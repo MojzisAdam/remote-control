@@ -1,0 +1,52 @@
+{
+  "login": {
+    "login": "Log in",
+    "header": "Enter your login credentials",
+    "email": "E-mail",
+    "password": "Password",
+    "remember-me": "Remember me",
+    "forgot-password": "Forgot your password?",
+    "login-button": "Log in",
+    "dont-have-acc": "Don't have an account?",
+    "register-now": "Register now"
+  },
+  "forgot-password": {
+    "title": "Password reset",
+    "description": "Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.",
+    "email": "E-mail",
+    "button": "Reset password",
+    "login": "Log in",
+    "register": "Register"
+  },
+  "password-reset": {
+    "title": "Password reset",
+    "description": "Please enter your new password",
+    "email": "E-mail",
+    "password": "Password",
+    "password-confirmation": "Confirm Password",
+    "button": "Change password",
+    "login": "Log in",
+    "register": "Register"
+  },
+  "register": {
+    "title": "Register",
+    "description": "Create your new account",
+    "first-name": "First name",
+    "last-name": "Last name",
+    "email": "E-mail",
+    "password": "Password",
+    "password-confirmation": "Confirm Password",
+    "button": "Register",
+    "have-acc": "Already have an account?",
+    "login": "Log in"
+  },
+  "email-verification": {
+        "alert-title": "E-mail verification",
+        "alert-description": "Your email is not verified. Please check your email for the verification link.",
+        "alert-button": "Resend Verification Email",
+        "page-title": "E-mail verification",
+        "page-description": "We are verifying your email address.",
+        "page-description-success": "Verification is complete. You can close this tab now.",
+        "page-description-failed": "Verification failed. Please try again later."
+    }
+}

@@ -1,0 +1,138 @@
+{
+  "errors": {
+    "0": "No error.",
+    "6": "Timeout of modbus room temperature sensor.",
+    "7": "CIM - Date and time not set.",
+    "8": "CIM - Battery low.",
+    "9": "CIM - RTC error.",
+    "10": "CIM - Wrong temperature sensor type.",
+    "14": "CIM - Temperature sensor error.",
+    "15": {
+      "1500": "CIM - TS8 reports an error.",
+      "default": "CIM - TS5 reports an error."
+    },
+    "16": {
+      "1500": "CIM - TS7 reports an error.",
+      "default": "CIM - TS4 reports an error."
+    },
+    "17": {
+      "1500": "CIM - TS6 reports an error.",
+      "default": "CIM - TS3 reports an error."
+    },
+    "18": {
+      "1500": "CIM - TS5 reports an error.",
+      "default": "CIM - TS2 reports an error."
+    },
+    "19": {
+      "1500": "CIM - TS4 reports an error",
+      "default": "CIM - TS1 reports an error"
+    },
+    "20": "CIM - TS3 reports an error",
+    "21": "CIM - TS2 reports an error",
+    "22": "CIM - TS1 reports an error",
+    "24": {
+      "1500": "CIM - Temperature sensor is assigned to another function.",
+      "default": "CIM - Temperature sensor is used by another function."
+    },
+    "25": {
+      "1500": "CIM - TS8 is not connected.",
+      "default": "CIM - TS5 is not connected."
+    },
+    "26": {
+      "1500": "CIM - TS7 is not connected.",
+      "default": "CIM - TS4 is not connected."
+    },
+    "27": {
+      "1500": "CIM - TS6 is not connected.",
+      "default": "CIM - TS3 is not connected."
+    },
+    "28": {
+      "1500": "CIM - TS5 is not connected.",
+      "default": "CIM - TS2 is not connected."
+    },
+    "29": {
+      "1500": "CIM - TS4 is not connected.",
+      "default": "CIM - TS1 is not connected."
+    },
+    "30": "CIM - TS3 is not connected.",
+    "31": "CIM - TS2 is not connected.",
+    "32": "CIM - TS1 is not connected.",
+    "35": {
+      "1500": "CIM - TS8 is not assigned.",
+      "default": "CIM - TS5 is not assigned."
+    },
+    "36": {
+      "1500": "CIM - TS7 is not assigned.",
+      "default": "CIM - TS4 is not assigned."
+    },
+    "37": {
+      "1500": "CIM - TS6 is not assigned.",
+      "default": "CIM - TS3 is not assigned."
+    },
+    "38": {
+      "1500": "CIM - TS5 is not assigned.",
+      "default": "CIM - TS2 is not assigned."
+    },
+    "39": {
+      "1500": "CIM - TS4 is not assigned.",
+      "default": "CIM - TS1 is not assigned."
+    },
+    "40": {
+      "1500": "CIM - TS3 is not assigned.",
+      "default": "CIM - Temperature sensor is not connected."
+    },
+    "41": {
+      "1500": "CIM - TS2 is not assigned.",
+      "default": "CIM - Temperature sensor error."
+    },
+    "42": {
+      "1500": "CIM - TS1 is not assigned.",
+      "default": "CIM - Temperature sensor error."
+    },
+    "43": {
+      "1500": "CIM - CIM temperature sensor is not connected.",
+      "default": "CIM - Wrong temperature sensor polarity"
+    },
+    "44": "CIM - Temperature sensor error.",
+    "45": "CIM - Temperature sensor error.",
+    "46": "CIM - Wrong temperature sensor polarity",
+    "50": "Outdoor unit - communication error.",
+    "51": "Outdoor unit capacity is different than set in the CIM module.",
+    "52": "Outdoor unit - Power interruption error.",
+    "53": "Outdoor unit - Inverter error.",
+    "54": "Outdoor unit - Active filter error, PFC board error",
+    "55": "Outdoor unit - Outlet temperature sensor error.",
+    "56": "Outdoor unit - Compressor temperature sensor error.",
+    "57": "Outdoor unit - Liquid pipe temperature sensor error.",
+    "58": "Outdoor unit - Outdoor temperature sensor error.",
+    "59": "Outdoor unit - Outdoor unit gas suction temperature sensor error.",
+    "60": "Outdoor unit - Two-way/three-way valve temperature sensor error.",
+    "61": "Outdoor unit - Condenser temperature sensor error.",
+    "62": "Outdoor unit - Liquid pipe temperature sensor error.",
+    "63": "Outdoor unit - Current sensor error.",
+    "64": "Outdoor unit - Pressure sensor error.",
+    "65": "Outdoor unit - Error: outdoor unit outside operating values (Trip detection)",
+    "66": "Outdoor unit - Compressor rotor position detection error.",
+    "67": "Outdoor unit - Fan motor error",
+    "68": "Outdoor unit - Fan motor 2 error.",
+    "69": "Outdoor unit - Four-way valve error.",
+    "70": "Outdoor unit - Coil error (expansion valve).",
+    "71": "Outdoor unit - Outlet temperature error.",
+    "72": "Outdoor unit - Compressor temperature error.",
+    "73": "Outdoor unit - High pressure error.",
+    "74": "Outdoor unit - Low pressure error.",
+    "79": "Outdoor unit - Unknown error",
+    "80": "Outdoor unit not connected.",
+    "82": "Low outlet temperature during defrosting.",
+    "84": "Indoor unit - No flow.",
+    "unknown": "Unknown error."
+  },
+  "errorDescriptions": {
+    "7": "\n\nSet time and date in the menu.",
+    "serviceContact": "\n\nContact service organization.",
+    "64": "\n\n1. Check if the heat pump evaporator is not covered \n2. Check the cleanliness of the heat pump evaporator \n3. Contact service organization.",
+    "80": "\n\n1. Check the outdoor unit circuit breaker. \n2. Contact service organization.",
+    "82": "\n\n1. Check the heating circuit filter/strainer. \n2. Check the circulation pump of the heat pump circuit. \n3. The temperature in the heating system is too low. \n4. Contact service organization.",
+    "84": "\n\n1. Check the pressure of the heating circuit. \n2. Check the heating circuit filter/strainer. \n3. Check the ball valves of the heat pump circuit. \n4. Check the circulation pump of the heat pump circuit. \n5. Contact service organization."
+  }
+}

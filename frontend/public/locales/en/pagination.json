@@ -1,0 +1,8 @@
+{
+	"previous": "Previous",
+	"next": "Next",
+	"showing": "Showing {{from}} to {{to}} of {{total}}",
+    "rows": "rows",
+	"columns": "Columns",
+	"noResults": "No results."
+}

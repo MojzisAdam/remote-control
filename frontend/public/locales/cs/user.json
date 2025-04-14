@@ -1,0 +1,52 @@
+{
+  "login": {
+    "login": "Příhlášení",
+    "header": "Zadejte své přihlašovací údaje",
+    "email": "E-mail",
+    "password": "Heslo",
+    "remember-me": "Zapamatuj si mě",
+    "forgot-password": "Zapomněli jste heslo?",
+    "login-button": "Přihlásit",
+    "dont-have-acc": "Nemáte účet?",
+    "register-now": "Zaregistrujte se nyní"
+  },
+  "forgot-password": {
+    "title": "Obnovení hesla",
+    "description": "Zapomněli jste heslo? Žádný problém. Dejte nám vědět svou e-mailovou adresu a my vám zašleme e-mail s odkazem pro obnovení hesla, který vám umožní vybrat si nové.",
+    "email": "E-mail",
+    "button": "Obnovit heslo",
+    "login": "Přihlásit",
+    "register": "Registrovat"
+  },
+  "password-reset": {
+    "title": "Obnovení hesla",
+    "description": "Zadejte prosím své nové heslo",
+    "email": "E-mail",
+    "password": "Heslo",
+    "password-confirmation": "Potvrďte heslo",
+    "button": "Změnit heslo",
+    "login": "Přihlásit",
+    "register": "Registrovat"
+  },
+  "register": {
+    "title": "Registrovat",
+    "description": "Vytvořte si nový účet",
+    "first-name": "Křestní jméno",
+    "last-name": "Příjmení",
+    "email": "E-mail",
+    "password": "heslo",
+    "password-confirmation": "Potvrďte heslo",
+    "button": "Registrovat",
+    "have-acc": "Už máte účet?",
+    "login": "Přihlásit"
+  },
+   "email-verification": {
+        "alert-title": "Ověření e-mailu",
+        "alert-description": "Váš email není ověřen. Zkontrolujte prosím svůj e-mail pro ověřovací odkaz.",
+        "alert-button": "Znovu odeslat ověřovací e-mail",
+        "page-title": "Ověření e-mailu",
+        "page-description": "Ověřujeme vaši e-mailovou adresu.",
+        "page-description-success": "Ověření je dokončeno. Tuto kartu nyní můžete zavřít.",
+        "page-description-failed": "Ověření se nezdařilo. Zkuste to znovu později."
+    }
+}

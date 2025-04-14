@@ -1,0 +1,122 @@
+{
+    "page-title": "Dashboard",
+    "your-devices": "Your devices",
+    "add-device-button": "Add Device",
+    "no-device-added-title": "No device added",
+    "empty-state-hint": "Get Started",
+    "no-device-added-text": "Please click on the button below to add your first device.",
+    "toast-device-added-title": "Device added succesfully.",
+    "toast-device-added-text": "You have added device with ID: ",
+    "toast-device-deleted-title": "Device deleted succesfully.",
+    "toast-device-deleted-text": "You have deleted device from your list with ID: ",
+    "device-status-summary": {
+        "online": "Online",
+        "offline": "Offline",
+        "fault": "Fault"
+    },
+    "favourite-devices": {
+        "title": "Favourite Devices",
+        "general-error-message": "Something went wrong. Please try again later.",
+        "tooltip-order-stop": "Stop editing order of favorite devices.",
+        "tooltip-order-start": "Edit order of favorite devices.",
+        "tooltip-last-used-hide": "Hide last used device.",
+        "tooltip-last-used-show": "Show last used device."
+    },
+    "search-sort-pagination": {
+        "search": "Search devices...",
+        "per-page": " per page",
+        "showing": "Showing",
+        "statuses": {
+            "all": "All",
+            "online": "Online",
+            "error": "Error",
+            "offline": "Offline"
+        },
+        "to": "to",
+        "of": "of",
+        "previous": "Previous",
+        "next": "Next"
+    },
+    "device-list": {
+        "your-devices": "Device List",
+        "no-devices": "No devices found.",
+        "table": {
+            "status": "Staus",
+            "id": "ID",
+            "name": "name",
+            "owner": "Owner",
+            "description": "Description",
+            "location": "Location",
+            "actions": "actions"
+        },
+        "remote-control-button": "Remote Control",
+        "history-button": "History",
+        "more-button": "More"
+    },
+    "add-device-modal": {
+        "modal-title": "Add new device",
+        "modal-description": "Please enter the device details below",
+        "input-placeholder": "Device ID",
+        "password-placeholder": "Password",
+        "cancel-button": "Cancel",
+        "add-button": "Add Device",
+        "error": {
+            "empty-name": "Device name cannot be empty."
+        }
+    },
+    "more-info-sheet": {
+        "description": "Detailed information about the device.",
+        "actions": {
+            "description": "Additional device related pages",
+            "notifications-button": "Notifications",
+            "parameters-button": "Parameter Log"
+        },
+        "basic-info": {
+            "description": "Basic informations",
+            "ip": "IP Address",
+            "display-type": "Display Type",
+            "sv": "Script Version",
+            "fw": "Firmware Version",
+            "first-con": "First Connection Date"
+        },
+        "device-description": {
+            "title": "Description",
+            "owner": "Owner",
+            "location": "Location",
+            "city": "City",
+            "address": "Address",
+            "zip_code": "ZIP Code",
+            "outdoor_unit_type": "Outdoor Unit Type",
+            "description": "Description",
+            "installation_date": "Installation Date",
+            "Installed_on": "Installed on",
+            "not-set": "Nothing has been set yet."
+        },
+        "notification-toggle": {
+            "title": "Enable Notifications",
+            "description": "If you enable notifications for this device, you will receive an error message in your email."
+        },
+        "favourite-toggle": {
+            "title": "Favorite",
+            "description": "Mark this device as a favorite to quickly access it from your favorites list."
+        },
+        "delete-button": {
+            "title": "Remove device",
+            "description": "Removing this device will unlink it from your account.",
+            "dialog": {
+                "title": "Are you sure you want to delete this device?",
+                "description": "This action is irreversible. The device will be permanently removed from your account.",
+                "cancel": "Cancel",
+                "delete": "Delete Device"
+            }
+        },
+        "modal-description": "Please enter the device details below",
+        "input-placeholder": "Device ID",
+        "password-placeholder": "Password",
+        "cancel-button": "Cancel",
+        "add-button": "Add Device",
+        "error": {
+            "empty-name": "Device name cannot be empty."
+        }
+    }
+}

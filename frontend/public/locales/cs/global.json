@@ -1,0 +1,49 @@
+{
+    "light": "Světlý",
+    "dark": "Tmavý",
+    "automatic": "Automaticky",
+    "errors": {
+        "general-error-message": "Něco se pokazilo. Zkuste to prosím znovu později.",
+        "empty-inputs": "Všechna vstupní pole nemohou být prázdná."
+    },
+   "sidebar": {
+        "kaiteki": "Kaiteki",
+        "navigation": "Navigace",
+        "home": "Domů",
+        "devicePages": "Stránky zařízení",
+        "remoteControl": "Vzdálené ovládání",
+        "history": "Historie",
+        "notifications": "Oznámení",
+        "parameterLog": "Změny parametrů",
+        "deviceInfo": "Informace o zařízení",
+        "system": "Systém",
+        "manageUsers": "Správa uživatelů",
+        "manageDevices": "Správa zařízení",
+        "settings": "Nastavení",
+        "toastDeviceDeletedTitle": "Zařízení bylo odstraněno",
+        "toastDeviceDeletedText": "Zařízení s ID "
+    },
+    "topNavigation": {
+        "profile": "Profil",
+        "language": "Jazyk",
+        "theme": "Motiv",
+        "light": "Světlý",
+        "dark": "Tmavý",
+        "automatic": "Automatický",
+        "logout": "Odhlásit se",
+        "logoutSuccess": "Úspěšné odhlášení",
+        "logoutSuccessDescription": "Byli jste úspěšně odhlášeni.",
+        "logoutFailed": "Odhlášení selhalo",
+        "logoutFailedDescription": "Během odhlášení došlo k chybě. Zkuste to prosím znovu."
+    },
+    "notifications": {
+        "title": "Oznámení",
+        "markAllAsSeen": "Označit vše jako přečtené",
+        "loading": "Načítání oznámení...",
+        "failedToLoad": "Nepodařilo se načíst oznámení",
+        "noNew": "Žádná nová oznámení",
+        "device": "Zařízení",
+        "error": "Chyba",
+        "maxLimit": "Zobrazeno maximum 100 oznámení."
+    }
+}

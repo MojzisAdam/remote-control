@@ -1,0 +1,19 @@
+{
+  "pageTitle": "Záznam změn parametrů - {{deviceId}}",
+  "heading": "Záznam změn parametrů",
+  "disclaimer": "Poznámka: Tento záznam ukazuje každý pokus o změnu parametru, i když ke změně nedošlo kvůli chybě.",
+  "searchPlaceholder": "Hledat podle emailu...",
+  "system": "Systém",
+  "notSet": "Nenastaveno",
+  "unknownParam": "Neznámý parametr",
+  "errorTitle": "Chyba",
+  "errorDescription": "Nepodařilo se načíst záznamy",
+  "table": {
+    "parameter": "Parametr",
+    "description": "Popis",
+    "changedBy": "Změnil",
+    "oldValue": "Původní hodnota",
+    "newValue": "Nová hodnota",
+    "changedAt": "Změněno"
+  }
+}

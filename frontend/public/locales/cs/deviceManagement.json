@@ -1,0 +1,81 @@
+{
+  "pageTitle": "Správa zařízení",
+  "overview": {
+    "title": "Přehled zařízení",
+    "total": "Celkem",
+    "online": "Online",
+    "offline": "Offline",
+    "error": "Chyba"
+  },
+  "search": {
+    "devicePlaceholder": "Hledat podle ID nebo popisu",
+    "emailPlaceholder": "Hledat podle e-mailu uživatele"
+  },
+  "status": {
+    "all": "Vše",
+    "online": "Online",
+    "offline": "Offline",
+    "error": "Chyba"
+  },
+  "viewUsers": {
+    "title": "Uživatelé s přístupem k zařízení {{deviceId}}",
+    "description": "Následující uživatelé mají přístup k tomuto zařízení",
+    "name": "Jméno",
+    "email": "E-mail",
+    "added": "Přidáno",
+    "noUsers": "K tomuto zařízení nemá přístup žádný uživatel"
+  },
+  "editDevice": {
+    "title": "Upravit popis zařízení",
+    "dialogDescription": "Aktualizujte informace pro zařízení {{deviceId}}",
+    "owner": "Majitel",
+    "ownerPlaceholder": "Zadejte jméno majitele",
+    "address": "Adresa",
+    "addressPlaceholder": "Zadejte ulici",
+    "city": "Město",
+    "cityPlaceholder": "Zadejte město",
+    "zipCode": "PSČ",
+    "zipCodePlaceholder": "Zadejte PSČ",
+    "unitType": "Typ venkovní jednotky",
+    "unitTypePlaceholder": "Zadejte typ jednotky",
+    "installationDate": "Datum instalace",
+    "selectDate": "Vyberte datum",
+    "description": "Popis",
+    "descriptionPlaceholder": "Zadejte popis zařízení",
+    "saveChanges": "Uložit změny"
+  },
+  "addDevice": {
+    "title": "Přidat zařízení",
+    "description": "Zařízení {{deviceId}} můžete přidat do svého seznamu.",
+    "instruction": "Zde si můžete nastavit vlastní název pro toto zařízení",
+    "namePlaceholder": "Zadejte název (nepovinné)",
+    "addDevice": "Přidat zařízení",
+    "toastSuccess": "Zařízení bylo přidáno do vašeho seznamu",
+    "toastDescription": "Zařízení {{deviceId}} bylo přidáno s názvem \"{{name}}\"",
+    "toastError": "Chyba při přidávání zařízení",
+    "toastErrorDescription": "Při přidávání zařízení do vašeho seznamu došlo k chybě"
+  },
+  "common": {
+    "cancel": "Zrušit"
+  },
+  "errors": {
+    "somethingWentWrong": "Něco se pokazilo. Zkuste to prosím znovu později."
+  },
+  "table": {
+    "status": "Stav",
+    "id": "ID",
+    "display": "Displej",
+    "owner": "Majitel",
+    "description": "Popis",
+    "location": "Umístění",
+    "actions": "Akce",
+    "copyId": "Zkopírovat ID zařízení",
+    "viewUsers": "Zobrazit uživatele",
+    "editDescription": "Upravit popis",
+    "addDevice": "Přidat zařízení"
+  },
+  "toast": {
+    "deviceUpdated": "Zařízení bylo aktualizováno",
+    "deviceDescriptionUpdated": "Popis zařízení byl úspěšně aktualizován"
+  }
+}

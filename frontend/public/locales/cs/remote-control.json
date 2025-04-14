@@ -1,0 +1,180 @@
+{
+  "title": "Vzdálené ovládání",
+  "parameterGroups": {
+    "basicParameters": "Základní parametry",
+    "commonRegulatorParameters": "Společné parametry regulátoru",
+    "heatingCircuitParameters": "Parametry topného okruhu",
+    "domesticHotWaterParameters": "Parametry teplé vody",
+    "bivalentSourceParameters": "Parametry bivalentního zdroje",
+    "photovoltaicParameters": "Parametry fotovoltaické elektrárny",
+    "roomThermostatParameters": "Parametry pokojového termostatu",
+    "basicParameters2": "Základní parametry 2",
+    "heatingCircuit2Parameters": "Parametry topného okruhu 2",
+    "extendedParameters": "Rozšířené parametry"
+  },
+   "dialog": {
+    "description": "Upravte hodnotu vybraného parametru",
+    "selectPlaceholder": "Vyberte možnost"
+  },
+  "parameterEdit": {
+    "updateFailed": "Aktualizace selhala",
+    "updating": "Probíhá aktualizace...",
+    "noParameters": "Žádné dostupné parametry"
+  },
+  "common": {
+    "retry": "Zkusit znovu",
+    "cancel": "Zrušit",
+    "edit": "Upravit",
+    "saveChanges": "Uložit změny"
+  },
+  "connection": {
+    "connected": "Připojeno",
+    "connecting": "Připojování",
+    "disconnected": "Opdpojeno",
+    "offline": "Offline",
+    "lastMessage": "Poslední zpráva:",
+    "waiting": "Čekání na odpověď zařízení...",
+    "noMessages": "Za posledních 20 sekund nebyla přijata žádná zpráva.",
+    "deviceOffline": "Zařízení je momentálně offline. Zkontrolujte síťové připojení.",
+    "cloud": "Připojení ke cloudu",
+    "error": "Chyba",
+    "reconnect": "Znovu připojit",
+    "device": "Zařízení"
+  },
+   "mqttStatus": {
+    "connected": "připojeno",
+    "connecting": "připojování...",
+    "disconnected": "odpojeno",
+    "error": "chyba",
+    "reconnecting": "znovu se připojuje..."
+  },
+  "remote-control": {
+    "buttonOverview": "Přehled",
+    "buttonParameters": "Paremetry"
+  },
+  "home": {
+    "season": {
+      "winter": "Období: zima",
+      "summer": "Období: léto"
+    },
+    "blocked": {
+      "thermostat": "Blokováno: termostatem",
+      "hdo": "Blokováno: HDO"
+    },
+    "temperatureFallback": "---"
+  },
+   "charts": {
+    "temperatures": "Teploty",
+    "monthlyAverages": "Měsíční průměry teplot",
+    "noData": "Nejsou k dispozici žádná data o teplotách",
+    "errorTitle": "Chyba",
+    "errorDescription": "Načítání dat o teplotě selhalo. Zkuste to prosím znovu později.",
+    "monthlyTitle": "Graf měsíčních teplot",
+    "temperatureTitle": "Graf teplot",
+     "config": {
+      "TS1": "Výstupní teplota z výměníku",
+      "TS2": "Venkovní teplota",
+      "TS4": "TUV (bojler)",
+      "komp": "Kompresor",
+      "avg_ts1": "Průměrná výstupní teplota",
+      "avg_ts2": "Průměrná venkovní teplota",
+      "avg_ts4": "Průměrná TUV (bojler)"
+    },
+    "units": {
+      "celsius": "°C",
+      "percent": "%"
+    }
+  },
+  "deviceLoader": {
+    "loadingTitle": "Čekání na data ze zařízení...",
+    "loadingSubtitle": "Toto může chvíli trvat."
+  },
+  "temperature": {
+    "title": "Teploty",
+    "current": "Aktuální teploty",
+    "desired": "Žádané teploty",
+    "thermostat": "Prostorový termostat",
+    "labels": {
+      "reg_673": "Výstupní teplota z výměníku",
+      "reg_674": "Venkovní teplota vzduchu",
+      "reg_675": "Vratná teplota / zpátečka",
+      "reg_676": "Teplota TUV (bojler)",
+      "reg_677": "Prostorová teplota",
+      "reg_678": "Akumulační nádoba",
+      "reg_679": "Topný okruh 2 (TO2) teplota",
+      "reg_680": "Teplota bazénu",
+      "reg_685": "Teplota kapalného chladiva",
+      "reg_704": "Požadavek TO",
+      "reg_705": "Požadavek TUV",
+      "reg_707": "Požadavek PT",
+      "reg_708": "Požadavek TO2",
+      "reg_681": "Prostorová teplota",
+      "she_hum": "Prostorová vlhkost"
+    },
+    "fallback": "---"
+  },
+  "deviceStates": {
+    "title": "Stavy",
+    "sections": {
+      "operation": "Provozní režim",
+      "blocking": "Blokace a chyby",
+      "performance": "Výkon a provoz",
+      "auxiliary": "Doplňkové zdroje",
+      "firmware": "Verze firmwaru"
+    },
+    "labels": {
+      "reg_736": "Režim regulátoru",
+      "reg_737": "Stav venkovní jednotky",
+      "reg_739": "Stav blokace termostatem",
+      "reg_740": "Stav blokace HDO",
+      "reg_741": "Stav sezona",
+      "reg_608": "Stav kompresoru",
+      "reg_610": "Výkon kompresoru",
+      "reg_640": "Stav DZTO",
+      "reg_646": "Stav DZTUV",
+      "reg_745": "Odhadovaný průtok",
+      "reg_746": "Topný výkon",
+      "reg_512": "Číslo chyby",
+      "reg_834": "CIM firmware číslo",
+      "fw_v": "Panel firmware číslo"
+    },
+    "values": {
+      "unknown": "Neznámé",
+      "on": "Zapnuto",
+      "off": "Vypnuto",
+      "blocked": "Blokuje",
+      "notBlocked": "Neblokuje",
+      "winter": "Zima",
+      "summer": "Léto",
+      "modes": {
+        "0": "Nečinný",
+        "1": "TUV",
+        "2": "TO",
+        "3": "Chlazení",
+        "4": "Topení",
+        "5": "Bazén",
+        "6": "TUV + TO",
+        "7": "Chlazení + TUV",
+        "8": "Bazén + TUV"
+      },
+      "unitStates": {
+        "0": "Vypnuto",
+        "1": "Topení",
+        "2": "Odtávání",
+        "3": "Chlazení"
+      },
+      "dzLevels": {
+        "0": "Vypnuto",
+        "1": "DZ úroveň 1",
+        "2": "DZ úroveň M",
+        "3": "DZ úroveň 3",
+        "4": "Přídavný"
+      }
+    },
+    "units": {
+      "percent": "%", 
+      "m3h": "m³/h",
+      "kw": "kW"
+    }
+  }
+}

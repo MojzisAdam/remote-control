@@ -1,0 +1,82 @@
+{
+  "pageTitle": "Devices management",
+  "overview": {
+    "title": "Device Overview",
+    "total": "Total",
+    "online": "Online",
+    "offline": "Offline",
+    "error": "Error"
+  },
+  "search": {
+    "devicePlaceholder": "Search by ID or Description",
+    "emailPlaceholder": "Search by user e-mail"
+  },
+  "status": {
+    "all": "All",
+    "online": "Online",
+    "offline": "Offline",
+    "error": "Error"
+  },
+  "viewUsers": {
+    "title": "Users with access to device {{deviceId}}",
+    "description": "The following users have access to this device",
+    "name": "Name",
+    "email": "Email",
+    "added": "Added",
+    "noUsers": "No users have access to this device"
+  },
+  "editDevice": {
+    "title": "Edit Device Description",
+    "dialogDescription": "Update the information for device {{deviceId}}",
+    "owner": "Owner",
+    "ownerPlaceholder": "Enter owner name",
+    "address": "Address",
+    "addressPlaceholder": "Enter street address",
+    "city": "City",
+    "cityPlaceholder": "Enter city",
+    "zipCode": "ZIP Code",
+    "zipCodePlaceholder": "Enter ZIP code",
+    "unitType": "Outdoor Unit Type",
+    "unitTypePlaceholder": "Enter unit type",
+    "installationDate": "Installation Date",
+    "selectDate": "Select date",
+    "description": "Description",
+    "descriptionPlaceholder": "Enter device description",
+    "saveChanges": "Save changes"
+  },
+  "addDevice": {
+    "title": "Add Device",
+    "description": "You can add {{deviceId}} to your list.",
+    "instruction": "Here you can set your own name for this device",
+    "namePlaceholder": "Enter a name (not required)",
+    "addDevice": "Add Device",
+    "toastSuccess": "Device added to your list",
+    "toastDescription": "Device {{deviceId}} has been added with name \"{{name}}\"",
+    "toastError": "Error adding device",
+    "toastErrorDescription": "There was an error adding the device to your list"
+  },
+  "common": {
+    "cancel": "Cancel"
+  },
+  "errors": {
+    "somethingWentWrong": "Something went wrong. Please try again later."
+  },
+
+  "table": {
+    "status": "Status",
+    "id": "ID",
+    "display": "Display",
+    "owner": "Owner",
+    "description": "Description",
+    "location": "Location",
+    "actions": "Actions",
+    "copyId": "Copy device id",
+    "viewUsers": "View Users",
+    "editDescription": "Edit Description",
+    "addDevice": "Add Device"
+  },
+  "toast": {
+    "deviceUpdated": "Device updated",
+    "deviceDescriptionUpdated": "Device description has been updated successfully"
+  }
+}

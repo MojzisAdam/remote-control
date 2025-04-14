@@ -1,0 +1,49 @@
+{
+    "light": "Light",
+    "dark": "Dark",
+    "automatic": "System",
+    "errors": {
+        "general-error-message": "Something went wrong. Please try again later.",
+        "empty-inputs": "All input fields can't be empty."
+    },
+    "sidebar": {
+        "kaiteki": "Kaiteki",
+        "navigation": "Navigation",
+        "home": "Home",
+        "devicePages": "Device Pages",
+        "remoteControl": "Remote Control",
+        "history": "History",
+        "notifications": "Notifications",
+        "parameterLog": "Parameter Log",
+        "deviceInfo": "Device Info",
+        "system": "System",
+        "manageUsers": "Manage Users",
+        "manageDevices": "Manage Devices",
+        "settings": "Settings",
+        "toastDeviceDeletedTitle": "Device Deleted",
+        "toastDeviceDeletedText": "Device with ID "
+    },
+    "topNavigation": {
+        "profile": "Profile",
+        "language": "Language",
+        "theme": "Theme",
+        "light": "Light",
+        "dark": "Dark",
+        "automatic": "Automatic",
+        "logout": "Log out",
+        "logoutSuccess": "Logout successful",
+        "logoutSuccessDescription": "You were successfully logged out.",
+        "logoutFailed": "Logout failed",
+        "logoutFailedDescription": "Something went wrong during logout, try again please."
+    },
+    "notifications": {
+        "title": "Notifications",
+        "markAllAsSeen": "Mark all as seen",
+        "loading": "Loading notifications...",
+        "failedToLoad": "Failed to load notifications",
+        "noNew": "No new notifications",
+        "device": "Device",
+        "error": "Error",
+        "maxLimit": "Maximum of 100 notifications displayed."
+    }
+}

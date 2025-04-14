@@ -1,0 +1,19 @@
+{
+  "pageTitle": "Parameter log - {{deviceId}}",
+  "heading": "Parameter Change Logs",
+  "disclaimer": "Disclaimer: This log shows every attempt to change a parameter, even if the change did not occur due to a error.",
+  "searchPlaceholder": "Search by email...",
+  "system": "System",
+  "notSet": "Not set",
+  "unknownParam": "Unknown parameter",
+  "errorTitle": "Error",
+  "errorDescription": "Failed to load logs",
+  "table": {
+    "parameter": "Parameter",
+    "description": "Description",
+    "changedBy": "Changed By",
+    "oldValue": "Old Value",
+    "newValue": "New Value",
+    "changedAt": "Changed At"
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "title": "Settings",
+  "description": "Manage your application preferences",
+  "tabs": {
+    "dashboard": "Dashboard",
+    "appearance": "Appearance",
+    "language": "Language",
+    "dbShort": "DB",
+    "themeShort": "Theme",
+    "langShort": "Lang"
+  },
+  "dashboard": {
+    "title": "Dashboard Settings",
+    "description": "Customize how your dashboard looks and behaves",
+    "showFavorites": "Show favorite devices",
+    "showFavoritesHint": "Display your favorite devices at the top of the dashboard",
+    "defaultView": "Default view",
+    "defaultViewHint": "Choose how devices are displayed on your dashboard",
+    "reset": "Reset to defaults"
+  },
+  "appearance": {
+    "title": "Appearance",
+    "description": "Customize how the application looks"
+  },
+  "language": {
+    "title": "Language Settings",
+    "description": "Choose your preferred language",
+    "label": "Language"
+  },
+  "themes": {
+    "light": "Light",
+    "dark": "Dark",
+    "automatic": "Automatic"
+  },
+  "saveChanges": {
+    "full": "Save changes",
+    "short": "Save"
+  },
+  "resetDialog": {
+    "title": "Reset settings?",
+    "description": "This action cannot be undone. All your custom settings will be reset to default values.",
+    "cancel": "Cancel",
+    "confirm": "Reset"
+  },
+  "toast": {
+    "savedTitle": "Settings saved",
+    "savedDescription": "Your preferences have been updated successfully.",
+    "resetTitle": "Settings reset",
+    "resetDescription": "All settings have been restored to defaults."
+  },
+  "views": {
+    "grid": "Grid",
+    "list": "List",
+    "select": "Select view type"
+  }
+}
