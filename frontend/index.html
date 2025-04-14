@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="/public/index.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kaiteki</title>
+    <script>
+        (function () {
+            const storedTheme = localStorage.getItem('theme');
+            if (storedTheme === 'dark' || (!storedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+    </script>
+  </head>
+  <body className="bg-white dark:bg-black">
+    <div id="initial-loading"
+        class="min-h-screen flex flex-col bg-gray-100 dark:bg-black duration-1000 transition-all ease-out">
+        <div class="bg-white dark:bg-black shadow"></div>
+        <div class="min-h-screen flex justify-center flex-col items-center gap-8">
+            <div class="basicSpinner"></div>
+            <h1 class="text-xl font-semibold text-gray-800 dark:text-gray-300">Loading...</h1>
+        </div>
+    </div>
+    <div id="root">
+        
+    </div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

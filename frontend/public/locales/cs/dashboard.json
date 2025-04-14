@@ -1,0 +1,114 @@
+{
+    "page-title": "Dashboard",
+    "your-devices": "Vaše zařízení",
+    "add-device-button": "Přidat TČ",
+    "no-device-added-title": "Žádné TČ přidané",
+    "empty-state-hint": "Začněte",
+    "no-device-added-text": "Kliknutím na tlačítko níže přidáte první TČ.",
+    "toast-device-deleted-title": "Zařízení smazáno úspěšně.",
+    "toast-device-deleted-text": "Vymazali jste zařízení ze svého seznamu s ID: ",
+    "toast-device-added-text": "Přidali jste zařízení s ID: ",
+    "toast-device-added-title": "Zařízení přidáno úspěšně.",
+    "device-status-summary": {
+        "online": "Online",
+        "offline": "Offline",
+        "fault": "Chyba"
+    },
+    "search-sort-pagination": {
+        "search": "Vyhledat TČ..",
+        "per-page": " na stránku",
+        "showing": "Zobrazeno od",
+        "statuses": {
+            "all": "Vše",
+            "online": "Online",
+            "error": "Chyba",
+            "offline": "Offline"
+        },
+        "to": "do",
+        "of": "z",
+        "previous": "Předchozí",
+        "next": "Další"
+    },
+    "favourite-devices": {
+        "tooltip-last-used-show": "Zobrazit poslední použité zařízení.",
+        "tooltip-last-used-hide": "Skrýt poslední použité zařízení.",
+        "tooltip-order-start": "Upravit pořadí oblíbených zařízení.",
+        "tooltip-order-stop": "Ukončit úpravu pořadí oblíbených zařízení.",
+        "title": "Oblíbená zařízení",
+        "general-error-message": "Něco se pokazilo. Zkuste to prosím znovu později."
+    },
+    "device-list": {
+        "your-devices": "Vaše zařízení",
+        "no-devices": "Žádné TČ přidané",
+        "table": {
+            "status": "Stav",
+            "id": "ID",
+            "name": "Vlastní jméno",
+            "owner": "Vlastník",
+            "description": "Popis",
+            "location": "Adresa",
+            "actions": "Akce"
+        },
+        "remote-control-button": "Vzdálený přístup",
+        "history-button": "Historie",
+        "more-button": "Více"
+    },
+    "add-device-modal": {
+        "modal-title": "Přidat nové TČ",
+        "modal-description": "Níže prosím zadejte podrobnosti o TČ",
+        "input-placeholder": "ID",
+        "password-placeholder": "Heslo",
+        "cancel-button": "Zavřít",
+        "add-button": "Přidat TČ",
+        "error": {
+            "empty-name": "Název zařízení nesmí být prázdný."
+        }
+    },
+    "more-info-sheet": {
+        "description": "Podrobné informace o zařízení.",
+        "actions": {
+            "description": "Další stránky související se zařízením",
+            "notifications-button": "Upozornění",
+            "parameters-button": "Protokol parametrů"
+        },
+        "basic-info": {
+            "description": "Základní informace",
+            "ip": "IP adresa",
+            "display-type": "Typ displeje",
+            "sv": "Verze skriptu",
+            "fw": "Verze firmwaru",
+            "first-con": "Datum prvního připojení"
+        },
+        "device-description": {
+            "title": "Popis",
+            "owner": "Vlastník",
+            "location": "Umístění",
+            "city": "Město",
+            "address": "Adresa",
+            "zip_code": "PSČ",
+            "outdoor_unit_type": "Typ venkovní jednotky",
+            "description": "Popis",
+            "installation_date": "Datum instalace",
+            "Installed_on": "Nainstalováno dne",
+            "not-set": "Nic nebylo zatím nastaveno."
+        },
+        "notification-toggle": {
+            "title": "Povolit upozornění",
+            "description": "Pokud povolíte upozornění pro toto zařízení, obdržíte chybovou zprávu na váš e-mail."
+        },
+        "favourite-toggle": {
+            "title": "Oblíbené",
+            "description": "Označte toto zařízení jako oblíbené pro rychlý přístup z vašeho seznamu oblíbených."
+        },
+        "delete-button": {
+            "title": "Odstranit zařízení",
+            "description": "Odstraněním tohoto zařízení bude odpojeno od vašeho účtu.",
+            "dialog": {
+                "title": "Jste si jisti, že chcete toto zařízení odstranit?",
+                "description": "Tato akce je nevratná. Zařízení bude trvale odstraněno z vašeho účtu.",
+                "cancel": "Zrušit",
+                "delete": "Odstranit zařízení"
+            }
+        }
+    }
+}

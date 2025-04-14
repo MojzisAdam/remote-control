@@ -1,0 +1,1767 @@
+{
+    "P0.0": {
+        "type": "int",
+		"register": 0,
+        "default_value": 55,
+        "min_value": 30,
+        "max_value": 80,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "Výměník MAX teplota (topení)"
+    },
+    "P0.1": {
+        "type": "int",
+		"register": 1,
+        "default_value": 8,
+        "min_value": 0,
+        "max_value": 30,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "Výměník MIN teplota (chlazení)"
+    },
+    "P0.2": {
+        "type": "int",
+		"register": 2,
+        "default_value": 2,
+        "min_value": 0,
+        "max_value": 5,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "Výměník omezení teploty pásmo"
+    },
+    "P0.3": {
+        "type": "int",
+		"register": 3,
+        "default_value": 50,
+        "min_value": 0,
+        "max_value": 100,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "%",
+        "description": "Výměník omezení teploty útlum"
+    },
+    "P0.4": {
+        "type": "int",
+		"register": 4,
+        "default_value": 3,
+        "min_value": 0,
+        "max_value": 30,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "min",
+        "description": "Kompresor – ochranný čas"
+    },
+    "P0.5": {
+        "type": "int",
+		"register": 5,
+        "default_value": 10,
+        "min_value": 0,
+        "max_value": 120,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "s",
+        "description": "RUN výstup zpoždění"
+    },
+    "P0.6": {
+        "type": "int",
+		"register": 6,
+        "default_value": 1,
+        "min_value": 0,
+        "max_value": 30,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "min",
+        "description": "RUN výstup doběh"
+    },
+    "P0.7": {
+        "type": "int",
+		"register": 7,
+        "default_value": 3,
+        "min_value": 0,
+        "max_value": 30,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "min",
+        "description": "DEF výstup doběh"
+    },
+    "P0.8": {
+        "type": "options",
+		"register": 8,
+        "default_value": 0,
+        "user_access": true,
+        "description": "Výchozí displej",
+        "options": {
+            "0": "TS1 (Výstup)",
+            "1": "TS2 (Venkovní vzduch)",
+            "2": "TS3 (Zpátečka)",
+            "3": "TS4 (TUV)",
+            "4": "TS5 (Prostorová teplota)",
+            "5": "TS6 (Akumulace)",
+            "6": "TS7 (TO2)",
+            "7": "TS8 (Bazén)",
+            "8": "TS9 (Kapalné chladivo)",
+            "9": "Výkon kompresoru",
+            "10": "Teplota na výstupu z výměníku",
+            "11": "Požadavek TO",
+            "12": "Požadavek TUV",
+            "13": "Průtok vody",
+            "14": "Topný výkon"
+        }
+    },
+    "P0.9": {
+        "type": "options",
+		"register": 9,
+        "default_value": 2,
+        "user_access": false,
+        "description": "Typ venkovní jednotky",
+        "options": {
+            "0": "RO",
+            "1": "ROT",
+            "2": "ROG-L",
+            "3": "ROA",
+            "4": "Samostatné TČ",
+            "5": "ROG-KM",
+            "6": "ROG-KA/B/R"
+        }
+    },
+    "P0.A": {
+        "type": "options",
+		"register": 10,
+        "default_value": 20,
+        "user_access": false,
+        "description": "Výkon venkovní jednotky",
+        "options": {
+            "2": "ROG9",
+            "4": "ROG12",
+            "5": "ROG14",
+            "7": "ROG18",
+            "10": "ROG24",
+            "13": "ROG30",
+            "16": "ROG36",
+            "20": "ROG45",
+            "23": "ROG54",
+            "26": "ROG60",
+            "34": "ROG72",
+            "43": "ROG90"
+        }
+    },
+    "P0.B": {
+        "type": "options",
+		"register": 11,
+        "default_value": 1,
+        "user_access": false,
+        "description": "Schéma instalace",
+        "options": {
+            "0": "Základní 1 (TS1)",
+            "1": "Tepelné čerpadlo (TS1..TS9)",
+            "2": "Adaptér (No TS)",
+            "3": "Regulátor 1 (TS1)",
+            "4": "Regulátor 2 (TS1, TS3)",
+            "5": "Základní 2 (TS1, TS5)"
+        }
+    },
+    "P0.C": {
+        "type": "options",
+		"register": 12,
+        "default_value": 6,
+        "user_access": false,
+        "description": "Funkce vstupu H/C",
+        "options": {
+            "0": "Neaktivní",
+            "1": "Útlum",
+            "2": "Chlazení",
+            "3": "Ohřev bazénu",
+            "4": "Chlazení/Bazén. ohřev",
+            "5": "Legionella",
+            "6": "Průtok",
+            "7": "FVE přebytky",
+            "8": "Odhad průtoku z OČ",
+            "9": "Pulzní měřák průtoku"
+        }
+    },
+    "P0.D": {
+        "type": "options",
+		"register": 13,
+        "default_value": 1,
+        "user_access": false,
+        "description": "Funkce vstupu ON (v řežimu TČ)",
+        "options": {
+            "0": "Neaktivní",
+            "1": "Topení",
+            "2": "Topení/Chlazení",
+            "3": "FVE přebytky",
+            "4": "Odhad průtoku z OČ",
+            "5": "Pulzní měřák průtoku"
+        }
+    },
+    "P0.E": {
+        "type": "options",
+		"register": 14,
+        "default_value": 4,
+        "user_access": false,
+        "description": "Funkce vstupu OFF",
+        "options": {
+            "0": "Neaktivní",
+            "1": "HDO",
+            "2": "HDO/Průtok",
+            "3": "Průtok",
+            "4": "Stop DZ"
+        }
+    },
+    "P0.F": {
+        "type": "options",
+		"register": 15,
+        "default_value": 1,
+        "user_access": false,
+        "description": "Funkce výstupu DEF (v řežimu TČ)",
+        "options": {
+            "0": "Odtávání",
+            "1": "Doplňkový zdroj",
+            "2": "Doplňkový zdroj TO",
+            "3": "Doplňkový zdroj TUV",
+            "4": "Oběh. čerp. Topení TO1",
+            "5": "Oběh. čerp. topení/chlazení",
+            "6": "Vyhřívání kompresoru",
+            "7": "Útlum",
+            "8": "Čerpadlo bazénu",
+            "9": "Doplňkový zdroj TUV PRID",
+            "10": "Oběhové čerpadlo TO2"
+        }
+    },
+    "P1.0": {
+        "type": "options",
+		"register": 16,
+        "default_value": 0,
+        "user_access": false,
+        "description": "Funkce výstupu ERR (v řežimu TČ)",
+        "options": {
+            "0": "Doplňkový zdroj",
+            "1": "Doplňkový zdroj TO",
+            "2": "Doplňkový zdroj TUV",
+            "3": "Doplňkový zdroj TO PRID",
+            "4": "Otevřít směšovací ventil TO2",
+            "5": "Zavřít směšovací ventil TO2"
+        }
+    },
+    "P1.1": {
+        "type": "options",
+		"register": 17,
+        "default_value": 0,
+        "user_access": false,
+        "description": "Funkce výstupu AUX (v řežimu TČ)",
+        "options": {
+            "0": "TUV",
+            "1": "Chlazení",
+            "2": "Čerpadlo bazénu",
+            "3": "Otevřít směšovací ventil TO2",
+            "4": "Zavřít směšovací ventil TO2"
+        }
+    },
+    "P1.2": {
+        "type": "int",
+		"register": 18,
+        "default_value": 18,
+        "min_value": 5,
+        "max_value": 25,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "MIN teplota kompresoru"
+    },
+    "P1.3": {
+        "type": "switch",
+		"register": 19,
+        "default_value": 1,
+        "user_access": true,
+        "description": "Automatické přepnutí letního/zimního času",
+        "options": {
+            "0": "Vypnuto",
+            "1": "Zapnuto"
+        }
+    },
+    "P1.4": {
+        "type": "int",
+		"register": 20,
+        "default_value": 6,
+        "min_value": 0,
+        "max_value": 120,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "s",
+        "description": "Zpoždění vstupu H/C"
+    },
+    "P1.5": {
+        "type": "int",
+		"register": 21,
+        "default_value": 6,
+        "min_value": 0,
+        "max_value": 120,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "s",
+        "description": "Zpoždění vstupu ON"
+    },
+    "P1.6": {
+        "type": "int",
+		"register": 22,
+        "default_value": 6,
+        "min_value": 0,
+        "max_value": 120,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "s",
+        "description": "Zpoždění vstupu OFF"
+    },
+    "P1.7": {
+        "type": "switch",
+		"register": 23,
+        "default_value": 1,
+        "user_access": false,
+        "description": "Protočení čerpadel",
+        "options": {
+            "0": "Neaktivní",
+            "1": "Aktivní"
+        }
+    },
+    "P1.8": {
+        "type": "options",
+		"register": 24,
+        "default_value": 1,
+        "user_access": false,
+        "description": "Protočení čerpadel zapnutí den v týdnu",
+        "options": {
+            "1": "Pondělí",
+            "2": "Úterý",
+            "3": "Středa",
+            "4": "Čtvrtek",
+            "5": "Pátek",
+            "6": "Sobota",
+            "7": "Neděle"
+        }
+    },
+    "P1.9": {
+        "type": "options",
+		"register": 25,
+        "default_value": 0,
+        "user_access": false,
+        "description": "Protočení čerpadel čas zapnutí",
+        "options": {
+            "0": "00:00",
+            "1": "01:00",
+            "2": "02:00",
+            "3": "03:00",
+            "4": "04:00",
+            "5": "05:00",
+            "6": "06:00",
+            "7": "07:00",
+            "8": "08:00",
+            "9": "09:00",
+            "10": "10:00",
+            "11": "11:00",
+            "12": "12:00",
+            "13": "13:00",
+            "14": "14:00",
+            "15": "15:00",
+            "16": "16:00",
+            "17": "17:00",
+            "18": "18:00",
+            "19": "19:00",
+            "20": "20:00",
+            "21": "21:00",
+            "22": "22:00",
+            "23": "23:00"
+        }
+    },
+    "P1.A": {
+        "type": "float",
+		"register": 26,
+        "default_value": 1.0,
+        "min_value": 0.1,
+        "max_value": 2.1,
+        "increment_value": 0.1,
+		"multiplied": 10,
+        "user_access": false,
+		"unit": "m3/h",
+        "description": "Odhad průtoku"
+    },
+    "P1.B": {
+        "type": "int",
+		"register": 27,
+        "default_value": 1,
+        "min_value": 1,
+        "max_value": 127,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": null,
+        "description": "MODBUS adresa"
+    },
+	"P2.0": {
+        "type": "int",
+		"register": 32,
+        "default_value": 50,
+        "min_value": 10,
+        "max_value": 100,
+		"increment_value": 5,
+        "user_access": false,
+		"unit": "%",
+        "description": "MAX výkon při startu"
+    },
+    "P2.1": {
+        "type": "int",
+		"register": 33,
+        "default_value": 20,
+        "min_value": 0,
+        "max_value": 30,
+		"increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "Léto / Zima teplota"
+    },
+    "P2.2": {
+        "type": "int",
+		"register": 34,
+        "default_value": 2,
+        "min_value": 0,
+        "max_value": 10,
+		"increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "Léto / Zima hystereze teploty"
+    },
+    "P2.3": {
+        "type": "options",
+		"register": 35,
+        "default_value": 0,
+        "user_access": true,
+        "description": "Léto / Zima funkce",
+        "options": {
+            "0": "Automaticky",
+            "1": "Léto",
+            "2": "Zima"
+        }
+    },
+    "P2.4": {
+        "type": "int",
+		"register": 36,
+        "default_value": 18,
+        "min_value": 5,
+        "max_value": 20,
+		"increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "Chlazení teplota"
+    },
+    "P2.5": {
+        "type": "options",
+		"register": 37,
+        "default_value": 0,
+        "user_access": false,
+        "description": "Čidlo teploty chlazení (v režimu TČ)",
+        "options": {
+            "0": "TS1 (Výstup z výměníku)",
+            "1": "TS3 (Vratná voda z TO)",
+            "2": "TS6 (Aku nádoba)"
+        }
+    },
+    "P2.6": {
+        "type": "switch",
+		"register": 38,
+        "default_value": 0,
+        "user_access": true,
+        "description": "Manuální chlazení",
+        "options": {
+            "0": "Vypnuto",
+            "1": "Zapnuto"
+        }
+    },
+    "P2.7": {
+        "type": "int",
+		"register": 39,
+        "default_value": 40,
+        "min_value": 30,
+        "max_value": 50,
+		"increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "Min. požadavek bazén"
+    },
+    "P2.8": {
+        "type": "int",
+		"register": 40,
+        "default_value": 30,
+        "min_value": 20,
+        "max_value": 60,
+		"increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "Teplota topení minimální požadavek (v režimu Regulátor)"
+    },
+    "P2.9": {
+        "type": "int",
+		"register": 41,
+        "default_value": 55,
+        "min_value": 20,
+        "max_value": 60,
+		"increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "Teplota topení maximální požadavek (v režimu Regulátor)"
+    },
+    "P2.A": {
+        "type": "int",
+		"register": 42,
+        "default_value": 5,
+        "min_value": 2,
+        "max_value": 20,
+		"increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "Teplota chlazení minimální požadavek (v režimu Regulátor)"
+    },
+    "P2.B": {
+        "type": "int",
+		"register": 43,
+        "default_value": 15,
+        "min_value": 2,
+        "max_value": 20,
+		"increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "Teplota chlazení maximální požadavek (v režimu Regulátor)"
+    },
+    "P2.C": {
+        "type": "int",
+		"register": 44,
+        "default_value": 24,
+        "min_value": 0,
+        "max_value": 127,
+		"increment_value": 1,
+        "user_access": true,
+		"unit": "h",
+        "description": "Léto/zima - perioda průměrné teploty"
+    },
+    "P2.D": {
+        "type": "int",
+		"register": 45,
+        "default_value": 2,
+        "min_value": 0,
+        "max_value": 127,
+		"increment_value": 1,
+        "user_access": true,
+		"unit": "h",
+        "description": "TO ekvitermní křivka - perioda průměrné teploty"
+    },
+    "P2.E": {
+        "type": "int",
+		"register": 46,
+        "default_value": 100,
+        "min_value": 10,
+        "max_value": 100,
+		"increment_value": 5,
+        "user_access": false,
+		"unit": "%",
+        "description": "Omezení MAX výkonu kompresoru v útlumu"
+    },
+    "P2.F": {
+        "type": "switch",
+		"register": 47,
+        "default_value": 0,
+        "user_access": true,
+        "description": "Ohřev bazénu",
+        "options": {
+            "0": "NE",
+            "1": "ANO"
+        }
+    },
+    "P3.0": {
+        "type": "int",
+		"register": 48,
+        "default_value": 28,
+        "min_value": 15,
+        "max_value": 35,
+		"increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "Teplota bazénu"
+    },
+    "P3.1": {
+        "type": "int",
+		"register": 49,
+        "default_value": 2,
+        "min_value": 1,
+        "max_value": 5,
+		"increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "Hystereze teploty baz."
+    },
+    "P3.2": {
+        "type": "int",
+		"register": 50,
+        "default_value": 0,
+        "min_value": 0,
+        "max_value": 10,
+		"increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "Teplota útlumu bazénu"
+    },
+    "P3.3": {
+        "type": "options",
+		"register": 51,
+        "default_value": 0,
+        "user_access": false,
+        "description": "Režim odtávání",
+        "options": {
+            "0": "Bez priority",
+            "1": "Vždy z TUV",
+            "2": "Vždy z TO"
+        }
+    },
+    "P3.4": {
+        "type": "options",
+		"register": 52,
+        "default_value": 0,
+        "user_access": false,
+        "description": "Senzor teploty venkovního vzduchu (venkovní jednotky ROG)",
+        "options": {
+            "0": "Venkovní jednotka",
+            "1": "TS2"
+        }
+    },
+	"P4.0": {
+        "type": "int",
+		"register": 64,
+        "default_value": 10,
+        "min_value": 0,
+        "max_value": 40,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": null,
+        "description": "TO číslo ekvitermní křivky"
+    },
+    "P4.1": {
+        "type": "int",
+		"register": 65,
+        "default_value": 2,
+        "min_value": -10,
+        "max_value": 10,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "TO posun ekvitermní křivky"
+    },
+    "P4.2": {
+        "type": "options",
+		"register": 66,
+        "default_value": 1,
+        "user_access": false,
+        "description": "TO čidlo pro řízení regulace teploty",
+		"options": {
+            "0": "TC1 (Výstupní teplota)",
+            "1": "TC3 (Zpátečka TO)",
+			"2": "(TC1+TS3)/2",
+			"3": "TC6 (Aku nádoba)"
+        }
+    },
+    "P4.3": {
+        "type": "int",
+		"register": 67,
+        "default_value": 2,
+        "min_value": 0,
+        "max_value": 10,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "TO hystereze teploty"
+    },
+    "P4.4": {
+        "type": "int",
+		"register": 68,
+        "default_value": 2,
+        "min_value": 0,
+        "max_value": 10,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "TO teplota útlumu"
+    },
+    "P4.5": {
+        "type": "int",
+		"register": 69,
+        "default_value": 40,
+        "min_value": 0,
+        "max_value": 100,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "%",
+        "description": "TO úroveň proporcionality"
+    },
+    "P4.6": {
+        "type": "int",
+		"register": 70,
+        "default_value": 60,
+        "min_value": 1,
+        "max_value": 120,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "min",
+        "description": "TO ovládací interval"
+    },
+    "P4.7": {
+        "type": "int",
+		"register": 71,
+        "default_value": 40,
+        "min_value": 20,
+        "max_value": 60,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "TO manuální teplota"
+    },
+    "P4.8": {
+        "type": "int",
+		"register": 72,
+        "default_value": 50,
+        "min_value": 20,
+        "max_value": 90,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "TO MAX teplota"
+    },
+    "P4.9": {
+        "type": "int",
+		"register": 73,
+        "default_value": 10,
+        "min_value": 0,
+        "max_value": 100,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "%",
+        "description": "TO MIN výkon kompresoru"
+    },
+    "P4.A": {
+        "type": "switch",
+		"register": 74,
+        "default_value": 0,
+        "user_access": false,
+        "description": "TO akumulační nádrž",
+		"options": {
+			"0": "NE",
+            "1": "ANO"
+		}
+    },
+    "P4.B": {
+        "type": "options",
+		"register": 75,
+        "default_value": 22,
+        "user_access": true,
+        "description": "TO čas zapnutí útlumu (Po, Út, St, Čt, Pá)",
+        "options": {
+            "0": "00:00",
+            "1": "01:00",
+            "2": "02:00",
+            "3": "03:00",
+            "4": "04:00",
+            "5": "05:00",
+            "6": "06:00",
+            "7": "07:00",
+            "8": "08:00",
+            "9": "09:00",
+            "10": "10:00",
+            "11": "11:00",
+            "12": "12:00",
+            "13": "13:00",
+            "14": "14:00",
+            "15": "15:00",
+            "16": "16:00",
+            "17": "17:00",
+            "18": "18:00",
+            "19": "19:00",
+            "20": "20:00",
+            "21": "21:00",
+            "22": "22:00",
+            "23": "23:00"
+        }
+    },
+    "P4.C": {
+        "type": "options",
+		"register": 76,
+        "default_value": 8,
+        "user_access": true,
+        "description": "TO čas vypnutí útlumu (Po, Út, St, Čt, Pá)",
+        "options": {
+            "0": "00:00",
+            "1": "01:00",
+            "2": "02:00",
+            "3": "03:00",
+            "4": "04:00",
+            "5": "05:00",
+            "6": "06:00",
+            "7": "07:00",
+            "8": "08:00",
+            "9": "09:00",
+            "10": "10:00",
+            "11": "11:00",
+            "12": "12:00",
+            "13": "13:00",
+            "14": "14:00",
+            "15": "15:00",
+            "16": "16:00",
+            "17": "17:00",
+            "18": "18:00",
+            "19": "19:00",
+            "20": "20:00",
+            "21": "21:00",
+            "22": "22:00",
+            "23": "23:00"
+        }
+    },
+    "P4.D": {
+        "type": "options",
+		"register": 77,
+        "default_value": 23,
+        "user_access": true,
+        "description": "TO čas zapnutí útlumu (So, Ne)",
+        "options": {
+            "0": "00:00",
+            "1": "01:00",
+            "2": "02:00",
+            "3": "03:00",
+            "4": "04:00",
+            "5": "05:00",
+            "6": "06:00",
+            "7": "07:00",
+            "8": "08:00",
+            "9": "09:00",
+            "10": "10:00",
+            "11": "11:00",
+            "12": "12:00",
+            "13": "13:00",
+            "14": "14:00",
+            "15": "15:00",
+            "16": "16:00",
+            "17": "17:00",
+            "18": "18:00",
+            "19": "19:00",
+            "20": "20:00",
+            "21": "21:00",
+            "22": "22:00",
+            "23": "23:00"
+        }
+    },
+    "P4.E": {
+        "type": "options",
+		"register": 78,
+        "default_value": 8,
+        "user_access": true,
+        "description": "TO čas vypnutí útlumu (So, Ne)",
+        "options": {
+            "0": "00:00",
+            "1": "01:00",
+            "2": "02:00",
+            "3": "03:00",
+            "4": "04:00",
+            "5": "05:00",
+            "6": "06:00",
+            "7": "07:00",
+            "8": "08:00",
+            "9": "09:00",
+            "10": "10:00",
+            "11": "11:00",
+            "12": "12:00",
+            "13": "13:00",
+            "14": "14:00",
+            "15": "15:00",
+            "16": "16:00",
+            "17": "17:00",
+            "18": "18:00",
+            "19": "19:00",
+            "20": "20:00",
+            "21": "21:00",
+            "22": "22:00",
+            "23": "23:00"
+        }
+    },
+    "P4.F": {
+        "type": "int",
+		"register": 79,
+        "default_value": 5,
+        "min_value": -10,
+        "max_value": 20,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "TO MAX výkon kompresoru limitní teplota"
+
+    },
+    "P5.0": {
+        "type": "int",
+		"register": 80,
+        "default_value": 100,
+        "min_value": 10,
+        "max_value": 100,
+        "increment_value": 5,
+        "user_access": false,
+		"unit": "%",
+        "description": "TO MAX výkon kompresoru nad limitní tepotou"
+    },
+    "P5.1": {
+        "type": "int",
+		"register": 81,
+        "default_value": 100,
+        "min_value": 10,
+        "max_value": 100,
+        "increment_value": 5,
+        "user_access": false,
+		"unit": "%",
+        "description": "TO MAX výkon kompresoru pod limitní teplotou"
+    },
+	"P6.0": {
+        "type": "switch",
+		"register": 96,
+        "default_value": 1,
+        "user_access": true,
+        "description": "TUV",
+        "options": {
+            "0": "Vypnuto",
+            "1": "Zapnuto"
+        }
+    },
+    "P6.1": {
+        "type": "int",
+		"register": 97,
+        "default_value": 46,
+        "min_value": 20,
+        "max_value": 70,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "TUV teplota"
+
+    },
+    "P6.2": {
+        "type": "int",
+		"register": 98,
+        "default_value": 3,
+        "min_value": 0,
+        "max_value": 10,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "TUV hystereze teploty"
+    },
+    "P6.3": {
+        "type": "int",
+		"register": 99,
+        "default_value": 3,
+        "min_value": 0,
+        "max_value": 30,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "TUV teplota útlumu"
+    },
+    "P6.4": {
+        "type": "int",
+		"register": 100,
+        "default_value": 3,
+        "min_value": 1,
+        "max_value": 6,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": null,
+        "description": "TUV MAX počet pokusů"
+    },
+    "P6.5": {
+        "type": "int",
+		"register": 101,
+        "default_value": 100,
+        "min_value": 5,
+        "max_value": 100,
+        "increment_value": 5,
+        "user_access": false,
+		"unit": "%",
+        "description": "TUV MAX výkon komp. (léto)"
+    },
+    "P6.6": {
+        "type": "int",
+		"register": 102,
+        "default_value": 100,
+        "min_value": 5,
+        "max_value": 100,
+        "increment_value": 5,
+        "user_access": false,
+		"unit": "%",
+        "description": "TUV MAX výkon komp. (zima)"
+    },
+    "P6.7": {
+        "type": "int",
+		"register": 103,
+        "default_value": 35,
+        "min_value": 30,
+        "max_value": 40,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "TUV MAX venkovní tepl. pro kompresor"
+    },
+    "P6.8": {
+        "type": "switch",
+		"register": 104,
+        "default_value": 1,
+        "user_access": true,
+        "description": "TUV funkce Legionella",
+        "options": {
+            "0": "Vypnuto",
+            "1": "Zapnuto"
+        }
+    },
+    "P6.9": {
+        "type": "int",
+		"register": 105,
+        "default_value": 60,
+        "min_value": 50,
+        "max_value": 70,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "TUV teplota Legionella - žádaná teplota"
+    },
+    "P6.A": {
+        "type": "options",
+		"register": 106,
+        "default_value": 1,
+        "user_access": true,
+        "description": "TUV Legionela zapnutí - den v týdnu",
+        "options": {
+            "1": "Pondělí",
+            "2": "Úterý",
+            "3": "Středa",
+            "4": "Čtvrtek",
+            "5": "Pátek",
+            "6": "Sobota",
+            "7": "Neděle"
+        }
+    },
+    "P6.B": {
+		"type": "options",
+		"register": 107,
+        "default_value": 1,
+        "user_access": true,
+        "description": "TUV Legionela zapnutí - čas",
+        "options": {
+            "0": "00:00",
+            "1": "01:00",
+            "2": "02:00",
+            "3": "03:00",
+            "4": "04:00",
+            "5": "05:00",
+            "6": "06:00",
+            "7": "07:00",
+            "8": "08:00",
+            "9": "09:00",
+            "10": "10:00",
+            "11": "11:00",
+            "12": "12:00",
+            "13": "13:00",
+            "14": "14:00",
+            "15": "15:00",
+            "16": "16:00",
+            "17": "17:00",
+            "18": "18:00",
+            "19": "19:00",
+            "20": "20:00",
+            "21": "21:00",
+            "22": "22:00",
+            "23": "23:00"
+        }
+    },
+    "P6.C": {
+        "type": "options",
+		"register": 108,
+        "default_value": 22,
+        "user_access": true,
+        "description": "TUV čas zapnutí útlumu (Po, Út, St, Čt, Pá)",
+        "options": {
+            "0": "00:00",
+            "1": "01:00",
+            "2": "02:00",
+            "3": "03:00",
+            "4": "04:00",
+            "5": "05:00",
+            "6": "06:00",
+            "7": "07:00",
+            "8": "08:00",
+            "9": "09:00",
+            "10": "10:00",
+            "11": "11:00",
+            "12": "12:00",
+            "13": "13:00",
+            "14": "14:00",
+            "15": "15:00",
+            "16": "16:00",
+            "17": "17:00",
+            "18": "18:00",
+            "19": "19:00",
+            "20": "20:00",
+            "21": "21:00",
+            "22": "22:00",
+            "23": "23:00"
+        }
+    },
+    "P6.D": {
+        "type": "options",
+		"register": 109,
+        "default_value": 6,
+        "user_access": true,
+        "description": "TUV čas vypnutí útlumu (Po, Út, St, Čt, Pá)",
+        "options": {
+            "0": "00:00",
+            "1": "01:00",
+            "2": "02:00",
+            "3": "03:00",
+            "4": "04:00",
+            "5": "05:00",
+            "6": "06:00",
+            "7": "07:00",
+            "8": "08:00",
+            "9": "09:00",
+            "10": "10:00",
+            "11": "11:00",
+            "12": "12:00",
+            "13": "13:00",
+            "14": "14:00",
+            "15": "15:00",
+            "16": "16:00",
+            "17": "17:00",
+            "18": "18:00",
+            "19": "19:00",
+            "20": "20:00",
+            "21": "21:00",
+            "22": "22:00",
+            "23": "23:00"
+        }
+    },
+    "P6.E": {
+		"type": "options",
+		"register": 110,
+        "default_value": 23,
+        "user_access": true,
+        "description": "TUV čas zapnutí útlumu (So, Ne)",
+        "options": {
+            "0": "00:00",
+            "1": "01:00",
+            "2": "02:00",
+            "3": "03:00",
+            "4": "04:00",
+            "5": "05:00",
+            "6": "06:00",
+            "7": "07:00",
+            "8": "08:00",
+            "9": "09:00",
+            "10": "10:00",
+            "11": "11:00",
+            "12": "12:00",
+            "13": "13:00",
+            "14": "14:00",
+            "15": "15:00",
+            "16": "16:00",
+            "17": "17:00",
+            "18": "18:00",
+            "19": "19:00",
+            "20": "20:00",
+            "21": "21:00",
+            "22": "22:00",
+            "23": "23:00"
+        }
+    },
+    "P6.F": {
+        "type": "options",
+		"register": 111,
+        "default_value": 7,
+        "user_access": true,
+        "description": "TUV čas vypnutí útlumu (So, Ne)",
+        "options": {
+            "0": "00:00",
+            "1": "01:00",
+            "2": "02:00",
+            "3": "03:00",
+            "4": "04:00",
+            "5": "05:00",
+            "6": "06:00",
+            "7": "07:00",
+            "8": "08:00",
+            "9": "09:00",
+            "10": "10:00",
+            "11": "11:00",
+            "12": "12:00",
+            "13": "13:00",
+            "14": "14:00",
+            "15": "15:00",
+            "16": "16:00",
+            "17": "17:00",
+            "18": "18:00",
+            "19": "19:00",
+            "20": "20:00",
+            "21": "21:00",
+            "22": "22:00",
+            "23": "23:00"
+        }
+    },
+    "P7.0": {
+        "type": "int",
+		"register": 112,
+        "default_value": 50,
+        "min_value": 40,
+        "max_value": 60,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "TUV teplota pro start DZ"
+    },
+	"P8.0": {
+        "type": "int",
+		"register": 128,
+        "default_value": -8,
+        "min_value": -25,
+        "max_value": 20,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "DZ teplota"
+    },
+    "P8.1": {
+        "type": "int",
+		"register": 129,
+        "default_value": 2,
+        "min_value": 0,
+        "max_value": 10,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "DZ hystereze teploty"
+    },
+    "P8.2": {
+        "type": "int",
+		"register": 130,
+        "default_value": 15,
+        "min_value": 0,
+        "max_value": 30,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "min",
+        "description": "DZ čas zpoždění výst."
+    },
+    "P8.3": {
+        "type": "int",
+		"register": 131,
+        "default_value": -18,
+        "min_value": -40,
+        "max_value": 10,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "DZ vše, MIN tepl. pro provoz komp."
+    },
+    "P8.4": {
+        "type": "int",
+		"register": 132,
+        "default_value": 2,
+        "min_value": 0,
+        "max_value": 10,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "DZ vše, hystereze teploty"
+    },
+    "P8.5": {
+        "type": "options",
+		"register": 133,
+        "default_value": 1,
+        "user_access": true,
+        "description": "DZ náhradní provoz",
+        "options": {
+            "0": "Ne",
+            "1": "Ano",
+            "2": "Nucený provoz"
+        }
+    },
+    "P8.6": {
+        "type": "int",
+		"register": 134,
+        "default_value": 18,
+        "min_value": 5,
+        "max_value": 22,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "DZ MIN TO/TUV teplota"
+    },
+    "P8.7": {
+        "type": "int",
+		"register": 135,
+        "default_value": 70,
+        "min_value": 70,
+        "max_value": 90,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "DZ výměník MAX tepl."
+    },
+    "P8.8": {
+        "type": "int",
+		"register": 136,
+        "default_value": 5,
+        "min_value": -40,
+        "max_value": 10,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "DZ vše tepl. podmínka"
+    },
+	"P9.0": {
+        "type": "int",
+		"register": 160,
+        "default_value": 5,
+        "min_value": 0,
+        "max_value": 50,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "FVE TO teplota přehřátí"
+    },
+    "P9.1": {
+        "type": "int",
+		"register": 161,
+        "default_value": 5,
+        "min_value": 0,
+        "max_value": 50,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "FVE TO teplota pokles"
+    },
+    "P9.2": {
+        "type": "options",
+		"register": 162,
+        "default_value": 0,
+        "user_access": false,
+        "description": "FVE TO režim provozu",
+        "options": {
+            "0": "Termostat",
+            "1": "Zima",
+            "2": "Celý rok"
+        }
+    },
+    "P9.3": {
+        "type": "int",
+		"register": 163,
+        "default_value": 5,
+        "min_value": 0,
+        "max_value": 50,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "FVE TUV teplota přehřátí"
+    },
+    "P9.4": {
+        "type": "int",
+		"register": 164,
+        "default_value": 5,
+        "min_value": 0,
+        "max_value": 50,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "FVE TUV teplota pokles"
+    },
+    "P9.5": {
+        "type": "int",
+		"register": 165,
+        "default_value": 2,
+        "min_value": 0,
+        "max_value": 20,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "FVE chl. tepl. přechlazení"
+    },
+    "P9.6": {
+        "type": "int",
+		"register": 166,
+        "default_value": 2,
+        "min_value": 0,
+        "max_value": 20,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "FVE chla. zvýšení teploty"
+    },
+    "P9.7": {
+        "type": "int",
+		"register": 167,
+        "default_value": 5,
+        "min_value": 0,
+        "max_value": 50,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "FVE bazén teplota přehřátí"
+    },
+    "P9.8": {
+        "type": "int",
+		"register": 168,
+        "default_value": 5,
+        "min_value": 0,
+        "max_value": 50,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "FVE bazén teplota pokles"
+    },
+    "P9.9": {
+        "type": "int",
+		"register":1690,
+        "default_value": 50,
+        "min_value": 20,
+        "max_value": 100,
+        "increment_value": 5,
+        "user_access": false,
+		"unit": "%",
+        "description": "FVE min. výkon pro DZ"
+    },
+    "P9.A": {
+        "type": "options",
+		"register": 170,
+        "default_value": 0,
+        "user_access": false,
+        "description": "FVE DZ režim",
+        "options": {
+            "0": "Vypnuto",
+            "1": "DZ po TČ",
+            "2": "DZ a TČ"
+        }
+    },
+	"PA.0": {
+        "type": "options",
+		"register": 192,
+        "default_value": 0,
+        "user_access": false,
+        "description": "Senzor teploty prostoru",
+        "options": {
+            "0": "Vypnuto",
+            "1": "TS5",
+            "2": "Modbus Sensor"
+        }
+    },
+    "PA.1": {
+        "type": "float",
+		"register": 193,
+        "default_value": 21.5,
+        "min_value": 10,
+        "max_value": 35,
+        "increment_value": 0.1,
+		"multiplied": 10,
+        "user_access": true,
+		"unit": "°C",
+        "description": "Žádaná prostorová teplota"
+    },
+    "PA.2": {
+        "type": "float",
+		"register": 194,
+        "default_value": 5,
+        "min_value": 0.1,
+        "max_value": 5,
+        "increment_value": 0.1,
+		"multiplied": 10,
+        "user_access": true,
+		"unit": "°C",
+        "description": "Hystereze prostorové tepl."
+    },
+    "PA.3": {
+        "type": "float",
+		"register": 195,
+        "default_value": 0,
+        "min_value": 0,
+        "max_value": 10,
+        "increment_value": 0.1,
+		"multiplied": 10,
+        "user_access": true,
+		"unit": "°C",
+        "description": "Útlum prostorové teploty"
+    },
+    "PA.4": {
+        "type": "int",
+		"register": 196,
+        "default_value": 50,
+        "min_value": 0,
+        "max_value": 100,
+        "increment_value": 5,
+        "user_access": false,
+		"unit": "%",
+        "description": "Vliv pokojové teploty"
+    },
+    "PA.5": {
+        "type": "int",
+		"register": 197,
+        "default_value": 12,
+        "min_value": 0,
+        "max_value": 96,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "h",
+        "description": "Integrační čas"
+    },
+    "PA.6": {
+        "type": "float",
+		"register": 198,
+        "default_value": 5,
+        "min_value": 0.5,
+        "max_value": 10,
+        "increment_value": 0.1,
+		"multiplied": 10,
+        "user_access": false,
+		"unit": "°C",
+        "description": "Rozsah vlivu prostoru"
+    },
+	"PB.0": {
+        "type": "float",
+		"register": 224,
+        "default_value": 1.0,
+        "min_value": 0.1,
+        "max_value": 25.5,
+        "increment_value": 0.1,
+		"multiplied": 10,
+        "user_access": false,
+		"unit": "L",
+        "description": "Průtok - refer. množství"
+    },
+    "PB.1": {
+        "type": "int",
+		"register": 225,
+        "default_value": 100,
+        "min_value": 1,
+        "max_value": 255,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": null,
+        "description": "Pulzy pro refer. množství"
+    },
+    "PB.2": {
+        "type": "options",
+		"register": 226,
+        "default_value": 7,
+        "user_access": false,
+        "description": "Funkce doplň. výstupu 1",
+        "options": {
+            "0": "Odtávání",
+            "1": "Oběh. čerp. Topení TO1",
+            "2": "Oběh. čerp. topení/chlazení",
+            "3": "Oběh. Čerp. bazén",
+            "4": "Chlazení",
+            "5": "Útlum",
+            "6": "Vyhřívání kompresoru",
+            "7": "Oběhové čerpadlo TO2",
+            "8": "Otevřít směšovací ventil TO2",
+            "9": "Zavřít směšovací ventil TO2"
+        }
+    },
+    "PB.3": {
+        "type": "options",
+		"register": 227,
+        "default_value": 8,
+        "user_access": false,
+        "description": "Funkce doplň. výstupu 2",
+        "options": {
+			"0": "Odtávání",
+            "1": "Oběh. čerp. Topení TO1",
+            "2": "Oběh. čerp. topení/chlazení",
+            "3": "Oběh. Čerp. bazén",
+            "4": "Chlazení",
+            "5": "Útlum",
+            "6": "Vyhřívání kompresoru",
+            "7": "Oběhové čerpadlo TO2",
+            "8": "Otevřít směšovací ventil TO2",
+            "9": "Zavřít směšovací ventil TO2"
+        }
+    },
+    "PB.4": {
+        "type": "options",
+		"register": 228,
+        "default_value": 9,
+        "user_access": false,
+        "description": "Funkce doplň. výstupu 3",
+        "options": {
+            "0": "Odtávání",
+            "1": "Oběh. čerp. Topení TO1",
+            "2": "Oběh. čerp. topení/chlazení",
+            "3": "Oběh. Čerp. bazén",
+            "4": "Chlazení",
+            "5": "Útlum",
+            "6": "Vyhřívání kompresoru",
+            "7": "Oběhové čerpadlo TO2",
+            "8": "Otevřít směšovací ventil TO2",
+            "9": "Zavřít směšovací ventil TO2"
+        }
+    },
+	"PB.5": {
+        "type": "switch",
+		"register": 229,
+        "default_value": 0,
+        "user_access": false,
+        "description": "Čidlo kapalného chladiva TS9",
+        "options": {
+            "0": "Neaktivní",
+            "1": "Aktivní"
+        }
+    },
+	"PC.0": {
+        "type": "switch",
+		"register": 256,
+        "default_value": 0,
+        "user_access": false,
+        "description": "TO2",
+        "options": {
+            "0": "Neaktivní",
+            "1": "Aktivní"
+        }
+    },
+    "PC.1": {
+        "type": "int",
+		"register": 257,
+        "default_value": 26,
+        "min_value": 0,
+        "max_value": 40,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": null,
+        "description": "TO2 číslo ekvitermní křivky"
+    },
+    "PC.2": {
+        "type": "int",
+		"register": 258,
+        "default_value": 2,
+        "min_value": -10,
+        "max_value": 10,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "TO2 posun ekvitermní křivky"
+    },
+    "PC.3": {
+        "type": "int",
+		"register": 259,
+        "default_value": 1,
+        "min_value": 0,
+        "max_value": 5,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "TO2 hystereze teploty"
+    },
+    "PC.4": {
+        "type": "int",
+		"register": 260,
+        "default_value": 2,
+        "min_value": 0,
+        "max_value": 10,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "TO2 teplota útlumu"
+    },
+    "PC.5": {
+        "type": "int",
+		"register": 261,
+        "default_value": 15,
+        "min_value": 1,
+        "max_value": 100,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "%",
+        "description": "TO2 úroveň proporcionality"
+    },
+    "PC.6": {
+        "type": "int",
+		"register": 262,
+        "default_value": 15,
+        "min_value": 1,
+        "max_value": 30,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "min",
+        "description": "TO2 ovládací interval"
+    },
+    "PC.7": {
+        "type": "int",
+		"register": 263,
+        "default_value": 35,
+        "min_value": 20,
+        "max_value": 60,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "TO2 manuální teplota"
+    },
+    "PC.8": {
+        "type": "int",
+		"register": 264,
+        "default_value": 40,
+        "min_value": 20,
+        "max_value": 60,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "TO2 MAX teplota"
+    },
+    "PC.9": {
+        "type": "switch",
+		"register": 265,
+        "default_value": 1,
+        "user_access": false,
+        "description": "TO2 Termostat",
+        "options": {
+            "0": "Neaktivní",
+            "1": "Aktivní"
+        }
+    },
+    "PC.A": {
+        "type": "int",
+		"register": 266,
+        "default_value": 120,
+        "min_value": 10,
+        "max_value": 1200,
+        "increment_value": 10,
+        "user_access": false,
+		"unit": "s",
+        "description": "TO2 Doba chodu motoru směšovacího ventilu"
+    },
+    "PC.B": {
+        "type": "float",
+		"register": 267,
+        "default_value": 0.5,
+        "min_value": 0.3,
+        "max_value": 3.0,
+        "increment_value": 0.1,
+		"multiplied": 10,
+        "user_access": false,
+		"unit": "s",
+        "description": "TO2 směšovací ventil MIN trvání řídícího signálu"
+    },
+    "fhi": {
+        "type": "options",
+        "default_value": 0,
+        "register": "fhi",
+        "user_access": false,
+        "description": "Frekvence zapisování historie",
+        "options": {
+            "0": "3 minuty",
+            "1": "1 hodina"
+        }
+    }
+}

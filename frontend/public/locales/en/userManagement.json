@@ -1,0 +1,77 @@
+{
+  "userManagement": {
+    "title": "User Management",
+    "addUser": "Add User",
+    "search": "Search...",
+    "actions": {
+      "title": "Actions",
+      "copyEmail": "Copy user e-mail",
+      "viewUser": "View user",
+      "editUser": "Edit user",
+      "deleteUser": "Delete user"
+    },
+    "table": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "E-mail",
+      "emailVerifiedAt": "E-mail verified at",
+      "notVerified": "Not Verified"
+    },
+    "viewUser": {
+      "title": "View User",
+      "description": "Information about user",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "E-mail",
+      "emailVerifiedAt": "E-mail verified at",
+      "accountCreatedAt": "Account created at",
+      "has2FA": "Has 2FA",
+      "yes": "Yes",
+      "no": "No",
+      "unknown": "Unknown",
+      "roles": "Roles",
+      "noRoles": "No roles assigned",
+      "permissions": "Permissions",
+      "noPermissions": "No permissions assigned"
+    },
+    "createUser": {
+      "title": "Add new user",
+      "description": "You can add new user here",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "E-mail",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "roles": "Roles",
+      "permissions": "Permissions",
+      "saveChanges": "Save changes"
+    },
+    "editUser": {
+      "title": "Edit User",
+      "description": "You can edit user here",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "E-mail",
+      "roles": "Roles",
+      "permissions": "Permissions",
+      "saveChanges": "Save changes"
+    },
+    "deleteUser": {
+      "title": "Are you absolutely sure?",
+      "description": "This action cannot be undone. This will permanently delete user with e-mail: {{email}}",
+      "unknownEmail": "Unknown",
+      "cancel": "Cancel",
+      "delete": "Delete"
+    },
+    "notifications": {
+      "userCreated": "User created successfully.",
+      "userCreatedDescription": "You have created user with e-mail: {{email}}",
+      "userDeleted": "User deleted successfully.",
+      "userDeletedDescription": "You have deleted user with e-mail: {{email}}",
+      "userUpdated": "User info changed successfully.",
+      "error": "Uh oh! Something went wrong.",
+      "errorDescription": "There was a problem with your request.",
+      "genericError": "Something went wrong. Please try again later."
+    }
+  }
+}

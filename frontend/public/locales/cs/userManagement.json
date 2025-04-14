@@ -1,0 +1,85 @@
+{
+  "userManagement": {
+    "title": "Správa uživatelů",
+    "addUser": "Přidat uživatele",
+    "search": "Vyhledat...",
+    "actions": {
+      "title": "Akce",
+      "copyEmail": "Zkopírovat e-mail uživatele",
+      "viewUser": "Zobrazit uživatele",
+      "editUser": "Upravit uživatele",
+      "deleteUser": "Smazat uživatele"
+    },
+    "table": {
+      "firstName": "Jméno",
+      "lastName": "Příjmení",
+      "email": "E-mail",
+      "emailVerifiedAt": "E-mail ověřen dne",
+      "notVerified": "Neověřeno"
+    },
+    "pagination": {
+      "previous": "Předchozí",
+      "next": "Další",
+      "showing": "Zobrazeno {{from}} až {{to}} z {{total}}",
+      "rows": "řádků",
+      "columns": "Sloupce",
+      "noResults": "Žádné výsledky."
+    },
+    "viewUser": {
+      "title": "Zobrazit uživatele",
+      "description": "Informace o uživateli",
+      "firstName": "Jméno",
+      "lastName": "Příjmení",
+      "email": "E-mail",
+      "emailVerifiedAt": "E-mail ověřen dne",
+      "accountCreatedAt": "Účet vytvořen dne",
+      "has2FA": "Má 2FA",
+      "yes": "Ano",
+      "no": "Ne",
+      "unknown": "Neznámé",
+      "roles": "Role",
+      "noRoles": "Nejsou přiřazeny žádné role",
+      "permissions": "Oprávnění",
+      "noPermissions": "Nejsou přiřazena žádná oprávnění"
+    },
+    "createUser": {
+      "title": "Přidat nového uživatele",
+      "description": "Zde můžete přidat nového uživatele",
+      "firstName": "Jméno",
+      "lastName": "Příjmení",
+      "email": "E-mail",
+      "password": "Heslo",
+      "confirmPassword": "Potvrdit heslo",
+      "roles": "Role",
+      "permissions": "Oprávnění",
+      "saveChanges": "Uložit změny"
+    },
+    "editUser": {
+      "title": "Upravit uživatele",
+      "description": "Zde můžete upravit údaje o uživateli",
+      "firstName": "Jméno",
+      "lastName": "Příjmení",
+      "email": "E-mail",
+      "roles": "Role",
+      "permissions": "Oprávnění",
+      "saveChanges": "Uložit změny"
+    },
+    "deleteUser": {
+      "title": "Opravdu si přejete pokračovat?",
+      "description": "Tuto akci nelze vrátit zpět. Uživatel s e-mailem {{email}} bude trvale smazán.",
+      "unknownEmail": "Neznámý",
+      "cancel": "Zrušit",
+      "delete": "Smazat"
+    },
+    "notifications": {
+      "userCreated": "Uživatel úspěšně vytvořen.",
+      "userCreatedDescription": "Vytvořili jste uživatele s e-mailem: {{email}}",
+      "userDeleted": "Uživatel úspěšně smazán.",
+      "userDeletedDescription": "Smazali jste uživatele s e-mailem: {{email}}",
+      "userUpdated": "Údaje o uživateli byly úspěšně změněny.",
+      "error": "Jejda! Něco se pokazilo.",
+      "errorDescription": "Došlo k problému s vaší žádostí.",
+      "genericError": "Něco se pokazilo. Zkuste to prosím znovu později."
+    }
+  }
+}

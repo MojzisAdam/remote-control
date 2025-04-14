@@ -1,0 +1,56 @@
+{
+  "title": "Nastavení",
+  "description": "Spravujte svá nastavení aplikace",
+  "tabs": {
+    "dashboard": "Přehled",
+    "appearance": "Vzhled",
+    "language": "Jazyk",
+    "dbShort": "Přeh.",
+    "themeShort": "Motiv",
+    "langShort": "Jaz."
+  },
+  "dashboard": {
+    "title": "Nastavení přehledu",
+    "description": "Upravte si vzhled a chování přehledu",
+    "showFavorites": "Zobrazit oblíbená zařízení",
+    "showFavoritesHint": "Zobrazí oblíbená zařízení nahoře v přehledu",
+    "defaultView": "Výchozí zobrazení",
+    "defaultViewHint": "Zvolte, jak se budou zařízení zobrazovat v přehledu",
+    "reset": "Obnovit výchozí nastavení"
+  },
+  "appearance": {
+    "title": "Vzhled",
+    "description": "Upravte si vzhled aplikace"
+  },
+  "language": {
+    "title": "Nastavení jazyka",
+    "description": "Vyberte preferovaný jazyk",
+    "label": "Jazyk"
+  },
+  "themes": {
+    "light": "Světlý",
+    "dark": "Tmavý",
+    "automatic": "Automatický"
+  },
+  "saveChanges": {
+    "full": "Uložit změny",
+    "short": "Uložit"
+  },
+  "resetDialog": {
+    "title": "Obnovit nastavení?",
+    "description": "Tuto akci nelze vrátit zpět. Všechna vlastní nastavení budou obnovena.",
+    "cancel": "Zrušit",
+    "confirm": "Obnovit"
+  },
+  "toast": {
+    "savedTitle": "Nastavení uloženo",
+    "savedDescription": "Vaše nastavení byla úspěšně aktualizována.",
+    "resetTitle": "Nastavení obnoveno",
+    "resetDescription": "Všechna nastavení byla obnovena do výchozího stavu."
+  },
+  "views": {
+    "grid": "Mřížka",
+    "list": "Seznam",
+    "select": "Vyberte typ zobrazení"
+  }
+}

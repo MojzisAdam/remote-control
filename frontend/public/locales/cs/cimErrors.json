@@ -1,0 +1,138 @@
+{
+  "errors": {
+    "0": "Žádná chyba.",
+    "6": "Časový limit (timeout) modbus čidla teploty prostoru.",
+    "7": "CIM - Datum a čas není nastaven.",
+    "8": "CIM - Vybitá baterie.",
+    "9": "CIM - Chyba RTC.",
+    "10": "CIM - Špatný typ teplotního čidla.",
+    "14": "CIM - Chyba teplotního čidla.",
+    "15": {
+      "1500": "CIM - TS8 hlásí chybu.",
+      "default": "CIM - TS5 hlásí chybu."
+    },
+    "16": {
+      "1500": "CIM - TS7 hlásí chybu.",
+      "default": "CIM - TS4 hlásí chybu."
+    },
+    "17": {
+      "1500": "CIM - TS6 hlásí chybu.",
+      "default": "CIM - TS3 hlásí chybu."
+    },
+    "18": {
+      "1500": "CIM - TS5 hlásí chybu.",
+      "default": "CIM - TS2 hlásí chybu."
+    },
+    "19": {
+      "1500": "CIM - TS4 hlásí chybu",
+      "default": "CIM - TS1 hlásí chybu"
+    },
+    "20": "CIM - TS3 hlásí chybu",
+    "21": "CIM - TS2 hlásí chybu",
+    "22": "CIM - TS1 hlásí chybu",
+    "24": {
+      "1500": "CIM - Snímač teploty je přiřazen k jiné funkci.",
+      "default": "CIM - Snímač teploty používá jiná funkce."
+    },
+    "25": {
+      "1500": "CIM - TS8 není připojen.",
+      "default": "CIM - TS5 není připojen."
+    },
+    "26": {
+      "1500": "CIM - TS7 není připojen.",
+      "default": "CIM - TS4 není připojen."
+    },
+    "27": {
+      "1500": "CIM - TS6 není připojen.",
+      "default": "CIM - TS3 není připojen."
+    },
+    "28": {
+      "1500": "CIM - TS5 není připojen.",
+      "default": "CIM - TS2 není připojen."
+    },
+    "29": {
+      "1500": "CIM - TS4 není připojen.",
+      "default": "CIM - TS1 není připojen."
+    },
+    "30": "CIM - TS3 není připojen.",
+    "31": "CIM - TS2 není připojen.",
+    "32": "CIM - TS1 není připojen.",
+    "35": {
+      "1500": "CIM - TS8 není přiřazen.",
+      "default": "CIM - TS5 není přiřazen."
+    },
+    "36": {
+      "1500": "CIM - TS7 není přiřazen.",
+      "default": "CIM - TS4 není přiřazen."
+    },
+    "37": {
+      "1500": "CIM - TS6 není přiřazen.",
+      "default": "CIM - TS3 není přiřazen."
+    },
+    "38": {
+      "1500": "CIM - TS5 není přiřazen.",
+      "default": "CIM - TS2 není přiřazen."
+    },
+    "39": {
+      "1500": "CIM - TS4 není přiřazen.",
+      "default": "CIM - TS1 není přiřazen."
+    },
+    "40": {
+      "1500": "CIM - TS3 není přiřazen.",
+      "default": "CIM - Teplotní čidlo není připojeno."
+    },
+    "41": {
+      "1500": "CIM - TS2 není přiřazen.",
+      "default": "CIM - Chyba teplotního čidla."
+    },
+    "42": {
+      "1500": "CIM - TS1 není přiřazen.",
+      "default": "CIM - Chyba teplotního čidla."
+    },
+    "43": {
+      "1500": "CIM - Snímač teploty CIM není připojen.",
+      "default": "CIM - Špatná polarita teplotního čidla"
+    },
+    "44": "CIM - Porucha teplotního čidla.",
+    "45": "CIM - Porucha teplotního čidla.",
+    "46": "CIM - Špatná polarita teplotního čidla",
+    "50": "Venkovní jednotka – chyba komunikace.",
+    "51": "Kapacita venkovní jednotky je jiná, než je nastavené v CIM modulu.",
+    "52": "Venkovní jednotka - Chyba přerušení napájení.",
+    "53": "Venkovní jednotka - Chyba invertoru.",
+    "54": "Venkovní jednotka - Chyba aktivního filtru, chyba desky PFC",
+    "55": "Venkovní jednotka - Chyba čidla výstupní teploty.",
+    "56": "Venkovní jednotka - Chyba čidla teploty kompresoru.",
+    "57": "Venkovní jednotka - Chyba čidla teploty potrubí kapaliny.",
+    "58": "Venkovní jednotka – Chyba čidla venkovní teploty.",
+    "59": "Venkovní jednotka - Chyba čidla teploty sání plynu venkovní jednotky.",
+    "60": "Venkovní jednotka - Chyba čidla teploty dvoucestného/třícestného ventilu.",
+    "61": "Venkovní jednotka - Chyba čidla teploty kondenzátoru.",
+    "62": "Venkovní jednotka - Chyba čidla teploty potrubí kapaliny.",
+    "63": "Venkovní jednotka - Chyba proudového snímače.",
+    "64": "Venkovní jednotka - Chyba čidla tlaku.",
+    "65": "Venkovní jednotka - Chyba: venkovní jednotka mimo provozní hodnoty (Trip detection)",
+    "66": "Venkovní jednotka - Chyba detekce polohy rotoru kompresoru.",
+    "67": "Venkovní jednotka - Chyba motoru ventilátoru",
+    "68": "Venkovní jednotka - Chyba motoru ventilátoru 2.",
+    "69": "Venkovní jednotka - Chyba čtyřcestného ventilu.",
+    "70": "Venkovní jednotka - Chyba cívky (expanzní ventil).",
+    "71": "Venkovní jednotka - Chyba výstupní teploty.",
+    "72": "Venkovní jednotka - Chyba teploty kompresoru.",
+    "73": "Venkovní jednotka - Chyba vysokého tlaku.",
+    "74": "Venkovní jednotka - Chyba nízkého tlaku.",
+    "79": "Venkovní jednotka - Neznámá chyba",
+    "80": "Není připojena venkovní jednotka.",
+    "82": "Nízká výstupní teplota během odtávání.",
+    "84": "Vnitřní jednotka – Není průtok.",
+    "unknown": "Neznáma chyba."
+  },
+  "errorDescriptions": {
+    "7": "\n\nNastavte čas a datum v menu.",
+    "serviceContact": "\n\nKontaktujte servisní organizaci.",
+    "64": "\n\n1. Zkontrolujte zda není zakrytý výparník TČ \n2. Zkontrolujte čistotu výparníku TČ \n3. Kontaktujte servisní organizaci.",
+    "80": "\n\n1. Zkontrolujte jistič venkovní jednotky. \n2. Kontaktujte servisní organizaci.",
+    "82": "\n\n1. Zkontrolujte sítko/filtr TO TČ. \n2. Zkontrolujte oběhové čerp. okruhu TČ. \n3. V topném systému je příliš nízká T. \n4. Kontaktujte servisní organizaci.",
+    "84": "\n\n1. Zkontrolujte tlak topného okruhu. \n2. Zkontrolujte sítko/filtr TO TČ. \n3. Zkontrolujte kulové ventily okruhu TČ. \n4. Zkontrolujte oběhové čerpadlo okruhu TČ. \n5. Kontaktujte servisní organizaci."
+  }
+}

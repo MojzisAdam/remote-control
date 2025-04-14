@@ -1,0 +1,69 @@
+{
+  "pageTitle": "History - {{deviceId}}",
+  "heading": "History",
+  "mainGraphTitle": "Main Graph",
+  "error.title": "Error",
+  "error.description": "Fetching graph data failed. Please try again later.",
+  "toast.fetchFail.title": "Fetching new data failed.",
+  "toast.fetchFail.description": "Please try again later.",
+  "toast.saveSuccess.title": "Line visibility successfuly saved.",
+  "toast.saveError.title": "Failed while saving.",
+  "toast.saveError.description": "Please try again later.",
+   "liveLogging": {
+    "title": "Live Logging",
+    "description": "Monitor device data in real-time",
+    "statusTitle": "Connection Information",
+    "status": "Status",
+    "note": "Live logging displays real-time data but does not save it to history. Works only with script verstion greater than 3.2.0."
+  },
+  "mqttStatus": {
+    "connected": "connected",
+    "connecting": "connecting...",
+    "disconnected": "disconnected",
+    "error": "error",
+    "reconnecting": "reconnecting..."
+  },
+  "noData": "No data available for the selected date range.",
+  "customGraphs": {
+    "title": "Custom Graphs",
+     "empty": "No custom charts added.",
+    "errorTitle": "Error",
+    "errorDescription": "Loading custom graphs failed. Please try again later.",
+    "toast": {
+      "createSuccess": "Custom graph successfully created.",
+      "updateSuccess": "Custom graph successfully updated.",
+      "deleteSuccess": "Custom graph successfully deleted.",
+      "errorTitle": "Failed while saving.",
+      "errorDescription": "Please try again later."
+    },
+    "addChart": "Add Chart",
+    "createChart": "Create Custom Chart",
+    "editChart": "Edit Chart",
+    "namePlaceholder": "Enter chart name",
+    "metricsPlaceholder": "Select metrics",
+    "createChartButton": "Create Chart",
+    "updateChart": "Update Chart",
+    "deleteConfirmTitle": "Are you absolutely sure?",
+    "deleteConfirmDescription": "This action cannot be undone. This will permanently delete your graph and remove it from the server."
+  },
+  "cancel": "Cancel",
+  "continue": "Continue",
+  "from": "From",
+  "to": "To",
+  "apply": "Apply",
+  "range": {
+		"hour": "Hour",
+		"day": "Day",
+		"week": "Week"
+	},
+    "paginationErrorTitle": "Failed to load data.",
+	"paginationErrorDescription": "Unable to retrieve device history data.",
+	"unexpectedErrorDescription": "An unexpected error occurred. Please try again later.",
+    "dateRange": "Date range",
+	"selectDateRange": "Select Date Range",
+	"clear": "Clear",
+	"showOnlyErrors": "Show only rows where chyba > 0",
+    "update_available": "A new version is available!",
+	"update_reload_prompt": "Please reload the page to update to the latest version.",
+	"reload_button": "Reload Page"
+}

@@ -1,0 +1,180 @@
+{
+  "title": "Remote Control",
+  "parameterGroups": {
+    "basicParameters": "Basic Parameters",
+    "commonRegulatorParameters": "Common Regulator Parameters",
+    "heatingCircuitParameters": "Heating Circuit (HC) Parameters",
+    "domesticHotWaterParameters": "Domestic Hot Water (DHW) Parameters",
+    "bivalentSourceParameters": "Bivalent Source (BS) Parameters",
+    "photovoltaicParameters": "Photovoltaic Power Plant (PVPP) Parameters",
+    "roomThermostatParameters": "Room Thermostat (RT) Parameters",
+    "basicParameters2": "Basic Parameters 2",
+    "heatingCircuit2Parameters": "Heating Circuit 2 (HC2) Parameters",
+    "extendedParameters": "Extended Parameters"
+  },
+   "dialog": {
+    "description": "Adjust the selected parameter value",
+    "selectPlaceholder": "Select option"
+  },
+  "parameterEdit": {
+    "updateFailed": "Update failed",
+    "updating": "Updating...",
+    "noParameters": "No parameters available"
+  },
+  "common": {
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "saveChanges": "Save Changes"
+  },
+   "connection": {
+    "connected": "Connected",
+    "connecting": "Connecting",
+    "disconnected": "Disconnected",
+    "offline": "Offline",
+    "lastMessage": "Last message:",
+    "waiting": "Waiting for device to respond...",
+    "noMessages": "No messages received in the last 20 seconds.",
+    "deviceOffline": "The device is currently offline. Please check the network connection.",
+    "cloud": "Cloud Connection",
+    "error": "Error",
+    "reconnect": "Reconnect",
+    "device": "Device"
+  },
+  "mqttStatus": {
+    "connected": "connected",
+    "connecting": "connecting...",
+    "disconnected": "disconnected",
+    "error": "error",
+    "reconnecting": "reconnecting..."
+  },
+  "remote-control": {
+    "buttonOverview": "verview",
+    "buttonParameters": "Parameters"
+  },
+   "home": {
+    "season": {
+      "winter": "Season: winter",
+      "summer": "Season: summer"
+    },
+    "blocked": {
+      "thermostat": "Blocked: by thermostat",
+      "hdo": "Blocked: by HDO"
+    },
+    "temperatureFallback": "---"
+  },
+   "charts": {
+    "temperatures": "Temperatures",
+    "monthlyAverages": "Monthly Temperature Averages",
+    "noData": "No temperature data available",
+    "errorTitle": "Error",
+    "errorDescription": "Fetching temperature data failed. Please try again later.",
+    "monthlyTitle": "Monthly Temperature Chart",
+    "temperatureTitle": "Temperature Chart",
+    "config": {
+      "TS1": "Output temperature from exchanger",
+      "TS2": "Outdoor temperature",
+      "TS4": "DHW (boiler)",
+      "komp": "Compressor",
+      "avg_ts1": "Average output temperature",
+      "avg_ts2": "Average outdoor temperature",
+      "avg_ts4": "Average DHW (boiler)"
+    },
+    "units": {
+      "celsius": "°C",
+      "percent": "%"
+    }
+  },
+    "deviceLoader": {
+    "loadingTitle": "Waiting for device data...",
+    "loadingSubtitle": "This may take a few moments."
+  },
+  "temperature": {
+    "title": "Temperatures",
+    "current": "Current Temperatures",
+    "desired": "Desired Temperatures",
+    "thermostat": "Room Thermostat",
+    "labels": {
+      "reg_673": "Output temperature from exchanger",
+      "reg_674": "Outdoor air temperature",
+      "reg_675": "Return temperature",
+      "reg_676": "DHW (boiler) temperature",
+      "reg_677": "Room temperature",
+      "reg_678": "Buffer tank",
+      "reg_679": "Heating circuit 2 (HC2) temperature",
+      "reg_680": "Pool temperature",
+      "reg_685": "Liquid refrigerant temperature",
+      "reg_704": "Demand HC",
+      "reg_705": "Demand DHW",
+      "reg_707": "Demand PT",
+      "reg_708": "Demand HC2",
+      "reg_681": "Room temperature",
+      "she_hum": "Room humidity"
+    },
+    "fallback": "---"
+    },
+    "deviceStates": {
+    "title": "Device States",
+    "sections": {
+      "operation": "Operation Mode",
+      "blocking": "Blocking & Errors",
+      "performance": "Performance & Activity",
+      "auxiliary": "Auxiliary Sources",
+      "firmware": "Firmware Versions"
+    },
+    "labels": {
+      "reg_736": "Controller mode",
+      "reg_737": "Outdoor unit status",
+      "reg_739": "Thermostat block",
+      "reg_740": "HDO block",
+      "reg_741": "Season mode",
+      "reg_608": "Compressor status",
+      "reg_610": "Compressor power",
+      "reg_640": "DZTO status",
+      "reg_646": "DZTUV status",
+      "reg_745": "Estimated flow",
+      "reg_746": "Heating power",
+      "reg_512": "Error code",
+      "reg_834": "CIM firmware version",
+      "fw_v": "Panel firmware version"
+    },
+    "values": {
+      "unknown": "Unknown",
+      "on": "On",
+      "off": "Off",
+      "blocked": "Blocked",
+      "notBlocked": "Not blocked",
+      "winter": "Winter",
+      "summer": "Summer",
+      "modes": {
+        "0": "Idle",
+        "1": "DHW",
+        "2": "HC",
+        "3": "Cooling",
+        "4": "Heating",
+        "5": "Pool",
+        "6": "DHW + HC",
+        "7": "Cooling + DHW",
+        "8": "Pool + DHW"
+      },
+      "unitStates": {
+        "0": "Off",
+        "1": "Heating",
+        "2": "Defrost",
+        "3": "Cooling"
+      },
+      "dzLevels": {
+        "0": "Off",
+        "1": "DZ level 1",
+        "2": "DZ level M",
+        "3": "DZ level 3",
+        "4": "Auxiliary"
+      }
+    },
+    "units": {
+      "percent": "%", 
+      "m3h": "m³/h",
+      "kw": "kW"
+    }
+  }
+}

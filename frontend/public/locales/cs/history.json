@@ -1,0 +1,69 @@
+{
+  "pageTitle": "Historie - {{deviceId}}",
+  "heading": "Historie",
+  "mainGraphTitle": "Hlavní graf",
+  "error.title": "Chyba",
+  "error.description": "Načtení dat pro graf selhalo. Zkuste to prosím znovu později.",
+  "toast.fetchFail.title": "Načítání nových dat selhalo.",
+  "toast.fetchFail.description": "Zkuste to prosím znovu později.",
+  "toast.saveSuccess.title": "Viditelnost čar byla úspěšně uložena.",
+  "toast.saveError.title": "Uložení selhalo.",
+  "toast.saveError.description": "Zkuste to prosím znovu později.",
+   "liveLogging": {
+  "title": "Živé sledování",
+  "description": "Sledujte data zařízení v reálném čase",
+  "statusTitle": "Informace o připojení",
+  "status": "Stav",
+  "note": "Živé sledování zobrazuje data v reálném čase, ale neukládá je do historie. Funguje pouze se skriptem verze vyšší než 3.2.0."
+},
+  "mqttStatus": {
+    "connected": "připojeno",
+    "connecting": "připojování...",
+    "disconnected": "odpojeno",
+    "error": "chyba",
+    "reconnecting": "znovu se připojuje..."
+  },
+  "noData": "Pro zvolené časové období nejsou dostupná žádná data.",
+  "customGraphs": {
+    "title": "Vlastní grafy",
+    "empty": "Nebyly přidány žádné vlastní grafy.",
+    "errorTitle": "Chyba",
+    "errorDescription": "Načtení vlastních grafů selhalo. Zkuste to prosím později.",
+    "toast": {
+      "createSuccess": "Vlastní graf byl úspěšně vytvořen.",
+      "updateSuccess": "Vlastní graf byl úspěšně upraven.",
+      "deleteSuccess": "Vlastní graf byl úspěšně smazán.",
+      "errorTitle": "Chyba při ukládání.",
+      "errorDescription": "Zkuste to prosím později."
+    },
+    "addChart": "Přidat graf",
+    "createChart": "Vytvořit vlastní graf",
+    "editChart": "Upravit graf",
+    "namePlaceholder": "Zadejte název grafu",
+    "metricsPlaceholder": "Vyberte metriky",
+    "createChartButton": "Vytvořit graf",
+    "updateChart": "Aktualizovat graf",
+    "deleteConfirmTitle": "Opravdu si tím jste jistí?",
+    "deleteConfirmDescription": "Tuto akci nelze vrátit zpět. Graf bude trvale odstraněn ze serveru."
+  },
+  "cancel": "Zrušit",
+  "continue": "Pokračovat",
+  "from": "Od",
+  "to": "Do",
+  "apply": "Potvrdit",
+  "range": {
+		"hour": "Hodina",
+		"day": "Den",
+		"week": "Týden"
+	},
+    "paginationErrorTitle": "Nepodařilo se načíst data.",
+	"paginationErrorDescription": "Nelze načíst historii zařízení.",
+	"unexpectedErrorDescription": "Došlo k neočekávané chybě. Zkuste to prosím později.",
+    "dateRange": "Časové období",
+	"selectDateRange": "Vyberte časové období",
+	"clear": "Vymazat",
+	"showOnlyErrors": "Zobrazit pouze řádky, kde je chyba > 0",
+    "update_available": "Je k dispozici nová verze!",
+	"update_reload_prompt": "Prosím, obnovte stránku pro aktualizaci na nejnovější verzi.",
+	"reload_button": "Obnovit stránku"
+}

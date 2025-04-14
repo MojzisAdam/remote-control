@@ -1,0 +1,1767 @@
+{
+    "P0.0": {
+        "type": "int",
+		"register": 0,
+        "default_value": 55,
+        "min_value": 30,
+        "max_value": 80,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "Exchanger MAX Temperature (Heating)"
+    },
+    "P0.1": {
+        "type": "int",
+		"register": 1,
+        "default_value": 8,
+        "min_value": 0,
+        "max_value": 30,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "Exchanger MIN Temperature (Cooling)"
+    },
+    "P0.2": {
+        "type": "int",
+		"register": 2,
+        "default_value": 2,
+        "min_value": 0,
+        "max_value": 5,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "Exchanger Temperature Limiter Band"
+    },
+    "P0.3": {
+        "type": "int",
+		"register": 3,
+        "default_value": 50,
+        "min_value": 0,
+        "max_value": 100,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "%",
+        "description": "Exchanger Temperature Limiter Attenuation"
+    },
+    "P0.4": {
+        "type": "int",
+		"register": 4,
+        "default_value": 3,
+        "min_value": 0,
+        "max_value": 30,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "min",
+        "description": "Compressor Guard Time"
+    },
+    "P0.5": {
+        "type": "int",
+		"register": 5,
+        "default_value": 10,
+        "min_value": 0,
+        "max_value": 120,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "s",
+        "description": "RUN Output Lead Time"
+    },
+    "P0.6": {
+        "type": "int",
+		"register": 6,
+        "default_value": 1,
+        "min_value": 0,
+        "max_value": 30,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "min",
+        "description": "RUN Output Lag Time"
+    },
+    "P0.7": {
+        "type": "int",
+		"register": 7,
+        "default_value": 3,
+        "min_value": 0,
+        "max_value": 30,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "min",
+        "description": "DEF Output Lag Time"
+    },
+    "P0.8": {
+        "type": "options",
+		"register": 8,
+        "default_value": 0,
+        "user_access": true,
+        "description": "Default Display Parameter",
+        "options": {
+            "0": "TS1 (Supply)",
+            "1": "TS2 (Outdoor)",
+            "2": "TS3 (Return)",
+            "3": "TS4 (DHW)",
+            "4": "TS5 (Room)",
+            "5": "TS6 (Tank)",
+            "6": "TS7 (HC2)",
+            "7": "TS8 (Pool)",
+            "8": "TS9 (Liquid Refrigerant)",
+            "9": "Compressor Power",
+            "10": "Exchanger Temperature",
+            "11": "Setpoint of HC",
+            "12": "Setpoint of DHW",
+            "13": "Water Flow Rate",
+            "14": "Heat Output"
+        }
+    },
+    "P0.9": {
+        "type": "options",
+		"register": 9,
+        "default_value": 2,
+        "user_access": false,
+        "description": "Outdoor Unit Type",
+        "options": {
+            "0": "RO",
+            "1": "ROT",
+            "2": "ROG-L",
+            "3": "ROA",
+            "4": "Standalone HP",
+            "5": "ROG-KM",
+            "6": "ROG-KA/B/R"
+        }
+    },
+    "P0.A": {
+        "type": "options",
+		"register": 10,
+        "default_value": 20,
+        "user_access": false,
+        "description": "Outdoor Unit Capacity",
+        "options": {
+            "2": "ROG9",
+            "4": "ROG12",
+            "5": "ROG14",
+            "7": "ROG18",
+            "10": "ROG24",
+            "13": "ROG30",
+            "16": "ROG36",
+            "20": "ROG45",
+            "23": "ROG54",
+            "26": "ROG60",
+            "34": "ROG72",
+            "43": "ROG90"
+        }
+    },
+    "P0.B": {
+        "type": "options",
+		"register": 11,
+        "default_value": 1,
+        "user_access": false,
+        "description": "Installation Scheme",
+        "options": {
+            "0": "Basic_1 (TS1)",
+            "1": "Heat Pump (TS1..TS9)",
+            "2": "Adapter (No TS)",
+            "3": "Regulator_1 (TS1)",
+            "4": "Regulator_2 (TS1, TS3)",
+            "5": "Basic_2 (TS1, TS5)"
+        }
+    },
+    "P0.C": {
+        "type": "options",
+		"register": 12,
+        "default_value": 6,
+        "user_access": false,
+        "description": "H/C Input Function (Heat Pump Mode)",
+        "options": {
+            "0": "Inactive",
+            "1": "Attenuation",
+            "2": "Cooling",
+            "3": "Pool heating",
+            "4": "Cooling/Pool heating",
+            "5": "Legionella",
+            "6": "FlowSwitch",
+            "7": "PVPP Surplus",
+            "8": "Flow Estimation",
+            "9": "Flow Meter"
+        }
+    },
+    "P0.D": {
+        "type": "options",
+		"register": 13,
+        "default_value": 1,
+        "user_access": false,
+        "description": "ON Input Function (Heat Pump Mode)",
+        "options": {
+            "0": "Inactive",
+            "1": "Heating",
+            "2": "Heating/Cooling Heating mode",
+            "3": "PVPP Surplus",
+            "4": "Flow Estimation",
+            "5": "Flow Meter"
+        }
+    },
+    "P0.E": {
+        "type": "options",
+		"register": 14,
+        "default_value": 4,
+        "user_access": false,
+        "description": "OFF Input Function",
+        "options": {
+            "0": "Inactive",
+            "1": "Stop OFF",
+            "2": "Stop/FlowSwitch",
+            "3": "FlowSwitch",
+            "4": "Stop BS"
+        }
+    },
+    "P0.F": {
+        "type": "options",
+		"register": 15,
+        "default_value": 1,
+        "user_access": false,
+        "description": "DEF Output Function",
+        "options": {
+            "0": "Defrost",
+            "1": "BS",
+            "2": "HC BS",
+            "3": "DHW BS",
+            "4": "Circ. Pump for Heating",
+            "5": "Circ. Pump for Cooling",
+            "6": "Compressor Heating",
+            "7": "Attenuation",
+            "8": "Circ. Pump for Pool",
+            "9": "DHW BS ADD",
+            "10": "Circ. Pump for HC2"
+        }
+    },
+    "P1.0": {
+        "type": "options",
+		"register": 16,
+        "default_value": 0,
+        "user_access": false,
+        "description": "ERR Output Function (Heat Pump Mode)",
+        "options": {
+            "0": "BS",
+            "1": "HC BS",
+            "2": "DHW BS",
+            "3": "HC BS ADD",
+            "4": "Open HC2 Mixing Valve",
+            "5": "Close HC2 Mixing Valve"
+        }
+    },
+    "P1.1": {
+        "type": "options",
+		"register": 17,
+        "default_value": 0,
+        "user_access": false,
+        "description": "AUX Output Function (Heat Pump Mode)",
+        "options": {
+            "0": "DHW",
+            "1": "Cooling",
+            "2": "Circ. Pump for Pool",
+            "3": "Open HC2 Mixing Valve",
+            "4": "Close HC2 Mixing Valve"
+        }
+    },
+    "P1.2": {
+        "type": "int",
+		"register": 18,
+        "default_value": 18,
+        "min_value": 5,
+        "max_value": 25,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "Compressor MIN Temperature"
+    },
+    "P1.3": {
+        "type": "switch",
+		"register": 19,
+        "default_value": 1,
+        "user_access": true,
+        "description": "Automatic switch to Summer/Winter Time",
+        "options": {
+            "0": "Inactive",
+            "1": "Automatic switch Enabled"
+        }
+    },
+    "P1.4": {
+        "type": "int",
+		"register": 20,
+        "default_value": 6,
+        "min_value": 0,
+        "max_value": 120,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "s",
+        "description": "H/C Input Delay Time"
+    },
+    "P1.5": {
+        "type": "int",
+		"register": 21,
+        "default_value": 6,
+        "min_value": 0,
+        "max_value": 120,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "s",
+        "description": "ON Input Delay Time"
+    },
+    "P1.6": {
+        "type": "int",
+		"register": 22,
+        "default_value": 6,
+        "min_value": 0,
+        "max_value": 120,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "s",
+        "description": "OFF Input Delay Time"
+    },
+    "P1.7": {
+        "type": "switch",
+		"register": 23,
+        "default_value": 1,
+        "user_access": false,
+        "description": "Spin Pump",
+        "options": {
+            "0": "OFF",
+            "1": "ON"
+        }
+    },
+    "P1.8": {
+        "type": "options",
+		"register": 24,
+        "default_value": 1,
+        "user_access": false,
+        "description": "Spin Pump ON Week Day",
+        "options": {
+            "1": "Monday",
+            "2": "Tuesday",
+            "3": "Wednesday",
+            "4": "Thursday",
+            "5": "Friday",
+            "6": "Saturday",
+            "7": "Sunday"
+        }
+    },
+    "P1.9": {
+        "type": "options",
+		"register": 25,
+        "default_value": 0,
+        "user_access": false,
+        "description": "Spin Pump ON Time",
+        "options": {
+            "0": "00:00",
+            "1": "01:00",
+            "2": "02:00",
+            "3": "03:00",
+            "4": "04:00",
+            "5": "05:00",
+            "6": "06:00",
+            "7": "07:00",
+            "8": "08:00",
+            "9": "09:00",
+            "10": "10:00",
+            "11": "11:00",
+            "12": "12:00",
+            "13": "13:00",
+            "14": "14:00",
+            "15": "15:00",
+            "16": "16:00",
+            "17": "17:00",
+            "18": "18:00",
+            "19": "19:00",
+            "20": "20:00",
+            "21": "21:00",
+            "22": "22:00",
+            "23": "23:00"
+        }
+    },
+    "P1.A": {
+        "type": "float",
+		"register": 26,
+        "default_value": 1.0,
+        "min_value": 0.1,
+        "max_value": 2.1,
+        "increment_value": 0.1,
+		"multiplied": 10,
+        "user_access": false,
+		"unit": "m3/h",
+        "description": "Minimum Flow"
+    },
+    "P1.B": {
+        "type": "int",
+		"register": 27,
+        "default_value": 1,
+        "min_value": 1,
+        "max_value": 127,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": null,
+        "description": "MODBUS Address"
+    },
+	"P2.0": {
+        "type": "int",
+		"register": 32,
+        "default_value": 50,
+        "min_value": 10,
+        "max_value": 100,
+		"increment_value": 5,
+        "user_access": false,
+		"unit": "%",
+        "description": "Compressor Power on Start"
+    },
+    "P2.1": {
+        "type": "int",
+		"register": 33,
+        "default_value": 20,
+        "min_value": 0,
+        "max_value": 30,
+		"increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "Summer/Winter Temperature"
+    },
+    "P2.2": {
+        "type": "int",
+		"register": 34,
+        "default_value": 2,
+        "min_value": 0,
+        "max_value": 10,
+		"increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "Summer/Winter Temperature Hysteresis"
+    },
+    "P2.3": {
+        "type": "options",
+		"register": 35,
+        "default_value": 0,
+        "user_access": true,
+        "description": "Summer/Winter Mode",
+        "options": {
+            "0": "Auto",
+            "1": "Summer",
+            "2": "Winter"
+        }
+    },
+    "P2.4": {
+        "type": "int",
+		"register": 36,
+        "default_value": 18,
+        "min_value": 5,
+        "max_value": 20,
+		"increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "Cooling Temperature"
+    },
+    "P2.5": {
+        "type": "options",
+		"register": 37,
+        "default_value": 0,
+        "user_access": false,
+        "description": "Cooling Temperature Sensor (Heat Pump Mode)",
+        "options": {
+            "0": "TS1 (Supply)",
+            "1": "TS3 (Return)",
+            "2": "TS6 (Tank)"
+        }
+    },
+    "P2.6": {
+        "type": "switch",
+		"register": 38,
+        "default_value": 0,
+        "user_access": true,
+        "description": "Manual Cooling",
+        "options": {
+            "0": "Inactive",
+            "1": "Cooling Enabled"
+        }
+    },
+    "P2.7": {
+        "type": "int",
+		"register": 39,
+        "default_value": 40,
+        "min_value": 30,
+        "max_value": 50,
+		"increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "Min HC Temperature for Pool Heating"
+    },
+    "P2.8": {
+        "type": "int",
+		"register": 40,
+        "default_value": 30,
+        "min_value": 20,
+        "max_value": 60,
+		"increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "Heating Setpoint Bottom Temperature"
+    },
+    "P2.9": {
+        "type": "int",
+		"register": 41,
+        "default_value": 55,
+        "min_value": 20,
+        "max_value": 60,
+		"increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "Heating Setpoint Top Temperature"
+    },
+    "P2.A": {
+        "type": "int",
+		"register": 42,
+        "default_value": 5,
+        "min_value": 2,
+        "max_value": 20,
+		"increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "Cooling Setpoint Bottom Temperature"
+    },
+    "P2.B": {
+        "type": "int",
+		"register": 43,
+        "default_value": 15,
+        "min_value": 2,
+        "max_value": 20,
+		"increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "Cooling Setpoint Top Temperature"
+    },
+    "P2.C": {
+        "type": "int",
+		"register": 44,
+        "default_value": 24,
+        "min_value": 0,
+        "max_value": 127,
+		"increment_value": 1,
+        "user_access": true,
+		"unit": "h",
+        "description": "Summer/Winter Temperature Averaging Period"
+    },
+    "P2.D": {
+        "type": "int",
+		"register": 45,
+        "default_value": 2,
+        "min_value": 0,
+        "max_value": 127,
+		"increment_value": 1,
+        "user_access": true,
+		"unit": "h",
+        "description": "HC Equitherm Curve Temperature Averaging Period"
+    },
+    "P2.E": {
+        "type": "int",
+		"register": 46,
+        "default_value": 100,
+        "min_value": 10,
+        "max_value": 100,
+		"increment_value": 5,
+        "user_access": false,
+		"unit": "%",
+        "description": "MAX Compressor Power on Attenuation"
+    },
+    "P2.F": {
+        "type": "switch",
+		"register": 47,
+        "default_value": 0,
+        "user_access": true,
+        "description": "Pool Heating",
+        "options": {
+            "0": "Inactive",
+            "1": "Pool Heating Enabled"
+        }
+    },
+    "P3.0": {
+        "type": "int",
+		"register": 48,
+        "default_value": 28,
+        "min_value": 15,
+        "max_value": 35,
+		"increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "Pool Temperature"
+    },
+    "P3.1": {
+        "type": "int",
+		"register": 49,
+        "default_value": 2,
+        "min_value": 1,
+        "max_value": 5,
+		"increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "Pool Temperature Hysteresis"
+    },
+    "P3.2": {
+        "type": "int",
+		"register": 50,
+        "default_value": 0,
+        "min_value": 0,
+        "max_value": 10,
+		"increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "Pool Attenuation Temperature"
+    },
+    "P3.3": {
+        "type": "options",
+		"register": 51,
+        "default_value": 0,
+        "user_access": false,
+        "description": "Defrost Mode",
+        "options": {
+            "0": "No Matter",
+            "1": "DHW",
+            "2": "HC"
+        }
+    },
+    "P3.4": {
+        "type": "options",
+		"register": 52,
+        "default_value": 0,
+        "user_access": false,
+        "description": "Outdoor Temperature Sensor (ROG Outdoor Units)",
+        "options": {
+            "0": "Outdoor Unit",
+            "1": "TS2"
+        }
+    },
+	"P4.0": {
+        "type": "int",
+		"register": 64,
+        "default_value": 10,
+        "min_value": 0,
+        "max_value": 40,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": null,
+        "description": "HC Equitherm Curve Number"
+    },
+    "P4.1": {
+        "type": "int",
+		"register": 65,
+        "default_value": 2,
+        "min_value": -10,
+        "max_value": 10,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "HC Equitherm Curve Shift"
+    },
+    "P4.2": {
+        "type": "options",
+		"register": 66,
+        "default_value": 1,
+        "user_access": false,
+        "description": "HC Regulation Temperature Sensor (Heat Pump Mode)",
+		"options": {
+            "0": "TS1 (Supply)",
+            "1": "TS3 (Return)",
+			"2": "(TS1+TS3)/2",
+			"3": "TS6 (Tank)"
+        }
+    },
+    "P4.3": {
+        "type": "int",
+		"register": 67,
+        "default_value": 2,
+        "min_value": 0,
+        "max_value": 10,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "HC Temperature Hysteresis"
+    },
+    "P4.4": {
+        "type": "int",
+		"register": 68,
+        "default_value": 2,
+        "min_value": 0,
+        "max_value": 10,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "HC Attenuation Temperature"
+    },
+    "P4.5": {
+        "type": "int",
+		"register": 69,
+        "default_value": 40,
+        "min_value": 0,
+        "max_value": 100,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "%",
+        "description": "HC Proportional Band"
+    },
+    "P4.6": {
+        "type": "int",
+		"register": 70,
+        "default_value": 60,
+        "min_value": 1,
+        "max_value": 120,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "min",
+        "description": "HC Control Interval"
+    },
+    "P4.7": {
+        "type": "int",
+		"register": 71,
+        "default_value": 40,
+        "min_value": 20,
+        "max_value": 60,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "HC Manual Temperature"
+    },
+    "P4.8": {
+        "type": "int",
+		"register": 72,
+        "default_value": 50,
+        "min_value": 20,
+        "max_value": 90,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "HC MAX Temperature"
+    },
+    "P4.9": {
+        "type": "int",
+		"register": 73,
+        "default_value": 10,
+        "min_value": 0,
+        "max_value": 100,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "%",
+        "description": "HC MIN Compressor Power"
+    },
+    "P4.A": {
+        "type": "switch",
+		"register": 74,
+        "default_value": 0,
+        "user_access": false,
+        "description": "HC Accumulation Tank",
+		"options": {
+			"0": "No HC Tank",
+            "1": "HC Tank Present"
+		}
+    },
+    "P4.B": {
+        "type": "options",
+		"register": 75,
+        "default_value": 22,
+        "user_access": true,
+        "description": "HC Attenuation ON Time (Mo, Tu, We, Th, Fr)",
+        "options": {
+            "0": "00:00",
+            "1": "01:00",
+            "2": "02:00",
+            "3": "03:00",
+            "4": "04:00",
+            "5": "05:00",
+            "6": "06:00",
+            "7": "07:00",
+            "8": "08:00",
+            "9": "09:00",
+            "10": "10:00",
+            "11": "11:00",
+            "12": "12:00",
+            "13": "13:00",
+            "14": "14:00",
+            "15": "15:00",
+            "16": "16:00",
+            "17": "17:00",
+            "18": "18:00",
+            "19": "19:00",
+            "20": "20:00",
+            "21": "21:00",
+            "22": "22:00",
+            "23": "23:00"
+        }
+    },
+    "P4.C": {
+        "type": "options",
+		"register": 76,
+        "default_value": 8,
+        "user_access": true,
+        "description": "HC Attenuation OFF Time (Mo, Tu, We, Th, Fr)",
+        "options": {
+            "0": "00:00",
+            "1": "01:00",
+            "2": "02:00",
+            "3": "03:00",
+            "4": "04:00",
+            "5": "05:00",
+            "6": "06:00",
+            "7": "07:00",
+            "8": "08:00",
+            "9": "09:00",
+            "10": "10:00",
+            "11": "11:00",
+            "12": "12:00",
+            "13": "13:00",
+            "14": "14:00",
+            "15": "15:00",
+            "16": "16:00",
+            "17": "17:00",
+            "18": "18:00",
+            "19": "19:00",
+            "20": "20:00",
+            "21": "21:00",
+            "22": "22:00",
+            "23": "23:00"
+        }
+    },
+    "P4.D": {
+        "type": "options",
+		"register": 77,
+        "default_value": 23,
+        "user_access": true,
+        "description": "HC Attenuation ON Time (Sa, Su)",
+        "options": {
+            "0": "00:00",
+            "1": "01:00",
+            "2": "02:00",
+            "3": "03:00",
+            "4": "04:00",
+            "5": "05:00",
+            "6": "06:00",
+            "7": "07:00",
+            "8": "08:00",
+            "9": "09:00",
+            "10": "10:00",
+            "11": "11:00",
+            "12": "12:00",
+            "13": "13:00",
+            "14": "14:00",
+            "15": "15:00",
+            "16": "16:00",
+            "17": "17:00",
+            "18": "18:00",
+            "19": "19:00",
+            "20": "20:00",
+            "21": "21:00",
+            "22": "22:00",
+            "23": "23:00"
+        }
+    },
+    "P4.E": {
+        "type": "options",
+		"register": 78,
+        "default_value": 8,
+        "user_access": true,
+        "description": "HC Attenuation OFF Time (Sa, Su)",
+        "options": {
+            "0": "00:00",
+            "1": "01:00",
+            "2": "02:00",
+            "3": "03:00",
+            "4": "04:00",
+            "5": "05:00",
+            "6": "06:00",
+            "7": "07:00",
+            "8": "08:00",
+            "9": "09:00",
+            "10": "10:00",
+            "11": "11:00",
+            "12": "12:00",
+            "13": "13:00",
+            "14": "14:00",
+            "15": "15:00",
+            "16": "16:00",
+            "17": "17:00",
+            "18": "18:00",
+            "19": "19:00",
+            "20": "20:00",
+            "21": "21:00",
+            "22": "22:00",
+            "23": "23:00"
+        }
+    },
+    "P4.F": {
+        "type": "int",
+		"register": 79,
+        "default_value": 5,
+        "min_value": -10,
+        "max_value": 20,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "HC MAX Compressor Power Limiting Temperature"
+
+    },
+    "P5.0": {
+        "type": "int",
+		"register": 80,
+        "default_value": 100,
+        "min_value": 10,
+        "max_value": 100,
+        "increment_value": 5,
+        "user_access": false,
+		"unit": "%",
+        "description": "HC MAX Compressor Power Above Limiting Temperature"
+    },
+    "P5.1": {
+        "type": "int",
+		"register": 81,
+        "default_value": 100,
+        "min_value": 10,
+        "max_value": 100,
+        "increment_value": 5,
+        "user_access": false,
+		"unit": "%",
+        "description": "HC MAX Compressor Power Below Limiting Temperature"
+    },
+	"P6.0": {
+        "type": "switch",
+		"register": 96,
+        "default_value": 1,
+        "user_access": true,
+        "description": "DHW",
+        "options": {
+            "0": "Inactive",
+            "1": "DHW Heating Enabled"
+        }
+    },
+    "P6.1": {
+        "type": "int",
+		"register": 97,
+        "default_value": 46,
+        "min_value": 20,
+        "max_value": 70,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "DHW Temperature"
+
+    },
+    "P6.2": {
+        "type": "int",
+		"register": 98,
+        "default_value": 3,
+        "min_value": 0,
+        "max_value": 10,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "DHW Temperature Hysteresis"
+    },
+    "P6.3": {
+        "type": "int",
+		"register": 99,
+        "default_value": 3,
+        "min_value": 0,
+        "max_value": 30,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "DHW Attenuation Temperature"
+    },
+    "P6.4": {
+        "type": "int",
+		"register": 100,
+        "default_value": 3,
+        "min_value": 1,
+        "max_value": 6,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": null,
+        "description": "DHW MAX Attempts"
+    },
+    "P6.5": {
+        "type": "int",
+		"register": 101,
+        "default_value": 100,
+        "min_value": 5,
+        "max_value": 100,
+        "increment_value": 5,
+        "user_access": false,
+		"unit": "%",
+        "description": "DHW MAX Compressor Power (Summer)"
+    },
+    "P6.6": {
+        "type": "int",
+		"register": 102,
+        "default_value": 100,
+        "min_value": 5,
+        "max_value": 100,
+        "increment_value": 5,
+        "user_access": false,
+		"unit": "%",
+        "description": "DHW MAX Compressor Power (Winter)"
+    },
+    "P6.7": {
+        "type": "int",
+		"register": 103,
+        "default_value": 35,
+        "min_value": 30,
+        "max_value": 40,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "DHW MAX Outdoor Temperature"
+    },
+    "P6.8": {
+        "type": "switch",
+		"register": 104,
+        "default_value": 1,
+        "user_access": true,
+        "description": "DHW Legionella Function",
+        "options": {
+            "0": "Inactive",
+            "1": "Legionella Function Enabled"
+        }
+    },
+    "P6.9": {
+        "type": "int",
+		"register": 105,
+        "default_value": 60,
+        "min_value": 50,
+        "max_value": 70,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "DHW Legionella Function Temperature"
+    },
+    "P6.A": {
+        "type": "options",
+		"register": 106,
+        "default_value": 1,
+        "user_access": true,
+        "description": "DHW Legionella Function ON Week Day",
+        "options": {
+            "1": "Monday",
+            "2": "Tuesday",
+            "3": "Wednesday",
+            "4": "Thursday",
+            "5": "Friday",
+            "6": "Saturday",
+            "7": "Sunday"
+        }
+    },
+    "P6.B": {
+		"type": "options",
+		"register": 107,
+        "default_value": 1,
+        "user_access": true,
+        "description": "HW Legionella Function ON Time",
+        "options": {
+            "0": "00:00",
+            "1": "01:00",
+            "2": "02:00",
+            "3": "03:00",
+            "4": "04:00",
+            "5": "05:00",
+            "6": "06:00",
+            "7": "07:00",
+            "8": "08:00",
+            "9": "09:00",
+            "10": "10:00",
+            "11": "11:00",
+            "12": "12:00",
+            "13": "13:00",
+            "14": "14:00",
+            "15": "15:00",
+            "16": "16:00",
+            "17": "17:00",
+            "18": "18:00",
+            "19": "19:00",
+            "20": "20:00",
+            "21": "21:00",
+            "22": "22:00",
+            "23": "23:00"
+        }
+    },
+    "P6.C": {
+        "type": "options",
+		"register": 108,
+        "default_value": 22,
+        "user_access": true,
+        "description": "DHW Attenuation ON Time (Mo, Tu, We, Th, Fr)",
+        "options": {
+            "0": "00:00",
+            "1": "01:00",
+            "2": "02:00",
+            "3": "03:00",
+            "4": "04:00",
+            "5": "05:00",
+            "6": "06:00",
+            "7": "07:00",
+            "8": "08:00",
+            "9": "09:00",
+            "10": "10:00",
+            "11": "11:00",
+            "12": "12:00",
+            "13": "13:00",
+            "14": "14:00",
+            "15": "15:00",
+            "16": "16:00",
+            "17": "17:00",
+            "18": "18:00",
+            "19": "19:00",
+            "20": "20:00",
+            "21": "21:00",
+            "22": "22:00",
+            "23": "23:00"
+        }
+    },
+    "P6.D": {
+        "type": "options",
+		"register": 109,
+        "default_value": 6,
+        "user_access": true,
+        "description": "DHW Attenuation OFF Time (Mo, Tu, We, Th, Fr)",
+        "options": {
+            "0": "00:00",
+            "1": "01:00",
+            "2": "02:00",
+            "3": "03:00",
+            "4": "04:00",
+            "5": "05:00",
+            "6": "06:00",
+            "7": "07:00",
+            "8": "08:00",
+            "9": "09:00",
+            "10": "10:00",
+            "11": "11:00",
+            "12": "12:00",
+            "13": "13:00",
+            "14": "14:00",
+            "15": "15:00",
+            "16": "16:00",
+            "17": "17:00",
+            "18": "18:00",
+            "19": "19:00",
+            "20": "20:00",
+            "21": "21:00",
+            "22": "22:00",
+            "23": "23:00"
+        }
+    },
+    "P6.E": {
+		"type": "options",
+		"register": 110,
+        "default_value": 23,
+        "user_access": true,
+        "description": "DHW Attenuation ON Time (Sa, Su)",
+        "options": {
+            "0": "00:00",
+            "1": "01:00",
+            "2": "02:00",
+            "3": "03:00",
+            "4": "04:00",
+            "5": "05:00",
+            "6": "06:00",
+            "7": "07:00",
+            "8": "08:00",
+            "9": "09:00",
+            "10": "10:00",
+            "11": "11:00",
+            "12": "12:00",
+            "13": "13:00",
+            "14": "14:00",
+            "15": "15:00",
+            "16": "16:00",
+            "17": "17:00",
+            "18": "18:00",
+            "19": "19:00",
+            "20": "20:00",
+            "21": "21:00",
+            "22": "22:00",
+            "23": "23:00"
+        }
+    },
+    "P6.F": {
+        "type": "options",
+		"register": 111,
+        "default_value": 7,
+        "user_access": true,
+        "description": "DHW Attenuation OFF Time (Sa, Su)",
+        "options": {
+            "0": "00:00",
+            "1": "01:00",
+            "2": "02:00",
+            "3": "03:00",
+            "4": "04:00",
+            "5": "05:00",
+            "6": "06:00",
+            "7": "07:00",
+            "8": "08:00",
+            "9": "09:00",
+            "10": "10:00",
+            "11": "11:00",
+            "12": "12:00",
+            "13": "13:00",
+            "14": "14:00",
+            "15": "15:00",
+            "16": "16:00",
+            "17": "17:00",
+            "18": "18:00",
+            "19": "19:00",
+            "20": "20:00",
+            "21": "21:00",
+            "22": "22:00",
+            "23": "23:00"
+        }
+    },
+    "P7.0": {
+        "type": "int",
+		"register": 112,
+        "default_value": 50,
+        "min_value": 40,
+        "max_value": 60,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "DHW temperature to start BS"
+    },
+	"P8.0": {
+        "type": "int",
+		"register": 128,
+        "default_value": -8,
+        "min_value": -25,
+        "max_value": 20,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "BS Temperature"
+    },
+    "P8.1": {
+        "type": "int",
+		"register": 129,
+        "default_value": 2,
+        "min_value": 0,
+        "max_value": 10,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "BS Temperature Hysteresis"
+    },
+    "P8.2": {
+        "type": "int",
+		"register": 130,
+        "default_value": 15,
+        "min_value": 0,
+        "max_value": 30,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "min",
+        "description": "BS Output Lag Time"
+    },
+    "P8.3": {
+        "type": "int",
+		"register": 131,
+        "default_value": -18,
+        "min_value": -40,
+        "max_value": 10,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "BS Total Temperature"
+    },
+    "P8.4": {
+        "type": "int",
+		"register": 132,
+        "default_value": 2,
+        "min_value": 0,
+        "max_value": 10,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "BS Total Temperature Hysteresis"
+    },
+    "P8.5": {
+        "type": "options",
+		"register": 133,
+        "default_value": 1,
+        "user_access": true,
+        "description": "BS Replacement Operation",
+        "options": {
+            "0": "OFF",
+            "1": "ON",
+            "2": "Forced"
+        }
+    },
+    "P8.6": {
+        "type": "int",
+		"register": 134,
+        "default_value": 18,
+        "min_value": 5,
+        "max_value": 22,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "BS MIN HC/DHW Temperature"
+    },
+    "P8.7": {
+        "type": "int",
+		"register": 135,
+        "default_value": 70,
+        "min_value": 70,
+        "max_value": 90,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "BS MAX Exchanger Temperature"
+    },
+    "P8.8": {
+        "type": "int",
+		"register": 136,
+        "default_value": 5,
+        "min_value": -40,
+        "max_value": 10,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "BS Total Temperature Conditional"
+    },
+	"P9.0": {
+        "type": "int",
+		"register": 160,
+        "default_value": 5,
+        "min_value": 0,
+        "max_value": 50,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "PVPP HC Overheating Temperature"
+    },
+    "P9.1": {
+        "type": "int",
+		"register": 161,
+        "default_value": 5,
+        "min_value": 0,
+        "max_value": 50,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "PVPP HC Temperature Drop"
+    },
+    "P9.2": {
+        "type": "options",
+		"register": 162,
+        "default_value": 0,
+        "user_access": false,
+        "description": "PVPP HC Operation Mode",
+        "options": {
+            "0": "Thermostat",
+            "1": "Winter",
+            "2": "All Seasons"
+        }
+    },
+    "P9.3": {
+        "type": "int",
+		"register": 163,
+        "default_value": 5,
+        "min_value": 0,
+        "max_value": 50,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "PVPP DHW Overheating Temperature"
+    },
+    "P9.4": {
+        "type": "int",
+		"register": 164,
+        "default_value": 5,
+        "min_value": 0,
+        "max_value": 50,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "PVPP DHW Temperature Drop"
+    },
+    "P9.5": {
+        "type": "int",
+		"register": 165,
+        "default_value": 2,
+        "min_value": 0,
+        "max_value": 20,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "PVPP Overcooling Temperature"
+    },
+    "P9.6": {
+        "type": "int",
+		"register": 166,
+        "default_value": 2,
+        "min_value": 0,
+        "max_value": 20,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "PVPP Cooling Temperature Rise"
+    },
+    "P9.7": {
+        "type": "int",
+		"register": 167,
+        "default_value": 5,
+        "min_value": 0,
+        "max_value": 50,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "PVPP Pool Overheating Temperature"
+    },
+    "P9.8": {
+        "type": "int",
+		"register": 168,
+        "default_value": 5,
+        "min_value": 0,
+        "max_value": 50,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "PVPP Pool Temperature Drop"
+    },
+    "P9.9": {
+        "type": "int",
+		"register":1690,
+        "default_value": 50,
+        "min_value": 20,
+        "max_value": 100,
+        "increment_value": 5,
+        "user_access": false,
+		"unit": "%",
+        "description": "PVPP MIN Power to Start BS"
+    },
+    "P9.A": {
+        "type": "options",
+		"register": 170,
+        "default_value": 0,
+        "user_access": false,
+        "description": "PVPP BS Mode",
+        "options": {
+            "0": "OFF",
+            "1": "BS after HP",
+            "2": "BS and HP"
+        }
+    },
+	"PA.0": {
+        "type": "options",
+		"register": 192,
+        "default_value": 0,
+        "user_access": false,
+        "description": "Room Temperature Sensor",
+        "options": {
+            "0": "None (RT OFF)",
+            "1": "TS5",
+            "2": "Modbus Sensor"
+        }
+    },
+    "PA.1": {
+        "type": "float",
+		"register": 193,
+        "default_value": 21.5,
+        "min_value": 10,
+        "max_value": 35,
+        "increment_value": 0.1,
+		"multiplied": 10,
+        "user_access": true,
+		"unit": "°C",
+        "description": "Room Temperature Setpoint"
+    },
+    "PA.2": {
+        "type": "float",
+		"register": 194,
+        "default_value": 5,
+        "min_value": 0.1,
+        "max_value": 5,
+        "increment_value": 0.1,
+		"multiplied": 10,
+        "user_access": true,
+		"unit": "°C",
+        "description": "Room Temperature Hysteresis"
+    },
+    "PA.3": {
+        "type": "float",
+		"register": 195,
+        "default_value": 0,
+        "min_value": 0,
+        "max_value": 10,
+        "increment_value": 0.1,
+		"multiplied": 10,
+        "user_access": true,
+		"unit": "°C",
+        "description": "Room Temperature Attenuation"
+    },
+    "PA.4": {
+        "type": "int",
+		"register": 196,
+        "default_value": 50,
+        "min_value": 0,
+        "max_value": 100,
+        "increment_value": 5,
+        "user_access": false,
+		"unit": "%",
+        "description": "Room Temperature Influence Gain"
+    },
+    "PA.5": {
+        "type": "int",
+		"register": 197,
+        "default_value": 12,
+        "min_value": 0,
+        "max_value": 96,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "h",
+        "description": "Room Temperature Influence Integral Time"
+    },
+    "PA.6": {
+        "type": "float",
+		"register": 198,
+        "default_value": 5,
+        "min_value": 0.5,
+        "max_value": 10,
+        "increment_value": 0.1,
+		"multiplied": 10,
+        "user_access": false,
+		"unit": "°C",
+        "description": "Room Temperature Influence Range"
+    },
+	"PB.0": {
+        "type": "float",
+		"register": 224,
+        "default_value": 1.0,
+        "min_value": 0.1,
+        "max_value": 25.5,
+        "increment_value": 0.1,
+		"multiplied": 10,
+        "user_access": false,
+		"unit": "L",
+        "description": "Reference Volume"
+    },
+    "PB.1": {
+        "type": "int",
+		"register": 225,
+        "default_value": 100,
+        "min_value": 1,
+        "max_value": 255,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": null,
+        "description": "Pulses per Reference Volume"
+    },
+    "PB.2": {
+        "type": "options",
+		"register": 226,
+        "default_value": 7,
+        "user_access": false,
+        "description": "Complementary Output 1 Function",
+        "options": {
+            "0": "Defrost",
+            "1": "Circ. Pump for Heating",
+            "2": "Circ. Pump for Cooling",
+            "3": "Circ. Pump for Pool",
+            "4": "Cooling",
+            "5": "Attenuation",
+            "6": "Compressor Heating",
+            "7": "Circ. Pump for HC2",
+            "8": "Open HC2 Mixing Valve",
+            "9": "Close HC2 Mixing Valve"
+        }
+    },
+    "PB.3": {
+        "type": "options",
+		"register": 227,
+        "default_value": 8,
+        "user_access": false,
+        "description": "Complementary Output 2 Function",
+        "options": {
+            "0": "Defrost",
+            "1": "Circ. Pump for Heating",
+            "2": "Circ. Pump for Cooling",
+            "3": "Circ. Pump for Pool",
+            "4": "Cooling",
+            "5": "Attenuation",
+            "6": "Compressor Heating",
+            "7": "Circ. Pump for HC2",
+            "8": "Open HC2 Mixing Valve",
+            "9": "Close HC2 Mixing Valve"
+        }
+    },
+    "PB.4": {
+        "type": "options",
+		"register": 228,
+        "default_value": 9,
+        "user_access": false,
+        "description": "Complementary Output 3 Function",
+        "options": {
+            "0": "Defrost",
+            "1": "Circ. Pump for Heating",
+            "2": "Circ. Pump for Cooling",
+            "3": "Circ. Pump for Pool",
+            "4": "Cooling",
+            "5": "Attenuation",
+            "6": "Compressor Heating",
+            "7": "Circ. Pump for HC2",
+            "8": "Open HC2 Mixing Valve",
+            "9": "Close HC2 Mixing Valve"
+        }
+    },
+	"PB.5": {
+        "type": "switch",
+		"register": 229,
+        "default_value": 0,
+        "user_access": false,
+        "description": "Liquid Refrigerant Sensor",
+        "options": {
+            "0": "Not Used",
+            "1": "Used"
+        }
+    },
+	"PC.0": {
+        "type": "switch",
+		"register": 256,
+        "default_value": 0,
+        "user_access": false,
+        "description": "HC2",
+        "options": {
+            "0": "Inactive",
+            "1": "HC2 Heating Enabled"
+        }
+    },
+    "PC.1": {
+        "type": "int",
+		"register": 257,
+        "default_value": 26,
+        "min_value": 0,
+        "max_value": 40,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": null,
+        "description": "HC2 Equitherm Curve Number"
+    },
+    "PC.2": {
+        "type": "int",
+		"register": 258,
+        "default_value": 2,
+        "min_value": -10,
+        "max_value": 10,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "HC2 Equitherm Curve Shift"
+    },
+    "PC.3": {
+        "type": "int",
+		"register": 259,
+        "default_value": 1,
+        "min_value": 0,
+        "max_value": 5,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "HC2 Temperature Hysteresis"
+    },
+    "PC.4": {
+        "type": "int",
+		"register": 260,
+        "default_value": 2,
+        "min_value": 0,
+        "max_value": 10,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "HC2 Attenuation Temperature"
+    },
+    "PC.5": {
+        "type": "int",
+		"register": 261,
+        "default_value": 15,
+        "min_value": 1,
+        "max_value": 100,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "%",
+        "description": "HC2 Proportional Band"
+    },
+    "PC.6": {
+        "type": "int",
+		"register": 262,
+        "default_value": 15,
+        "min_value": 1,
+        "max_value": 30,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "min",
+        "description": "HC2 Control Interval"
+    },
+    "PC.7": {
+        "type": "int",
+		"register": 263,
+        "default_value": 35,
+        "min_value": 20,
+        "max_value": 60,
+        "increment_value": 1,
+        "user_access": true,
+		"unit": "°C",
+        "description": "HC2 Manual Temperature"
+    },
+    "PC.8": {
+        "type": "int",
+		"register": 264,
+        "default_value": 40,
+        "min_value": 20,
+        "max_value": 60,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "°C",
+        "description": "HC2 MAX Temperature"
+    },
+    "PC.9": {
+        "type": "switch",
+		"register": 265,
+        "default_value": 1,
+        "user_access": false,
+        "description": "HC2 Thermostat",
+        "options": {
+            "0": "Inactive",
+            "1": "Controlled by Thermostat"
+        }
+    },
+    "PC.A": {
+        "type": "int",
+		"register": 266,
+        "default_value": 120,
+        "min_value": 10,
+        "max_value": 1200,
+        "increment_value": 10,
+        "user_access": false,
+		"unit": "s",
+        "description": "HC2 Mixing Valve Motor Running Time"
+    },
+    "PC.B": {
+        "type": "float",
+		"register": 267,
+        "default_value": 0.5,
+        "min_value": 0.3,
+        "max_value": 3.0,
+        "increment_value": 0.1,
+		"multiplied": 10,
+        "user_access": false,
+		"unit": "s",
+        "description": "HC2 Mixing Valve MIN Control Signal Duration"
+    },
+    "fhi": {
+        "type": "options",
+        "default_value": 0,
+        "register": "fhi",
+        "user_access": false,
+        "description": "History recording frequency",
+        "options": {
+            "0": "3 minutes",
+            "1": "1 hour"
+        }
+    }
+}

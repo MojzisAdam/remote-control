@@ -1,0 +1,8 @@
+{
+	"previous": "Předchozí",
+	"next": "Další",
+	"showing": "Zobrazeno {{from}} až {{to}} z {{total}}",
+    "rows": "řádků",
+	"columns": "Sloupce",
+	"noResults": "Žádné výsledky."
+}
