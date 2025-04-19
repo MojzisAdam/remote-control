@@ -3,7 +3,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Device } from "@/api/devices/model";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { useTranslation } from "react-i18next";
+import { ListFilter } from "lucide-react";
 
 interface SearchSortPaginationProps {
 	devices: Device[];
@@ -64,8 +66,8 @@ const SearchSortPagination: React.FC<SearchSortPaginationProps> = ({ devices, se
 	}, [filteredDevices, currentPage, itemsPerPage, paginatedDevices, setFilteredDevices]);
 
 	return (
-		<div className="flex flex-row gap-4 items-center justify-between max-md:flex-col max-md:gap-0 max-sm:items-start max-[1400px]:flex-col">
-			<div className="flex gap-4 max-sm:flex-col ">
+		<div className="flex flex-row gap-4 items-center justify-between  max-lg:gap-0 max-lg:items-start max-lg:flex-col">
+			<div className="flex gap-4">
 				<Input
 					type="text"
 					placeholder={t("search-sort-pagination.search")}
@@ -73,7 +75,8 @@ const SearchSortPagination: React.FC<SearchSortPaginationProps> = ({ devices, se
 					onChange={(e) => setSearchQuery(e.target.value)}
 					className="max-w-96"
 				/>
-				<div className="flex gap-4">
+				{/* Desktop selects */}
+				<div className="hidden min-[1400px]:flex gap-4">
 					<Select
 						onValueChange={setStatusFilter}
 						defaultValue={statusFilter}
@@ -94,6 +97,7 @@ const SearchSortPagination: React.FC<SearchSortPaginationProps> = ({ devices, se
 							</SelectGroup>
 						</SelectContent>
 					</Select>
+
 					<Select
 						onValueChange={(e) => setItemsPerPage(Number(e))}
 						defaultValue={String(itemsPerPage)}
@@ -115,6 +119,62 @@ const SearchSortPagination: React.FC<SearchSortPaginationProps> = ({ devices, se
 						</SelectContent>
 					</Select>
 				</div>
+
+				{/* Mobile popover trigger */}
+				<Popover>
+					<PopoverTrigger asChild>
+						<Button
+							variant="outline"
+							size="sm"
+							className="min-[1400px]:hidden"
+						>
+							<ListFilter />
+						</Button>
+					</PopoverTrigger>
+					<PopoverContent className="p-4 w-auto min-w-52 space-y-4">
+						<Select
+							onValueChange={setStatusFilter}
+							defaultValue={statusFilter}
+						>
+							<SelectTrigger className="w-full">
+								<SelectValue placeholder={t(`search-sort-pagination.statuses.${statusFilter.toLowerCase()}`)} />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectGroup>
+									{STATUSES.map((status) => (
+										<SelectItem
+											key={status}
+											value={status}
+										>
+											{t(`search-sort-pagination.statuses.${status.toLowerCase()}`)}
+										</SelectItem>
+									))}
+								</SelectGroup>
+							</SelectContent>
+						</Select>
+
+						<Select
+							onValueChange={(e) => setItemsPerPage(Number(e))}
+							defaultValue={String(itemsPerPage)}
+						>
+							<SelectTrigger className="w-full">
+								<SelectValue placeholder={itemsPerPage} />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectGroup>
+									{[10, 25, 50].map((num) => (
+										<SelectItem
+											key={num}
+											value={String(num)}
+										>
+											{String(num) + t("search-sort-pagination.per-page")}
+										</SelectItem>
+									))}
+								</SelectGroup>
+							</SelectContent>
+						</Select>
+					</PopoverContent>
+				</Popover>
 			</div>
 
 			<div className="flex items-center justify-between space-x-2 py-4">

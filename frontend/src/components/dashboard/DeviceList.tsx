@@ -90,7 +90,7 @@ const DeviceList: React.FC<DeviceListProps> = ({ devices, moreInfo }) => {
 
 			{/* Grid View */}
 			{viewMode === "grid" ? (
-				<div className="grid grid-cols-1 min-[880px]:grid-cols-2 min-[1200px]:grid-cols-3 gap-6">
+				<div className="grid grid-cols-1 min-[880px]:grid-cols-2 min-[1200px]:grid-cols-3 min-[1950px]:grid-cols-4  gap-6">
 					{devices.map((device) => (
 						<DeviceCard
 							key={device.id}
