@@ -68,7 +68,7 @@ const TemperaturesChartContainer: React.FC<TemperaturesChartContainerProps> = ({
 						<Skeleton className="h-[300px] w-full" />
 					</div>
 				) : !isDataAvailable ? (
-					<div className="absolute inset-0 flex items-center justify-center">
+					<div className="absolute inset-0 flex items-center justify-center text-center px-4">
 						<p className="text-gray-500">{t("charts.noData")}</p>
 					</div>
 				) : (

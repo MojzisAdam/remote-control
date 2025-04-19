@@ -78,7 +78,7 @@ export const useMqtt = (): UseMqttReturn => {
 						username: mqttConfig.username,
 						password: mqttConfig.password,
 						port: mqttConfig.port,
-						protocolVersion: 5,
+						protocolVersion: 4,
 					};
 
 					setState((prev) => ({
@@ -230,8 +230,14 @@ export const useMqtt = (): UseMqttReturn => {
 					return;
 				}
 
+				const publishOptions: PublishOptions = {
+					qos: options.qos ?? 0,
+					retain: options.retain ?? false,
+					dup: options.dup ?? false,
+				};
+
 				try {
-					client.publish(topic, message, options, (error) => {
+					client.publish(topic, message, publishOptions, (error) => {
 						if (error) {
 							reject(error);
 						} else {

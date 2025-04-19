@@ -198,17 +198,19 @@ const DeviceManagement = () => {
 							<span className="font-medium mr-1">{t("overview.total")}:</span>
 							<span>{summary.total}</span>
 						</div>
-						<div className="flex items-center">
-							<span className="font-medium mr-1 text-green-500">{t("overview.online")}:</span>
-							<span>{summary.online}</span>
-						</div>
-						<div className="flex items-center">
-							<span className="font-medium mr-1 text-gray-500 dark:text-gray-400">{t("overview.offline")}:</span>
-							<span>{summary.offline}</span>
-						</div>
-						<div className="flex items-center">
-							<span className="font-medium mr-1 text-red-500">{t("overview.error")}:</span>
-							<span>{summary.in_error}</span>
+						<div className="flex flex-wrap gap-2 text-sm">
+							<div className="flex items-center">
+								<span className="font-medium mr-1 text-green-500">{t("overview.online")}:</span>
+								<span>{summary.online}</span>
+							</div>
+							<div className="flex items-center">
+								<span className="font-medium mr-1 text-gray-500 dark:text-gray-400">{t("overview.offline")}:</span>
+								<span>{summary.offline}</span>
+							</div>
+							<div className="flex items-center">
+								<span className="font-medium mr-1 text-red-500">{t("overview.error")}:</span>
+								<span>{summary.in_error}</span>
+							</div>
 						</div>
 					</div>
 				</div>

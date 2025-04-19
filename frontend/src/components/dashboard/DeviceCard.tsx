@@ -65,27 +65,27 @@ const DeviceCard: React.FC<DeviceCardProps> = ({ device, moreInfo }) => {
 			</CardContent>
 
 			{/* Action Buttons */}
-			<CardFooter className="flex flex-wrap gap-4 mt-2 max-sm:flex-col max-sm:gap-6">
+			<CardFooter className="flex flex-wrap gap-4 mt-2">
 				<Button
 					className="flex-1 px-4 w-full sm:w-auto"
 					variant="default"
 					onClick={() => navigate(routes.remoteControl(device.id))}
 				>
-					<LaptopMinimal className="h-4 w-4 mr-2" /> {t("device-list.remote-control-button")}
+					<LaptopMinimal className="h-4 w-4" /> {/* {t("device-list.remote-control-button")} */}
 				</Button>
 				<Button
 					className="flex-1 w-full sm:w-auto"
 					variant="outline"
 					onClick={() => navigate(routes.history(device.id))}
 				>
-					<History className="h-4 w-4 mr-2" /> {t("device-list.history-button")}
+					<History className="h-4 w-4" /> {/* {t("device-list.history-button")} */}
 				</Button>
 				<Button
 					className="flex-1 w-full sm:w-auto"
 					variant="secondary"
 					onClick={() => moreInfo(device)}
 				>
-					<CircleChevronRight className="h-4 w-4 mr-2" /> {t("device-list.more-button")}
+					<CircleChevronRight className="h-4 w-4" /> {/* {t("device-list.more-button")} */}
 				</Button>
 			</CardFooter>
 		</Card>

@@ -193,6 +193,7 @@
     justify-content: center;
     flex-direction: column;
     margin-bottom: 0px;
+    font-size: 21px;
 }
 
 .outdoor-unit {
@@ -214,13 +215,6 @@
 
 .dark .outdoor-unit svg {
     color: var(--icon-dark);
-}
-
-.outdoor-unit img {
-    width: 43px;
-    height: auto;
-    margin-right: 10px;
-    margin-left: 10px;
 }
 
 .outdoor-unit p {
@@ -304,6 +298,8 @@
 
 .state-bar {
     position: absolute;
+    display: flex;
+    align-items: center;
     width: 100%;
     height: 42px;
     bottom: 0px;
@@ -327,8 +323,6 @@
     padding-right: 5%;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 8px;
-    padding-bottom: 10px;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
 }
@@ -433,134 +427,232 @@
 
 @media only screen and (max-width: 675px) {
     .container-home {
-        min-height: 450px;
+        min-height: 380px;
         position: relative;
     }
 
     .outdoor-temp {
         position: absolute;
-        top: 70px;
+        top: 50px;
         left: 25px;
         margin-bottom: 0;
         margin-left: 0;
     }
 
+    .outdoor-temp p {
+        font-size: 18px;
+    }
+
+    .outdoor-temp svg {
+        width: 28px;
+    }
+
     .outdoor-unit {
         position: absolute;
-        top: 60px;
+        top: 40px;
         right: 25px;
         margin-bottom: 0;
         margin-right: 0;
     }
 
+    .outdoor-unit svg {
+        width: 48px;
+    }
+
+    .stav_venk {
+        left: 16px;
+        top: -22px;
+    }
+
+    .stav_venk svg {
+        width: 28px;
+    }
+
+    .outdoor-unit p {
+        font-size: 18px;
+    }
+
     .home-image {
         bottom: auto;
+        width: 330px;
+        height: 290px;
+        background-size: 330px 290px;
+    }
+
+    .home-image p {
+        bottom: -51px;
+    }
+
+    .home-image p svg {
+        width: 32px;
+    }
+
+    .want-temp-home {
+        font-size: 18px;
+    }
+
+
+    .want-temp-home[data-descr]::after {
+        font-size: 11px;
+    }
+
+    .state-bar p {
+        font-size: 14px;
     }
 }
 
 @media only screen and (max-width: 460px) {
     .outdoor-temp {
-        top: 70px;
+        top: 50px;
         left: 15px;
     }
 
     .outdoor-unit {
-        top: 60px;
+        top: 40px;
         right: 15px;
     }
 }
 
 @media only screen and (max-width: 400px) {
     .container-home {
-        min-height: 500px;
+        min-height: 400px;
     }
 
     .outdoor-temp {
-        top: 70px;
+        top: 50px;
         left: 10px;
     }
 
     .outdoor-unit {
-        top: 60px;
+        top: 40px;
         right: 10px;
     }
 }
 
 @media only screen and (max-width: 360px) {
     .outdoor-temp {
-        top: 70px;
+        top: 50px;
         left: 5px;
     }
 
     .outdoor-unit {
-        top: 60px;
-        right: 5px;
+        top: 40px;
+        right: 10px;
     }
 }
 
 @container (max-width: 675px) {
     .container-home {
-        min-height: 450px;
+        min-height: 380px;
         position: relative;
     }
 
     .outdoor-temp {
         position: absolute;
-        top: 60px;
+        top: 50px;
         left: 25px;
         margin-bottom: 0;
         margin-left: 0;
     }
 
+    .outdoor-temp p {
+        font-size: 18px;
+    }
+
+    .outdoor-temp svg {
+        width: 28px;
+    }
+
     .outdoor-unit {
         position: absolute;
-        top: 60px;
+        top: 40px;
         right: 25px;
         margin-bottom: 0;
         margin-right: 0;
     }
 
+    .outdoor-unit svg {
+        width: 48px;
+    }
+
+    .stav_venk {
+        left: 16px;
+        top: -22px;
+    }
+
+    .stav_venk svg {
+        width: 28px;
+    }
+
+    .outdoor-unit p {
+        font-size: 18px;
+    }
+
     .home-image {
         bottom: auto;
+        width: 330px;
+        height: 290px;
+        background-size: 330px 290px;
+    }
+
+    .home-image p {
+        bottom: -51px;
+    }
+
+    .home-image p svg {
+        width: 32px;
+    }
+
+    .want-temp-home {
+        font-size: 18px;
+    }
+
+
+    .want-temp-home[data-descr]::after {
+        font-size: 11px;
+    }
+
+    .state-bar p {
+        font-size: 14px;
     }
 }
 
 @container (max-width: 460px) {
     .outdoor-temp {
-        top: 60px;
+        top: 50px;
         left: 15px;
     }
 
     .outdoor-unit {
-        top: 60px;
+        top: 40px;
         right: 15px;
     }
 }
 
 @container (max-width: 400px) {
     .container-home {
-        min-height: 500px;
+        min-height: 400px;
     }
 
     .outdoor-temp {
-        top: 60px;
+        top: 50px;
         left: 10px;
     }
 
     .outdoor-unit {
-        top: 60px;
+        top: 40px;
         right: 10px;
     }
 }
 
 @container (max-width: 360px) {
     .outdoor-temp {
-        top: 60px;
+        top: 50px;
         left: 5px;
     }
 
     .outdoor-unit {
-        top: 60px;
-        right: 5px;
+        top: 40px;
+        right: 10px;
     }
 }

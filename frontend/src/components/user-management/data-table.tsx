@@ -8,9 +8,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Loader2 } from "lucide-react";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectItem } from "@/components/ui/select";
+import { Loader2, ListFilter } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { ColumnActions } from "@/components/user-management/columns";
 
@@ -57,59 +58,132 @@ export function DataTable<TData>({ columns, data, sorting, pageSize, onSortingCh
 	return (
 		<div>
 			<div className="flex items-center py-4 gap-4">
-				<div className="flex items-center gap-4">
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button variant="outline">
-								{pageSize} {tPagination("rows")}
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent align="end">
-							{pageSizes.map((size) => (
-								<DropdownMenuCheckboxItem
-									key={size}
-									onClick={() => onPageSizeChange(size)}
-									checked={pageSize === size}
-								>
-									{size} {tPagination("rows")}
-								</DropdownMenuCheckboxItem>
-							))}
-						</DropdownMenuContent>
-					</DropdownMenu>
+				{/* Desktop layout */}
+				<div className="hidden md:flex items-center gap-4 w-full">
+					<Select
+						onValueChange={(val) => onPageSizeChange(Number(val))}
+						defaultValue={String(pageSize)}
+					>
+						<SelectTrigger className="w-[120px] ">
+							<SelectValue placeholder={`${pageSize} ${tPagination("rows")}`} />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectGroup>
+								{pageSizes.map((size) => (
+									<SelectItem
+										key={size}
+										value={String(size)}
+									>
+										{size} {tPagination("rows")}
+									</SelectItem>
+								))}
+							</SelectGroup>
+						</SelectContent>
+					</Select>
+
 					<Input
 						placeholder={t("userManagement.search")}
 						onChange={(e) => onSearchChange(e.target.value)}
 						className="max-w-sm"
 					/>
-				</div>
-				{loading && !isInitialLoad ? <Loader2 className="animate-spin h-4 w-4" /> : null}
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button
-							variant="outline"
-							className="ml-auto"
-						>
-							{tPagination("columns")}
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align="end">
-						{table
-							.getAllColumns()
-							.filter((column) => column.getCanHide())
-							.map((column) => {
-								return (
+
+					<div className="h-5 w-5">{loading && !isInitialLoad && <Loader2 className="animate-spin h-4 w-4" />}</div>
+
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button
+								variant="outline"
+								className="ml-auto"
+							>
+								{tPagination("columns")}
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent align="end">
+							{table
+								.getAllColumns()
+								.filter((col: any) => col.getCanHide())
+								.map((col: any) => (
 									<DropdownMenuCheckboxItem
-										key={column.id}
+										key={col.id}
 										className="capitalize"
-										checked={column.getIsVisible()}
-										onCheckedChange={(value) => column.toggleVisibility(!!value)}
+										checked={col.getIsVisible()}
+										onCheckedChange={(value) => col.toggleVisibility(!!value)}
 									>
-										{typeof column.columnDef.meta === "string" ? column.columnDef.meta : column.id}
+										{typeof col.columnDef.meta === "string" ? col.columnDef.meta : col.id}
 									</DropdownMenuCheckboxItem>
-								);
-							})}
-					</DropdownMenuContent>
-				</DropdownMenu>
+								))}
+						</DropdownMenuContent>
+					</DropdownMenu>
+				</div>
+
+				{/* Mobile layout */}
+				<div className="flex md:hidden items-center gap-2 w-full">
+					<Input
+						placeholder={t("userManagement.search")}
+						onChange={(e) => onSearchChange(e.target.value)}
+						className="max-w-48"
+					/>
+
+					<Popover>
+						<PopoverTrigger asChild>
+							<Button
+								variant="outline"
+								size="sm"
+							>
+								<ListFilter />
+							</Button>
+						</PopoverTrigger>
+						<PopoverContent className="p-4 space-y-4 w-auto">
+							<Select
+								onValueChange={(val) => onPageSizeChange(Number(val))}
+								defaultValue={String(pageSize)}
+							>
+								<SelectTrigger className="w-[160px]">
+									<SelectValue placeholder={`${pageSize} ${tPagination("rows")}`} />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectGroup>
+										{pageSizes.map((size) => (
+											<SelectItem
+												key={size}
+												value={String(size)}
+											>
+												{size} {tPagination("rows")}
+											</SelectItem>
+										))}
+									</SelectGroup>
+								</SelectContent>
+							</Select>
+
+							<DropdownMenu>
+								<DropdownMenuTrigger asChild>
+									<Button
+										variant="outline"
+										className="w-full"
+									>
+										{tPagination("columns")}
+									</Button>
+								</DropdownMenuTrigger>
+								<DropdownMenuContent align="end">
+									{table
+										.getAllColumns()
+										.filter((col: any) => col.getCanHide())
+										.map((col: any) => (
+											<DropdownMenuCheckboxItem
+												key={col.id}
+												className="capitalize"
+												checked={col.getIsVisible()}
+												onCheckedChange={(value) => col.toggleVisibility(!!value)}
+											>
+												{typeof col.columnDef.meta === "string" ? col.columnDef.meta : col.id}
+											</DropdownMenuCheckboxItem>
+										))}
+								</DropdownMenuContent>
+							</DropdownMenu>
+						</PopoverContent>
+					</Popover>
+					<div className="h-5 w-5">{loading && !isInitialLoad && <Loader2 className="animate-spin h-4 w-4" />}</div>
+				</div>
 			</div>
 			<div className="rounded-md border">
 				<Table>

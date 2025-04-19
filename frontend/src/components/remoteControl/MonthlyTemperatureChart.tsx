@@ -101,7 +101,7 @@ const MonthlyTemperatureChart: React.FC<MonthlyTemperatureChartProps> = ({ data 
 	};
 
 	if (!formattedData.length) {
-		return <div className="h-full w-full flex items-center justify-center">{t("charts.noData")}</div>;
+		return <div className="h-full w-full flex items-center justify-center text-center px-4">{t("charts.noData")}</div>;
 	}
 
 	return (
