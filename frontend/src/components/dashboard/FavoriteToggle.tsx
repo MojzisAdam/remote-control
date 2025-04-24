@@ -38,7 +38,7 @@ export function FavoriteToggle({ isFavorite: initialFavorite, deviceId, onChange
 	};
 
 	return (
-		<Card className="w-full max-w-md p-2 py-4 max-sm:px-0">
+		<Card className="w-full max-w-md p-2 py-4 max-sm:px-0 h-full">
 			<CardContent className="flex items-center justify-between p-2 px-4 gap-4 space-x-2">
 				<div className="space-y-1">
 					<div className="flex items-center space-x-2">

@@ -96,6 +96,10 @@
             "title": "Enable Notifications",
             "description": "If you enable notifications for this device, you will receive an error message in your email."
         },
+         "web-notification-toggle": {
+            "title": "App Notifications",
+            "description": "When enabled, you will see a badge in the app’s notification icon whenever this device’s status changes."
+        },
         "favourite-toggle": {
             "title": "Favorite",
             "description": "Mark this device as a favorite to quickly access it from your favorites list."

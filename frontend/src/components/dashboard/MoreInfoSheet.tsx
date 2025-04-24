@@ -2,6 +2,7 @@ import React from "react";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Device } from "@/api/devices/model";
 import { NotificationToggle } from "@/components/dashboard/NotificationToggle";
+import { WebNotificationToggle } from "@/components/dashboard/WebNotificationToggle";
 import { FavoriteToggle } from "@/components/dashboard/FavoriteToggle";
 import { DeviceBasicInfo } from "@/components/dashboard/DeviceBasicInfo";
 import DeviceNameEditor from "@/components/dashboard/DeviceNameEditor";
@@ -28,6 +29,10 @@ export function MoreInfoSheet({ open, onOpenChange, device, updateDeviceSheet, d
 
 	const setNotifications = (enabled: boolean) => {
 		device.notifications = enabled;
+	};
+
+	const setWebNotifications = (enabled: boolean) => {
+		device.web_notifications = enabled;
 	};
 
 	const setFavorite = (enabled: boolean) => {
@@ -69,7 +74,7 @@ export function MoreInfoSheet({ open, onOpenChange, device, updateDeviceSheet, d
 						updateDeviceSheet={updateDeviceSheet}
 					/>
 
-					<div className="flex gap-8 max-[1100px]:flex-col  max-[1100px]:gap-4">
+					<div className="flex gap-8 max-[1100px]:flex-col  max-[1100px]:gap-4 items-stretch">
 						<div className="pt-2">
 							<NotificationToggle
 								enabled={device.notifications ? device.notifications : false}
@@ -78,14 +83,21 @@ export function MoreInfoSheet({ open, onOpenChange, device, updateDeviceSheet, d
 							/>
 						</div>
 						<div className="pt-2">
+							<WebNotificationToggle
+								enabled={device.web_notifications ?? true}
+								onChange={setWebNotifications}
+								deviceId={device.id}
+							/>
+						</div>
+					</div>
+					<div className="flex gap-8 max-[1100px]:flex-col  max-[1100px]:gap-4 items-stretch">
+						<div className="pt-2">
 							<FavoriteToggle
 								isFavorite={device.favourite ? device.favourite : false}
 								onChange={setFavorite}
 								deviceId={device.id}
 							/>
 						</div>
-					</div>
-					<div className="flex w-full min-[1100px]:max-w-[359.5px]">
 						<div className="pt-2">
 							<DeleteDeviceFromList
 								deviceId={device.id}

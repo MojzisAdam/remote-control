@@ -212,6 +212,7 @@ class DeviceController extends Controller
             'own_name' => 'nullable|string|max:100',
             'favourite' => 'nullable|boolean',
             'notifications' => 'nullable|boolean',
+            'web_notifications' => 'nullable|boolean',
         ]);
 
         $user = Auth::user();
@@ -238,9 +239,15 @@ class DeviceController extends Controller
                 $pivotData['favouriteOrder'] = -1;
             }
         }
+
         if ($request->has('notifications')) {
             $pivotData['notifications'] = $request->notifications;
         }
+
+        if ($request->has('web_notifications')) {
+            $pivotData['web_notifications'] = $request->web_notifications;
+        }
+
 
         $user->devices()->updateExistingPivot($deviceId, $pivotData);
 

@@ -65,6 +65,7 @@ class ErrorNotificationService
     {
         $userIds = DB::table('device_user')
             ->where('device_id', $deviceId)
+            ->where('web_notifications', true)
             ->pluck('user_id');
 
         foreach ($userIds as $userId) {

@@ -34,6 +34,7 @@ class DeviceResource extends JsonResource
             'own_name' => $userDevice ? $userDevice->pivot->own_name : null,
             'favourite' => $userDevice ? $userDevice->pivot->favourite : false,
             'notifications' => $userDevice ? $userDevice->pivot->notifications : false,
+            'web_notifications' => $userDevice ? $userDevice->pivot->web_notifications : false,
             'favouriteOrder' => $userDevice ? $userDevice->pivot->favouriteOrder : 0,
         ];
     }

@@ -16,6 +16,7 @@ export interface Device {
 	own_name?: string;
 	favourite?: boolean;
 	notifications?: boolean;
+	web_notifications?: boolean;
 	favouriteOrder: number;
 
 	status: "online" | "error" | "offline";
@@ -42,6 +43,7 @@ export type DeviceUser = {
 	own_name: string;
 	favourite: boolean;
 	notifications: boolean;
+	web_notifications: boolean;
 	favouriteOrder: number;
 	created_at?: string;
 	updated_at?: string;
