@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useUserManagement } from "@/hooks/useUserManagement";
+import { formatName, readableRoleNames, readablePermissionNames, getDefaultPermissionsForRole, allPermissions } from "@/utils/permissionUtils";
 
 type EditUserModalProps = {
 	onSuccess: (user: User) => void;
@@ -43,6 +44,9 @@ export function EditUserModal({ onSuccess, open, onOpenChange, data }: EditUserM
 		permissions: data?.permissions || [],
 	});
 
+	// Store default permissions for the current role
+	const [defaultPermissions, setDefaultPermissions] = useState<string[]>([]);
+
 	useEffect(() => {
 		setInformationFormData({
 			first_name: data?.first_name || "",
@@ -51,6 +55,11 @@ export function EditUserModal({ onSuccess, open, onOpenChange, data }: EditUserM
 			roles: data?.roles || [],
 			permissions: data?.permissions || [],
 		});
+
+		// Set default permissions based on the role
+		if (data?.roles && data.roles.length > 0) {
+			setDefaultPermissions(getDefaultPermissionsForRole(data.roles[0]));
+		}
 	}, [data]);
 
 	const submitInformationForm = async (event: React.FormEvent) => {
@@ -82,10 +91,17 @@ export function EditUserModal({ onSuccess, open, onOpenChange, data }: EditUserM
 				...informationFormData,
 				[name]: checked ? [...(informationFormData[name] as string[]), value] : (informationFormData[name] as string[]).filter((v: string) => v !== value),
 			});
-		} else if (type === "radio") {
+		} else if (type === "radio" && name === "roles") {
+			const newDefaultPermissions = getDefaultPermissionsForRole(value);
+			setDefaultPermissions(newDefaultPermissions);
+
+			// Ensure all default permissions for the new role are included
+			const updatedPermissions = [...new Set([...informationFormData.permissions.filter((p) => !defaultPermissions.includes(p)), ...newDefaultPermissions])];
+
 			setInformationFormData({
 				...informationFormData,
-				[name]: value,
+				roles: [value],
+				permissions: updatedPermissions,
 			});
 		} else {
 			setInformationFormData({
@@ -95,10 +111,15 @@ export function EditUserModal({ onSuccess, open, onOpenChange, data }: EditUserM
 		}
 	};
 
-	const handleChangeInformation2 = (name: string, checked: boolean | string) => {
+	const handlePermissionChange = (permission: string, checked: boolean | string) => {
+		// If this is a default permission for current role, don't allow unchecking
+		if (defaultPermissions.includes(permission) && !checked) {
+			return; // Don't allow removing default permissions
+		}
+
 		setInformationFormData({
 			...informationFormData,
-			permissions: checked ? [...informationFormData.permissions, name] : informationFormData.permissions.filter((permission) => permission !== name),
+			permissions: checked ? [...informationFormData.permissions, permission] : informationFormData.permissions.filter((p) => p !== permission),
 		});
 	};
 
@@ -109,6 +130,12 @@ export function EditUserModal({ onSuccess, open, onOpenChange, data }: EditUserM
 
 		onOpenChange(open);
 	};
+
+	// Check if a permission is a default for the current role
+	const isDefaultPermission = (permission: string): boolean => {
+		return defaultPermissions.includes(permission);
+	};
+
 	return (
 		<Dialog
 			open={open}
@@ -197,7 +224,7 @@ export function EditUserModal({ onSuccess, open, onOpenChange, data }: EditUserM
 								defaultValue={data?.roles[0]}
 								onChange={handleChangeInformation}
 							>
-								{["superadmin", "administrator", "superuser", "user"].map((role) => (
+								{Object.keys(readableRoleNames).map((role) => (
 									<div
 										className="flex items-center"
 										key={role}
@@ -210,7 +237,7 @@ export function EditUserModal({ onSuccess, open, onOpenChange, data }: EditUserM
 											htmlFor={role}
 											className="ml-2"
 										>
-											{role}
+											{formatName(role, readableRoleNames)}
 										</Label>
 									</div>
 								))}
@@ -220,8 +247,8 @@ export function EditUserModal({ onSuccess, open, onOpenChange, data }: EditUserM
 						{/* Permissions */}
 						<div>
 							<Label>{t("userManagement.editUser.permissions")}</Label>
-							<div className="flex space-x-4 mt-2">
-								{["manage-users", "manage-divices", "view-history", "edit-device-description"].map((permission) => (
+							<div className="grid grid-cols-2 gap-2 mt-2">
+								{allPermissions.map((permission) => (
 									<div
 										key={permission}
 										className="flex items-center"
@@ -232,14 +259,17 @@ export function EditUserModal({ onSuccess, open, onOpenChange, data }: EditUserM
 											value={permission}
 											checked={informationFormData.permissions.includes(permission)}
 											onCheckedChange={(checked) => {
-												handleChangeInformation2(permission, checked);
+												handlePermissionChange(permission, checked);
 											}}
+											disabled={isDefaultPermission(permission)}
 										/>
 										<Label
 											htmlFor={permission}
-											className="ml-2"
+											className={`ml-2 ${isDefaultPermission(permission) ? "" : ""}`}
+											title={isDefaultPermission(permission) ? "Default permission for this role" : ""}
 										>
-											{permission}
+											{formatName(permission, readablePermissionNames)}
+											{isDefaultPermission(permission)}
 										</Label>
 									</div>
 								))}

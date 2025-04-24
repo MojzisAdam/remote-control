@@ -7,6 +7,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { useNavigate } from "react-router-dom";
 import routes from "@/constants/routes";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "@/hooks/useAuth";
 
 interface DeviceCardProps {
 	device: Device;
@@ -28,6 +29,7 @@ export const getStatusColor = (status: string) => {
 
 const DeviceCard: React.FC<DeviceCardProps> = ({ device, moreInfo }) => {
 	const { t } = useTranslation("dashboard");
+	const { hasPermission } = useAuth();
 
 	const navigate = useNavigate();
 	return (
@@ -73,13 +75,15 @@ const DeviceCard: React.FC<DeviceCardProps> = ({ device, moreInfo }) => {
 				>
 					<LaptopMinimal className="h-4 w-4" /> {/* {t("device-list.remote-control-button")} */}
 				</Button>
-				<Button
-					className="flex-1 w-full sm:w-auto"
-					variant="outline"
-					onClick={() => navigate(routes.history(device.id))}
-				>
-					<History className="h-4 w-4" /> {/* {t("device-list.history-button")} */}
-				</Button>
+				{hasPermission("view-history") && (
+					<Button
+						className="flex-1 w-full sm:w-auto"
+						variant="outline"
+						onClick={() => navigate(routes.history(device.id))}
+					>
+						<History className="h-4 w-4" /> {/* {t("device-list.history-button")} */}
+					</Button>
+				)}
 				<Button
 					className="flex-1 w-full sm:w-auto"
 					variant="secondary"

@@ -8,6 +8,7 @@ import { List, Grid3X3, LaptopMinimal, History, CircleChevronRight } from "lucid
 import { useNavigate } from "react-router-dom";
 import routes from "@/constants/routes";
 import { getSetting } from "@/utils/settingsStorage";
+import { useAuth } from "@/hooks/useAuth";
 
 interface DeviceListProps {
 	devices: Device[];
@@ -18,6 +19,7 @@ const DeviceList: React.FC<DeviceListProps> = ({ devices, moreInfo }) => {
 	const { t } = useTranslation("dashboard");
 	const [viewMode, setViewMode] = useState<"grid" | "list">(getSetting("defaultDashboardView"));
 	const navigate = useNavigate();
+	const { hasPermission } = useAuth();
 
 	const initialWidths = {
 		status: 50,
@@ -259,12 +261,14 @@ const DeviceList: React.FC<DeviceListProps> = ({ devices, moreInfo }) => {
 													>
 														<LaptopMinimal className="h-4 w-4" />
 													</Button>
-													<Button
-														variant="outline"
-														onClick={() => navigate(routes.history(device.id))}
-													>
-														<History className="h-4 w-4" />
-													</Button>
+													{hasPermission("view-history") && (
+														<Button
+															variant="outline"
+															onClick={() => navigate(routes.history(device.id))}
+														>
+															<History className="h-4 w-4" />
+														</Button>
+													)}
 													<Button
 														variant="secondary"
 														onClick={() => moreInfo(device)}

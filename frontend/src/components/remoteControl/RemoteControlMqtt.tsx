@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { useDevices } from "@/hooks/useDevices";
 import { useDeviceContext } from "@/provider/DeviceProvider";
+import { useAuth } from "@/hooks/useAuth";
 
 interface DeviceData {
 	[key: string]: number | string | undefined;
@@ -99,6 +100,9 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 	const { updateDeviceVersions } = useDevices();
 	const { currentDevice, updateDevice } = useDeviceContext();
 	const { client, connectionStatus, error, connectClient, disconnectClient, publishMessage, subscribeToTopic, lastMessage } = useMqtt();
+
+	const { hasPermission } = useAuth();
+	const canViewExtendedParams = hasPermission("edit-all-parameters");
 
 	const [deviceData, dispatchDeviceData] = useReducer(deviceDataReducer, {});
 	const startCounter = useRef<number>(0b000);
@@ -428,6 +432,8 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 	);
 
 	const toggleExtendedParameters = useCallback(async () => {
+		if (!canViewExtendedParams) return;
+
 		const newState = !showExtendedParams;
 		setShowExtendedParams(newState);
 		if (newState && !isExtendedSubscribed.current) {
@@ -537,43 +543,45 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 		[deviceData]
 	);
 
-	const parametersData = useMemo(
-		() =>
-			showExtendedParams
-				? { ...extendedData }
-				: {
-						reg_33: deviceData.reg_33,
-						reg_35: deviceData.reg_35,
-						reg_36: deviceData.reg_36,
-						reg_38: deviceData.reg_38,
-						reg_64: deviceData.reg_64,
-						reg_65: deviceData.reg_65,
-						// reg_66: deviceData.reg_66,
-						reg_68: deviceData.reg_68,
-						reg_71: deviceData.reg_71,
-						reg_75: deviceData.reg_75,
-						reg_76: deviceData.reg_76,
-						reg_77: deviceData.reg_77,
-						reg_78: deviceData.reg_78,
-						reg_96: deviceData.reg_96,
-						reg_97: deviceData.reg_97,
-						reg_99: deviceData.reg_99,
-						reg_108: deviceData.reg_108,
-						reg_109: deviceData.reg_109,
-						reg_110: deviceData.reg_110,
-						reg_111: deviceData.reg_111,
-						reg_128: deviceData.reg_128,
-						reg_133: deviceData.reg_133,
-						// reg_192: deviceData.reg_192,
-						reg_193: deviceData.reg_193 !== undefined ? deviceData.reg_193 * 10 : deviceData.reg_193,
-						reg_195: deviceData.reg_195 !== undefined ? deviceData.reg_195 * 10 : deviceData.reg_195,
-						reg_257: deviceData.reg_257,
-						reg_258: deviceData.reg_258,
-						reg_260: deviceData.reg_260,
-						fhi: deviceData.fhi,
-				  },
-		[showExtendedParams, extendedData, deviceData]
-	);
+	const parametersData = useMemo(() => {
+		const baseParams = {
+			reg_33: deviceData.reg_33,
+			reg_35: deviceData.reg_35,
+			reg_36: deviceData.reg_36,
+			reg_38: deviceData.reg_38,
+			reg_64: deviceData.reg_64,
+			reg_65: deviceData.reg_65,
+			// reg_66: deviceData.reg_66,
+			reg_68: deviceData.reg_68,
+			reg_71: deviceData.reg_71,
+			reg_75: deviceData.reg_75,
+			reg_76: deviceData.reg_76,
+			reg_77: deviceData.reg_77,
+			reg_78: deviceData.reg_78,
+			reg_96: deviceData.reg_96,
+			reg_97: deviceData.reg_97,
+			reg_99: deviceData.reg_99,
+			reg_108: deviceData.reg_108,
+			reg_109: deviceData.reg_109,
+			reg_110: deviceData.reg_110,
+			reg_111: deviceData.reg_111,
+			reg_128: deviceData.reg_128,
+			reg_133: deviceData.reg_133,
+			// reg_192: deviceData.reg_192,
+			reg_193: deviceData.reg_193 !== undefined ? deviceData.reg_193 * 10 : deviceData.reg_193,
+			reg_195: deviceData.reg_195 !== undefined ? deviceData.reg_195 * 10 : deviceData.reg_195,
+			reg_257: deviceData.reg_257,
+			reg_258: deviceData.reg_258,
+			reg_260: deviceData.reg_260,
+			fhi: canViewExtendedParams ? deviceData.fhi : undefined,
+		};
+
+		if (showExtendedParams && canViewExtendedParams) {
+			return { ...extendedData };
+		}
+
+		return baseParams;
+	}, [showExtendedParams, extendedData, deviceData, canViewExtendedParams]);
 
 	return (
 		<div className="space-y-4">
@@ -643,36 +651,38 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 					)}
 					{activePage === "parameters" && (
 						<>
-							<div className="mb-4 flex justify-end items-center space-x-4">
-								{showExtendedParams && deviceConnectionStatus === "connected" && (
-									<>
-										{extendedReloading &&
-											(showReloadButton ? (
-												<Button
-													variant="outline"
-													size="icon"
-													onClick={refreshExtendedData}
-												>
-													<RefreshCw />
-												</Button>
-											) : (
-												<div>
-													<Loader2
-														className="animate-spin"
-														size={16}
-													/>
-												</div>
-											))}
-									</>
-								)}
-								<Button
-									size="icon"
-									onClick={toggleExtendedParameters}
-									variant={showExtendedParams ? "secondary" : "outline"}
-								>
-									{showExtendedParams ? <Boxes size={16} /> : <Box size={16} />}
-								</Button>
-							</div>
+							{canViewExtendedParams && (
+								<div className="mb-4 flex justify-end items-center space-x-4">
+									{showExtendedParams && deviceConnectionStatus === "connected" && (
+										<>
+											{extendedReloading &&
+												(showReloadButton ? (
+													<Button
+														variant="outline"
+														size="icon"
+														onClick={refreshExtendedData}
+													>
+														<RefreshCw />
+													</Button>
+												) : (
+													<div>
+														<Loader2
+															className="animate-spin"
+															size={16}
+														/>
+													</div>
+												))}
+										</>
+									)}
+									<Button
+										size="icon"
+										onClick={toggleExtendedParameters}
+										variant={showExtendedParams ? "secondary" : "outline"}
+									>
+										{showExtendedParams ? <Boxes size={16} /> : <Box size={16} />}
+									</Button>
+								</div>
+							)}
 							<DeviceParameters
 								deviceId={deviceId}
 								deviceData={parametersData}

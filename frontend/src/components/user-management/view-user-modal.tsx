@@ -4,6 +4,7 @@ import { User } from "@/api/user/model";
 import { formatDateTime } from "@/utils/utils";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { useTranslation } from "react-i18next";
+import { formatName, readableRoleNames, readablePermissionNames } from "@/utils/permissionUtils";
 
 type ViewUserModalProps = {
 	open: boolean;
@@ -53,9 +54,9 @@ export function ViewUserModal({ open, onOpenChange, data }: ViewUserModalProps) 
 							<TableCell className="font-medium">{t("userManagement.viewUser.roles")}</TableCell>
 							<TableCell className="text-right">
 								{data?.roles && data.roles.length > 0 ? (
-									<ul>
+									<ul className="list-none p-0">
 										{data.roles.map((role, index) => (
-											<li key={index}>{role}</li>
+											<li key={index}>{formatName(role, readableRoleNames)}</li>
 										))}
 									</ul>
 								) : (
@@ -67,9 +68,9 @@ export function ViewUserModal({ open, onOpenChange, data }: ViewUserModalProps) 
 							<TableCell className="font-medium">{t("userManagement.viewUser.permissions")}</TableCell>
 							<TableCell className="text-right">
 								{data?.permissions && data.permissions.length > 0 ? (
-									<ul>
+									<ul className="list-none p-0">
 										{data.permissions.map((permission, index) => (
-											<li key={index}>{permission}</li>
+											<li key={index}>{formatName(permission, readablePermissionNames)}</li>
 										))}
 									</ul>
 								) : (

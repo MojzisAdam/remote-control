@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useUserManagement } from "@/hooks/useUserManagement";
+import { formatName, readableRoleNames, readablePermissionNames, getDefaultPermissionsForRole, allPermissions } from "@/utils/permissionUtils";
 
 type CreateUserModalProps = {
 	onSuccess: (email: string) => void;
@@ -34,14 +35,19 @@ export function CreateUserModal({ onSuccess, open, onOpenChange }: CreateUserMod
 
 	const [errorsInf, setErrorsInf] = useState<Record<string, string[]>>({});
 	const [statusInf, setStatusInf] = useState<string | null>(null);
+
+	// Default role is "user"
+	const defaultRole = "user";
+	const [defaultPermissions, setDefaultPermissions] = useState<string[]>(getDefaultPermissionsForRole(defaultRole));
+
 	const [informationFormData, setInformationFormData] = useState<InformationRegisterFormData>({
 		first_name: "",
 		last_name: "",
 		email: "",
 		password: "",
 		password_confirmation: "",
-		roles: ["user"],
-		permissions: [],
+		roles: [defaultRole],
+		permissions: defaultPermissions,
 	});
 
 	const submitInformationForm = async (event: React.FormEvent) => {
@@ -56,14 +62,18 @@ export function CreateUserModal({ onSuccess, open, onOpenChange }: CreateUserMod
 				onSuccess(informationFormData.email);
 
 				setTimeout(() => {
+					const resetRole = "user";
+					const resetPermissions = getDefaultPermissionsForRole(resetRole);
+					setDefaultPermissions(resetPermissions);
+
 					setInformationFormData({
 						first_name: "",
 						last_name: "",
 						email: "",
 						password: "",
 						password_confirmation: "",
-						roles: ["user"],
-						permissions: [],
+						roles: [resetRole],
+						permissions: resetPermissions,
 					});
 				});
 
@@ -82,10 +92,18 @@ export function CreateUserModal({ onSuccess, open, onOpenChange }: CreateUserMod
 				...informationFormData,
 				[name]: checked ? [...(informationFormData[name] as string[]), value] : (informationFormData[name] as string[]).filter((v: string) => v !== value),
 			});
-		} else if (type === "radio") {
+		} else if (type === "radio" && name === "roles") {
+			// When role changes, update permissions based on the newly selected role
+			const newDefaultPermissions = getDefaultPermissionsForRole(value);
+			setDefaultPermissions(newDefaultPermissions);
+
+			// Ensure all default permissions for the new role are included
+			const updatedPermissions = [...new Set([...informationFormData.permissions.filter((p) => !defaultPermissions.includes(p)), ...newDefaultPermissions])];
+
 			setInformationFormData({
 				...informationFormData,
-				[name]: value,
+				roles: [value], // Store as array since roles is defined as string[]
+				permissions: updatedPermissions,
 			});
 		} else {
 			setInformationFormData({
@@ -95,11 +113,21 @@ export function CreateUserModal({ onSuccess, open, onOpenChange }: CreateUserMod
 		}
 	};
 
-	const handleChangeInformation2 = (name: string, checked: boolean | string) => {
+	const handlePermissionChange = (permission: string, checked: boolean | string) => {
+		// If this is a default permission for current role, don't allow unchecking
+		if (defaultPermissions.includes(permission) && !checked) {
+			return; // Don't allow removing default permissions
+		}
+
 		setInformationFormData({
 			...informationFormData,
-			permissions: checked ? [...informationFormData.permissions, name] : informationFormData.permissions.filter((permission) => permission !== name),
+			permissions: checked ? [...informationFormData.permissions, permission] : informationFormData.permissions.filter((p) => p !== permission),
 		});
+	};
+
+	// Check if a permission is a default for the current role
+	const isDefaultPermission = (permission: string): boolean => {
+		return defaultPermissions.includes(permission);
 	};
 
 	const customOnOpenChange = (open: boolean) => {
@@ -237,7 +265,7 @@ export function CreateUserModal({ onSuccess, open, onOpenChange }: CreateUserMod
 								defaultValue="user"
 								onChange={handleChangeInformation}
 							>
-								{["superadmin", "administrator", "superuser", "user"].map((role) => (
+								{Object.keys(readableRoleNames).map((role) => (
 									<div
 										className="flex items-center"
 										key={role}
@@ -250,7 +278,7 @@ export function CreateUserModal({ onSuccess, open, onOpenChange }: CreateUserMod
 											htmlFor={role}
 											className="ml-2"
 										>
-											{role}
+											{formatName(role, readableRoleNames)}
 										</Label>
 									</div>
 								))}
@@ -260,8 +288,8 @@ export function CreateUserModal({ onSuccess, open, onOpenChange }: CreateUserMod
 						{/* Permissions */}
 						<div>
 							<Label>{t("userManagement.createUser.permissions")}</Label>
-							<div className="flex space-x-4 mt-2">
-								{["manage-users", "manage-divices", "view-history"].map((permission) => (
+							<div className="grid grid-cols-2 gap-2 mt-2">
+								{allPermissions.map((permission) => (
 									<div
 										key={permission}
 										className="flex items-center"
@@ -272,14 +300,17 @@ export function CreateUserModal({ onSuccess, open, onOpenChange }: CreateUserMod
 											value={permission}
 											checked={informationFormData.permissions.includes(permission)}
 											onCheckedChange={(checked) => {
-												handleChangeInformation2(permission, checked);
+												handlePermissionChange(permission, checked);
 											}}
+											disabled={isDefaultPermission(permission)}
 										/>
 										<Label
 											htmlFor={permission}
-											className="ml-2"
+											className={`ml-2 ${isDefaultPermission(permission) ? "" : ""}`}
+											title={isDefaultPermission(permission) ? "Default permission for this role" : ""}
 										>
-											{permission}
+											{formatName(permission, readablePermissionNames)}
+											{isDefaultPermission(permission)}
 										</Label>
 									</div>
 								))}
