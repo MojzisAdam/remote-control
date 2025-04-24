@@ -22,7 +22,7 @@ const FavouriteDevices: React.FC<FavouriteDevicesProps> = ({ moreInfo, devices }
 	const { t } = useTranslation("dashboard");
 	const { t: globalT } = useTranslation("global");
 
-	const { user } = useAuth();
+	const { user, hasPermission } = useAuth();
 	const { loading: loadingUM, toggleLastVisitedDisplay } = useUserManagement();
 	const navigate = useNavigate();
 
@@ -210,13 +210,15 @@ const FavouriteDevices: React.FC<FavouriteDevicesProps> = ({ moreInfo, devices }
 										>
 											<LaptopMinimal className="h-4 w-4" />
 										</Button>
-										<Button
-											variant="outline"
-											className="flex-1"
-											onClick={() => navigate(routes.history(lastVisitedDevice.id))}
-										>
-											<History className="h-4 w-4" />
-										</Button>
+										{hasPermission("view-history") && (
+											<Button
+												variant="outline"
+												className="flex-1"
+												onClick={() => navigate(routes.history(lastVisitedDevice.id))}
+											>
+												<History className="h-4 w-4" />
+											</Button>
+										)}
 										<Button
 											variant="secondary"
 											onClick={() => moreInfo(lastVisitedDevice)}
@@ -270,14 +272,16 @@ const FavouriteDevices: React.FC<FavouriteDevicesProps> = ({ moreInfo, devices }
 												>
 													<LaptopMinimal className="h-4 w-4" />
 												</Button>
-												<Button
-													variant="outline"
-													className="flex-1"
-													disabled={editMode}
-													onClick={() => navigate(routes.history(device.id))}
-												>
-													<History className="h-4 w-4" />
-												</Button>
+												{hasPermission("view-history") && (
+													<Button
+														variant="outline"
+														className="flex-1"
+														disabled={editMode}
+														onClick={() => navigate(routes.history(device.id))}
+													>
+														<History className="h-4 w-4" />
+													</Button>
+												)}
 												<Button
 													variant="secondary"
 													onClick={() => moreInfo(device)}

@@ -1,6 +1,15 @@
 import { useState } from "react";
 import { ApiHandlerResult, handleApiRequest } from "@/utils/apiHandler";
-import { fetchUsers as fetchUsersApi, deleteUser as deleteUserApi, registerUser as registerUserApi, updateUser as updateUserApi, updateLastVisitedDevice, getLastVisitedDevice, toggleDisplayLastVisitedDevice, getDisplayLastVisitedDevice } from "@/api/manageUsers/actions";
+import {
+	fetchUsers as fetchUsersApi,
+	deleteUser as deleteUserApi,
+	registerUser as registerUserApi,
+	updateUser as updateUserApi,
+	updateLastVisitedDevice,
+	getLastVisitedDevice,
+	toggleDisplayLastVisitedDevice,
+	getDisplayLastVisitedDevice,
+} from "@/api/manageUsers/actions";
 import { SortingState } from "@tanstack/react-table";
 import { InformationFormData } from "@/components/user-management/edit-user-modal";
 import { InformationRegisterFormData } from "@/components/user-management/create-user-modal";

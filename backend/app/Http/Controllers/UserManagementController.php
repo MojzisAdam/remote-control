@@ -49,11 +49,19 @@ class UserManagementController extends Controller
         $user->email_verified_at = now();
         $user->save();
 
-        if (isset($input['roles'])) {
-            $user->syncRoles($input['roles']);
+        $user->syncRoles([]);
+        $user->syncPermissions([]);
+
+        if (isset($input['roles']) && !empty($input['roles'])) {
+            $roleName = is_array($input['roles']) ? $input['roles'][0] : $input['roles'];
+            $user->roles()->detach();
+            $user->assignRole($roleName);
         }
+
         if (isset($input['permissions'])) {
-            $user->syncPermissions($input['permissions']);
+            foreach ($input['permissions'] as $permission) {
+                $user->givePermissionTo($permission);
+            }
         }
 
         return response()->json(new UserResource($user), 201);
@@ -81,13 +89,21 @@ class UserManagementController extends Controller
             'email' => $input['email'],
         ])->save();
 
-        if (isset($input['roles'])) {
-            $user->syncRoles($input['roles']);
+        $user->syncRoles([]);
+        $user->syncPermissions([]);
+
+        if (isset($input['roles']) && !empty($input['roles'])) {
+            $roleName = is_array($input['roles']) ? $input['roles'][0] : $input['roles'];
+            $user->roles()->detach();
+            $user->assignRole($roleName);
         }
 
         if (isset($input['permissions'])) {
-            $user->syncPermissions($input['permissions']);
+            foreach ($input['permissions'] as $permission) {
+                $user->givePermissionTo($permission);
+            }
         }
+
         return new UserResource($user);
     }
 

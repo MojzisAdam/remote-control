@@ -62,7 +62,7 @@ Route::middleware(['auth:sanctum', 'device.ownership'])->group(function () {
     Route::put('/devices/{deviceId}/versions', [DeviceController::class, 'updateVersions']);
 });
 
-Route::middleware('auth:sanctum', 'permission:manage-divices')->group(function () {
+Route::middleware('auth:sanctum', 'permission:manage-devices')->group(function () {
     Route::get('/manage-devices', [DeviceController::class, 'listDevices']);
     Route::get('/manage-devices/summary', [DeviceController::class, 'deviceSummary']);
     Route::get('/devices/{deviceId}/users', [DeviceController::class, 'getDeviceUsers']);

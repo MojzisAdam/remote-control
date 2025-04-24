@@ -76,7 +76,7 @@ export function DashboardSideBar() {
 		},
 	];
 
-	const dynamicItems = deviceId
+	const dynamicItemsConfig = deviceId
 		? [
 				{
 					title: t("sidebar.remoteControl"),
@@ -87,6 +87,7 @@ export function DashboardSideBar() {
 					title: t("sidebar.history"),
 					url: routes.history(deviceId),
 					icon: History,
+					requiredPermission: "view-history",
 				},
 				{
 					title: t("sidebar.notifications"),
@@ -107,6 +108,8 @@ export function DashboardSideBar() {
 				},
 		  ]
 		: [];
+
+	const dynamicItems = deviceId ? dynamicItemsConfig.filter((item) => !item.requiredPermission || hasPermission(item.requiredPermission)) : [];
 
 	return (
 		<>
@@ -177,7 +180,7 @@ export function DashboardSideBar() {
 						)}
 
 						{/* Admin Controls Group */}
-						{(hasPermission("manage-users") || hasPermission("manage-divices")) && (
+						{(hasPermission("manage-users") || hasPermission("manage-devices")) && (
 							<>
 								<Separator className="my-2" />
 								<SidebarGroupContent title={t("sidebar.system")}>
@@ -196,7 +199,7 @@ export function DashboardSideBar() {
 												</SidebarMenuButton>
 											</SidebarMenuItem>
 										)}
-										{hasPermission("manage-divices") && (
+										{hasPermission("manage-devices") && (
 											<SidebarMenuItem key="manageDevices">
 												<SidebarMenuButton asChild>
 													<Link

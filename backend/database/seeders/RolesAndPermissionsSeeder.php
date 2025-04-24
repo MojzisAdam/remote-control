@@ -19,35 +19,48 @@ class RolesAndPermissionsSeeder extends Seeder
 
         $permissions = [
             'manage-users',
-            'manage-divices',
+            'manage-devices',
             'view-history',
             'edit-device-description',
+            'view-notifications',
+            'edit-all-parameters',
         ];
 
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission]);
+            Permission::firstOrCreate(['name' => $permission]);
         }
 
-        $userRole = Role::create(['name' => 'user']);
-        $superUserRole = Role::create(['name' => 'superuser']);
-        $administratorRole = Role::create(['name' => 'administrator']);
-        $superAdminRole = Role::create(['name' => 'superadmin']);
+        $userRole = Role::firstOrCreate(['name' => 'user']);
+        $superUserRole = Role::firstOrCreate(['name' => 'superuser']);
+        $administratorRole = Role::firstOrCreate(['name' => 'administrator']);
+        $superAdminRole = Role::firstOrCreate(['name' => 'superadmin']);
 
-        $superAdminRole->givePermissionTo(Permission::all());
+        $superAdminRole->syncPermissions(Permission::all());
 
-        $administratorRole->givePermissionTo(['view-history']);
-        $administratorRole->givePermissionTo(['edit-device-description']);
+        $administratorRole->syncPermissions([
+            'view-history',
+            'edit-device-description',
+            'view-notifications',
+            'edit-all-parameters',
+        ]);
+
+        // Superuser: view history
+        $superUserRole->syncPermissions(['view-history']);
 
         // Create a super admin user only if not in production.
         if (!app()->environment('production')) {
-            $superAdminUser = User::factory()->create([
-                'first_name' => 'Admin',
-                'last_name' => 'User',
-                'email' => 'admin@example.com',
-                'password' => Hash::make('password'),
-            ]);
+            $superAdminUser = User::firstOrCreate(
+                ['email' => 'admin@example.com'],
+                [
+                    'first_name' => 'Admin',
+                    'last_name' => 'User',
+                    'password' => Hash::make('password'),
+                ]
+            );
 
-            $superAdminUser->assignRole($superAdminRole);
+            if (!$superAdminUser->hasRole('superadmin')) {
+                $superAdminUser->assignRole($superAdminRole);
+            }
         }
 
     }

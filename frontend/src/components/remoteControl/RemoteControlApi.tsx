@@ -10,6 +10,7 @@ import DeviceParameters from "./DeviceParameters";
 import { LayoutDashboard, Sliders } from "lucide-react";
 import { DeviceData } from "@/api/remoteControlApi/model";
 import DeviceLoader from "@/components/remoteControl/DeviceLoader";
+import { useAuth } from "@/hooks/useAuth";
 
 interface RemoteControlApiProps {
 	deviceId: string;
@@ -17,6 +18,9 @@ interface RemoteControlApiProps {
 }
 
 const RemoteControlApi: React.FC<RemoteControlApiProps> = ({ deviceId, onDataReceived }) => {
+	const { hasPermission } = useAuth();
+	const canViewExtendedParams = hasPermission("edit-all-parameters");
+
 	const { deviceData, connectionStatus, error, lastSuccessfulFetch, retryConnection, updateDeviceParameter } = useRemoteControlApi(deviceId, onDataReceived);
 
 	const [activePage, setActivePage] = useState<"overview" | "parameters">("overview");
@@ -94,7 +98,7 @@ const RemoteControlApi: React.FC<RemoteControlApiProps> = ({ deviceId, onDataRec
 			reg_257: deviceData.reg_257,
 			reg_258: deviceData.reg_258,
 			reg_260: deviceData.reg_260,
-			fhi: deviceData.fhi,
+			fhi: canViewExtendedParams ? deviceData.fhi : undefined,
 		}),
 		[deviceData]
 	);
