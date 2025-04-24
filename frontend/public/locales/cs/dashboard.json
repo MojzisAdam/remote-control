@@ -96,6 +96,10 @@
             "title": "Povolit upozornění",
             "description": "Pokud povolíte upozornění pro toto zařízení, obdržíte chybovou zprávu na váš e-mail."
         },
+        "web-notification-toggle": {
+            "title": "Aplikační upozornění",
+            "description": "Při zapnutí se v ikoně upozornění v aplikaci zobrazí odznak při každé změně stavu tohoto zařízení."
+        },
         "favourite-toggle": {
             "title": "Oblíbené",
             "description": "Označte toto zařízení jako oblíbené pro rychlý přístup z vašeho seznamu oblíbených."

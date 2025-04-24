@@ -140,6 +140,7 @@ export const useDevices = () => {
 			own_name?: string;
 			favourite?: boolean;
 			notifications?: boolean;
+			web_notifications?: boolean;
 			favouriteOrder?: number;
 		}
 	): Promise<ApiHandlerResult> => {

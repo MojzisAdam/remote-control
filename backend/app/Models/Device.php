@@ -40,7 +40,7 @@ class Device extends Model
     public function users()
     {
         return $this->belongsToMany(User::class, 'device_user')
-            ->withPivot(['own_name', 'favourite', 'notifications', 'favouriteOrder'])
+            ->withPivot(['own_name', 'favourite', 'notifications', 'web_notifications', 'favouriteOrder'])
             ->withTimestamps();
     }
 

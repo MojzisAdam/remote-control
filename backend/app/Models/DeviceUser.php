@@ -18,10 +18,12 @@ class DeviceUser extends Pivot
         'favourite',
         'favouriteOrder',
         'notifications',
+        'web_notifications',
     ];
 
     protected $casts = [
         'favourite' => 'boolean',
         'notifications' => 'boolean',
+        'web_notifications' => 'boolean',
     ];
 }

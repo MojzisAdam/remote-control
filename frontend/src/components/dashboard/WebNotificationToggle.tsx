@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -9,42 +7,40 @@ import { useDevices } from "@/hooks/useDevices";
 import AuthSessionStatus from "@/components/AuthSessionStatus";
 import { useTranslation } from "react-i18next";
 
-interface NotificationToggleProps {
+interface WebNotificationToggleProps {
 	enabled: boolean;
 	deviceId: string;
 	onChange: (enabled: boolean) => void;
 }
 
-export function NotificationToggle({ enabled: initialEnabled, deviceId, onChange }: NotificationToggleProps) {
+export function WebNotificationToggle({ enabled: initialEnabled, deviceId, onChange }: WebNotificationToggleProps) {
 	const { t } = useTranslation("dashboard");
-	const { t: globalT } = useTranslation("global");
-
+	const { t: gt } = useTranslation("global");
 	const { updateDevice, loading, error } = useDevices();
-	const [statusInf, setStatusInf] = useState<string | null>(null);
 	const [isEnabled, setIsEnabled] = useState(initialEnabled);
+	const [statusInf, setStatusInf] = useState<string | null>(null);
 
-	const setNotifications = async (enabledSwitched: boolean) => {
+	const toggleWeb = async (newVal: boolean) => {
 		try {
-			const result = await updateDevice(deviceId, {
-				notifications: enabledSwitched,
-			});
+			const result = await updateDevice(deviceId, { web_notifications: newVal });
+			console.log(result);
 			setStatusInf(result.status || error || null);
 			if (result.success) {
+				setIsEnabled(newVal);
 				setStatusInf(null);
-				setIsEnabled(enabledSwitched);
-				onChange(enabledSwitched);
+				onChange(newVal);
 			}
 		} catch {
-			setStatusInf(globalT("errors.general-error-message"));
+			setStatusInf(gt("errors.general-error-message"));
 		}
 	};
 
 	return (
 		<Card className="w-full max-w-md p-2 py-4 max-sm:px-0 h-full">
-			<CardContent className="flex items-center justify-between p-2 px-4  gap-4 space-x-2">
+			<CardContent className="flex items-center justify-between p-2 px-4 gap-4">
 				<div className="space-y-1">
-					<Label htmlFor="notifications">{t("more-info-sheet.notification-toggle.title")}</Label>
-					<p className="text-sm text-muted-foreground">{t("more-info-sheet.notification-toggle.description")}</p>
+					<Label htmlFor="web-notifications">{t("more-info-sheet.web-notification-toggle.title")}</Label>
+					<p className="text-sm text-muted-foreground">{t("more-info-sheet.web-notification-toggle.description")}</p>
 				</div>
 				<div className="relative">
 					{loading && (
@@ -54,18 +50,18 @@ export function NotificationToggle({ enabled: initialEnabled, deviceId, onChange
 						/>
 					)}
 					<Switch
-						id="notifications"
+						id="web-notifications"
 						checked={isEnabled}
-						onCheckedChange={setNotifications}
+						onCheckedChange={toggleWeb}
 						disabled={loading}
 					/>
 				</div>
 			</CardContent>
-			<div className="flex items-center justify-between px-4">
+			<div className="px-4">
 				{statusInf && (
 					<AuthSessionStatus
-						className="mb-4"
 						status={statusInf}
+						className="mb-4"
 					/>
 				)}
 			</div>

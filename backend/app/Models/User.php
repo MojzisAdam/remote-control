@@ -71,7 +71,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function devices()
     {
         return $this->belongsToMany(Device::class, 'device_user')
-            ->withPivot(['own_name', 'favourite', 'notifications', 'favouriteOrder'])
+            ->withPivot(['own_name', 'favourite', 'notifications', 'web_notifications', 'favouriteOrder'])
             ->withTimestamps();
     }
 
