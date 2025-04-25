@@ -26,13 +26,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/user/toggle-display-last-visited-device', [UserManagementController::class, 'toggleDisplayLastVisitedDevice']);
     Route::get('/user/display-last-visited-device', [UserManagementController::class, 'getDisplayLastVisitedDevice']);
 
-    Route::put('/custom-graphs/{graphId}', [GraphController::class, 'updateCustomGraph']);
-    Route::delete('/custom-graphs/{graphId}', [GraphController::class, 'deleteCustomGraph']);
-
     Route::get('/notifications', [NotificationController::class, 'getUserNotifications']);
     Route::put('/notifications/{notificationId}/mark-as-seen', [NotificationController::class, 'markNotificationAsSeen']);
     Route::get('/notifications/unseen', [NotificationController::class, 'getUnseenNotifications']);
-    Route::get('/notifications/device/{deviceId}', [NotificationController::class, 'getDeviceNotifications']);
 });
 
 Route::middleware(['auth:sanctum', 'device.ownership'])->group(function () {
@@ -43,12 +39,7 @@ Route::middleware(['auth:sanctum', 'device.ownership'])->group(function () {
 
     Route::get('/device-history/{deviceId}', [GraphController::class, 'getDeviceHistory']);
     Route::post('/device-history/{deviceId}/custom-graph', [GraphController::class, 'getCustomGraphData']);
-    Route::get('/hidden-lines/{deviceId}', [GraphController::class, 'getHiddenLines']);
-    Route::post('/hidden-lines/{deviceId}', [GraphController::class, 'updateHiddenLines']);
-    Route::get('/custom-graphs/{deviceId}', [GraphController::class, 'getCustomGraphs']);
-    Route::post('/custom-graphs/{deviceId}', [GraphController::class, 'saveCustomGraph']);
     Route::get('/temperatures/monthly-average/{deviceId}', [GraphController::class, 'getMonthlyAverageTemperatures']);
-    Route::get('/device-history/{deviceId}/paginated', [GraphController::class, 'paginated']);
 
     Route::post('/remote-control/{deviceId}/start-session', [RemoteControlApiController::class, 'startSession']);
     Route::get('/remote-control/{deviceId}/check-connection', [RemoteControlApiController::class, 'checkConnection']);
@@ -60,7 +51,23 @@ Route::middleware(['auth:sanctum', 'device.ownership'])->group(function () {
     Route::get('/device/{deviceId}/parameter-logs', [DeviceController::class, 'getParameterLogs']);
 
     Route::put('/devices/{deviceId}/versions', [DeviceController::class, 'updateVersions']);
+
+    Route::get('/notifications/device/{deviceId}', [NotificationController::class, 'getDeviceNotifications']);
 });
+
+Route::middleware(['auth:sanctum', 'permission:view-history'])->group(function () {
+    Route::put('/custom-graphs/{graphId}', [GraphController::class, 'updateCustomGraph']);
+    Route::delete('/custom-graphs/{graphId}', [GraphController::class, 'deleteCustomGraph']);
+});
+
+Route::middleware(['auth:sanctum', 'device.ownership', 'permission:view-history'])->group(function () {
+    Route::get('/hidden-lines/{deviceId}', [GraphController::class, 'getHiddenLines']);
+    Route::post('/hidden-lines/{deviceId}', [GraphController::class, 'updateHiddenLines']);
+    Route::get('/custom-graphs/{deviceId}', [GraphController::class, 'getCustomGraphs']);
+    Route::post('/custom-graphs/{deviceId}', [GraphController::class, 'saveCustomGraph']);
+    Route::get('/device-history/{deviceId}/paginated', [GraphController::class, 'paginated']);
+});
+
 
 Route::middleware('auth:sanctum', 'permission:manage-devices')->group(function () {
     Route::get('/manage-devices', [DeviceController::class, 'listDevices']);

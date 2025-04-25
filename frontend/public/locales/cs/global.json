@@ -45,5 +45,10 @@
         "device": "Zařízení",
         "error": "Chyba",
         "maxLimit": "Zobrazeno maximum 100 oznámení."
+    },
+    "auth": {
+        "authorizing": "Autorizace...",
+        "notAuthorized": "Nepovoleno",
+        "noPermission": "Nemáte oprávnění pro přístup k tomuto zdroji."
     }
 }
