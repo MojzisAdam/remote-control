@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState, useEffect } from "react";
 import { User } from "@/api/user/model";
 import { getColumns } from "@/components/user-management/columns";

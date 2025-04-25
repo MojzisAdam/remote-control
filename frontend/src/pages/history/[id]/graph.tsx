@@ -12,6 +12,7 @@ import PageHeading from "@/components/PageHeading";
 import usePageTitle from "@/hooks/usePageTitle";
 import { useDeviceContext } from "@/provider/DeviceProvider";
 import { useTranslation } from "react-i18next";
+import withAuthorization from "@/middleware/withAuthorization";
 
 const HistoryGraphPage: React.FC = () => {
 	const { t } = useTranslation("history");
@@ -75,4 +76,4 @@ const HistoryGraphPage: React.FC = () => {
 	);
 };
 
-export default HistoryGraphPage;
+export default withAuthorization(HistoryGraphPage, "view-history");

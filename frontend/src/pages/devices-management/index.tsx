@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useEffect, useState } from "react";
 import { DataTable } from "@/components/device-management/data-table";
 import { getColumns } from "@/components/device-management/columns";
@@ -14,6 +12,7 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { Skeleton } from "@/components/ui/skeleton";
 import usePageTitle from "@/hooks/usePageTitle";
 import { useTranslation } from "react-i18next";
+import withAuthorization from "@/middleware/withAuthorization";
 
 const DeviceManagement = () => {
 	const { t } = useTranslation("deviceManagement");
@@ -280,4 +279,4 @@ const DeviceManagement = () => {
 	);
 };
 
-export default DeviceManagement;
+export default withAuthorization(DeviceManagement, "manage-devices");

@@ -12,6 +12,7 @@ import PageHeading from "@/components/PageHeading";
 import usePageTitle from "@/hooks/usePageTitle";
 import { useDeviceContext } from "@/provider/DeviceProvider";
 import { useTranslation } from "react-i18next";
+import withAuthorization from "@/middleware/withAuthorization";
 
 const HistoryTablePage: React.FC = () => {
 	const { t } = useTranslation("history");
@@ -72,4 +73,4 @@ const HistoryTablePage: React.FC = () => {
 	);
 };
 
-export default HistoryTablePage;
+export default withAuthorization(HistoryTablePage, "view-history");
