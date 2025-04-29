@@ -107,7 +107,7 @@ const CustomGraphContainer: React.FC<CustomGraphContainerProps> = ({ deviceId, s
 				selectedTo={selectedTo}
 				setSelectedFrom={setSelectedFrom}
 				setSelectedTo={setSelectedTo}
-				fetchData={() => handleFetchData()}
+				fetchData={handleFetchData}
 				timeRange={timeRange}
 				handleTimeRangeSelect={handleTimeRangeSelect}
 				className="min-[1536px]:flex-col min-[1536px]:items-start max-[1020px]:flex-col max-[990px]:flex-row max-[1020px]:items-start"

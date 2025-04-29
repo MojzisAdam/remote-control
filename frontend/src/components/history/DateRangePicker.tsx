@@ -26,7 +26,7 @@ const DateRangePicker: React.FC<Props> = ({ loading, selectedFrom, selectedTo, s
 
 	useEffect(() => {
 		const checkIfMobile = () => {
-			setIsMobile(window.innerWidth < 990);
+			setIsMobile(window.innerWidth < 1150);
 		};
 
 		checkIfMobile();

@@ -54,7 +54,9 @@
   "range": {
 		"hour": "Hodina",
 		"day": "Den",
-		"week": "Týden"
+		"week": "Týden",
+        "previous": "Posun o den zpět",
+        "next": "Posun vpřed o den"
 	},
     "paginationErrorTitle": "Nepodařilo se načíst data.",
 	"paginationErrorDescription": "Nelze načíst historii zařízení.",
@@ -65,5 +67,62 @@
 	"showOnlyErrors": "Zobrazit pouze řádky, kde je chyba > 0",
     "update_available": "Je k dispozici nová verze!",
 	"update_reload_prompt": "Prosím, obnovte stránku pro aktualizaci na nejnovější verzi.",
-	"reload_button": "Obnovit stránku"
+	"reload_button": "Obnovit stránku",
+    "chart": {
+        "komp_valueMap": {
+        "0": "Vypnuto",
+        "10": "Zapnuto"
+        },
+        "run_valueMap": {
+        "0": "Vypnuto",
+        "6": "Zapnuto"
+        },
+        "reg_valueMap": {
+        "0": "Vypnuto",
+        "5": "TUV",
+        "3": "Topení",
+        "9": "Chlazení",
+        "11": "Topení",
+        "7": "Bazén",
+        "15": "Topení+TUV",
+        "13": "Chlazení+TUV",
+        "17": "Bazén+TUV"
+        },
+        "vjedn_valueMap": {
+        "0": "Vypnuto",
+        "2": "Topení",
+        "4": "Odmrazování",
+        "6": "Chlazení"
+        },
+        "dzto_valueMap": {
+        "0": "Vypnuto",
+        "4": "DZ úroveň 1",
+        "7": "DZ úroveň m",
+        "9": "DZ úroveň 2",
+        "11": "Přídavné topení"
+        },
+        "dztuv_valueMap": {
+        "0": "Vypnuto",
+        "4": "DZ úroveň 1",
+        "7": "DZ úroveň m",
+        "9": "DZ úroveň 2",
+        "11": "Přídavné topení"
+        },
+        "tstat_valueMap": {
+        "0": "Nezablokováno",
+        "-2": "Blokováno"
+        },
+        "hdo_valueMap": {
+        "0": "Nezablokováno",
+        "-3": "Blokováno"
+        },
+        "obd_valueMap": {
+        "3": "Zima",
+        "-4": "Léto"
+        },
+        "chyba_valueMap": {
+        "0": "Bez chyby",
+        "-6": "Chyba"
+        }
+    }  
 }

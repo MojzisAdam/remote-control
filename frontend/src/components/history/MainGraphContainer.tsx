@@ -148,20 +148,20 @@ const MainGraphContainer: React.FC<MainGraphContainerProps> = ({ deviceId }) => 
 						/>
 					) : (
 						<>
-							<div className="flex flex-col min-[1200px]:flex-row w-full min-[1200px]:gap-4 mb-4">
+							<div className="flex flex-col min-[1300px]:flex-row w-full min-[1300px]:gap-4 mb-4">
 								<DateRangeFilter
 									loading={loading}
 									selectedFrom={selectedFrom}
 									selectedTo={selectedTo}
 									setSelectedFrom={setSelectedFrom}
 									setSelectedTo={setSelectedTo}
-									fetchData={() => handleFetchData()}
+									fetchData={handleFetchData}
 									timeRange={timeRange}
 									handleTimeRangeSelect={handleTimeRangeSelect}
 									className="items-center flex-1"
 								/>
 
-								<div className="flex items-center justify-end gap-2 min-[1200px]:w-auto h-fit max-[1200px]:mb-4 max-[990px]:flex">
+								<div className="flex items-center justify-end gap-2 min-[1300px]:w-auto h-fit max-[1300px]:mb-4 max-[990px]:flex max-[500px]:hidden">
 									<Popover>
 										<PopoverTrigger asChild>
 											<Button

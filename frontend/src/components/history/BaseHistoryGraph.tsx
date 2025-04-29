@@ -3,9 +3,11 @@ import React, { useMemo, useState, useEffect, useRef } from "react";
 import { useTheme } from "next-themes";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, LineElement, CategoryScale, LinearScale, PointElement, Legend, ChartEvent, Tooltip, TimeScale, ChartOptions, TooltipItem } from "chart.js";
+import "chartjs-adapter-date-fns";
 import zoomPlugin from "chartjs-plugin-zoom";
 import { chartConfig, chartColors } from "@/constants/chartConstants";
 import { DeviceHistory } from "@/api/deviceHistory/model";
+import { useTranslation } from "react-i18next";
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Legend, Tooltip, TimeScale, zoomPlugin);
 
@@ -19,6 +21,7 @@ interface BaseGraphProps {
 }
 
 const BaseHistoryGraph: React.FC<BaseGraphProps> = ({ data = [], selectedMetrics, hiddenLines = [], savePreferences, className = "", height = "h-60 md:h-80" }) => {
+	const { t } = useTranslation("history");
 	const { resolvedTheme } = useTheme();
 	const [isZoomEnabled, setIsZoomEnabled] = useState(false);
 	const chartRef = useRef<HTMLDivElement>(null);
@@ -110,7 +113,7 @@ const BaseHistoryGraph: React.FC<BaseGraphProps> = ({ data = [], selectedMetrics
 
 	const chartData = useMemo(() => {
 		return {
-			labels: data.map((item) => formatDate(item.cas)),
+			labels: data.map((item) => new Date(item.cas)),
 			datasets: Object.keys(chartConfig)
 				.filter((key) => (selectedMetrics ? selectedMetrics.includes(key) : true))
 				.map((key) => ({
@@ -174,6 +177,21 @@ const BaseHistoryGraph: React.FC<BaseGraphProps> = ({ data = [], selectedMetrics
 						const label = dataset.label;
 						const value = tooltipItem.raw;
 						const unit = (dataset as unknown as { unit: string }).unit;
+
+						const key = Object.keys(chartConfig).find((k) => chartConfig[k as keyof typeof chartConfig].label === label);
+
+						if (key) {
+							const config = chartConfig[key as keyof typeof chartConfig];
+
+							const valueMap = config.valueMap;
+							if (valueMap && value !== null && typeof value === "number") {
+								const valueKey = value.toString();
+								const translatedValue = t(`chart.${key}_valueMap.${valueKey}`, { defaultValue: valueMap[valueKey] });
+
+								return `${label}: ${translatedValue}`;
+							}
+						}
+
 						return `${label}: ${value} ${unit}`;
 					},
 				},
@@ -192,6 +210,16 @@ const BaseHistoryGraph: React.FC<BaseGraphProps> = ({ data = [], selectedMetrics
 		},
 		scales: {
 			x: {
+				type: "time",
+				time: {
+					unit: "minute",
+					tooltipFormat: "dd/MM/yyyy HH:mm",
+					displayFormats: {
+						minute: "HH:mm",
+						hour: "HH:mm",
+						day: "dd/MM",
+					},
+				},
 				offset: false,
 				ticks: {
 					color: currentColors.axisColor,
