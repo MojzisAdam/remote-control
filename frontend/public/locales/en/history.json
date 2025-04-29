@@ -54,7 +54,9 @@
   "range": {
 		"hour": "Hour",
 		"day": "Day",
-		"week": "Week"
+		"week": "Week",
+        "previous": "Shift backward by a day",
+        "next": "Shift forward by a day"
 	},
     "paginationErrorTitle": "Failed to load data.",
 	"paginationErrorDescription": "Unable to retrieve device history data.",
@@ -65,5 +67,62 @@
 	"showOnlyErrors": "Show only rows where chyba > 0",
     "update_available": "A new version is available!",
 	"update_reload_prompt": "Please reload the page to update to the latest version.",
-	"reload_button": "Reload Page"
+	"reload_button": "Reload Page",
+    "chart": {
+        "komp_valueMap": {
+        "0": "Off",
+        "10": "On"
+        },
+        "run_valueMap": {
+        "0": "Off",
+        "6": "On"
+        },
+        "reg_valueMap": {
+        "0": "Off",
+        "5": "TUV",
+        "3": "Heating",
+        "9": "Cooling",
+        "11": "Heating",
+        "7": "Pool",
+        "15": "Heating+TUV",
+        "13": "Cooling+TUV",
+        "17": "Pool+TUV"
+        },
+        "vjedn_valueMap": {
+        "0": "Off",
+        "2": "Heating",
+        "4": "Defrosting",
+        "6": "Cooling"
+        },
+        "dzto_valueMap": {
+        "0": "Off",
+        "4": "DZ level 1",
+        "7": "DZ level m",
+        "9": "DZ level 2",
+        "11": "Additional"
+        },
+        "dztuv_valueMap": {
+        "0": "Off",
+        "4": "DZ level 1",
+        "7": "DZ level m",
+        "9": "DZ level 2",
+        "11": "Additional"
+        },
+        "tstat_valueMap": {
+        "0": "Not blocked",
+        "-2": "Blocked"
+        },
+        "hdo_valueMap": {
+        "0": "Not blocked",
+        "-3": "Blocked"
+        },
+        "obd_valueMap": {
+        "3": "Winter",
+        "-4": "Summer"
+        },
+        "chyba_valueMap": {
+        "0": "No error",
+        "-6": "Error"
+        }
+    }
 }
