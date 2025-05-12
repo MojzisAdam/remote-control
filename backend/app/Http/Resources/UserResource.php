@@ -30,7 +30,8 @@ class UserResource extends JsonResource
             'has2FA' => $this->two_factor_confirmed_at ? true : false,
             'displayLastVisitedDevice' => $this->displayLastVisitedDevice,
             'lastVisitedDeviceId' => $this->lastVisitedDeviceId,
-            'preferred_language' => $this->preferred_language
+            'preferred_language' => $this->preferred_language,
+            'force_password_change' => $this->force_password_change
         ];
     }
 }

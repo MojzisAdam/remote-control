@@ -3,22 +3,22 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { User } from "@/api/user/model";
-import { useUserManagement } from "@/hooks/useUserManagement";
 import InputError from "@/components/InputError";
 import AuthSessionStatus from "@/components/AuthSessionStatus";
 import { useTranslation } from "react-i18next";
+import { updateUserPassword, fetchUser } from "@/api/user/actions";
+import { useAuthContext } from "@/provider/AuthContextProvider";
 
-interface ResetUserPasswordModalProps {
+interface ForcePasswordChangeModalProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
-	onSuccess: (user: User) => void;
-	data?: User;
+	onSuccess: () => void;
 }
 
-export function ResetUserPasswordModal({ open, onOpenChange, onSuccess, data }: ResetUserPasswordModalProps) {
+export function ForcePasswordChangeModal({ open, onOpenChange, onSuccess }: ForcePasswordChangeModalProps) {
 	const { t } = useTranslation("userManagement");
-	const { resetPassword, loading } = useUserManagement();
+	const { setUser } = useAuthContext();
+	const [loading, setLoading] = useState(false);
 	const [passwordFormData, setPasswordFormData] = useState({
 		password: "",
 		password_confirmation: "",
@@ -36,30 +36,38 @@ export function ResetUserPasswordModal({ open, onOpenChange, onSuccess, data }: 
 			setErrors({});
 			setStatus(null);
 		}
-	}, [open, data]);
+	}, [open]);
 
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
-		if (!data) return;
+		setLoading(true);
 
 		try {
-			const result = await resetPassword(data.id, passwordFormData.password, passwordFormData.password_confirmation);
+			const response = await updateUserPassword(passwordFormData.password, passwordFormData.password_confirmation);
 
-			if (result.success) {
-				setStatus(t("userManagement.resetPassword.success"));
-				setErrors({});
-				setTimeout(() => {
-					onOpenChange(false);
-					if (data) {
-						onSuccess(data);
-					}
-				}, 100);
-			} else {
-				setErrors(result.errors || {});
-				setStatus(result.status || null);
+			setStatus(t("userManagement.forcePasswordChange.success"));
+			setErrors({});
+
+			// Fetch updated user data
+			try {
+				const updatedUser = await fetchUser();
+				setUser(updatedUser);
+			} catch (err) {
+				console.error("Failed to update user data after password change", err);
 			}
-		} catch (error) {
-			setStatus(t("userManagement.resetPassword.error"));
+
+			setTimeout(() => {
+				onOpenChange(false);
+				onSuccess();
+			}, 2000);
+		} catch (error: any) {
+			if (error.response?.status === 422) {
+				setErrors(error.response.data.errors);
+			} else {
+				setStatus(t("userManagement.forcePasswordChange.error"));
+			}
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -69,16 +77,18 @@ export function ResetUserPasswordModal({ open, onOpenChange, onSuccess, data }: 
 			[e.target.name]: e.target.value,
 		});
 	};
-
 	return (
 		<Dialog
 			open={open}
-			onOpenChange={onOpenChange}
+			onOpenChange={() => {}} // Prevent closing by clicking outside
 		>
-			<DialogContent className="sm:max-w-[425px]">
+			<DialogContent
+				className="sm:max-w-[425px]"
+				hideCloseButton
+			>
 				<DialogHeader>
-					<DialogTitle>{t("userManagement.resetPassword.title")}</DialogTitle>
-					<DialogDescription>{data && t("userManagement.resetPassword.description", { name: `${data.first_name} ${data.last_name}` })}</DialogDescription>
+					<DialogTitle>{t("userManagement.forcePasswordChange.title")}</DialogTitle>
+					<DialogDescription>{t("userManagement.forcePasswordChange.description")}</DialogDescription>
 				</DialogHeader>
 				<div>
 					{status && (
@@ -92,7 +102,7 @@ export function ResetUserPasswordModal({ open, onOpenChange, onSuccess, data }: 
 					<div className="grid gap-4">
 						{/* Password */}
 						<div>
-							<Label htmlFor="password">{t("userManagement.resetPassword.password")}</Label>
+							<Label htmlFor="password">{t("userManagement.forcePasswordChange.password")}</Label>
 							<Input
 								id="password"
 								name="password"
@@ -113,7 +123,7 @@ export function ResetUserPasswordModal({ open, onOpenChange, onSuccess, data }: 
 
 						{/* Confirm Password */}
 						<div>
-							<Label htmlFor="password_confirmation">{t("userManagement.resetPassword.passwordConfirmation")}</Label>
+							<Label htmlFor="password_confirmation">{t("userManagement.forcePasswordChange.passwordConfirmation")}</Label>
 							<Input
 								id="password_confirmation"
 								name="password_confirmation"
@@ -138,7 +148,7 @@ export function ResetUserPasswordModal({ open, onOpenChange, onSuccess, data }: 
 							type="submit"
 							disabled={loading}
 						>
-							{loading ? t("userManagement.resetPassword.loading") : t("userManagement.resetPassword.reset")}
+							{loading ? t("userManagement.forcePasswordChange.loading") : t("userManagement.forcePasswordChange.update")}
 						</Button>
 					</DialogFooter>
 				</form>

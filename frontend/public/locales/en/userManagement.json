@@ -73,8 +73,7 @@
       "error": "Uh oh! Something went wrong.",
       "errorDescription": "There was a problem with your request.",
       "genericError": "Something went wrong. Please try again later."
-    },
-    "resetPassword": {
+    },    "resetPassword": {
       "title": "Reset User Password",
       "description": "Set a new password for {{name}}",
       "password": "New Password",
@@ -83,6 +82,16 @@
       "reset": "Reset Password",
       "success": "Password has been reset successfully.",
       "error": "Failed to reset password. Please try again."
+    },
+    "forcePasswordChange": {
+      "title": "Password Change Required",
+      "description": "Your password has been reset by an administrator. You need to set a new password to continue.",
+      "password": "New Password",
+      "passwordConfirmation": "Confirm New Password",
+      "update": "Update Password",
+      "loading": "Updating...",
+      "success": "Password updated successfully",
+      "error": "An error occurred while updating the password"
     }
   }
 }

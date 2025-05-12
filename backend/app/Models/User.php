@@ -25,7 +25,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'displayLastVisitedDevice',
         'lastVisitedDeviceId',
-        'preferred_language'
+        'preferred_language',
+        'force_password_change'
     ];
 
     public function sendPasswordResetNotification($token)

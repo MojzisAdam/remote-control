@@ -32,4 +32,37 @@ class AuthController extends Controller
 
         return response()->json(['message' => $request->preferred_language]);
     }
+
+    public function checkForcePasswordChange(Request $request)
+    {
+        $user = Auth::user();
+        return response()->json([
+            'force_password_change' => $user->force_password_change
+        ]);
+    }
+    public function updateUserPassword(Request $request)
+    {
+        $request->validate([
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $user = Auth::user();
+
+        if (!$user->force_password_change) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Password change is not required for this account.',
+            ], 403);
+        }
+
+        $user->forceFill([
+            'password' => Hash::make($request->password),
+            'force_password_change' => false,
+        ])->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Password updated successfully.',
+        ]);
+    }
 }

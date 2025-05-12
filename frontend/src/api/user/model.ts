@@ -11,7 +11,8 @@ export type User = {
 	has2FA: boolean;
 	displayLastVisitedDevice: boolean;
 	lastVisitedDeviceId: string | null;
-    preferred_language: string;
+	preferred_language: string;
+	force_password_change: boolean;
 };
 
 export type CodeData = {

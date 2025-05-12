@@ -67,6 +67,21 @@ export const changePassword = async ({ current_password, password, password_conf
 	return response.data;
 };
 
+// Update user password when forced to change (no current_password required)
+export const updateUserPassword = async (password: string, password_confirmation: string): Promise<string> => {
+	const response = await axios.post("/user/update-password", {
+		password,
+		password_confirmation,
+	});
+	return response.data;
+};
+
+// Check if user needs to change password
+export const checkForcePasswordChange = async (): Promise<{ force_password_change: boolean }> => {
+	const response = await axios.get("/user/check-force-password-change");
+	return response.data;
+};
+
 // Two-Factor Challenge
 export const twoFactorChallenge = async (codeData: CodeData): Promise<string> => {
 	const response = await axios.post("/two-factor-challenge", codeData);
@@ -129,6 +144,6 @@ export const getTwoFactorSecretKey = async (): Promise<string> => {
 
 // Update users prefered languague
 export const updatePreferredLanguage = async (newLanguage: string): Promise<string> => {
-	const response = await axios.put('/user/language', { preferred_language: newLanguage })
+	const response = await axios.put("/user/language", { preferred_language: newLanguage });
 	return response.data;
 };

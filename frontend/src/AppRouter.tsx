@@ -21,6 +21,7 @@ import LoadingPage from "@/components/loadingPage";
 import AppLayout from "@/components/layouts/AppLayout";
 import GuestLayout from "@/components/layouts/GuestLayout";
 import ErrorLayout from "@/components/layouts/ErrorLayout";
+import { ForcePasswordChangeModal } from "@/components/user-management/force-password-change-modal";
 
 const PUBLIC_PAGES = ["/", "/login", "/register", "/forgot-password", "/email-verification", "/reset-password", "/404"];
 const EXCLUDED_FROM_REDIRECT = ["/email-verification", "/reset-password"];
@@ -32,10 +33,19 @@ const AppRouter: React.FC = () => {
 	const [checking, setChecking] = useState(true);
 	const [initialCheck, setInitialCheck] = useState(true);
 	const [redirectTarget, setRedirectTarget] = useState<string | null>(null);
+	const [showPasswordChangeModal, setShowPasswordChangeModal] = useState(false);
 
 	const isPublicPage = PUBLIC_PAGES.some((path) => {
 		return path === "/" ? location.pathname === "/" : location.pathname.startsWith(path);
 	});
+
+	useEffect(() => {
+		if (user && !isPublicPage) {
+			if (user.force_password_change) {
+				setShowPasswordChangeModal(true);
+			}
+		}
+	}, [user, isPublicPage]);
 
 	const isExcludedFromRedirect = EXCLUDED_FROM_REDIRECT.some((path) => (path === "/" ? location.pathname === "/" : location.pathname.startsWith(path)));
 
@@ -87,89 +97,100 @@ const AppRouter: React.FC = () => {
 	if ((loading && !refreshLoading) || checking) {
 		return <LoadingPage />;
 	}
-
 	return (
-		<Routes>
-			{/* Public Routes */}
-			<Route element={<GuestLayout />}>
-				<Route
-					path="/"
-					element={<Login />}
+		<>
+			{user && !isPublicPage && showPasswordChangeModal && (
+				<ForcePasswordChangeModal
+					open={showPasswordChangeModal}
+					onOpenChange={setShowPasswordChangeModal}
+					onSuccess={() => {
+						setShowPasswordChangeModal(false);
+					}}
 				/>
-				<Route
-					path="/login"
-					element={<Login />}
-				/>
-				<Route
-					path="/register"
-					element={<Register />}
-				/>
-				<Route
-					path="/forgot-password"
-					element={<ForgotPassword />}
-				/>
-				<Route
-					path="/email-verification/:id/:hash"
-					element={<EmailVerification />}
-				/>
-				<Route
-					path="/reset-password/:token"
-					element={<ResetPassword />}
-				/>
-			</Route>
+			)}
 
-			{/* Protected / Authenticated Routes */}
-			<Route element={<AppLayout />}>
-				<Route
-					path="/dashboard"
-					element={<Dashboard />}
-				/>
-				<Route
-					path="/notifications/:id"
-					element={<Notifications />}
-				/>
-				<Route
-					path="/parameter-log/:id"
-					element={<ParameterLog />}
-				/>
-				<Route
-					path="/devices-management"
-					element={<DeviceManagement />}
-				/>
-				<Route
-					path="/profile"
-					element={<Profile />}
-				/>
-				<Route
-					path="/remote-control/:id"
-					element={<RemoteControl />}
-				/>
-				<Route
-					path="/user-management"
-					element={<UserManagement />}
-				/>
-				<Route
-					path="/history/:id/graph"
-					element={<Graph />}
-				/>
-				<Route
-					path="/history/:id/table"
-					element={<Table />}
-				/>
-				<Route
-					path="/settings"
-					element={<Settings />}
-				/>
-			</Route>
+			<Routes>
+				{/* Public Routes */}
+				<Route element={<GuestLayout />}>
+					<Route
+						path="/"
+						element={<Login />}
+					/>
+					<Route
+						path="/login"
+						element={<Login />}
+					/>
+					<Route
+						path="/register"
+						element={<Register />}
+					/>
+					<Route
+						path="/forgot-password"
+						element={<ForgotPassword />}
+					/>
+					<Route
+						path="/email-verification/:id/:hash"
+						element={<EmailVerification />}
+					/>
+					<Route
+						path="/reset-password/:token"
+						element={<ResetPassword />}
+					/>
+				</Route>
 
-			{/* 404 / Error Routes */}
-			<Route element={<ErrorLayout />}>
-				<Route
-					path="*"
-					element={<NotFoundPage />}
-				/>
-			</Route>
-		</Routes>
+				{/* Protected / Authenticated Routes */}
+				<Route element={<AppLayout />}>
+					<Route
+						path="/dashboard"
+						element={<Dashboard />}
+					/>
+					<Route
+						path="/notifications/:id"
+						element={<Notifications />}
+					/>
+					<Route
+						path="/parameter-log/:id"
+						element={<ParameterLog />}
+					/>
+					<Route
+						path="/devices-management"
+						element={<DeviceManagement />}
+					/>
+					<Route
+						path="/profile"
+						element={<Profile />}
+					/>
+					<Route
+						path="/remote-control/:id"
+						element={<RemoteControl />}
+					/>
+					<Route
+						path="/user-management"
+						element={<UserManagement />}
+					/>
+					<Route
+						path="/history/:id/graph"
+						element={<Graph />}
+					/>
+					<Route
+						path="/history/:id/table"
+						element={<Table />}
+					/>
+					<Route
+						path="/settings"
+						element={<Settings />}
+					/>
+				</Route>
+
+				{/* 404 / Error Routes */}
+				<Route element={<ErrorLayout />}>
+					<Route
+						path="*"
+						element={<NotFoundPage />}
+					/>
+				</Route>
+			</Routes>
+		</>
 	);
 };
 

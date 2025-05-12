@@ -181,7 +181,6 @@ class UserManagementController extends Controller
         ]);
     }
 
-    // Method to reset user's password
     public function resetPassword(Request $request, User $user)
     {
         $request->validate([
@@ -190,6 +189,7 @@ class UserManagementController extends Controller
 
         $user->forceFill([
             'password' => Hash::make($request->password),
+            'force_password_change' => true,
         ])->save();
 
         return response()->json([
