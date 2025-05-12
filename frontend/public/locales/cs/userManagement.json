@@ -1,5 +1,4 @@
-{
-  "userManagement": {
+{  "userManagement": {
     "title": "Správa uživatelů",
     "addUser": "Přidat uživatele",
     "search": "Vyhledat...",
@@ -8,7 +7,8 @@
       "copyEmail": "Zkopírovat e-mail uživatele",
       "viewUser": "Zobrazit uživatele",
       "editUser": "Upravit uživatele",
-      "deleteUser": "Smazat uživatele"
+      "deleteUser": "Smazat uživatele",
+      "resetPassword": "Resetovat heslo"
     },
     "table": {
       "firstName": "Jméno",
@@ -70,16 +70,27 @@
       "unknownEmail": "Neznámý",
       "cancel": "Zrušit",
       "delete": "Smazat"
-    },
-    "notifications": {
+    },    "notifications": {
       "userCreated": "Uživatel úspěšně vytvořen.",
       "userCreatedDescription": "Vytvořili jste uživatele s e-mailem: {{email}}",
       "userDeleted": "Uživatel úspěšně smazán.",
       "userDeletedDescription": "Smazali jste uživatele s e-mailem: {{email}}",
       "userUpdated": "Údaje o uživateli byly úspěšně změněny.",
+      "passwordReset": "Heslo bylo úspěšně resetováno.",
+      "passwordResetDescription": "Resetovali jste heslo pro uživatele s e-mailem: {{email}}",
       "error": "Jejda! Něco se pokazilo.",
       "errorDescription": "Došlo k problému s vaší žádostí.",
       "genericError": "Něco se pokazilo. Zkuste to prosím znovu později."
+    },
+    "resetPassword": {
+      "title": "Resetovat heslo uživatele",
+      "description": "Nastavte nové heslo pro {{name}}",
+      "password": "Nové heslo",
+      "passwordConfirmation": "Potvrdit nové heslo",
+      "loading": "Resetuji...",
+      "reset": "Resetovat heslo",
+      "success": "Heslo bylo úspěšně resetováno.",
+      "error": "Heslo se nepodařilo resetovat. Zkuste to prosím znovu."
     }
   }
 }

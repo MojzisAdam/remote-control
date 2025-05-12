@@ -58,7 +58,12 @@ export const toggleDisplayLastVisitedDevice = async (enabled: boolean): Promise<
 };
 
 // Get the setting for displaying the last visited device
-export const getDisplayLastVisitedDevice = async (): Promise<boolean> => {
+export const getDisplayLastVisitedDevice = async (): Promise<{ display_last_visited_device: boolean }> => {
 	const response = await axios.get("/user/display-last-visited-device");
 	return response.data;
+};
+
+// Reset user's password
+export const resetUserPassword = async (userId: number, password: string, password_confirmation: string): Promise<void> => {
+	await axios.post(`/users/${userId}/reset-password`, { password, password_confirmation });
 };

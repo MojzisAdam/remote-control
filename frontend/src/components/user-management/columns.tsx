@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, ArrowUp, ArrowDown, User as IconUser, UserCog, UserX, ArrowBigDown } from "lucide-react";
+import { ArrowUpDown, ArrowUp, ArrowDown, User as IconUser, UserCog, UserX, ArrowBigDown, KeyRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatDateTime } from "@/utils/utils";
 
@@ -12,6 +12,7 @@ export type ColumnActions = {
 	viewUser: (user: User) => void;
 	editUser: (user: User) => void;
 	deleteUserModal: (user: User) => void;
+	resetPasswordModal: (user: User) => void;
 };
 
 const isColumnActions = (meta: unknown): meta is ColumnActions => {
@@ -22,7 +23,9 @@ const isColumnActions = (meta: unknown): meta is ColumnActions => {
 			"editUser" in meta &&
 			typeof (meta as { editUser: unknown }).editUser === "function" &&
 			"deleteUserModal" in meta &&
-			typeof (meta as { deleteUserModal: unknown }).deleteUserModal === "function"
+			typeof (meta as { deleteUserModal: unknown }).deleteUserModal === "function" &&
+			"resetPasswordModal" in meta &&
+			typeof (meta as { resetPasswordModal: unknown }).resetPasswordModal === "function"
 		);
 	}
 	return false;
@@ -99,12 +102,13 @@ export const getColumns = (t: (key: string) => string): ColumnDef<User, ColumnAc
 		meta: t("userManagement.actions.title"),
 		cell: ({ row, column }) => {
 			const user = row.original;
-			const { viewUser, editUser, deleteUserModal } = isColumnActions(column.columnDef.meta)
+			const { viewUser, editUser, deleteUserModal, resetPasswordModal } = isColumnActions(column.columnDef.meta)
 				? column.columnDef.meta
 				: {
 						viewUser: () => {},
 						editUser: () => {},
 						deleteUserModal: () => {},
+						resetPasswordModal: () => {},
 				  };
 
 			return (
@@ -130,6 +134,10 @@ export const getColumns = (t: (key: string) => string): ColumnDef<User, ColumnAc
 						<DropdownMenuItem onClick={() => editUser && editUser(user)}>
 							<UserCog />
 							{t("userManagement.actions.editUser")}
+						</DropdownMenuItem>
+						<DropdownMenuItem onClick={() => resetPasswordModal && resetPasswordModal(user)}>
+							<KeyRound />
+							{t("userManagement.actions.resetPassword")}
 						</DropdownMenuItem>
 						<DropdownMenuItem onClick={() => deleteUserModal && deleteUserModal(user)}>
 							<UserX />

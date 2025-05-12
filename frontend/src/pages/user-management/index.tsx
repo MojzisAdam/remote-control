@@ -6,6 +6,7 @@ import { ViewUserModal } from "@/components/user-management/view-user-modal";
 import { EditUserModal } from "@/components/user-management/edit-user-modal";
 import { CreateUserModal } from "@/components/user-management/create-user-modal";
 import { DeleteUserAlert } from "@/components/user-management/delete-user-alert";
+import { ResetUserPasswordModal } from "@/components/user-management/reset-user-password-modal";
 import { SortingState } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -29,12 +30,12 @@ const UserManagement = () => {
 	const [from, setFrom] = useState<number>(0);
 	const [to, setTo] = useState<number>(0);
 	const [totalUsers, setTotalUsers] = useState<number>(0);
-
 	const [userModal, setUserModal] = useState<User>();
 	const [viewUserModal, setViewUserModal] = useState<boolean>(false);
 	const [editUserModal, setEditUserModal] = useState<boolean>(false);
 	const [createUserModal, setCreateUserModal] = useState<boolean>(false);
 	const [deleteUserAlert, setDeleteUserAlert] = useState<boolean>(false);
+	const [resetPasswordModalOpen, setResetPasswordModalOpen] = useState<boolean>(false);
 
 	const { toast } = useToast();
 	usePageTitle(t("userManagement.title"));
@@ -142,14 +143,23 @@ const UserManagement = () => {
 		});
 		loadUsers();
 	};
-
 	const onEditUser = (updatedUser: User) => {
 		setUsers((prevUsers) => prevUsers.map((user) => (user.id === updatedUser.id ? { ...user, ...updatedUser } : user)));
 	};
 
+	const onResetPassword = (user: User) => {
+		toast({
+			title: t("userManagement.notifications.passwordReset"),
+			description: t("userManagement.notifications.passwordResetDescription", { email: user.email }),
+		});
+	};
 	const deleteUserModal = (user: User) => {
 		setUserModal(user);
 		setDeleteUserAlert(true);
+	};
+	const resetPasswordModal = (user: User) => {
+		setUserModal(user);
+		setResetPasswordModalOpen(true);
 	};
 
 	const onDeleteUser = async (confirmed: boolean, user: User | undefined) => {
@@ -183,7 +193,6 @@ const UserManagement = () => {
 	};
 
 	const columns = getColumns(t);
-
 	const updatedColumns = columns.map((column) => {
 		if (column.id === "actions") {
 			return {
@@ -192,6 +201,7 @@ const UserManagement = () => {
 					viewUser,
 					editUser,
 					deleteUserModal,
+					resetPasswordModal,
 				},
 			};
 		}
@@ -254,12 +264,18 @@ const UserManagement = () => {
 				open={createUserModal}
 				onSuccess={onCreateUser}
 				onOpenChange={setCreateUserModal}
-			/>
+			/>{" "}
 			<DeleteUserAlert
 				open={deleteUserAlert}
 				onSuccess={onDeleteUser}
 				onOpenChange={setDeleteUserAlert}
 				user={userModal}
+			/>
+			<ResetUserPasswordModal
+				open={resetPasswordModalOpen}
+				onSuccess={onResetPassword}
+				onOpenChange={setResetPasswordModalOpen}
+				data={userModal}
 			/>
 		</>
 	);
