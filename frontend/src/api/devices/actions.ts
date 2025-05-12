@@ -129,3 +129,12 @@ export const updateDeviceVersions = async (
 ): Promise<void> => {
 	await axios.put(`/devices/${deviceId}/versions`, data);
 };
+
+export const addDeviceToUser = async (deviceId: string, email: string, ownName: string): Promise<string> => {
+	const response = await axios.post("/manage-devices/add-to-user", {
+		device_id: deviceId,
+		user_email: email,
+		own_name: ownName,
+	});
+	return response.data;
+};

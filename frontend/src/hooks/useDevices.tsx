@@ -15,6 +15,7 @@ import {
 	getDeviceUsers,
 	addDeviceToListApi,
 	updateDeviceVersions as updateDeviceVersionsApi,
+	addDeviceToUser as addDeviceToUserApi,
 } from "@/api/devices/actions";
 import { ApiHandlerResult, handleApiRequest } from "@/utils/apiHandler";
 import { Device, DeviceDescription, DeviceStatusSummary } from "@/api/devices/model";
@@ -283,6 +284,21 @@ export const useDevices = () => {
 		return result;
 	};
 
+	const addDeviceToUser = async (deviceId: string, userEmail: string, ownName: string): Promise<ApiHandlerResult> => {
+		setLoading(true);
+		const result = await handleApiRequest({
+			apiCall: () => addDeviceToUserApi(deviceId, userEmail, ownName),
+			successMessage: "Device added to user successfully",
+			statusHandlers: {
+				400: () => "Bad request. Please check your input.",
+				404: () => "User with provided email not found.",
+				422: () => "User already has this device or invalid input.",
+			},
+		});
+		setLoading(false);
+		return result;
+	};
+
 	const updateDeviceVersions = async (deviceId: string, fwVersion: string, scriptVersion: string): Promise<ApiHandlerResult> => {
 		setLoading(true);
 		const result = await handleApiRequest({
@@ -320,6 +336,7 @@ export const useDevices = () => {
 		deleteDevice,
 		fetchDeviceUsers,
 		addDeviceToList,
+		addDeviceToUser,
 		updateDeviceVersions,
 	};
 };

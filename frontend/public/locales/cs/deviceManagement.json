@@ -55,6 +55,20 @@
     "toastError": "Chyba při přidávání zařízení",
     "toastErrorDescription": "Při přidávání zařízení do vašeho seznamu došlo k chybě"
   },
+  "addDeviceToUser": {
+    "title": "Přidat zařízení uživateli",
+    "description": "Přidat zařízení {{deviceId}} do seznamu jiného uživatele",
+    "instruction": "Zadejte e-mail uživatele, kterému chcete toto zařízení přidat.",
+    "emailLabel": "E-mail uživatele",
+    "emailPlaceholder": "Zadejte e-mail uživatele",
+    "nameLabel": "Název zařízení (volitelný)",
+    "namePlaceholder": "Zadejte název tohoto zařízení",
+    "addDevice": "Přidat",
+    "toastSuccess": "Zařízení přidáno",
+    "toastDescription": "Zařízení {{deviceId}} s názvem \"{{name}}\" bylo přidáno do seznamu uživatele {{email}}",
+    "toastError": "Chyba",
+    "toastErrorDescription": "Nepodařilo se přidat zařízení do seznamu uživatele. Zkuste to prosím znovu."
+    },
   "common": {
     "cancel": "Zrušit"
   },
@@ -72,7 +86,8 @@
     "copyId": "Zkopírovat ID zařízení",
     "viewUsers": "Zobrazit uživatele",
     "editDescription": "Upravit popis",
-    "addDevice": "Přidat zařízení"
+    "addDevice": "Přidat zařízení",
+    "addToUser": "Přidat uživateli"
   },
   "toast": {
     "deviceUpdated": "Zařízení bylo aktualizováno",

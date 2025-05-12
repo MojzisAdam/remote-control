@@ -34,7 +34,7 @@ export function AddDeviceModal({ open, onOpenChange, device }: AddDeviceModalPro
 					title: t("addDevice.toastSuccess"),
 					description: t("addDevice.toastDescription", { deviceId: device.id, name: ownName }),
 				});
-				onOpenChange(false);
+				customOnOpenChange(false);
 			}
 		} catch {
 			toast({
@@ -50,10 +50,19 @@ export function AddDeviceModal({ open, onOpenChange, device }: AddDeviceModalPro
 		setStatusInf(null);
 	}, [device]);
 
+	const customOnOpenChange = (open: boolean) => {
+		setTimeout(() => {
+			setOwnName("");
+			setStatusInf(null);
+		}, 500);
+
+		onOpenChange(open);
+	};
+
 	return (
 		<Dialog
 			open={open}
-			onOpenChange={onOpenChange}
+			onOpenChange={customOnOpenChange}
 		>
 			<DialogContent className="sm:max-w-md">
 				<DialogHeader>

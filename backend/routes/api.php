@@ -75,6 +75,7 @@ Route::middleware('auth:sanctum', 'permission:manage-devices')->group(function (
     Route::get('/devices/{deviceId}/users', [DeviceController::class, 'getDeviceUsers']);
     Route::put('/manage-devices/{deviceId}/description', [DeviceController::class, 'updateDeviceDescription']);
     Route::post('/manage-devices/add', [DeviceController::class, 'addDeviceToList']);
+    Route::post('/manage-devices/add-to-user', [DeviceController::class, 'addDeviceToUser']);
 });
 
 Route::middleware('auth:sanctum', 'permission:manage-users')->group(function () {
