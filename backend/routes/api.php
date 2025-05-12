@@ -15,6 +15,8 @@ use App\Http\Controllers\RpiController;
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
     Route::put('/user/language', [AuthController::class, 'updateLanguage']);
+    Route::get('/user/check-force-password-change', [AuthController::class, 'checkForcePasswordChange']);
+    Route::post('/user/update-password', [AuthController::class, 'updateUserPassword']);
     Route::get('/devices', [DeviceController::class, 'listUserDevices']);
     Route::post('/devices/add', [DeviceController::class, 'addDevice']);
     Route::get('/devices/favorites', [DeviceController::class, 'getFavoriteDevices']);

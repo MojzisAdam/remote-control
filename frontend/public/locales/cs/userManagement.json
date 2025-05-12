@@ -81,8 +81,7 @@
       "error": "Jejda! Něco se pokazilo.",
       "errorDescription": "Došlo k problému s vaší žádostí.",
       "genericError": "Něco se pokazilo. Zkuste to prosím znovu později."
-    },
-    "resetPassword": {
+    },    "resetPassword": {
       "title": "Resetovat heslo uživatele",
       "description": "Nastavte nové heslo pro {{name}}",
       "password": "Nové heslo",
@@ -91,6 +90,16 @@
       "reset": "Resetovat heslo",
       "success": "Heslo bylo úspěšně resetováno.",
       "error": "Heslo se nepodařilo resetovat. Zkuste to prosím znovu."
+    },
+    "forcePasswordChange": {
+      "title": "Vyžadována změna hesla",
+      "description": "Vaše heslo bylo resetováno správcem. Pro pokračování je nutné nastavit nové heslo.",
+      "password": "Nové heslo",
+      "passwordConfirmation": "Potvrdit nové heslo",
+      "update": "Aktualizovat heslo",
+      "loading": "Aktualizuji...",
+      "success": "Heslo bylo úspěšně aktualizováno",
+      "error": "Při aktualizaci hesla došlo k chybě"
     }
   }
 }
