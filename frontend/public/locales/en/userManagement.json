@@ -1,5 +1,4 @@
-{
-  "userManagement": {
+{  "userManagement": {
     "title": "User Management",
     "addUser": "Add User",
     "search": "Search...",
@@ -8,7 +7,8 @@
       "copyEmail": "Copy user e-mail",
       "viewUser": "View user",
       "editUser": "Edit user",
-      "deleteUser": "Delete user"
+      "deleteUser": "Delete user",
+      "resetPassword": "Reset password"
     },
     "table": {
       "firstName": "First Name",
@@ -62,16 +62,27 @@
       "unknownEmail": "Unknown",
       "cancel": "Cancel",
       "delete": "Delete"
-    },
-    "notifications": {
+    },    "notifications": {
       "userCreated": "User created successfully.",
       "userCreatedDescription": "You have created user with e-mail: {{email}}",
       "userDeleted": "User deleted successfully.",
       "userDeletedDescription": "You have deleted user with e-mail: {{email}}",
       "userUpdated": "User info changed successfully.",
+      "passwordReset": "Password reset successfully.",
+      "passwordResetDescription": "You have reset the password for user with e-mail: {{email}}",
       "error": "Uh oh! Something went wrong.",
       "errorDescription": "There was a problem with your request.",
       "genericError": "Something went wrong. Please try again later."
+    },
+    "resetPassword": {
+      "title": "Reset User Password",
+      "description": "Set a new password for {{name}}",
+      "password": "New Password",
+      "passwordConfirmation": "Confirm New Password",
+      "loading": "Resetting...",
+      "reset": "Reset Password",
+      "success": "Password has been reset successfully.",
+      "error": "Failed to reset password. Please try again."
     }
   }
 }

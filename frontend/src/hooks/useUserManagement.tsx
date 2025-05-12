@@ -9,6 +9,7 @@ import {
 	getLastVisitedDevice,
 	toggleDisplayLastVisitedDevice,
 	getDisplayLastVisitedDevice,
+	resetUserPassword,
 } from "@/api/manageUsers/actions";
 import { SortingState } from "@tanstack/react-table";
 import { InformationFormData } from "@/components/user-management/edit-user-modal";
@@ -130,6 +131,22 @@ export const useUserManagement = () => {
 		return result;
 	};
 
+	// Reset user password
+	const resetPassword = async (userId: number, password: string, password_confirmation: string): Promise<ApiHandlerResult> => {
+		setLoading(true);
+		const result = await handleApiRequest({
+			apiCall: () => resetUserPassword(userId, password, password_confirmation),
+			successMessage: "Password reset successfully",
+			statusHandlers: {
+				422: () => {
+					return null;
+				},
+			},
+		});
+		setLoading(false);
+		return result;
+	};
+
 	return {
 		loading,
 		deleteUser,
@@ -140,5 +157,6 @@ export const useUserManagement = () => {
 		setLastVisited,
 		toggleLastVisitedDisplay,
 		fetchDisplayLastVisitedDevice,
+		resetPassword,
 	};
 };

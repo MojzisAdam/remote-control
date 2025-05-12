@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Actions\Fortify\CreateNewUser;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\DeviceResource;
@@ -177,6 +178,23 @@ class UserManagementController extends Controller
         return response()->json([
             'status' => 'success',
             'display_last_visited_device' => $user->display_last_visited_device,
+        ]);
+    }
+
+    // Method to reset user's password
+    public function resetPassword(Request $request, User $user)
+    {
+        $request->validate([
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $user->forceFill([
+            'password' => Hash::make($request->password),
+        ])->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Password reset successfully.',
         ]);
     }
 }

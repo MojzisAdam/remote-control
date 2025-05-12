@@ -84,6 +84,7 @@ Route::middleware('auth:sanctum', 'permission:manage-users')->group(function () 
     Route::post('/users', [UserManagementController::class, 'store']);
     Route::put('/users/{user}', [UserManagementController::class, 'update']);
     Route::delete('/users/{user}', [UserManagementController::class, 'destroy']);
+    Route::post('/users/{user}/reset-password', [UserManagementController::class, 'resetPassword']);
 });
 
 
