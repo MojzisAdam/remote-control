@@ -55,6 +55,20 @@
     "toastError": "Error adding device",
     "toastErrorDescription": "There was an error adding the device to your list"
   },
+  "addDeviceToUser": {
+    "title": "Add Device to User",
+    "description": "Add device {{deviceId}} to another user's list",
+    "instruction": "Enter the email of the user you want to add this device to.",
+    "emailLabel": "User Email",
+    "emailPlaceholder": "Enter user's email",
+    "nameLabel": "Device Name (Optional)",
+    "namePlaceholder": "Enter a name for this device",
+    "addDevice": "Add",
+    "toastSuccess": "Device Added",
+    "toastDescription": "Device {{deviceId}}  with name '{{name}}' was added to {{email}}'s list",
+    "toastError": "Error",
+    "toastErrorDescription": "Failed to add the device to user's list. Please try again."
+  },
   "common": {
     "cancel": "Cancel"
   },
@@ -73,7 +87,8 @@
     "copyId": "Copy device id",
     "viewUsers": "View Users",
     "editDescription": "Edit Description",
-    "addDevice": "Add Device"
+    "addDevice": "Add Device",
+    "addToUser": "Add to User"
   },
   "toast": {
     "deviceUpdated": "Device updated",

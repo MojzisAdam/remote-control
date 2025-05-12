@@ -2,7 +2,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Device } from "@/api/devices/model";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Plus, FilePenLine, Users, ArrowBigDown } from "lucide-react";
+import { Plus, FilePenLine, Users, ArrowBigDown, UserPlus } from "lucide-react";
 import { getStatusColor } from "@/components/dashboard/DeviceCard";
 import { getDisplayTypeName } from "@/utils/displayUtils";
 
@@ -10,6 +10,7 @@ export type DeviceActions = {
 	viewDeviceUsers: (device: Device) => void;
 	editDeviceDescription: (device: Device) => void;
 	addDeviceToList: (device: Device) => void;
+	addDeviceToUser: (device: Device) => void;
 };
 
 const isColumnActions = (meta: unknown): meta is DeviceActions => {
@@ -19,9 +20,11 @@ const isColumnActions = (meta: unknown): meta is DeviceActions => {
 		"viewDeviceUsers" in meta &&
 		"editDeviceDescription" in meta &&
 		"addDeviceToList" in meta &&
+		"addDeviceToUser" in meta &&
 		typeof (meta as DeviceActions).viewDeviceUsers === "function" &&
 		typeof (meta as DeviceActions).editDeviceDescription === "function" &&
-		typeof (meta as DeviceActions).addDeviceToList === "function"
+		typeof (meta as DeviceActions).addDeviceToList === "function" &&
+		typeof (meta as DeviceActions).addDeviceToUser === "function"
 	);
 };
 export const getColumns = (t: (key: string) => string): ColumnDef<Device, DeviceActions>[] => [
@@ -70,12 +73,13 @@ export const getColumns = (t: (key: string) => string): ColumnDef<Device, Device
 		meta: t("table.actions"),
 		cell: ({ row, column }) => {
 			const device = row.original;
-			const { viewDeviceUsers, editDeviceDescription, addDeviceToList } = isColumnActions(column.columnDef.meta)
+			const { viewDeviceUsers, editDeviceDescription, addDeviceToList, addDeviceToUser } = isColumnActions(column.columnDef.meta)
 				? column.columnDef.meta
 				: {
 						viewDeviceUsers: () => {},
 						editDeviceDescription: () => {},
 						addDeviceToList: () => {},
+						addDeviceToUser: () => {},
 				  };
 			return (
 				<DropdownMenu modal={false}>
@@ -105,6 +109,10 @@ export const getColumns = (t: (key: string) => string): ColumnDef<Device, Device
 						</DropdownMenuItem>
 						<DropdownMenuItem onClick={() => addDeviceToList(device)}>
 							<Plus /> {t("table.addDevice")}
+						</DropdownMenuItem>
+						<DropdownMenuItem onClick={() => addDeviceToUser(device)}>
+							<UserPlus />
+							{t("table.addToUser")}
 						</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>

@@ -7,6 +7,7 @@ import { Device, DeviceDescription } from "@/api/devices/model";
 import { ViewDeviceUsersModal } from "@/components/device-management/ViewDeviceUsersModal";
 import { EditDeviceDescriptionModal } from "@/components/device-management/EditDeviceDescriptionModal";
 import { AddDeviceModal } from "@/components/device-management/AddDeviceModal";
+import { AddDeviceToUserModal } from "@/components/device-management/AddDeviceToUserModal";
 import { useToast } from "@/hooks/use-toast";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -31,6 +32,7 @@ const DeviceManagement = () => {
 	const [viewUsersModalOpen, setViewUsersModalOpen] = useState<boolean>(false);
 	const [editDescriptionModalOpen, setEditDescriptionModalOpen] = useState<boolean>(false);
 	const [addDeviceModalOpen, setAddDeviceModalOpen] = useState<boolean>(false);
+	const [addDeviceToUserModalOpen, setAddDeviceToUserModalOpen] = useState<boolean>(false);
 
 	const { toast } = useToast();
 
@@ -149,6 +151,11 @@ const DeviceManagement = () => {
 		setAddDeviceModalOpen(true);
 	};
 
+	const addDeviceToUser = (device: Device) => {
+		setSelectedDevice(device);
+		setAddDeviceToUserModalOpen(true);
+	};
+
 	// Handle updating device description
 	const onDescriptionUpdate = async (deviceId: string, descriptionData: Partial<DeviceDescription>) => {
 		toast({
@@ -180,7 +187,7 @@ const DeviceManagement = () => {
 		col.id === "actions"
 			? {
 					...col,
-					meta: { viewDeviceUsers, editDeviceDescription, addDeviceToList },
+					meta: { viewDeviceUsers, editDeviceDescription, addDeviceToList, addDeviceToUser },
 			  }
 			: col
 	);
@@ -272,6 +279,11 @@ const DeviceManagement = () => {
 						onOpenChange={setEditDescriptionModalOpen}
 						device={selectedDevice}
 						onSave={onDescriptionUpdate}
+					/>
+					<AddDeviceToUserModal
+						open={addDeviceToUserModalOpen}
+						onOpenChange={setAddDeviceToUserModalOpen}
+						device={selectedDevice}
 					/>
 				</>
 			)}

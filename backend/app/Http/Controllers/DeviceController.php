@@ -138,11 +138,11 @@ class DeviceController extends Controller
         $device = $user->devices()->where('device_id', $deviceId)->first();
 
         if (!$device) {
-            return response()->json(['status' => 'error', 'message' => 'Device not found in user list.'], 404);
+            return response()->json(['status' => 'error', 'message' => __('devices.not_found_in_user_list')], 404);
         }
 
 
-        return response()->json(['status' => 'success', 'message' => 'Device updated successfully.', 'device' => new DeviceResource($device)]);
+        return response()->json(['status' => 'success', 'message' => __('devices.updated_successfully'), 'device' => new DeviceResource($device)]);
     }
 
     public function getDeviceStatusSummary(Request $request)
@@ -184,7 +184,7 @@ class DeviceController extends Controller
         $device = Device::where('id', $request->device_id)->first();
 
         if (!$device || !Hash::check($request->password, $device->password)) {
-            return response()->json(['status' => 'error', 'message' => 'Invalid device ID or password.'], 422);
+            return response()->json(['status' => 'error', 'message' => __('devices.invalid_id_or_password')], 422);
         }
 
         $user = Auth::user();
@@ -192,14 +192,14 @@ class DeviceController extends Controller
         if ($user->devices()->where('device_id', $device->id)->exists()) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'You have already added this device.',
+                'message' => __('devices.already_added'),
             ], 422);
         }
         $user->devices()->attach($device->id);
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Device added successfully.',
+            'message' => __('devices.added_successfully'),
         ]);
     }
 
@@ -220,7 +220,7 @@ class DeviceController extends Controller
         $device = $user->devices()->where('device_id', $deviceId)->first();
 
         if (!$device) {
-            return response()->json(['status' => 'error', 'message' => 'Device not found in user list.'], 404);
+            return response()->json(['status' => 'error', 'message' => __('devices.not_found_in_user_list')], 404);
         }
 
         $pivotData = [];
@@ -251,7 +251,7 @@ class DeviceController extends Controller
 
         $user->devices()->updateExistingPivot($deviceId, $pivotData);
 
-        return response()->json(['status' => 'success', 'message' => 'Device updated successfully.']);
+        return response()->json(['status' => 'success', 'message' => __('devices.updated_successfully')]);
     }
 
     public function updateFavouriteOrder(Request $request)
@@ -276,17 +276,17 @@ class DeviceController extends Controller
                         'favouriteOrder' => $deviceData['favouriteOrder'],
                     ]);
                 } else {
-                    throw new \Exception("Device with ID {$deviceData['deviceId']} not found.");
+                    throw new \Exception(__('devices.not_found', ['id' => $deviceData['deviceId']]));
                 }
             }
 
             DB::commit();
 
-            return response()->json(['status' => 'success', 'message' => 'Favourite order updated successfully.']);
+            return response()->json(['status' => 'success', 'message' => __('devices.favourite_order_updated')]);
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return response()->json(['status' => 'error', 'message' => 'Failed to update favourite order. ' . $e->getMessage()], 500);
+            return response()->json(['status' => 'error', 'message' => __('devices.favourite_order_update_failed') . ' ' . $e->getMessage()], 500);
         }
     }
 
@@ -310,18 +310,18 @@ class DeviceController extends Controller
         $user = Auth::user();
 
         if (!$user->can('edit-device-description')) {
-            return response()->json(['status' => 'error', 'message' => 'Permission denied.'], 403);
+            return response()->json(['status' => 'error', 'message' => __('devices.permission_denied')], 403);
         }
 
         $deviceDescription = DeviceDescription::where('device_id', $deviceId)->first();
 
         if (!$deviceDescription) {
-            return response()->json(['status' => 'error', 'message' => 'Device description not found.'], 404);
+            return response()->json(['status' => 'error', 'message' => __('devices.description_not_found')], 404);
         }
 
         $deviceDescription->update($request->all());
 
-        return response()->json(['status' => 'success', 'message' => 'Device description updated successfully.']);
+        return response()->json(['status' => 'success', 'message' => __('devices.description_updated')]);
     }
 
     /**
@@ -395,7 +395,7 @@ class DeviceController extends Controller
         if (!$device) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Device not found in your list.'
+                'message' => __('devices.not_found_in_your_list')
             ], 404);
         }
 
@@ -403,7 +403,7 @@ class DeviceController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Device removed successfully.'
+            'message' => __('devices.removed_successfully')
         ]);
     }
 
@@ -419,7 +419,7 @@ class DeviceController extends Controller
         if (!$device) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Device not found.',
+                'message' => __('devices.not_found'),
             ], 422);
         }
 
@@ -428,7 +428,7 @@ class DeviceController extends Controller
         if ($user->devices()->where('device_id', $device->id)->exists()) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'You have already added this device.',
+                'message' => __('devices.already_added'),
             ], 422);
         }
 
@@ -436,7 +436,52 @@ class DeviceController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Device added successfully.',
+            'message' => __('devices.added_successfully'),
+        ]);
+    }
+
+    public function addDeviceToUser(Request $request)
+    {
+        $request->validate([
+            'device_id' => 'required|string|exists:devices,id',
+            'user_email' => 'required|email',
+            'own_name' => 'nullable|string|max:255',
+        ]);
+
+        // Find the device
+        $device = Device::where('id', $request->device_id)->first();
+
+        if (!$device) {
+            return response()->json([
+                'status' => 'error',
+                'message' => __('devices.not_found'),
+            ], 404);
+        }
+
+        // Find the user by email
+        $user = User::where('email', $request->user_email)->first();
+
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => __('devices.user_not_found'),
+            ], 404);
+        }
+
+        // Check if the user already has this device
+        if ($user->devices()->where('device_id', $device->id)->exists()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => __('devices.user_already_has_device'),
+            ], 422);
+        }
+
+        // Add the device to the user's list
+        $user->devices()->attach($device->id, ['own_name' => $request->own_name]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => __('devices.device_added_to_user'),
         ]);
     }
 
@@ -483,7 +528,7 @@ class DeviceController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Parameter change logged successfully',
+                'message' => __('devices.parameter_change_logged'),
                 'data' => new DeviceParameterLogResource($log),
             ]);
         } catch (Exception $e) {
@@ -510,11 +555,11 @@ class DeviceController extends Controller
             ]);
 
             return response()->json([
-                'message' => 'Device versions updated successfully'
+                'message' => __('devices.versions_updated')
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Failed to update device versions',
+                'message' => __('devices.versions_update_failed'),
                 'error' => $e->getMessage()
             ], 500);
         }

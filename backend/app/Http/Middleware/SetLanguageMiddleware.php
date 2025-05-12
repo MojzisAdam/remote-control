@@ -15,9 +15,15 @@ class SetLanguageMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $lang = $request->header('Accept-Language', 'en');
+        $locale = $request->header('Accept-Language')
+            ?? $request->query('lang')
+            ?? config('app.locale');
 
-        App::setLocale($lang);
+        if (!$locale || !in_array($locale, ['en', 'cs'])) {
+            $locale = config('app.locale');
+        }
+
+        App::setLocale($locale);
 
         return $next($request);
     }
