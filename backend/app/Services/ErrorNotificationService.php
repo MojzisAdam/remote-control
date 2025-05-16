@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\DeviceErrorState;
 use App\Models\DeviceNotification;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NewErrorOccurredMail;
 use App\Mail\ErrorResolvedMail;
@@ -60,22 +59,17 @@ class ErrorNotificationService
             $this->attachNotificationToUsers($notification, $deviceId);
         }
     }
-
     private function attachNotificationToUsers($notification, $deviceId)
     {
-        $userIds = DB::table('device_user')
-            ->where('device_id', $deviceId)
-            ->where('web_notifications', true)
-            ->pluck('user_id');
+        // Get device with its users who have web notifications enabled
+        $device = Device::findOrFail($deviceId);
+        $users = $device->users()->wherePivot('web_notifications', true)->get();
 
-        foreach ($userIds as $userId) {
-            $exists = DB::table('notification_user')
-                ->where(['user_id' => $userId, 'notification_id' => $notification->id])
-                ->exists();
-            if (!$exists) {
-                DB::table('notification_user')->insert([
-                    'user_id' => $userId,
-                    'notification_id' => $notification->id,
+        foreach ($users as $user) {
+            // Check if the user already has this notification
+            if (!$notification->users()->where('users.id', $user->id)->exists()) {
+                // Attach the notification to the user
+                $notification->users()->attach($user->id, [
                     'seen' => false,
                     'created_at' => now(),
                     'updated_at' => now(),
