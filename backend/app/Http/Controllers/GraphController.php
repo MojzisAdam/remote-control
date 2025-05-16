@@ -13,7 +13,7 @@ use App\Http\Resources\DataTransformationResource;
 use App\Http\Resources\DynamicDataTransformationResource;
 use App\Http\Resources\HistoryTableResource;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\DB; // Still needed for DB::raw() expressions
 use App\Http\Resources\UserGraphPreferenceResource;
 
 class GraphController extends Controller
@@ -187,7 +187,6 @@ class GraphController extends Controller
         $graph->delete();
         return response()->json(['message' => 'Graph deleted']);
     }
-
     public function getMonthlyAverageTemperatures(Request $request, $deviceId)
     {
         $deviceExists = Device::where('id', $deviceId)->exists();
@@ -198,14 +197,13 @@ class GraphController extends Controller
 
         $startDate = Carbon::now()->subYear()->startOfDay();
 
-        $query = DB::table('device_history')
-            ->select([
-                DB::raw('YEAR(cas) as year'),
-                DB::raw('MONTH(cas) as month'),
-                DB::raw('AVG(TS1) as avg_ts1'),
-                DB::raw('AVG(TS2) as avg_ts2'),
-                DB::raw('AVG(TS4) as avg_ts4'),
-            ])
+        $query = DeviceHistory::select([
+            DB::raw('YEAR(cas) as year'),
+            DB::raw('MONTH(cas) as month'),
+            DB::raw('AVG(TS1) as avg_ts1'),
+            DB::raw('AVG(TS2) as avg_ts2'),
+            DB::raw('AVG(TS4) as avg_ts4'),
+        ])
             ->where('cas', '>=', $startDate)
             ->whereNotNull('TS1')
             ->whereNotNull('TS2')
