@@ -22,7 +22,7 @@ php artisan migrate
 
 2. The middleware is already registered in `bootstrap/app.php` and will automatically begin logging API traffic.
 
-3. Access the dashboard at `/admin/traffic` (requires authentication and admin role).
+3. Access the dashboard at `/admin/traffic` (requires authentication and superadmin role).
 
 ## Usage
 
@@ -73,6 +73,6 @@ If you experience performance issues due to high traffic volume:
 The analytics dashboard is protected by:
 
 1. Authentication requirement
-2. Role-based access control (admin role required)
+2. Role-based access control (superadmin role required)
 
 Make sure to maintain these protections to keep your traffic data secure.
