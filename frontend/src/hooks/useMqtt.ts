@@ -41,7 +41,7 @@ interface UseMqttReturn {
 	lastMessage: { topic: string; message: string } | null;
 }
 
-export const useMqtt = (): UseMqttReturn => {
+export const useMqtt = (deviceId: string): UseMqttReturn => {
 	const [state, setState] = useState<MqttState>({
 		client: null,
 		connectionStatus: "disconnected",
@@ -70,7 +70,7 @@ export const useMqtt = (): UseMqttReturn => {
 					}
 
 					const defaultOptions: MqttOptions = {
-						clientId: `mqtt-client-${Math.random().toString(16).substring(2, 10)}`,
+						clientId: `mqtt-client-${deviceId}-${Math.random().toString(16).substring(2, 10)}`,
 						clean: true,
 						keepalive: 60,
 						reconnectPeriod: autoReconnect ? 3000 : 0,

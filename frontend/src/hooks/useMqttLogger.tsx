@@ -12,30 +12,14 @@ interface UseMqttLoggerReturn {
 	startLogging: () => Promise<void>;
 	stopLogging: () => Promise<void>;
 	clearLogs: () => void;
-	connectionStatus:
-		| "connected"
-		| "disconnected"
-		| "connecting"
-		| "reconnecting"
-		| "error";
+	connectionStatus: "connected" | "disconnected" | "connecting" | "reconnecting" | "error";
 	error: Error | null;
 }
 
 const MAX_LOG_ENTRIES = 10000;
 
-export const useMqttLogger = ({
-	deviceId,
-}: UseMqttLoggerProps): UseMqttLoggerReturn => {
-	const {
-		connectClient,
-		disconnectClient,
-		subscribeToTopic,
-		publishMessage,
-		connectionStatus,
-		error,
-		lastMessage,
-		client,
-	} = useMqtt();
+export const useMqttLogger = ({ deviceId }: UseMqttLoggerProps): UseMqttLoggerReturn => {
+	const { connectClient, disconnectClient, subscribeToTopic, publishMessage, connectionStatus, error, lastMessage, client } = useMqtt(deviceId);
 
 	const [logData, setLogData] = useState<DeviceHistory[]>([]);
 	const [isLogging, setIsLogging] = useState<boolean>(false);
@@ -47,15 +31,9 @@ export const useMqttLogger = ({
 
 	useEffect(() => {
 		const subscribeToTopics = async () => {
-			if (
-				isStartingLogging &&
-				connectionStatus === "connected" &&
-				client
-			) {
+			if (isStartingLogging && connectionStatus === "connected" && client) {
 				try {
-					await Promise.all(
-						deviceTopics.map((topic) => subscribeToTopic(topic))
-					);
+					await Promise.all(deviceTopics.map((topic) => subscribeToTopic(topic)));
 					await publishMessage(publishTopic, '{"send": 1}', {
 						qos: 1,
 					});
@@ -69,13 +47,7 @@ export const useMqttLogger = ({
 		};
 
 		subscribeToTopics();
-	}, [
-		isStartingLogging,
-		connectionStatus,
-		client,
-		deviceTopics,
-		subscribeToTopic,
-	]);
+	}, [isStartingLogging, connectionStatus, client, deviceTopics, subscribeToTopic]);
 
 	const startLogging = useCallback(async (): Promise<void> => {
 		try {
@@ -84,9 +56,7 @@ export const useMqttLogger = ({
 			if (connectionStatus !== "connected") {
 				await connectClient();
 			} else {
-				await Promise.all(
-					deviceTopics.map((topic) => subscribeToTopic(topic))
-				);
+				await Promise.all(deviceTopics.map((topic) => subscribeToTopic(topic)));
 				await publishMessage(publishTopic, '{"send": 1}', { qos: 1 });
 				setIsLogging(true);
 				setIsStartingLogging(false);
@@ -116,11 +86,7 @@ export const useMqttLogger = ({
 
 	useEffect(() => {
 		if (isLogging && lastMessage && lastMessage.topic) {
-			const isDeviceMessage = deviceTopics.some(
-				(topic) =>
-					lastMessage.topic.startsWith(topic) ||
-					lastMessage.topic.includes(`/${deviceId}/`)
-			);
+			const isDeviceMessage = deviceTopics.some((topic) => lastMessage.topic.startsWith(topic) || lastMessage.topic.includes(`/${deviceId}/`));
 
 			if (isDeviceMessage) {
 				const parsedMessage = JSON.parse(lastMessage.message);
@@ -133,9 +99,7 @@ export const useMqttLogger = ({
 				setLogData((prevData) => {
 					const updatedData = [...prevData, newEntry];
 
-					return updatedData.length > MAX_LOG_ENTRIES
-						? updatedData.slice(-MAX_LOG_ENTRIES)
-						: updatedData;
+					return updatedData.length > MAX_LOG_ENTRIES ? updatedData.slice(-MAX_LOG_ENTRIES) : updatedData;
 				});
 			}
 		}
