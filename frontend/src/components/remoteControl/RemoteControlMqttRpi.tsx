@@ -77,7 +77,7 @@ interface DeviceData {
 	fhi?: number;
 }
 
-interface RemoteControlMqttProps {
+interface RemoteControlMqttRpiProps {
 	deviceId: string;
 	onDataReceived?: (data: DeviceData) => void;
 }
@@ -95,7 +95,7 @@ const deviceDataReducer = (state: DeviceData, action: { type: string; payload?: 
 	}
 };
 
-const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataReceived }) => {
+const RemoteControlMqttRpi: React.FC<RemoteControlMqttRpiProps> = ({ deviceId, onDataReceived }) => {
 	const { t } = useTranslation("remote-control");
 	const { updateDeviceVersions } = useDevices();
 	const { currentDevice, updateDevice } = useDeviceContext();
@@ -204,7 +204,7 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 		const setupSubscription = async () => {
 			if (connectionStatus !== "connected" || isSubscribed.current) return;
 			try {
-				const topic = `/amit_cim/publish/${deviceId}/#`;
+				const topic = `cim/v1/${deviceId}/data/remote`;
 				await subscribeToTopic(topic);
 				isSubscribed.current = true;
 				sendInitialMessage();
@@ -217,7 +217,7 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 		const sendInitialMessage = async () => {
 			if (connectionStatus !== "connected" || !isSubscribed.current || hasPublishedInitialMessage.current) return;
 			try {
-				const sendTopic = `/amit_cim/subscribe/${deviceId}/w`;
+				const sendTopic = `cim/v1/${deviceId}/cmd/remote_control`;
 				await publishMessage(sendTopic, JSON.stringify({ send: 1 }), { qos: 1 });
 				hasPublishedInitialMessage.current = true;
 			} catch (err) {
@@ -242,7 +242,7 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 			const { topic, message } = lastMessage;
 			const payload = JSON.parse(message);
 
-			if (topic.includes("/publish_s/") && topic.includes("/params")) {
+			if (topic === `cim/v1/${deviceId}/data/parameters`) {
 				const formattedPayload = formatExtendedPayload(payload);
 				setExtendedData((prev) => ({ ...prev, ...formattedPayload }));
 				setLastExtendedMessageTimestamp(Date.now());
@@ -256,7 +256,7 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 
 			let newData: DeviceData = {};
 
-			if (topic.endsWith("1")) {
+			if (topic === `cim/v1/${deviceId}/data/remote`) {
 				newData = {
 					reg_33: payload.reg_33,
 					reg_35: payload.reg_35,
@@ -269,10 +269,6 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 					reg_71: payload.reg_71,
 					reg_75: payload.reg_75,
 					reg_76: payload.reg_76,
-				};
-				startCounter.current |= 0b001;
-			} else if (topic.endsWith("2")) {
-				newData = {
 					reg_77: payload.reg_77,
 					reg_78: payload.reg_78,
 					reg_96: payload.reg_96,
@@ -285,10 +281,6 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 					reg_128: formatInt16(payload.reg_128),
 					reg_133: payload.reg_133,
 					reg_192: payload.reg_192,
-				};
-				startCounter.current |= 0b010;
-			} else if (topic.endsWith("3")) {
-				newData = {
 					reg_193: payload.reg_193,
 					reg_257: payload.reg_257,
 					reg_258: payload.reg_258,
@@ -325,7 +317,6 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 					fw_v: payload.fw_v,
 					fhi: payload.fhi,
 				};
-				startCounter.current |= 0b100;
 			}
 
 			dispatchDeviceData({ type: "UPDATE", payload: newData });
@@ -338,7 +329,7 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 				}
 			}
 
-			if (startCounter.current === 0b111 && !containerPageShown) {
+			if (!containerPageShown) {
 				setContainerPageShown(true);
 			}
 		} catch (err) {
@@ -377,15 +368,11 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 
 	const publishMqtt = useCallback(
 		async (register: number, value: number) => {
-			const name = typeof register === "number" ? `reg_${register}` : register;
-
-			const topic = ["reg_64", "reg_65", "reg_71", "reg_68", "reg_75", "reg_76", "reg_77", "reg_78", "reg_33", "reg_35"].includes(name)
-				? `/amit_cim/subscribe/${deviceId}/1`
-				: `/amit_cim/subscribe/${deviceId}/2`;
+			const topic = `cim/v1/${deviceId}/cmd/prmt_change_1`;
 			const message = JSON.stringify({
 				reg_change: 1,
-				[`${name}_change`]: 1,
-				[name]: value,
+				reg_name: register,
+				reg_value: value,
 			});
 			try {
 				await publishMessage(topic, message, { qos: 1 });
@@ -398,7 +385,7 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 
 	const publishMqttExtended = useCallback(
 		async (register: number, value: number) => {
-			const topic = `/amit_cim/subscribe/${deviceId}/change`;
+			const topic = `cim/v1/${deviceId}/cmd/prmt_change_2`;
 			const message = JSON.stringify({
 				reg_change: 1,
 				reg_name: register,
@@ -426,11 +413,11 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 		const setupExtendedSubscription = async () => {
 			try {
 				setExtendedReloading(true);
-				const topic = `/amit_cim/publish_s/${deviceId}/params`;
+				const topic = `cim/v1/${deviceId}/data/parameters`;
 				await subscribeToTopic(topic);
 				isExtendedSubscribed.current = true;
 
-				const sendTopic = `/amit_cim/subscribe/${deviceId}/ws`;
+				const sendTopic = `cim/v1/${deviceId}/cmd/all_prmts`;
 				await publishMessage(sendTopic, JSON.stringify({ send: 1 }), { qos: 1 });
 			} catch (err) {
 				console.error("Failed to subscribe to extended parameters topic:", err);
@@ -450,7 +437,7 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 		setLastExtendedMessageTimestamp(null);
 		setShowReloadButton(false);
 		try {
-			const sendTopic = `/amit_cim/subscribe/${deviceId}/ws`;
+			const sendTopic = `cim/v1/${deviceId}/cmd/all_prmts`;
 			await publishMessage(sendTopic, JSON.stringify({ send: 1 }));
 		} catch (err) {
 			console.error("Failed to refresh extended parameters:", err);
@@ -712,4 +699,4 @@ export const formatExtendedPayload = (payload: ExtendedPayload): ExtendedPayload
 	return formatted;
 };
 
-export default RemoteControlMqtt;
+export default RemoteControlMqttRpi;

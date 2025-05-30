@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useUserManagement } from "@/hooks/useUserManagement";
 import DeviceNotFound from "@/components/deviceNotFound";
 import RemoteControlMqtt from "@/components/remoteControl/RemoteControlMqtt";
-import RemoteControlApi from "@/components/remoteControl/RemoteControlApi";
+import RemoteControlMqttRpi from "@/components/remoteControl/RemoteControlMqttRpi";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Laptop } from "lucide-react";
 import PageHeading from "@/components/PageHeading";
@@ -51,7 +51,7 @@ const RemoteControlPage: React.FC = () => {
 								</>
 							) : (
 								<>
-									<RemoteControlApi deviceId={deviceId as string} />
+									<RemoteControlMqttRpi deviceId={deviceId as string} />
 								</>
 							)}
 						</>
