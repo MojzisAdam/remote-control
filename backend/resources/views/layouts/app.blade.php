@@ -94,12 +94,18 @@
                 </div>
         </nav>
 
+        <!-- Admin Navigation (only shown to superadmins) -->
+        @if(auth()->check() && auth()->user()->isSuperAdmin())
+            @include('layouts.admin-nav')
+        @endif
+
         <!-- Page Content -->
         <main>
             @yield('content')
         </main>
 
         <!-- Footer -->
+        <!--
         <footer class="bg-white border-t border-gray-200 py-6">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center text-sm text-gray-500">
@@ -107,6 +113,7 @@
                 </div>
             </div>
         </footer>
+        -->
     </div>
 
     <!-- Alpine.js (for dropdowns and toggle functionality) -->
