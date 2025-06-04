@@ -83,4 +83,14 @@ class User extends Authenticatable implements MustVerifyEmail
             ->withTimestamps();
     }
 
+    /**
+     * Check if the user is a super admin.
+     * 
+     * @return bool
+     */
+    public function isSuperAdmin()
+    {
+        return $this->hasRole('superadmin');
+    }
+
 }

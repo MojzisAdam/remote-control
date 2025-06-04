@@ -14,6 +14,9 @@ class Kernel extends ConsoleKernel
     {
         // Prune old traffic logs daily
         $schedule->command('traffic:prune')->daily();
+
+        // Clean up old update versions weekly
+        $schedule->command('updates:cleanup')->weekly();
     }
 
     /**
