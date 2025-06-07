@@ -94,13 +94,15 @@ class UpdateManagerService
                 }
             }
         }
-
         // Log the action
         $this->logAction('branch_update', $branch->id, null, [
             'old_name' => $oldName,
             'new_name' => $newName,
             'is_active' => $branch->is_active,
         ]);
+
+        // Regenerate the manifest to update the branch_active status
+        $this->generateManifest($branch);
 
         return $branch;
     }
