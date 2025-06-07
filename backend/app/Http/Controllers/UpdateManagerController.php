@@ -102,7 +102,15 @@ class UpdateManagerController extends Controller
             'is_active' => ['boolean'],
         ]);
 
+        // Set is_active to false if not present in the request (checkbox unchecked)
+        if (!$request->has('is_active')) {
+            $validated['is_active'] = false;
+        }
+
         $branch = $this->updateManager->updateBranch($branch, $validated);
+
+        // Regenerate the manifest to update the branch_active status
+        $this->updateManager->generateManifest($branch);
 
         return redirect()->route('update_manager.branches.list')
             ->with('success', "Branch '{$branch->name}' has been updated.");

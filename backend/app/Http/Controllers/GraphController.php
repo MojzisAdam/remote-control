@@ -299,10 +299,10 @@ class GraphController extends Controller
             'obd' => 'required|numeric',
             'chyba' => 'required|numeric',
             'PT' => 'nullable|numeric',
-            'PPT' => 'required|numeric',
-            'RPT' => 'required|numeric',
-            'Prtk' => 'required|numeric',
-            'TpnVk' => 'required|numeric',
+            'PPT' => 'nullable|numeric',
+            'RPT' => 'nullable|numeric',
+            'Prtk' => 'nullable|numeric',
+            'TpnVk' => 'nullable|numeric',
         ]);
 
         $validated['cas'] = Carbon::now();

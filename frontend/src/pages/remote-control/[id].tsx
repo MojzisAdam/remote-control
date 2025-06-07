@@ -47,11 +47,11 @@ const RemoteControlPage: React.FC = () => {
 						<>
 							{currentDevice && currentDevice.display_type == "2" ? (
 								<>
-									<RemoteControlMqtt deviceId={deviceId as string} />
+									<RemoteControlMqtt deviceId={(deviceId ?? "").toUpperCase()} />
 								</>
 							) : (
 								<>
-									<RemoteControlMqttRpi deviceId={deviceId as string} />
+									<RemoteControlMqttRpi deviceId={(deviceId ?? "").toLowerCase()} />
 								</>
 							)}
 						</>
