@@ -32,6 +32,23 @@ export const useDevices = () => {
 		in_error: 0,
 	});
 
+	// Helper function to sort devices consistently
+	const sortDevices = (devicesToSort: Device[]): Device[] => {
+		return [...devicesToSort].sort((a, b) => {
+			// First compare by own_name (devices with own_name come first)
+			if (a.own_name && b.own_name) {
+				return a.own_name.localeCompare(b.own_name);
+			}
+
+			// Devices with own_name come before those without
+			if (a.own_name && !b.own_name) return -1;
+			if (!a.own_name && b.own_name) return 1;
+
+			// If neither has own_name, sort by id
+			return a.id.localeCompare(b.id);
+		});
+	};
+
 	// Fetch all devices added by the user
 	const fetchUserDevices = async (): Promise<ApiHandlerResult> => {
 		setLoading(true);
@@ -48,7 +65,7 @@ export const useDevices = () => {
 				status: getDeviceStatus(device),
 			}));
 
-			setDevices(processedDevices);
+			setDevices(sortDevices(processedDevices));
 		}
 		setLoading(false);
 		return result;
@@ -77,7 +94,7 @@ export const useDevices = () => {
 				status: getDeviceStatus(device),
 			}));
 
-			setDevices(processedDevices);
+			setDevices(sortDevices(processedDevices));
 		}
 		setLoading(false);
 		return result;
@@ -239,7 +256,10 @@ export const useDevices = () => {
 	};
 
 	const updateDeviceList = (updatedDevice: Device) => {
-		setDevices((prevDevices) => prevDevices.map((device) => (device.id === updatedDevice.id ? updatedDevice : device)));
+		setDevices((prevDevices) => {
+			const newDevices = prevDevices.map((device) => (device.id === updatedDevice.id ? updatedDevice : device));
+			return sortDevices(newDevices);
+		});
 	};
 
 	// Delete a device from the user's list
@@ -319,7 +339,7 @@ export const useDevices = () => {
 		loading,
 		error,
 		summary,
-		setDevices,
+		setDevices: (newDevices: Device[]) => setDevices(sortDevices(newDevices)),
 		fetchUserDevices,
 		fetchDevicesWithFilters,
 		getDeviceSummary,
