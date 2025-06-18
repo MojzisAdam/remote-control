@@ -1,0 +1,11 @@
+{
+  "confirm-twofa-modal": {
+    "title": "Potvrzení dvoufaktorového ověření",
+    "description": "Než budete moci vstoupit do aplikace, musíte zadat kód dvoufaktorového ověření.",
+    "code": "Kód",
+    "enter-code": "Zadejte kód",
+    "enter-recovery-code": "Zadejte obnovovací kód",
+    "use-recovery-code": "Použít obnovovací kód",
+    "save-changes": "Uložit změny"
+  }
+}

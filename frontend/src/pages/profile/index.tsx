@@ -9,6 +9,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Separator } from "@/components/ui/separator";
 import TwoFactor from "@/components/profile/two-factor";
 import usePageTitle from "@/hooks/usePageTitle";
+import { useTranslation } from "react-i18next";
 
 type InformationFormData = {
 	first_name: string;
@@ -18,6 +19,7 @@ type InformationFormData = {
 
 const Profile: React.FC = () => {
 	const { user, changeInformations, loading, changePassword } = useAuth();
+	const { t } = useTranslation("profile");
 
 	const [errorsInf, setErrorsInf] = useState<Record<string, string[]>>({});
 	const [statusInf, setStatusInf] = useState<string | null>(null);
@@ -27,7 +29,7 @@ const Profile: React.FC = () => {
 		email: user?.email || "",
 	});
 
-	usePageTitle("Profile");
+	usePageTitle(t("page-title"));
 
 	const submitInformationForm = async (event: React.FormEvent) => {
 		event.preventDefault();
@@ -71,14 +73,14 @@ const Profile: React.FC = () => {
 	return (
 		<>
 			<div className="flex flex-col gap-8">
-				<h1 className="text-2xl font-bold flex flex-wrap items-center gap-2 max-sm:text-xl">Profile</h1>
+				<h1 className="text-2xl font-bold flex flex-wrap items-center gap-2 max-sm:text-xl">{t("profile-heading")}</h1>
 				<div className="flex flex-col gap-12">
 					{/* Profile Information */}
 					<div>
 						<Card className="max-w-[800px]">
 							<CardHeader>
-								<CardTitle>Profile information</CardTitle>
-								<CardDescription>Update your accounts profile information and email address. If you are going to change your e-mail you will have to verify it.</CardDescription>
+								<CardTitle>{t("profile-info-card.title")}</CardTitle>
+								<CardDescription>{t("profile-info-card.description")}</CardDescription>
 							</CardHeader>
 							<CardContent>
 								<div>
@@ -93,7 +95,7 @@ const Profile: React.FC = () => {
 									<div className="gap-4 flex flex-col">
 										{/* First Name */}
 										<div>
-											<Label htmlFor="first_name">First name</Label>
+											<Label htmlFor="first_name">{t("profile-info-card.first-name")}</Label>
 											<Input
 												id="first_name"
 												type="text"
@@ -112,7 +114,7 @@ const Profile: React.FC = () => {
 										</div>
 										{/* Last Name */}
 										<div>
-											<Label htmlFor="last_name">First name</Label>
+											<Label htmlFor="last_name">{t("profile-info-card.last-name")}</Label>
 											<Input
 												id="last_name"
 												type="text"
@@ -131,7 +133,7 @@ const Profile: React.FC = () => {
 										</div>
 										{/* Email Address */}
 										<div>
-											<Label htmlFor="email">E-mail</Label>
+											<Label htmlFor="email">{t("profile-info-card.email")}</Label>
 											<Input
 												id="email"
 												type="email"
@@ -155,7 +157,7 @@ const Profile: React.FC = () => {
 										<ButtonWithSpinner
 											className="py-3 font-medium"
 											isLoading={loading}
-											label="Save changes"
+											label={t("profile-info-card.save-changes")}
 										/>
 									</div>
 								</form>
@@ -165,8 +167,8 @@ const Profile: React.FC = () => {
 					{/* Password Change Form */}
 					<Card className="max-w-[800px]">
 						<CardHeader>
-							<CardTitle>Change Password</CardTitle>
-							<CardDescription>Change your password. After succesfull password change you will be logged out on all divices.</CardDescription>
+							<CardTitle>{t("password-card.title")}</CardTitle>
+							<CardDescription>{t("password-card.description")}</CardDescription>
 						</CardHeader>
 						<CardContent>
 							<div>
@@ -180,7 +182,7 @@ const Profile: React.FC = () => {
 							<form onSubmit={submitPasswordForm}>
 								<div className="gap-4 flex flex-col">
 									<div>
-										<Label htmlFor="current_password">Current Password</Label>
+										<Label htmlFor="current_password">{t("password-card.current-password")}</Label>
 										<Input
 											id="current_password"
 											type="password"
@@ -192,7 +194,7 @@ const Profile: React.FC = () => {
 										{passwordErrors.current_password && <InputError messages={passwordErrors.current_password} />}
 									</div>
 									<div>
-										<Label htmlFor="password">New Password</Label>
+										<Label htmlFor="password">{t("password-card.new-password")}</Label>
 										<Input
 											id="password"
 											type="password"
@@ -204,7 +206,7 @@ const Profile: React.FC = () => {
 										{passwordErrors.password && <InputError messages={passwordErrors.password} />}
 									</div>
 									<div>
-										<Label htmlFor="password_confirmation">Confirm Password</Label>
+										<Label htmlFor="password_confirmation">{t("password-card.confirm-password")}</Label>
 										<Input
 											id="password_confirmation"
 											type="password"
@@ -219,7 +221,7 @@ const Profile: React.FC = () => {
 								<Separator className="my-6" />
 								<ButtonWithSpinner
 									isLoading={loading}
-									label="Change Password"
+									label={t("password-card.change-button")}
 								/>
 							</form>
 						</CardContent>

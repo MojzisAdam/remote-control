@@ -9,6 +9,7 @@ import ButtonWithSpinner from "@/components/ButtonWithSpinner";
 import { CodeData } from "@/api/user/model";
 import { Checkbox } from "@/components/ui/checkbox";
 import AuthSessionStatus from "../AuthSessionStatus";
+import { useTranslation } from "react-i18next";
 
 type ConfirmTwoFAModalProps = {
 	onSuccess?: (() => void) | null;
@@ -18,6 +19,7 @@ type ConfirmTwoFAModalProps = {
 
 export function ConfirmTwoFAModal({ onSuccess, open, onOpenChange }: ConfirmTwoFAModalProps) {
 	const { twoFactorChallenge, loading } = useAuth();
+	const { t } = useTranslation("login");
 
 	const [code, setCode] = useState("");
 	const [useRecoveryCode, setUseRecoveryCode] = useState(false);
@@ -54,19 +56,40 @@ export function ConfirmTwoFAModal({ onSuccess, open, onOpenChange }: ConfirmTwoF
 
 		onOpenChange(open);
 	};
-
 	return (
-		<Dialog open={open} onOpenChange={customOnOpenChange}>
+		<Dialog
+			open={open}
+			onOpenChange={customOnOpenChange}
+		>
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>
-					<DialogTitle>Confirm Two-Factor Authentication</DialogTitle>
-					<DialogDescription>Before you can enter application you need to enter you two-factor authentication code.</DialogDescription>
+					<DialogTitle>{t("confirm-twofa-modal.title")}</DialogTitle>
+					<DialogDescription>{t("confirm-twofa-modal.description")}</DialogDescription>
 				</DialogHeader>
-				<div>{status && <AuthSessionStatus className="" status={status} />}</div>
 				<div>
-					<Label htmlFor="password">Code</Label>
-					<Input className="block mt-1 w-full" name="code" type="text" required onChange={(e) => setCode(e.target.value)} placeholder={`Enter ${useRecoveryCode ? "Recovery " : ""}Code`} />
-					{errors.code && <InputError messages={errors.code} className="mt-2" />}
+					{status && (
+						<AuthSessionStatus
+							className=""
+							status={status}
+						/>
+					)}
+				</div>
+				<div>
+					<Label htmlFor="password">{t("confirm-twofa-modal.code")}</Label>
+					<Input
+						className="block mt-1 w-full"
+						name="code"
+						type="text"
+						required
+						onChange={(e) => setCode(e.target.value)}
+						placeholder={useRecoveryCode ? t("confirm-twofa-modal.enter-recovery-code") : t("confirm-twofa-modal.enter-code")}
+					/>
+					{errors.code && (
+						<InputError
+							messages={errors.code}
+							className="mt-2"
+						/>
+					)}
 				</div>
 
 				<DialogFooter>
@@ -80,11 +103,19 @@ export function ConfirmTwoFAModal({ onSuccess, open, onOpenChange }: ConfirmTwoF
 									setUseRecoveryCode(checked as boolean);
 								}}
 							/>
-							<label htmlFor="terms" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-								Use Recovery Code
+							<label
+								htmlFor="terms"
+								className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+							>
+								{t("confirm-twofa-modal.use-recovery-code")}
 							</label>
 						</div>
-						<ButtonWithSpinner onClick={() => submitForm()} className="py-3 font-medium" isLoading={loading} label="Save changes" />
+						<ButtonWithSpinner
+							onClick={() => submitForm()}
+							className="py-3 font-medium"
+							isLoading={loading}
+							label={t("confirm-twofa-modal.save-changes")}
+						/>
 					</div>
 				</DialogFooter>
 			</DialogContent>

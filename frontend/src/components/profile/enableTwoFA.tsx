@@ -5,6 +5,7 @@ import ButtonWithSpinner from "@/components/ButtonWithSpinner";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import InputError from "@/components/InputError";
+import { useTranslation } from "react-i18next";
 
 type EnableTwoFAProps = {
 	settingPhase: "enable" | "disable" | "setting" | "set" | "setCodes";
@@ -12,7 +13,19 @@ type EnableTwoFAProps = {
 };
 
 const EnableTwoFA: React.FC<EnableTwoFAProps> = ({ settingPhase, setSettingPhase }) => {
-	const { user, loading, confirmTwoFactorAuthentication, regenerateTwoFactorRecoveryCodes, disableTwoFactorAuthentication, getConfirmedPasswordStatus, enableTwoFactorAuthentication, getTwoFactorSecretKey, getTwoFactorQrCode, getTwoFactorRecoveryCodes } = useAuth();
+	const {
+		user,
+		loading,
+		confirmTwoFactorAuthentication,
+		regenerateTwoFactorRecoveryCodes,
+		disableTwoFactorAuthentication,
+		getConfirmedPasswordStatus,
+		enableTwoFactorAuthentication,
+		getTwoFactorSecretKey,
+		getTwoFactorQrCode,
+		getTwoFactorRecoveryCodes,
+	} = useAuth();
+	const { t } = useTranslation("profile");
 
 	const [open, setOpen] = useState(false);
 	const [qrCode, setQrCode] = useState("");
@@ -161,41 +174,75 @@ const EnableTwoFA: React.FC<EnableTwoFAProps> = ({ settingPhase, setSettingPhase
 
 		setSettingPhase("enable");
 	};
-
 	return (
 		<div>
 			{settingPhase === "setting" && (
 				<div className="flex flex-col gap-6">
-					<p className="text-sm font-semibold">To finish enabilin two factor authentication, scan the following QR code using your phones authenticator application or enter the setup key and provide the generated OTP code.</p>
+					<p className="text-sm font-semibold">{t("two-factor.finish-instructions")}</p>
 					<div className="bg-white p-2 w-fit">{qrCode && <span dangerouslySetInnerHTML={{ __html: qrCode }} />}</div>
 					{secretKey && (
 						<p className="text-base">
-							<span>Setup Key:</span> {secretKey}
+							<span>{t("two-factor.setup-key")}</span> {secretKey}
 						</p>
 					)}
 					<div>
-						<Label htmlFor="password">Code</Label>
-						<Input id="setUpCode" type="text" value={setUpCode} className="block w-full" onChange={(e) => setSetUpCode(e.target.value)} required autoComplete="current-password" />
-						{setUpCodeErrors.code && <InputError messages={setUpCodeErrors.code} className="mt-2" />}
+						<Label htmlFor="password">{t("two-factor.code")}</Label>
+						<Input
+							id="setUpCode"
+							type="text"
+							value={setUpCode}
+							className="block w-full"
+							onChange={(e) => setSetUpCode(e.target.value)}
+							required
+							autoComplete="current-password"
+						/>
+						{setUpCodeErrors.code && (
+							<InputError
+								messages={setUpCodeErrors.code}
+								className="mt-2"
+							/>
+						)}
 					</div>
 					<div className="flex gap-4">
-						<ButtonWithSpinner onClick={confirmTFA} className="py-3 font-medium w-32" isLoading={loading} label="Confirm" />
-						<ButtonWithSpinner variant="secondary" onClick={disableTFA} className="py-3 font-medium w-32" isLoading={loading} label="Cancel" />
+						<ButtonWithSpinner
+							onClick={confirmTFA}
+							className="py-3 font-medium w-32"
+							isLoading={loading}
+							label={t("two-factor.confirm")}
+						/>
+						<ButtonWithSpinner
+							variant="secondary"
+							onClick={disableTFA}
+							className="py-3 font-medium w-32"
+							isLoading={loading}
+							label={t("two-factor.cancel")}
+						/>
 					</div>
 				</div>
 			)}
 
 			{settingPhase === "setCodes" && (
 				<div className="flex flex-col gap-6">
-					<p className="text-sm font-semibold">Store these recovery codes in a secure password mannager. They can be used to recover access to your accoutn if your two factor authnetication device is lost.</p>
+					<p className="text-sm font-semibold">{t("two-factor.recovery-instructions")}</p>
 					<div className="flex flex-col gap-2 w-full bg-gray-100 dark:bg-zinc-900 rounded-md p-4 py-6">
 						{recoveryCodes.map((recoveryCode) => (
 							<div key={recoveryCode}>{recoveryCode}</div>
 						))}
 					</div>
 					<div className="flex gap-4">
-						<ButtonWithSpinner onClick={regenerateRecoveryCodes} className="py-3 font-medium " isLoading={loading} label="Regenerate recovery codes" />
-						<ButtonWithSpinner variant="destructive" onClick={disableTFA} className="py-3 font-medium w-32" isLoading={loading} label="Disable" />
+						<ButtonWithSpinner
+							onClick={regenerateRecoveryCodes}
+							className="py-3 font-medium "
+							isLoading={loading}
+							label={t("two-factor.regenerate-codes")}
+						/>
+						<ButtonWithSpinner
+							variant="destructive"
+							onClick={disableTFA}
+							className="py-3 font-medium w-32"
+							isLoading={loading}
+							label={t("two-factor.disable")}
+						/>
 					</div>
 				</div>
 			)}
@@ -203,19 +250,39 @@ const EnableTwoFA: React.FC<EnableTwoFAProps> = ({ settingPhase, setSettingPhase
 			{settingPhase === "set" && (
 				<div className="flex flex-col gap-4">
 					<div className="flex gap-4">
-						<ButtonWithSpinner onClick={showRecoveryCodes} className="py-3 font-medium " isLoading={loading} label="Show recovery codes" />
-						<ButtonWithSpinner variant="destructive" onClick={disableTFA} className="py-3 font-medium w-32" isLoading={loading} label="Disable" />
+						<ButtonWithSpinner
+							onClick={showRecoveryCodes}
+							className="py-3 font-medium "
+							isLoading={loading}
+							label={t("two-factor.show-codes")}
+						/>
+						<ButtonWithSpinner
+							variant="destructive"
+							onClick={disableTFA}
+							className="py-3 font-medium w-32"
+							isLoading={loading}
+							label={t("two-factor.disable")}
+						/>
 					</div>
 				</div>
 			)}
 
 			{settingPhase === "enable" && (
 				<div>
-					<ButtonWithSpinner onClick={enable} className="py-3 font-medium" isLoading={loading} label="Enable" />
+					<ButtonWithSpinner
+						onClick={enable}
+						className="py-3 font-medium"
+						isLoading={loading}
+						label={t("two-factor.enable")}
+					/>
 				</div>
 			)}
 
-			<ConfirmPasswordModal onSuccess={onSuccessModal} open={open} onOpenChange={setOpen} />
+			<ConfirmPasswordModal
+				onSuccess={onSuccessModal}
+				open={open}
+				onOpenChange={setOpen}
+			/>
 		</div>
 	);
 };
