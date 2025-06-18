@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import InputError from "@/components/InputError";
 import ButtonWithSpinner from "@/components/ButtonWithSpinner";
 import AuthSessionStatus from "@/components/AuthSessionStatus";
+import { useTranslation } from "react-i18next";
 
 type ConfirmPasswordModalProps = {
 	onSuccess?: (() => void) | null;
@@ -15,6 +16,7 @@ type ConfirmPasswordModalProps = {
 
 export function ConfirmPasswordModal({ onSuccess, open, onOpenChange }: ConfirmPasswordModalProps) {
 	const { confirmPassword, loading } = useAuth();
+	const { t } = useTranslation("profile");
 
 	const [password, setPassword] = useState<string>("");
 	const [errors, setErrors] = useState<Record<string, string[]>>({});
@@ -35,20 +37,46 @@ export function ConfirmPasswordModal({ onSuccess, open, onOpenChange }: ConfirmP
 	};
 
 	return (
-		<Dialog open={open} onOpenChange={onOpenChange}>
+		<Dialog
+			open={open}
+			onOpenChange={onOpenChange}
+		>
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>
-					<DialogTitle>Confirm Password</DialogTitle>
-					<DialogDescription>Before you can modify two factor authentication, we need your password.</DialogDescription>
+					<DialogTitle>{t("confirm-password-modal.title")}</DialogTitle>
+					<DialogDescription>{t("confirm-password-modal.description")}</DialogDescription>
 				</DialogHeader>
 				<div>
-					{status && <AuthSessionStatus className="mb-4" status={status} />}
-					<Label htmlFor="password">Password</Label>
-					<Input id="password" type="password" value={password} className="block mt-1 w-full" onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password" />
-					{errors.password && <InputError messages={errors.password} className="mt-2" />}
+					{status && (
+						<AuthSessionStatus
+							className="mb-4"
+							status={status}
+						/>
+					)}
+					<Label htmlFor="password">{t("confirm-password-modal.password")}</Label>
+					<Input
+						id="password"
+						type="password"
+						value={password}
+						className="block mt-1 w-full"
+						onChange={(e) => setPassword(e.target.value)}
+						required
+						autoComplete="current-password"
+					/>
+					{errors.password && (
+						<InputError
+							messages={errors.password}
+							className="mt-2"
+						/>
+					)}
 				</div>
 				<DialogFooter>
-					<ButtonWithSpinner onClick={() => submitForm()} className="py-3 font-medium" isLoading={loading} label="Save changes" />
+					<ButtonWithSpinner
+						onClick={() => submitForm()}
+						className="py-3 font-medium"
+						isLoading={loading}
+						label={t("confirm-password-modal.save-changes")}
+					/>
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>

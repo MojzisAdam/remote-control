@@ -1,0 +1,43 @@
+{
+  "page-title": "Profile",
+  "profile-heading": "Profile",
+  "profile-info-card": {
+    "title": "Profile information",
+    "description": "Update your accounts profile information and email address. If you are going to change your e-mail you will have to verify it.",
+    "first-name": "First name",
+    "last-name": "Last name",
+    "email": "E-mail",
+    "save-changes": "Save changes"
+  },
+  "password-card": {
+    "title": "Change Password",
+    "description": "Change your password. After successful password change you will be logged out on all devices.",
+    "current-password": "Current Password",
+    "new-password": "New Password",
+    "confirm-password": "Confirm Password",
+    "change-button": "Change Password"
+  },
+  "two-factor": {
+    "title": "Two-Factor Authentication",
+    "enabled": "Two-Factor Authentication is enabled",
+    "disabled": "Two-Factor Authentication is disabled",
+    "finish-enabling": "Finish enabling Two-Factor Authentication",
+    "description": "When two factor authentication is enabled, you will be prompted for a secure, random token during authentication. You may retrieve token from your phone's Google Authentication application.",
+    "finish-instructions": "To finish enabling two factor authentication, scan the following QR code using your phone's authenticator application or enter the setup key and provide the generated OTP code.",
+    "setup-key": "Setup Key:",
+    "code": "Code",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "recovery-instructions": "Store these recovery codes in a secure password manager. They can be used to recover access to your account if your two factor authentication device is lost.",
+    "regenerate-codes": "Regenerate recovery codes",
+    "disable": "Disable",
+    "show-codes": "Show recovery codes",
+    "enable": "Enable"
+  },
+  "confirm-password-modal": {
+    "title": "Confirm Password",
+    "description": "Before you can modify two factor authentication, we need your password.",
+    "password": "Password",
+    "save-changes": "Confirm"
+  }
+}

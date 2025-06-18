@@ -1,0 +1,11 @@
+{
+  "confirm-twofa-modal": {
+    "title": "Confirm Two-Factor Authentication",
+    "description": "Before you can enter application you need to enter your two-factor authentication code.",
+    "code": "Code",
+    "enter-code": "Enter Code",
+    "enter-recovery-code": "Enter Recovery Code",
+    "use-recovery-code": "Use Recovery Code",
+    "save-changes": "Save changes"
+  }
+}
