@@ -21,6 +21,18 @@
     "confirm-password": "Potvrdit heslo",
     "change-button": "Změnit heslo"
   },
+  "password-confirmation": {
+    "title": "Potvrdit změnu hesla",
+    "description": "Změna hesla vás odhlásí ze všech zařízení, kde jste aktuálně přihlášeni. Budete se muset znovu přihlásit pomocí nového hesla. Chcete pokračovat?",
+    "cancel": "Zrušit",
+    "confirm": "Ano, změnit heslo"
+  },
+  "email-confirmation": {
+    "title": "Potvrdit změnu e-mailu",
+    "description": "Změna e-mailu vyžaduje ověření nové adresy. Na novou e-mailovou adresu obdržíte ověřovací odkaz. Chcete pokračovat?",
+    "cancel": "Zrušit",
+    "confirm": "Ano, změnit e-mail"
+  },
   "two-factor": {
     "title": "Dvoufaktorové ověření",
     "enabled": "Dvoufaktorové ověření je povoleno",

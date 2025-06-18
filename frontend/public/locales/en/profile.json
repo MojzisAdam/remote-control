@@ -21,6 +21,18 @@
     "confirm-password": "Confirm Password",
     "change-button": "Change Password"
   },
+  "password-confirmation": {
+    "title": "Confirm Password Change",
+    "description": "Changing your password will log you out of all devices where you are currently logged in. You will need to log in again using your new password. Do you want to continue?",
+    "cancel": "Cancel",
+    "confirm": "Yes, Change Password"
+  },
+  "email-confirmation": {
+    "title": "Confirm Email Change",
+    "description": "Changing your email requires verification of the new address. You will receive a verification link on the new email address. Do you want to continue?",
+    "cancel": "Cancel",
+    "confirm": "Yes, Change Email"
+  },
   "two-factor": {
     "title": "Two-Factor Authentication",
     "enabled": "Two-Factor Authentication is enabled",

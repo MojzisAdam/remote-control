@@ -12,6 +12,7 @@ import TwoFactor from "@/components/profile/two-factor";
 import usePageTitle from "@/hooks/usePageTitle";
 import { useTranslation } from "react-i18next";
 import { useToast } from "@/hooks/use-toast";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 
 type InformationFormData = {
 	first_name: string;
@@ -34,13 +35,34 @@ const Profile: React.FC = () => {
 
 	usePageTitle(t("page-title"));
 
+	const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
+	const [showEmailConfirmation, setShowEmailConfirmation] = useState(false);
+	const [pendingEmailData, setPendingEmailData] = useState<InformationFormData | null>(null);
 	const submitInformationForm = async (event: React.FormEvent) => {
 		event.preventDefault();
 
+		// Check if email has been changed
+		if (informationFormData.email !== user?.email) {
+			setPendingEmailData(informationFormData);
+			setShowEmailConfirmation(true);
+			return;
+		}
+
+		// If only name is changed, submit directly
 		const result = await changeInformations(informationFormData);
 
 		setErrorsInf(result.errors || {});
 		setStatusInf(result.status || null);
+	};
+
+	const confirmEmailChange = async () => {
+		if (!pendingEmailData) return;
+
+		const result = await changeInformations(pendingEmailData);
+
+		setErrorsInf(result.errors || {});
+		setStatusInf(result.status || null);
+		setShowEmailConfirmation(false);
 	};
 
 	const handleChangeInformation = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,13 +86,19 @@ const Profile: React.FC = () => {
 			[e.target.name]: e.target.value,
 		});
 	};
-
 	const submitPasswordForm = async (event: React.FormEvent) => {
 		event.preventDefault();
 
+		// Show confirmation dialog before changing password
+		setShowPasswordConfirmation(true);
+	};
+
+	const confirmPasswordChange = async () => {
 		const result = await changePassword(passwordData);
 		setPasswordStatus(result.status || null);
 		setPasswordErrors(result.errors || {});
+		setShowPasswordConfirmation(false);
+
 		if (result.success) {
 			const resultLogout = await logout();
 			if (resultLogout.success) {
@@ -247,7 +275,74 @@ const Profile: React.FC = () => {
 				{/* Two-Factor Authentication Form */}
 				<TwoFactor />
 			</div>
+
+			{/* Confirmation Dialogs */}
+			<PasswordChangeConfirmation
+				open={showPasswordConfirmation}
+				onOpenChange={setShowPasswordConfirmation}
+				onConfirm={confirmPasswordChange}
+				t={t}
+			/>
+
+			<EmailChangeConfirmation
+				open={showEmailConfirmation}
+				onOpenChange={setShowEmailConfirmation}
+				onConfirm={confirmEmailChange}
+				t={t}
+			/>
 		</>
+	);
+};
+
+// Password Change Confirmation Dialog
+const PasswordChangeConfirmation: React.FC<{
+	open: boolean;
+	onOpenChange: (open: boolean) => void;
+	onConfirm: () => void;
+	t: (key: string) => string;
+}> = ({ open, onOpenChange, onConfirm, t }) => {
+	return (
+		<AlertDialog
+			open={open}
+			onOpenChange={onOpenChange}
+		>
+			<AlertDialogContent>
+				<AlertDialogHeader>
+					<AlertDialogTitle>{t("password-confirmation.title")}</AlertDialogTitle>
+					<AlertDialogDescription>{t("password-confirmation.description")}</AlertDialogDescription>
+				</AlertDialogHeader>
+				<AlertDialogFooter>
+					<AlertDialogCancel>{t("password-confirmation.cancel")}</AlertDialogCancel>
+					<AlertDialogAction onClick={onConfirm}>{t("password-confirmation.confirm")}</AlertDialogAction>
+				</AlertDialogFooter>
+			</AlertDialogContent>
+		</AlertDialog>
+	);
+};
+
+// Email Change Confirmation Dialog
+const EmailChangeConfirmation: React.FC<{
+	open: boolean;
+	onOpenChange: (open: boolean) => void;
+	onConfirm: () => void;
+	t: (key: string) => string;
+}> = ({ open, onOpenChange, onConfirm, t }) => {
+	return (
+		<AlertDialog
+			open={open}
+			onOpenChange={onOpenChange}
+		>
+			<AlertDialogContent>
+				<AlertDialogHeader>
+					<AlertDialogTitle>{t("email-confirmation.title")}</AlertDialogTitle>
+					<AlertDialogDescription>{t("email-confirmation.description")}</AlertDialogDescription>
+				</AlertDialogHeader>
+				<AlertDialogFooter>
+					<AlertDialogCancel>{t("email-confirmation.cancel")}</AlertDialogCancel>
+					<AlertDialogAction onClick={onConfirm}>{t("email-confirmation.confirm")}</AlertDialogAction>
+				</AlertDialogFooter>
+			</AlertDialogContent>
+		</AlertDialog>
 	);
 };
 

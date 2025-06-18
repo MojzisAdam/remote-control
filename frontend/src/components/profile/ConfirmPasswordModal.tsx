@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, KeyboardEvent } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
@@ -22,6 +22,13 @@ export function ConfirmPasswordModal({ onSuccess, open, onOpenChange }: ConfirmP
 	const [password, setPassword] = useState<string>("");
 	const [errors, setErrors] = useState<Record<string, string[]>>({});
 	const [status, setStatus] = useState<string | null>(null);
+
+	const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === "Enter") {
+			e.preventDefault();
+			submitForm();
+		}
+	};
 
 	const submitForm = async () => {
 		const result = await confirmPassword(password);
@@ -60,6 +67,7 @@ export function ConfirmPasswordModal({ onSuccess, open, onOpenChange }: ConfirmP
 						value={password}
 						className="block mt-1 w-full"
 						onChange={(e) => setPassword(e.target.value)}
+						onKeyDown={handleKeyDown}
 						required
 						autoComplete="current-password"
 					/>
