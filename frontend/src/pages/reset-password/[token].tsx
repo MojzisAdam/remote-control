@@ -9,6 +9,7 @@ import { useParams, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
 import ButtonWithSpinner from "@/components/ButtonWithSpinner";
 import usePageTitle from "@/hooks/usePageTitle";
@@ -88,9 +89,8 @@ const PasswordReset: React.FC = () => {
 						{/* Password */}
 						<div className="mt-4">
 							<Label htmlFor="password">{t("password-reset.password")}</Label>
-							<Input
+							<PasswordInput
 								id="password"
-								type="password"
 								value={password}
 								className="block mt-1 w-full"
 								onChange={(event) => setPassword(event.target.value)}
@@ -107,9 +107,8 @@ const PasswordReset: React.FC = () => {
 						<div className="mt-4">
 							<Label htmlFor="passwordConfirmation">{t("password-reset.password-confirmation")}</Label>
 
-							<Input
+							<PasswordInput
 								id="passwordConfirmation"
-								type="password"
 								value={passwordConfirmation}
 								className="block mt-1 w-full"
 								onChange={(event) => setPasswordConfirmation(event.target.value)}

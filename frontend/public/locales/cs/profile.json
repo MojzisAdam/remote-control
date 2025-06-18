@@ -1,6 +1,10 @@
 {
   "page-title": "Profil",
   "profile-heading": "Profil",
+  "logoutSuccess": "Heslo úspěšně změněno",
+  "logoutSuccessDescription": "Vaše heslo bylo změněno. Přihlaste se prosím znovu pomocí nového hesla.",
+  "logoutFailed": "Chyba odhlášení",
+  "logoutFailedDescription": "Heslo bylo úspěšně změněno, ale nastala chyba při odhlašování. Prosím, obnovte stránku.",
   "profile-info-card": {
     "title": "Informace o profilu",
     "description": "Aktualizujte informace o svém účtu a e-mailovou adresu. Pokud změníte svůj e-mail, budete ho muset ověřit.",

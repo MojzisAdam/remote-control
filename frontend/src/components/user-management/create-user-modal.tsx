@@ -11,6 +11,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useUserManagement } from "@/hooks/useUserManagement";
 import { formatName, readableRoleNames, readablePermissionNames, getDefaultPermissionsForRole, allPermissions } from "@/utils/permissionUtils";
+import { PasswordInput } from "@/components/ui/password-input";
 
 type CreateUserModalProps = {
 	onSuccess: (email: string) => void;
@@ -220,10 +221,9 @@ export function CreateUserModal({ onSuccess, open, onOpenChange }: CreateUserMod
 						<div>
 							<Label htmlFor="password">{t("userManagement.createUser.password")}</Label>
 
-							<Input
+							<PasswordInput
 								id="password"
 								name="password"
-								type="password"
 								value={informationFormData.password}
 								className="block mt-1 w-full"
 								onChange={handleChangeInformation}
@@ -241,10 +241,9 @@ export function CreateUserModal({ onSuccess, open, onOpenChange }: CreateUserMod
 						<div>
 							<Label htmlFor="password_confirmation">{t("userManagement.createUser.confirmPassword")}</Label>
 
-							<Input
+							<PasswordInput
 								id="password_confirmation"
 								name="password_confirmation"
-								type="password"
 								value={informationFormData.password_confirmation}
 								className="block mt-1 w-full"
 								onChange={handleChangeInformation}

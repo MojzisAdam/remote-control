@@ -1,6 +1,10 @@
 {
   "page-title": "Profile",
   "profile-heading": "Profile",
+  "logoutSuccess": "Password changed successfully",
+  "logoutSuccessDescription": "Your password has been changed. Please login again using your new password.",
+  "logoutFailed": "Logout error",
+  "logoutFailedDescription": "Password was changed successfully, but there was an error logging you out. Please refresh the page.",
   "profile-info-card": {
     "title": "Profile information",
     "description": "Update your accounts profile information and email address. If you are going to change your e-mail you will have to verify it.",

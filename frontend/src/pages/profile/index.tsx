@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
 import AuthSessionStatus from "@/components/AuthSessionStatus";
 import ButtonWithSpinner from "@/components/ButtonWithSpinner";
@@ -10,6 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import TwoFactor from "@/components/profile/two-factor";
 import usePageTitle from "@/hooks/usePageTitle";
 import { useTranslation } from "react-i18next";
+import { useToast } from "@/hooks/use-toast";
 
 type InformationFormData = {
 	first_name: string;
@@ -18,8 +20,9 @@ type InformationFormData = {
 };
 
 const Profile: React.FC = () => {
-	const { user, changeInformations, loading, changePassword } = useAuth();
+	const { user, changeInformations, loading, changePassword, logout } = useAuth();
 	const { t } = useTranslation("profile");
+	const { toast } = useToast();
 
 	const [errorsInf, setErrorsInf] = useState<Record<string, string[]>>({});
 	const [statusInf, setStatusInf] = useState<string | null>(null);
@@ -68,6 +71,20 @@ const Profile: React.FC = () => {
 		const result = await changePassword(passwordData);
 		setPasswordStatus(result.status || null);
 		setPasswordErrors(result.errors || {});
+		if (result.success) {
+			const resultLogout = await logout();
+			if (resultLogout.success) {
+				toast({
+					title: t("logoutSuccess"),
+					description: t("logoutSuccessDescription"),
+				});
+			} else {
+				toast({
+					title: t("logoutFailed"),
+					description: t("logoutFailedDescription"),
+				});
+			}
+		}
 	};
 
 	return (
@@ -182,10 +199,10 @@ const Profile: React.FC = () => {
 							<form onSubmit={submitPasswordForm}>
 								<div className="gap-4 flex flex-col">
 									<div>
+										{" "}
 										<Label htmlFor="current_password">{t("password-card.current-password")}</Label>
-										<Input
+										<PasswordInput
 											id="current_password"
-											type="password"
 											name="current_password"
 											value={passwordData.current_password}
 											onChange={handlePasswordChange}
@@ -194,10 +211,10 @@ const Profile: React.FC = () => {
 										{passwordErrors.current_password && <InputError messages={passwordErrors.current_password} />}
 									</div>
 									<div>
+										{" "}
 										<Label htmlFor="password">{t("password-card.new-password")}</Label>
-										<Input
+										<PasswordInput
 											id="password"
-											type="password"
 											name="password"
 											value={passwordData.password}
 											onChange={handlePasswordChange}
@@ -206,10 +223,10 @@ const Profile: React.FC = () => {
 										{passwordErrors.password && <InputError messages={passwordErrors.password} />}
 									</div>
 									<div>
+										{" "}
 										<Label htmlFor="password_confirmation">{t("password-card.confirm-password")}</Label>
-										<Input
+										<PasswordInput
 											id="password_confirmation"
-											type="password"
 											name="password_confirmation"
 											value={passwordData.password_confirmation}
 											onChange={handlePasswordChange}

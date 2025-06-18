@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
 import InputError from "@/components/InputError";
@@ -52,11 +53,10 @@ export function ConfirmPasswordModal({ onSuccess, open, onOpenChange }: ConfirmP
 							className="mb-4"
 							status={status}
 						/>
-					)}
+					)}{" "}
 					<Label htmlFor="password">{t("confirm-password-modal.password")}</Label>
-					<Input
+					<PasswordInput
 						id="password"
-						type="password"
 						value={password}
 						className="block mt-1 w-full"
 						onChange={(e) => setPassword(e.target.value)}

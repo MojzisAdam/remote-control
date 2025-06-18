@@ -8,6 +8,7 @@ import InputError from "@/components/InputError";
 import { Separator } from "@/components/ui/separator";
 import { useDevices } from "@/hooks/useDevices";
 import { useTranslation } from "react-i18next";
+import { PasswordInput } from "@/components/ui/password-input";
 
 interface AddDeviceModalProps {
 	onSuccess: (deviceId: string) => void;
@@ -106,10 +107,9 @@ export function AddDeviceModal({ onSuccess, open, onOpenChange }: AddDeviceModal
 					<div>
 						<Label htmlFor="devicePass">{t("add-device-modal.password-placeholder")}</Label>
 
-						<Input
+						<PasswordInput
 							id="devicePass"
 							name="devicePass"
-							type="password"
 							value={devicePass}
 							className="block mt-1 w-full"
 							onChange={(e) => setDevicePass(e.target.value)}
