@@ -8,6 +8,7 @@ import { useUserManagement } from "@/hooks/useUserManagement";
 import InputError from "@/components/InputError";
 import AuthSessionStatus from "@/components/AuthSessionStatus";
 import { useTranslation } from "react-i18next";
+import { PasswordInput } from "@/components/ui/password-input";
 
 interface ResetUserPasswordModalProps {
 	open: boolean;
@@ -93,10 +94,9 @@ export function ResetUserPasswordModal({ open, onOpenChange, onSuccess, data }: 
 						{/* Password */}
 						<div>
 							<Label htmlFor="password">{t("userManagement.resetPassword.password")}</Label>
-							<Input
+							<PasswordInput
 								id="password"
 								name="password"
-								type="password"
 								value={passwordFormData.password}
 								className="mt-1 w-full"
 								onChange={handleChange}
@@ -114,10 +114,9 @@ export function ResetUserPasswordModal({ open, onOpenChange, onSuccess, data }: 
 						{/* Confirm Password */}
 						<div>
 							<Label htmlFor="password_confirmation">{t("userManagement.resetPassword.passwordConfirmation")}</Label>
-							<Input
+							<PasswordInput
 								id="password_confirmation"
 								name="password_confirmation"
-								type="password"
 								value={passwordFormData.password_confirmation}
 								className="mt-1 w-full"
 								onChange={handleChange}

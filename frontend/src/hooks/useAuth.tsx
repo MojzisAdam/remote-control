@@ -99,10 +99,10 @@ export const useAuth = () => {
 		const result = await handleApiRequest({
 			apiCall: logoutUser,
 			onSuccess: () => {
+				setUser(null);
 				const currentPath = location.pathname + location.search;
 				const redirectValue = currentPath !== "/login" ? currentPath : "/";
 				navigate(`/login?redirect=${encodeURIComponent(redirectValue)}`, { replace: true });
-				setUser(null);
 			},
 			successMessage: null,
 		});

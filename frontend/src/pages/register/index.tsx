@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import usePageTitle from "@/hooks/usePageTitle";
@@ -136,19 +137,17 @@ const Register: React.FC = () => {
 
 							{/* Password */}
 							<div>
+								{" "}
 								<Label htmlFor="password">{t("register.password")}</Label>
-
-								<Input
+								<PasswordInput
 									id="password"
 									name="password"
-									type="password"
 									value={formData.password}
 									className="block mt-1 w-full"
 									onChange={handleChange}
 									required
 									autoComplete="new-password"
 								/>
-
 								<InputError
 									messages={errors.password}
 									className="mt-2"
@@ -157,18 +156,16 @@ const Register: React.FC = () => {
 
 							{/* Confirm Password */}
 							<div>
+								{" "}
 								<Label htmlFor="password_confirmation">{t("register.password-confirmation")}</Label>
-
-								<Input
+								<PasswordInput
 									id="password_confirmation"
 									name="password_confirmation"
-									type="password"
 									value={formData.password_confirmation}
 									className="block mt-1 w-full"
 									onChange={handleChange}
 									required
 								/>
-
 								<InputError
 									messages={errors.password_confirmation}
 									className="mt-2"

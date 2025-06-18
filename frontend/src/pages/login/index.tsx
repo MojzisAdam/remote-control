@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
 import AuthSessionStatus from "@/components/AuthSessionStatus";
 import ButtonWithSpinner from "@/components/ButtonWithSpinner";
 import InputError from "@/components/InputError";
@@ -9,15 +8,12 @@ import { useTranslation } from "react-i18next";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
 import usePageTitle from "@/hooks/usePageTitle";
 import { ConfirmTwoFAModal } from "@/components/login/ConfirmTwoFAModal";
-import { syncLang } from "@/utils/syncLang";
 
 const Login: React.FC = () => {
-	const navigate = useNavigate();
-	const location = useLocation();
-
 	const { t } = useTranslation("user");
 	const { login, loadUser, user, loading } = useAuth();
 
@@ -91,14 +87,12 @@ const Login: React.FC = () => {
 											className="mt-2"
 										/>
 									)}
-								</div>
-
+								</div>{" "}
 								{/* Password */}
 								<div>
 									<Label htmlFor="password">{t("login.password")}</Label>
-									<Input
+									<PasswordInput
 										id="password"
-										type="password"
 										value={password}
 										className="block mt-1 w-full"
 										onChange={(e) => setPassword(e.target.value)}

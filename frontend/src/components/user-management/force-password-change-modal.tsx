@@ -8,6 +8,7 @@ import AuthSessionStatus from "@/components/AuthSessionStatus";
 import { useTranslation } from "react-i18next";
 import { updateUserPassword, fetchUser } from "@/api/user/actions";
 import { useAuthContext } from "@/provider/AuthContextProvider";
+import { PasswordInput } from "@/components/ui/password-input";
 
 interface ForcePasswordChangeModalProps {
 	open: boolean;
@@ -103,10 +104,9 @@ export function ForcePasswordChangeModal({ open, onOpenChange, onSuccess }: Forc
 						{/* Password */}
 						<div>
 							<Label htmlFor="password">{t("userManagement.forcePasswordChange.password")}</Label>
-							<Input
+							<PasswordInput
 								id="password"
 								name="password"
-								type="password"
 								value={passwordFormData.password}
 								className="mt-1 w-full"
 								onChange={handleChange}
@@ -124,10 +124,9 @@ export function ForcePasswordChangeModal({ open, onOpenChange, onSuccess }: Forc
 						{/* Confirm Password */}
 						<div>
 							<Label htmlFor="password_confirmation">{t("userManagement.forcePasswordChange.passwordConfirmation")}</Label>
-							<Input
+							<PasswordInput
 								id="password_confirmation"
 								name="password_confirmation"
-								type="password"
 								value={passwordFormData.password_confirmation}
 								className="mt-1 w-full"
 								onChange={handleChange}
