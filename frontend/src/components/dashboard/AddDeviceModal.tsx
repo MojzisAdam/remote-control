@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, KeyboardEvent } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -57,6 +57,13 @@ export function AddDeviceModal({ onSuccess, open, onOpenChange }: AddDeviceModal
 		onOpenChange(open);
 	};
 
+	const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === "Enter") {
+			e.preventDefault();
+			handleSubmit();
+		}
+	};
+
 	return (
 		<Dialog
 			open={open}
@@ -95,6 +102,7 @@ export function AddDeviceModal({ onSuccess, open, onOpenChange }: AddDeviceModal
 							name="device_id"
 							className="block mt-1 w-full"
 							onChange={(e) => setDeviceId(e.target.value)}
+							onKeyDown={handleKeyDown}
 							required
 						/>
 						{errorsInf.device_id && (
@@ -113,6 +121,7 @@ export function AddDeviceModal({ onSuccess, open, onOpenChange }: AddDeviceModal
 							value={devicePass}
 							className="block mt-1 w-full"
 							onChange={(e) => setDevicePass(e.target.value)}
+							onKeyDown={handleKeyDown}
 							required
 							autoComplete="new-password"
 						/>
