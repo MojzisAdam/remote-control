@@ -18,6 +18,7 @@ class NotificationResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'additional_data' => optional($this->message_data)->isEmpty() ? null : json_encode($this->message_data),
+            'own_name' => $this->own_name ?? null,
         ];
     }
 }

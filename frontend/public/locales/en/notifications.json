@@ -23,5 +23,7 @@
 	"yesterdayAt": "Yesterday at {{time}}",
 	"noMoreNotifications": "No more notifications to load",
 	"success": "Success",
-	"errorTitle": "Error"
+	"errorTitle": "Error",
+	"notificationNotFound": "Notification not found",
+	"notificationNotFoundDescription": "The notification could not be found in the available history."
 }

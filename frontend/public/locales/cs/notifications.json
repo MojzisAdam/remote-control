@@ -23,5 +23,7 @@
 	"yesterdayAt": "Včera v {{time}}",
 	"noMoreNotifications": "Žádná další upozornění k načtení",
 	"success": "Úspěch",
-	"errorTitle": "Chyba"
+	"errorTitle": "Chyba",
+	"notificationNotFound": "Upozornění nenalezeno",
+	"notificationNotFoundDescription": "Upozornění nebylo nalezeno v dostupné historii."
 }

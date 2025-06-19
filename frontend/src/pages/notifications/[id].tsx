@@ -6,12 +6,13 @@ import DeviceNotFound from "@/components/deviceNotFound";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { AlertCircle, CheckCircle, Bell, Eye, ChevronDown, ChevronUp, Clock, Loader2 } from "lucide-react";
 import deviceErrors from "@/utils/deviceErrors";
 import PageHeading from "@/components/PageHeading";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { fetchDeviceNotifications } from "@/api/notifications/actions";
+import { PaginatedResponse, Notification as NotificationType } from "@/api/notifications/model";
 import usePageTitle from "@/hooks/usePageTitle";
 import { useDeviceContext } from "@/provider/DeviceProvider";
 import { useTranslation } from "react-i18next";
@@ -23,40 +24,74 @@ const DeviceNotificationsPage: React.FC = () => {
 	const queryClient = useQueryClient();
 	const { t, i18n } = useTranslation("notifications");
 	const selectedLocale = i18n.language === "en" ? enUS : cs;
+	const { markAsSeen } = useNotifications();
 
-	const { getDeviceNotifications, markAsSeen, notifications, pagination, loadMoreDeviceNotifications } = useNotifications();
+	// Use React Query to get the highlighted notification ID from cache
+	const { data: highlightedId, isFetched: highlightFetched } = useQuery<number | null>({
+		queryKey: ["highlighted-notification"],
+		queryFn: () => {
+			// Return the current value from the cache or null if not present
+			const currentValue = queryClient.getQueryData<number | null>(["highlighted-notification"]);
+			return Promise.resolve(currentValue || null);
+		},
+		enabled: true,
+		gcTime: 5000, // Auto-clear after 5 seconds
+		staleTime: 5000,
+		initialData: null,
+	});
+	const [highlightedNotification, setHighlightedNotification] = useState<number | null>(null);
+	const processedHighlightRef = useRef<number | null>(null);
 
 	const { toast } = useToast();
 
 	const { setLastVisited } = useUserManagement();
 	const { currentDevice, isLoading, notFound, loadDevice } = useDeviceContext();
 
-	const [loadingNotifications, setLoadingNotifications] = useState(true);
 	const [expandedNotifications, setExpandedNotifications] = useState<number[]>([]);
 
-	const [loadingMore, setLoadingMore] = useState(false);
 	const loadMoreRef = useRef<HTMLDivElement>(null);
 
-	usePageTitle(t("pageTitle", { deviceId }));
+	// Use React Query for device notifications
+	const {
+		data: notificationsData,
+		isLoading: loadingNotifications,
+		fetchNextPage,
+		hasNextPage,
+		isFetchingNextPage: loadingMore,
+	} = useInfiniteQuery<PaginatedResponse<NotificationType>>({
+		queryKey: ["device-notifications", deviceId],
+		queryFn: async ({ pageParam }) => {
+			return await fetchDeviceNotifications(deviceId as string, pageParam as number);
+		},
+		getNextPageParam: (lastPage: PaginatedResponse<NotificationType>) => {
+			if (lastPage.pagination?.hasMore) {
+				return Number(lastPage.pagination.page) + 1;
+			}
+			return undefined;
+		},
+		enabled: !!deviceId && !!currentDevice,
+		initialPageParam: 1,
+	});
 
+	// Flatten notifications from all pages
+	const notifications: NotificationType[] = notificationsData ? notificationsData.pages.flatMap((page) => page.notifications || []) : [];
+
+	usePageTitle(t("pageTitle", { deviceId }));
 	const loadMore = async () => {
-		if (currentDevice && typeof deviceId === "string") {
-			setLoadingMore(true);
-			await loadMoreDeviceNotifications(deviceId);
-			setLoadingMore(false);
+		if (currentDevice && typeof deviceId === "string" && hasNextPage && !loadingMore) {
+			await fetchNextPage();
 		}
 	};
 
 	const handleObserver = useCallback(
 		(entries: IntersectionObserverEntry[]) => {
 			const [entry] = entries;
-			if (entry.isIntersecting && pagination?.hasMore && !loadingNotifications && !loadingMore) {
+			if (entry.isIntersecting && hasNextPage && !loadingNotifications && !loadingMore) {
 				loadMore();
 			}
 		},
-		[loadingMore, pagination]
+		[loadingMore, hasNextPage, loadingNotifications, fetchNextPage]
 	);
-
 	useEffect(() => {
 		const observer = new IntersectionObserver(handleObserver, {
 			rootMargin: "0px 0px 200px 0px",
@@ -71,7 +106,7 @@ const DeviceNotificationsPage: React.FC = () => {
 				observer.unobserve(loadMoreRef.current);
 			}
 		};
-	}, [pagination, loadingNotifications]);
+	}, [handleObserver]);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -85,28 +120,100 @@ const DeviceNotificationsPage: React.FC = () => {
 		fetchData();
 	}, [deviceId]);
 
-	const fetchNotifications = async () => {
-		if (currentDevice && typeof deviceId === "string") {
-			setLoadingNotifications(true);
-			const result = await getDeviceNotifications(deviceId);
-			if (result.success) {
+	// Reset processed highlight reference when deviceId changes
+	useEffect(() => {
+		processedHighlightRef.current = null;
+		setHighlightedNotification(null);
+	}, [deviceId]);
+
+	// Find and highlight a specific notification, loading more pages if necessary
+	const findAndHighlightNotification = useCallback(
+		async (notificationId: number) => {
+			if (!notificationsData || loadingNotifications) {
+				setTimeout(() => findAndHighlightNotification(notificationId), 500);
+				return;
 			}
-			setLoadingNotifications(false);
-		}
+
+			if (notifications.some((n: NotificationType) => n.id === notificationId)) {
+				setHighlightedNotification(notificationId);
+				setExpandedNotifications((prev) => (prev.includes(notificationId) ? prev : [...prev, notificationId]));
+
+				setTimeout(() => {
+					const element = document.getElementById(`notification-${notificationId}`);
+					if (element) {
+						element.scrollIntoView({ behavior: "smooth", block: "center" });
+					}
+				}, 100);
+				return;
+			}
+
+			let currentPage = notificationsData.pages.length || 1;
+			let found = false;
+
+			while (!found && hasNextPage) {
+				await fetchNextPage();
+				const updatedNotifications = queryClient.getQueryData<any>(["device-notifications", deviceId])?.pages.flatMap((page: any) => page.notifications || []) || [];
+
+				if (updatedNotifications.some((n: NotificationType) => n.id === notificationId)) {
+					found = true;
+					setHighlightedNotification(notificationId);
+					setExpandedNotifications((prev) => (prev.includes(notificationId) ? prev : [...prev, notificationId]));
+
+					setTimeout(() => {
+						const element = document.getElementById(`notification-${notificationId}`);
+						if (element) {
+							element.scrollIntoView({ behavior: "smooth", block: "center" });
+						}
+					}, 300);
+				}
+
+				currentPage++;
+			}
+
+			if (!found) {
+				toast({
+					title: t("notificationNotFound", "Notification not found"),
+					description: t("notificationNotFoundDescription", "The notification could not be found in the available history."),
+					variant: "destructive",
+				});
+			}
+		},
+		[notifications, notificationsData, fetchNextPage, hasNextPage, queryClient, deviceId, t, setExpandedNotifications]
+	);
+	const fetchNotifications = async () => {
+		// React Query will handle fetching
 	};
 
+	// Handle highlighted notification from React Query cache
 	useEffect(() => {
-		if (currentDevice) {
-			fetchNotifications();
+		if (highlightedId && processedHighlightRef.current !== highlightedId && notificationsData && !loadingNotifications) {
+			processedHighlightRef.current = highlightedId;
+			findAndHighlightNotification(highlightedId);
 		}
-	}, [currentDevice]);
+	}, [highlightedId, findAndHighlightNotification, notificationsData, loadingNotifications]);
+
+	// Separate effect for the timeout to ensure it works correctly
+	useEffect(() => {
+		if (highlightedNotification !== null) {
+			// Clear the highlight after 5 seconds
+			const timer = setTimeout(() => {
+				setHighlightedNotification(null);
+			}, 5000);
+
+			return () => clearTimeout(timer);
+		}
+	}, [highlightedNotification]);
 
 	const handleMarkAllAsSeen = async () => {
 		const unseenNotifications = notifications.filter((n) => !n.seen);
 		if (unseenNotifications.length > 0) {
 			try {
 				await Promise.all(unseenNotifications.map((n) => markAsSeen(n.id)));
+				// Invalidate both queries to keep them in sync
 				queryClient.invalidateQueries({ queryKey: ["user-notifications"] });
+				if (deviceId) {
+					queryClient.invalidateQueries({ queryKey: ["device-notifications", deviceId] });
+				}
 				toast({
 					title: t("success"),
 					description: t("markedAllAsSeen", { count: unseenNotifications.length }),
@@ -122,11 +229,14 @@ const DeviceNotificationsPage: React.FC = () => {
 			}
 		}
 	};
-
 	const handleMarkAsSeen = async (notificationId: number) => {
 		try {
 			await markAsSeen(notificationId);
+			// Invalidate both queries to keep them in sync
 			queryClient.invalidateQueries({ queryKey: ["user-notifications"] });
+			if (deviceId) {
+				queryClient.invalidateQueries({ queryKey: ["device-notifications", deviceId] });
+			}
 			toast({
 				title: t("success"),
 				description: t("markedAsSeen"),
@@ -155,11 +265,21 @@ const DeviceNotificationsPage: React.FC = () => {
 	const isExpanded = (notificationId: number) => {
 		return expandedNotifications.includes(notificationId);
 	};
-
 	const getErrorVariant = (errorCode: number): "destructive" | "outline" | "secondary" | "default" => {
 		if (errorCode > 0) return "destructive";
 		if (errorCode == 0) return "default";
 		return "secondary";
+	};
+
+	// Returns CSS classes for error status indicators
+	const getErrorStatusClasses = (errorCode: number): string => {
+		if (errorCode > 0) {
+			return "bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300";
+		}
+		if (errorCode == 0) {
+			return "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300";
+		}
+		return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300";
 	};
 
 	const formatTimestamp = (timestamp: string): string => {
@@ -237,8 +357,11 @@ const DeviceNotificationsPage: React.FC = () => {
 					<div className="space-y-4">
 						{notifications.map((notification, index) => (
 							<Card
+								id={`notification-${notification.id}`}
 								key={notification.id}
-								className={`overflow-hidden transition-all ${notification.seen ? "bg-muted/40" : "bg-background border-l-primary"}`}
+								className={`overflow-hidden transition-all 
+									${notification.seen ? "bg-muted/40" : "bg-background border-l-primary"}
+									${highlightedNotification === notification.id ? "ring-1 ring-primary ring-offset-1 animate-pulse-subtle" : ""}`}
 							>
 								<div
 									className="p-4 cursor-pointer"
@@ -246,23 +369,13 @@ const DeviceNotificationsPage: React.FC = () => {
 								>
 									<div className="flex flex-wrap justify-between items-center gap-2">
 										<div className="flex items-center gap-2">
-											<Badge
-												variant={getErrorVariant(notification.error_code)}
-												className="text-xs font-medium pointer-events-none"
-											>
+											<span className={`text-xs px-2 py-0.5 rounded-full ${getErrorStatusClasses(notification.error_code)}`}>
 												{t("error")}: {notification.error_code}
-											</Badge>
-
+											</span>
 											{!notification.seen && (
-												<Badge
-													variant="outline"
-													className="bg-blue-100 dark:bg-blue-950 text-xs pointer-events-none"
-												>
-													{t("new")}
-												</Badge>
+												<span className="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">{t("new")}</span>
 											)}
 										</div>
-
 										<div className="flex items-center gap-2">
 											<span className="text-sm text-muted-foreground">{formatTimestamp(notification.created_at)}</span>
 
@@ -323,7 +436,7 @@ const DeviceNotificationsPage: React.FC = () => {
 															</div>
 														</div>
 													)}
-
+													{/*
 													{notification.additional_data && (
 														<div className="flex items-start gap-2">
 															<AlertCircle className="h-4 w-4 text-muted-foreground mt-0.5" />
@@ -337,6 +450,7 @@ const DeviceNotificationsPage: React.FC = () => {
 															</div>
 														</div>
 													)}
+                                                    */}
 												</div>
 											</div>
 
@@ -372,11 +486,8 @@ const DeviceNotificationsPage: React.FC = () => {
 								<Loader2 className="h-6 w-6 animate-spin text-primary" />
 							</div>
 						)}
-
-						{/* When there are no more notifications to load */}
-						{!loadingMore && pagination && !pagination.hasMore && notifications.length > 0 && (
-							<div className="text-center py-4 text-sm text-muted-foreground">{t("noMoreNotifications")}</div>
-						)}
+						{/* When there are no more notifications to load */}{" "}
+						{!loadingMore && !hasNextPage && notifications.length > 0 && <div className="text-center py-4 text-sm text-muted-foreground">{t("noMoreNotifications")}</div>}
 					</div>
 				)}
 			</div>
