@@ -74,8 +74,13 @@ class NotificationController extends Controller
         }
 
         $user->notifications()->updateExistingPivot($notificationId, ['seen' => true]);
-
         $notification = $user->notifications()->where('device_notifications.id', $notificationId)->first();
+
+        // Add the own_name from the user_devices pivot table
+        $userDevice = $user->devices()->where('device_id', $notification->device_id)->first();
+        if ($userDevice) {
+            $notification->own_name = $userDevice->pivot->own_name;
+        }
 
         $notification->seen = $notification->pivot->seen;
         unset($notification->pivot);
@@ -86,7 +91,6 @@ class NotificationController extends Controller
     public function getUnseenNotifications(Request $request)
     {
         $user = Auth::user();
-
         $notifications = $user->notifications()
             ->wherePivot('seen', false)
             ->orderBy('device_notifications.created_at', 'desc')
@@ -105,6 +109,13 @@ class NotificationController extends Controller
                     'description' => $notification->notificationType->description,
                 ];
             }
+
+            // Add the own_name from the user_devices pivot table
+            $userDevice = $user->devices()->where('device_id', $notification->device_id)->first();
+            if ($userDevice) {
+                $notification->own_name = $userDevice->pivot->own_name;
+            }
+
             $notification->seen = $notification->pivot->seen;
             unset($notification->pivot);
             return $notification;
@@ -112,7 +123,6 @@ class NotificationController extends Controller
 
         return response()->json(notificationResource::collection($notifications));
     }
-
     public function getDeviceNotifications(Request $request, $deviceId)
     {
         $user = Auth::user();
@@ -143,6 +153,13 @@ class NotificationController extends Controller
                     'description' => $notification->notificationType->description,
                 ];
             }
+
+            // Add the own_name from the user_devices pivot table
+            $userDevice = $user->devices()->where('device_id', $notification->device_id)->first();
+            if ($userDevice) {
+                $notification->own_name = $userDevice->pivot->own_name;
+            }
+
             $notification->seen = $notification->pivot->seen;
             unset($notification->pivot);
             return $notification;

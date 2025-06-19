@@ -7,6 +7,7 @@ export interface Notification {
 	updated_at: string;
 	seen: boolean;
 	additional_data?: string;
+	own_name?: string;
 }
 
 export interface PaginationInfo {
