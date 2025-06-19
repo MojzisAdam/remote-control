@@ -1,13 +1,107 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { DeviceHistory } from "@/api/deviceHistory/model";
+import { HoverClickPopover } from "@/components/ui/hover-popover";
+
 const formatTemperature = (value: number | undefined) => {
-	if (value === undefined || value === null) return "---";
+	if (value === undefined || value === null || value == -128) return "---";
 	return `${value.toFixed(1)} °C`;
 };
 
 const formatCustomValue = (value: number | undefined, unit: string) => {
 	if (value === undefined || value === null) return "---";
 	return `${value.toFixed(1)} ${unit}`;
+};
+
+// Helper function for binary state tooltips (ON/OFF)
+const getBinaryTooltip = (value: number | undefined, onText: string = "zapnuto", offText: string = "vypnuto") => {
+	if (value === undefined || value === null) return null;
+	return value === 1 ? onText : offText;
+};
+
+// Helper function for REG mode tooltips
+const getRegModeTooltip = (value: number | undefined) => {
+	if (value === undefined || value === null) return null;
+
+	switch (value) {
+		case 0:
+			return "nečinný";
+		case 1:
+			return "tuv";
+		case 2:
+			return "to";
+		case 3:
+			return "chlazení";
+		case 4:
+			return "topení";
+		case 5:
+			return "bazén";
+		case 6:
+			return "to+tuv";
+		case 7:
+			return "chlazení+tuv";
+		case 8:
+			return "bazén+tuv";
+		default:
+			return `mode ${value}`;
+	}
+};
+
+// Helper function for VJEDN mode tooltips
+const getVjednModeTooltip = (value: number | undefined) => {
+	if (value === undefined || value === null) return null;
+
+	switch (value) {
+		case 0:
+			return "vypnuto";
+		case 1:
+			return "topení";
+		case 2:
+			return "odtávání";
+		case 3:
+			return "chlazení";
+		default:
+			return `mode ${value}`;
+	}
+};
+
+// Helper function for DZ mode tooltips
+const getDzModeTooltip = (value: number | undefined) => {
+	if (value === undefined || value === null) return null;
+
+	switch (value) {
+		case 0:
+			return "vypnuto";
+		case 1:
+			return "dz level 1";
+		case 2:
+			return "dz level m";
+		case 3:
+			return "dz level 2";
+		case 4:
+			return "přidavný";
+		default:
+			return `mode ${value}`;
+	}
+};
+
+// Helper function for OBD tooltips
+const getObdTooltip = (value: number | undefined) => {
+	if (value === undefined || value === null) return null;
+	return value === 0 ? "zima" : "léto";
+};
+
+// Render cell with tooltip when needed
+const renderWithTooltip = (displayValue: string | number, tooltip: string | null) => {
+	if (!tooltip) return displayValue;
+
+	return (
+		<HoverClickPopover
+			content={<div className="p-2 text-sm">{tooltip}</div>}
+			className="cursor-help"
+		>
+			<span>{displayValue}</span>
+		</HoverClickPopover>
+	);
 };
 
 const formatValue = (value: number | undefined) => {
@@ -23,7 +117,7 @@ const formatValue = (value: number | undefined) => {
 export const columns: ColumnDef<DeviceHistory>[] = [
 	{
 		accessorKey: "cas",
-		header: "Timestamp",
+		header: "Time",
 		cell: ({ row }) => {
 			const timestamp = row.original.cas;
 			const date = new Date(timestamp);
@@ -93,7 +187,12 @@ export const columns: ColumnDef<DeviceHistory>[] = [
 	{
 		accessorKey: "komp",
 		header: "Komp",
-		cell: ({ row }) => formatValue(row.original.komp),
+		cell: ({ row }) => {
+			const value = row.original.komp;
+			const displayValue = formatValue(value);
+			const tooltip = getBinaryTooltip(value);
+			return renderWithTooltip(displayValue, tooltip);
+		},
 	},
 	{
 		accessorKey: "kvyk",
@@ -103,47 +202,82 @@ export const columns: ColumnDef<DeviceHistory>[] = [
 	{
 		accessorKey: "run",
 		header: "Run",
-		cell: ({ row }) => formatValue(row.original.run),
+		cell: ({ row }) => {
+			const value = row.original.run;
+			const displayValue = formatValue(value);
+			const tooltip = getBinaryTooltip(value);
+			return renderWithTooltip(displayValue, tooltip);
+		},
 	},
 	{
 		accessorKey: "reg",
 		header: "Reg",
-		cell: ({ row }) => row.original.reg,
+		cell: ({ row }) => {
+			const value = row.original.reg;
+			const displayValue = value !== undefined ? value.toString() : "---";
+			const tooltip = getRegModeTooltip(value);
+			return renderWithTooltip(displayValue, tooltip);
+		},
 	},
 	{
 		accessorKey: "vjedn",
 		header: "Vjedn",
-		cell: ({ row }) => row.original.vjedn,
+		cell: ({ row }) => {
+			const value = row.original.vjedn;
+			const displayValue = value !== undefined ? value.toString() : "---";
+			const tooltip = getVjednModeTooltip(value);
+			return renderWithTooltip(displayValue, tooltip);
+		},
 	},
 	{
 		accessorKey: "dzto",
 		header: "DZTO",
-		cell: ({ row }) => formatValue(row.original.dzto),
+		cell: ({ row }) => {
+			const value = row.original.dzto;
+			const displayValue = value !== undefined ? value.toString() : "---";
+			const tooltip = getDzModeTooltip(value);
+			return renderWithTooltip(displayValue, tooltip);
+		},
 	},
 	{
 		accessorKey: "dztuv",
 		header: "DZTUV",
-		cell: ({ row }) => formatValue(row.original.dztuv),
+		cell: ({ row }) => {
+			const value = row.original.dztuv;
+			const displayValue = value !== undefined ? value.toString() : "---";
+			const tooltip = getDzModeTooltip(value);
+			return renderWithTooltip(displayValue, tooltip);
+		},
 	},
 	{
 		accessorKey: "tstat",
 		header: "TStat",
-		cell: ({ row }) => formatValue(row.original.tstat),
+		cell: ({ row }) => {
+			const value = row.original.tstat;
+			const displayValue = formatValue(value);
+			const tooltip = getBinaryTooltip(value);
+			return renderWithTooltip(displayValue, tooltip);
+		},
 	},
 	{
 		accessorKey: "hdo",
 		header: "HDO",
-		cell: ({ row }) => formatValue(row.original.hdo),
+		cell: ({ row }) => {
+			const value = row.original.hdo;
+			const displayValue = formatValue(value);
+			const tooltip = getBinaryTooltip(value);
+			return renderWithTooltip(displayValue, tooltip);
+		},
 	},
 	{
 		accessorKey: "obd",
 		header: "OBD",
-		cell: ({ row }) => row.original.obd,
-	},
-	{
-		accessorKey: "chyba",
-		header: "Error",
-		cell: ({ row }) => row.original.chyba,
+		cell: ({ row }) => {
+			const value = row.original.obd;
+			const displayValue = value !== undefined ? value.toString() : "---";
+			const tooltip = getObdTooltip(value);
+			return renderWithTooltip(displayValue, tooltip);
+		},
 	},
 	{
 		accessorKey: "PT",
@@ -169,5 +303,10 @@ export const columns: ColumnDef<DeviceHistory>[] = [
 		accessorKey: "TpnVk",
 		header: "TpnVk",
 		cell: ({ row }) => formatCustomValue(row.original.TpnVk, "kW"),
+	},
+	{
+		accessorKey: "chyba",
+		header: "Chyba",
+		cell: ({ row }) => row.original.chyba,
 	},
 ];
