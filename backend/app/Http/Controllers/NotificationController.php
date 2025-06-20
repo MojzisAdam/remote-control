@@ -88,6 +88,52 @@ class NotificationController extends Controller
         return response()->json(new NotificationResource($notification));
     }
 
+    public function markAllNotificationsAsSeen(Request $request)
+    {
+        $user = Auth::user();
+        $limit = $request->input('limit', 100);
+
+        // Get unseen notification IDs limited by the parameter
+        $notificationIds = $user->notifications()
+            ->wherePivot('seen', false)
+            ->orderBy('device_notifications.created_at', 'desc')
+            ->limit($limit)
+            ->pluck('device_notifications.id');
+
+        // Update all notifications at once
+        foreach ($notificationIds as $id) {
+            $user->notifications()->updateExistingPivot($id, ['seen' => true]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'All notifications marked as seen',
+            'count' => count($notificationIds)
+        ]);
+    }
+
+    public function markDeviceNotificationsAsSeen(Request $request, $deviceId)
+    {
+        $user = Auth::user();
+
+        // Get all unseen notification IDs for this device
+        $notificationIds = $user->notifications()
+            ->where('device_notifications.device_id', $deviceId)
+            ->wherePivot('seen', false)
+            ->pluck('device_notifications.id');
+
+        // Update all notifications at once
+        foreach ($notificationIds as $id) {
+            $user->notifications()->updateExistingPivot($id, ['seen' => true]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'All device notifications marked as seen',
+            'count' => count($notificationIds)
+        ]);
+    }
+
     public function getUnseenNotifications(Request $request)
     {
         $user = Auth::user();

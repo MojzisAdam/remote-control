@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { fetchUserNotifications, markNotificationAsSeen, fetchUnseenNotifications, fetchDeviceNotifications } from "@/api/notifications/actions";
+import {
+	fetchUserNotifications,
+	markNotificationAsSeen,
+	fetchUnseenNotifications,
+	fetchDeviceNotifications,
+	markAllNotificationsAsSeen,
+	markDeviceNotificationsAsSeen,
+} from "@/api/notifications/actions";
 import { Notification, PaginationInfo } from "@/api/notifications/model";
 import { ApiHandlerResult, handleApiRequest } from "@/utils/apiHandler";
 
@@ -103,6 +110,42 @@ export const useNotifications = () => {
 		return result;
 	};
 
+	// Mark all unseen notifications as seen
+	const markAllAsSeen = async (limit: number = 100): Promise<ApiHandlerResult> => {
+		setLoading(true);
+		const result = await handleApiRequest({
+			apiCall: () => markAllNotificationsAsSeen(limit),
+			successMessage: "All notifications marked as seen",
+			statusHandlers: {
+				404: () => setError("Failed to mark notifications as seen."),
+			},
+		});
+		if (result.success) {
+			// Update local state to mark all notifications as seen
+			setNotifications((prev) => prev.map((n) => ({ ...n, seen: true })));
+		}
+		setLoading(false);
+		return result;
+	};
+
+	// Mark all unseen notifications for a specific device as seen
+	const markDeviceAllAsSeen = async (deviceId: string): Promise<ApiHandlerResult> => {
+		setLoading(true);
+		const result = await handleApiRequest({
+			apiCall: () => markDeviceNotificationsAsSeen(deviceId),
+			successMessage: "All device notifications marked as seen",
+			statusHandlers: {
+				404: () => setError("Failed to mark device notifications as seen."),
+			},
+		});
+		if (result.success) {
+			// Update local state to mark all notifications for this device as seen
+			setNotifications((prev) => prev.map((n) => (n.device_id === deviceId ? { ...n, seen: true } : n)));
+		}
+		setLoading(false);
+		return result;
+	};
+
 	return {
 		notifications,
 		loading,
@@ -112,6 +155,8 @@ export const useNotifications = () => {
 		getUnseenNotifications,
 		getDeviceNotifications,
 		markAsSeen,
+		markAllAsSeen,
+		markDeviceAllAsSeen,
 		loadMoreDeviceNotifications,
 	};
 };
