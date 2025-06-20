@@ -8,13 +8,37 @@ import { Bell, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import routes from "@/constants/routes";
 import { useTranslation } from "react-i18next";
+import { format, isToday, isYesterday, differenceInMinutes } from "date-fns";
+import { cs, enUS } from "date-fns/locale";
 
 const NotificationIcon: React.FC = () => {
 	const { getUnseenNotifications, markAsSeen, markAllAsSeen } = useNotifications();
 	const navigate = useNavigate();
 	const { t } = useTranslation("global");
+	const { t: tNotifications, i18n } = useTranslation("notifications");
+	const selectedLocale = i18n.language === "en" ? enUS : cs;
 	const queryClient = useQueryClient();
 	const [open, setOpen] = React.useState(false);
+
+	const formatTimestamp = (timestamp: string): string => {
+		const date = new Date(timestamp);
+		const now = new Date();
+		const diffMins = differenceInMinutes(now, date);
+
+		if (diffMins < 60) {
+			return diffMins <= 1 ? tNotifications("justNow") : tNotifications("minutesAgo", { count: diffMins });
+		}
+
+		if (isToday(date)) {
+			return tNotifications("todayAt", { time: format(date, "HH:mm", { locale: selectedLocale }) });
+		}
+
+		if (isYesterday(date)) {
+			return tNotifications("yesterdayAt", { time: format(date, "HH:mm", { locale: selectedLocale }) });
+		}
+
+		return format(date, "d. MMM HH:mm", { locale: selectedLocale });
+	};
 
 	const {
 		data: notifications,
@@ -130,6 +154,7 @@ const NotificationIcon: React.FC = () => {
 									<div className="flex flex-col w-full p-3 space-y-2.5 hover:bg-gray-50 dark:hover:bg-zinc-900 rounded-md cursor-pointer border border-transparent hover:border-gray-100 dark:hover:border-zinc-800">
 										<div className="flex flex-col gap-2">
 											<div className="flex flex-row justify-between items-center w-full">
+												{" "}
 												<span className="text-xs text-muted-foreground">{formatTimestamp(notification.created_at)}</span>
 												<div className="flex items-center gap-1">
 													<span
@@ -198,34 +223,6 @@ function getErrorStatusClasses(errorCode: number): string {
 		return "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300";
 	}
 	return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300";
-}
-
-function formatTimestamp(timestamp: string): string {
-	const date = new Date(timestamp);
-	const now = new Date();
-	const diffMs = now.getTime() - date.getTime();
-	const diffMins = Math.floor(diffMs / 60000);
-
-	if (diffMins < 60) {
-		return diffMins <= 1 ? "Just now" : `${diffMins} minutes ago`;
-	}
-
-	if (date.toDateString() === now.toDateString()) {
-		return `Today at ${date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
-	}
-
-	const yesterday = new Date(now);
-	yesterday.setDate(now.getDate() - 1);
-	if (date.toDateString() === yesterday.toDateString()) {
-		return `Yesterday at ${date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
-	}
-
-	return date.toLocaleString([], {
-		month: "short",
-		day: "numeric",
-		hour: "2-digit",
-		minute: "2-digit",
-	});
 }
 
 export default NotificationIcon;
