@@ -10,7 +10,7 @@ import routes from "@/constants/routes";
 import { useTranslation } from "react-i18next";
 
 const NotificationIcon: React.FC = () => {
-	const { getUnseenNotifications, markAsSeen } = useNotifications();
+	const { getUnseenNotifications, markAsSeen, markAllAsSeen } = useNotifications();
 	const navigate = useNavigate();
 	const { t } = useTranslation("global");
 	const queryClient = useQueryClient();
@@ -50,7 +50,8 @@ const NotificationIcon: React.FC = () => {
 	};
 	const handleMarkAllAsSeen = async () => {
 		if (notifications) {
-			await Promise.all(unseenNotifications.map((n: Notification) => markAsSeen(n.id)));
+			// Use the batch method to mark all notifications as seen (limit 100)
+			await markAllAsSeen(100);
 			refetch();
 			// Also invalidate any device notification queries that might be open
 			queryClient.invalidateQueries({

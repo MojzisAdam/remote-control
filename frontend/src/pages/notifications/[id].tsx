@@ -24,7 +24,7 @@ const DeviceNotificationsPage: React.FC = () => {
 	const queryClient = useQueryClient();
 	const { t, i18n } = useTranslation("notifications");
 	const selectedLocale = i18n.language === "en" ? enUS : cs;
-	const { markAsSeen } = useNotifications();
+	const { markAsSeen, markDeviceAllAsSeen } = useNotifications();
 
 	// Use React Query to get the highlighted notification ID from cache
 	const { data: highlightedId, isFetched: highlightFetched } = useQuery<number | null>({
@@ -203,12 +203,13 @@ const DeviceNotificationsPage: React.FC = () => {
 			return () => clearTimeout(timer);
 		}
 	}, [highlightedNotification]);
-
 	const handleMarkAllAsSeen = async () => {
 		const unseenNotifications = notifications.filter((n) => !n.seen);
 		if (unseenNotifications.length > 0) {
 			try {
-				await Promise.all(unseenNotifications.map((n) => markAsSeen(n.id)));
+				// Use the new batch method for marking all notifications as seen for this device
+				await markDeviceAllAsSeen(deviceId as string);
+
 				// Invalidate both queries to keep them in sync
 				queryClient.invalidateQueries({ queryKey: ["user-notifications"] });
 				if (deviceId) {

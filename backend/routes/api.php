@@ -31,6 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/notifications', [NotificationController::class, 'getUserNotifications']);
     Route::put('/notifications/{notificationId}/mark-as-seen', [NotificationController::class, 'markNotificationAsSeen']);
     Route::get('/notifications/unseen', [NotificationController::class, 'getUnseenNotifications']);
+    Route::put('/notifications/mark-all-seen', [NotificationController::class, 'markAllNotificationsAsSeen']);
 });
 
 Route::middleware(['auth:sanctum', 'device.ownership'])->group(function () {
@@ -55,6 +56,7 @@ Route::middleware(['auth:sanctum', 'device.ownership'])->group(function () {
     Route::put('/devices/{deviceId}/versions', [DeviceController::class, 'updateVersions']);
 
     Route::get('/notifications/device/{deviceId}', [NotificationController::class, 'getDeviceNotifications']);
+    Route::put('/notifications/device/{deviceId}/mark-all-seen', [NotificationController::class, 'markDeviceNotificationsAsSeen']);
 });
 
 Route::middleware(['auth:sanctum', 'permission:view-history'])->group(function () {
