@@ -543,7 +543,24 @@ const HomePage: React.FC<HomePageProps> = ({ deviceData }) => {
 						className="want-temp-home"
 						data-descr={`${deviceData.reg_704} °C`}
 					>
-						{getTemperatureDisplay(deviceData.reg_675)}
+						{(() => {
+							const reg66 = deviceData.reg_66;
+							const reg673 = deviceData.reg_673;
+							const reg675 = deviceData.reg_675;
+							const reg678 = deviceData.reg_678;
+
+							if (reg66 === undefined || reg66 === null) {
+								return getTemperatureDisplay(reg675);
+							} else if (reg66 === 0) {
+								return getTemperatureDisplay(reg673);
+							} else if (reg66 === 1) {
+								return getTemperatureDisplay(reg675);
+							} else if (reg66 === 2) {
+								return getTemperatureDisplay(reg675);
+							} else {
+								return getTemperatureDisplay(reg678);
+							}
+						})()}
 					</span>
 				</p>
 
