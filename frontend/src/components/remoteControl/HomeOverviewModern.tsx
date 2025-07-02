@@ -544,21 +544,21 @@ const HomePage: React.FC<HomePageProps> = ({ deviceData }) => {
 						data-descr={`${deviceData.reg_704} °C`}
 					>
 						{(() => {
-							const reg66 = deviceData.reg_66;
-							const reg673 = deviceData.reg_673;
-							const reg675 = deviceData.reg_675;
-							const reg678 = deviceData.reg_678;
+							const reg_66 = deviceData.reg_66;
+							const reg_673 = deviceData.reg_673;
+							const reg_675 = deviceData.reg_675;
+							const reg_678 = deviceData.reg_678;
 
-							if (reg66 === undefined || reg66 === null) {
-								return getTemperatureDisplay(reg675);
-							} else if (reg66 === 0) {
-								return getTemperatureDisplay(reg673);
-							} else if (reg66 === 1) {
-								return getTemperatureDisplay(reg675);
-							} else if (reg66 === 2) {
-								return getTemperatureDisplay(reg675);
+							if (reg_66 === undefined || reg_66 === null) {
+								return getTemperatureDisplay(reg_675);
+							} else if (reg_66 === 0) {
+								return getTemperatureDisplay(reg_673);
+							} else if (reg_66 === 1) {
+								return getTemperatureDisplay(reg_675);
+							} else if (reg_66 === 2) {
+								return getTemperatureDisplay(reg_675);
 							} else {
-								return getTemperatureDisplay(reg678);
+								return getTemperatureDisplay(reg_678);
 							}
 						})()}
 					</span>
@@ -578,7 +578,7 @@ const HomePage: React.FC<HomePageProps> = ({ deviceData }) => {
 					</p>
 				)}
 
-				{deviceData.reg_192 === 1 && (
+				{deviceData.reg_192 === 1 ? (
 					<p>
 						<span className={deviceData.reg_739 === 0 && deviceData.reg_741 === 0 ? "home_tuvto-on" : "home_tuvto-off"}></span>
 						<ThermostatIcon />
@@ -589,9 +589,7 @@ const HomePage: React.FC<HomePageProps> = ({ deviceData }) => {
 							{getTemperatureDisplay(deviceData.reg_677)}
 						</span>
 					</p>
-				)}
-
-				{deviceData.reg_192 === 2 && (
+				) : deviceData.reg_192 === 2 ? (
 					<p>
 						<span className={deviceData.reg_739 === 0 && deviceData.reg_741 === 0 ? "home_tuvto-on" : "home_tuvto-off"}></span>
 						<ThermostatIcon />
@@ -602,7 +600,7 @@ const HomePage: React.FC<HomePageProps> = ({ deviceData }) => {
 							{getTemperatureDisplay(deviceData.reg_681)}
 						</span>
 					</p>
-				)}
+				) : null}
 			</div>
 
 			{/* Outdoor Unit */}
