@@ -50,5 +50,8 @@
         "authorizing": "Autorizace...",
         "notAuthorized": "Nepovoleno",
         "noPermission": "Nemáte oprávnění pro přístup k tomuto zdroji."
+    },
+    "loading": {
+        "message": "Načítání..."
     }
 }

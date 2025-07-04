@@ -50,5 +50,8 @@
         "authorizing": "Authorizing...",
         "notAuthorized": "Not Authorized",
         "noPermission": "You don't have permission to access this resource."
+    },
+    "loading": {
+        "message": "Loading..."
     }
 }

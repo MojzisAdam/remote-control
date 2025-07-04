@@ -28,13 +28,34 @@
         })();
     </script>
   </head>
-  <body className="bg-white dark:bg-black">
+  <body class="bg-white dark:bg-black">
     <div id="initial-loading"
         class="min-h-screen flex flex-col bg-gray-100 dark:bg-black duration-1000 transition-all ease-out">
         <div class="bg-white dark:bg-black shadow"></div>
         <div class="min-h-screen flex justify-center flex-col items-center gap-8">
             <div class="basicSpinner"></div>
-            <h1 class="text-xl font-semibold text-gray-800 dark:text-gray-300">Loading...</h1>
+            <h1 id="loader-text" class="text-xl font-semibold text-gray-800 dark:text-gray-300">Loading...</h1>
+            <script>
+                (function () {
+                    const translations = {
+                        en: 'Loading...',
+                        cs: 'Načítání...',
+                    };
+
+                    function getLang() {
+                        return localStorage.getItem('i18nextLng') ||
+                            document.cookie.match(/(?:^|; )i18next=([^;]*)/)?.[1] ||
+                            navigator.language.split('-')[0] ||
+                            'en';
+                    }
+
+                    const lang = getLang();
+                    const text = translations[lang] || translations['en'];
+
+                    const el = document.getElementById('loader-text');
+                    if (el) el.textContent = text;
+                })();
+            </script>
         </div>
     </div>
     <div id="root">
