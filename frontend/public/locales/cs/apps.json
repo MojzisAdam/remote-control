@@ -1,0 +1,19 @@
+{
+    "page-title": "Stáhnout aplikace",
+    "title": "Stáhnout mobilní aplikaci",
+    "description": "Získejte mobilní aplikaci pro ovládání vašich zařízení",
+    "android-app": "Android aplikace",
+    "download-options": "Možnosti stažení",
+    "primary-option": "Google Drive",
+    "secondary-option": "Přímé stažení",
+    "google-drive-desc": "Stáhnout z Google Drive",
+    "direct-download-desc": "Přímé stažení z našich serverů",
+    "download-button": "Stáhnout",
+    "recommended": "Doporučeno",
+    "requirements": {
+        "title": "Systémové požadavky",
+        "android-version": "Android 11.0 nebo vyšší",
+        "storage": "25 MB volného místa",
+        "internet": "Je vyžadováno připojení k internetu"
+    }
+}

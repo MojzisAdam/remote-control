@@ -17,14 +17,15 @@ import ResetPassword from "@/pages/reset-password/[token]";
 import UserManagement from "@/pages/user-management";
 import NotFoundPage from "@/pages/NotFoundPage";
 import Settings from "@/pages/settings";
+import Apps from "@/pages/apps";
 import LoadingPage from "@/components/loadingPage";
 import AppLayout from "@/components/layouts/AppLayout";
 import GuestLayout from "@/components/layouts/GuestLayout";
 import ErrorLayout from "@/components/layouts/ErrorLayout";
 import { ForcePasswordChangeModal } from "@/components/user-management/force-password-change-modal";
 
-const PUBLIC_PAGES = ["/", "/login", "/register", "/forgot-password", "/email-verification", "/reset-password", "/404"];
-const EXCLUDED_FROM_REDIRECT = ["/email-verification", "/reset-password"];
+const PUBLIC_PAGES = ["/", "/login", "/register", "/forgot-password", "/email-verification", "/reset-password", "/404", "/apps"];
+const EXCLUDED_FROM_REDIRECT = ["/email-verification", "/reset-password", "/apps"];
 
 const AppRouter: React.FC = () => {
 	const { user, loading, refreshLoading, inAuthVerification } = useAuthContext();
@@ -135,6 +136,10 @@ const AppRouter: React.FC = () => {
 					<Route
 						path="/reset-password/:token"
 						element={<ResetPassword />}
+					/>
+					<Route
+						path="/apps"
+						element={<Apps />}
 					/>
 				</Route>
 

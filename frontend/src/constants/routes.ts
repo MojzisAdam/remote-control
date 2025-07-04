@@ -6,6 +6,7 @@ const routes = {
 	notifications: (deviceId: string) => `/notifications/${deviceId}`,
 	parameterLog: (deviceId: string) => `/parameter-log/${deviceId}`,
 	settings: "/settings",
+	apps: "/apps",
 };
 
 export default routes;

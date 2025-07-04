@@ -1,0 +1,19 @@
+{
+    "page-title": "Download Apps",
+    "title": "Download Mobile App",
+    "description": "Get the mobile companion app to control your devices",
+    "android-app": "Android App",
+    "download-options": "Download Options",
+    "primary-option": "Google Drive",
+    "secondary-option": "Direct Download",
+    "google-drive-desc": "Download from Google Drive",
+    "direct-download-desc": "Direct download from our servers",
+    "download-button": "Download",
+    "recommended": "Recommended",
+    "requirements": {
+        "title": "System Requirements",
+        "android-version": "Android 11.0 or higher",
+        "storage": "25 MB free storage space",
+        "internet": "Internet connection required"
+    }
+}

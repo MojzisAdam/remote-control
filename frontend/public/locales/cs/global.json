@@ -20,6 +20,7 @@
         "manageUsers": "Správa uživatelů",
         "manageDevices": "Správa zařízení",
         "settings": "Nastavení",
+        "apps": "Aplikace",
         "toastDeviceDeletedTitle": "Zařízení bylo odstraněno",
         "toastDeviceDeletedText": "Zařízení s ID "
     },

@@ -71,7 +71,7 @@ export function DashboardSideBar() {
 	const items = [
 		{
 			title: t("sidebar.home"),
-			url: "/dashboard",
+			url: routes.dashboard,
 			icon: Home,
 		},
 	];
