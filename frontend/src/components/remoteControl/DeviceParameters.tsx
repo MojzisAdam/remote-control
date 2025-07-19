@@ -437,7 +437,9 @@ export const DeviceParameters: React.FC<DeviceParametersProps> = ({ deviceId, de
 													<div className="flex flex-col md:flex-row md:justify-between items-start gap-3 mb-3">
 														{/* Parameter description */}
 														<div className="flex-grow">
-															<span className="font-medium text-sm text-gray-800 dark:text-gray-200">{param.description}</span>
+															<span className="font-medium text-sm text-gray-800 dark:text-gray-200">
+																{key} - {param.description}
+															</span>
 														</div>
 
 														{/* Value display */}
@@ -515,7 +517,7 @@ export const DeviceParameters: React.FC<DeviceParametersProps> = ({ deviceId, de
 																	className="text-xs py-1 h-7 px-2.5 border-gray-200 text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800/50"
 																>
 																	{pendingUpdate ? (
-																		"Updating..."
+																		t("parameterEdit.updating")
 																	) : (
 																		<>
 																			{" "}

@@ -135,13 +135,13 @@ const RemoteControlMqttRpi: React.FC<RemoteControlMqttRpiProps> = ({ deviceId, o
 		if (deviceData.fw_v && deviceData.reg_834 && !versionsUpdated.current) {
 			const updateVersions = async () => {
 				try {
-					const result = await updateDeviceVersions(deviceId, deviceData.fw_v as string, `${deviceData.reg_834}`);
+					const result = await updateDeviceVersions(deviceId, `${deviceData.reg_834}`, `${deviceData.fw_v}`);
 
 					if (result.success && currentDevice) {
 						const updatedDevice = {
 							...currentDevice,
-							fw_version: deviceData.fw_v as string,
-							script_version: `${deviceData.reg_834}`,
+							fw_version: `${deviceData.reg_834}`,
+							script_version: `${deviceData.fw_v}`,
 						};
 						updateDevice(updatedDevice);
 					}
@@ -152,9 +152,11 @@ const RemoteControlMqttRpi: React.FC<RemoteControlMqttRpiProps> = ({ deviceId, o
 				}
 			};
 
-			updateVersions();
+			if (currentDevice && (currentDevice.fw_version !== `${deviceData.reg_834}` || currentDevice.script_version !== `${deviceData.fw_v}`)) {
+				updateVersions();
+			}
 		}
-	}, [deviceId, deviceData.fw_v, deviceData.reg_834, updateDeviceVersions, currentDevice, updateDevice]);
+	}, [deviceId, deviceData.fw_v, deviceData.reg_834, updateDeviceVersions, updateDevice]);
 
 	useEffect(() => {
 		connectionStatusRef.current = deviceConnectionStatus;

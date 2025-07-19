@@ -1,8 +1,10 @@
 import React, { useMemo } from "react";
+import { format } from "date-fns";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, CartesianGrid } from "recharts";
 import { ChartContainer } from "@/components/ui/chart";
 import { MonthlyTemperatureData } from "@/api/deviceHistory/model";
 import { useTranslation } from "react-i18next";
+import { cs, enUS } from "date-fns/locale";
 
 interface MonthlyTemperatureChartProps {
 	data: MonthlyTemperatureData[];
@@ -21,7 +23,8 @@ interface CustomTooltipProps {
 }
 
 const MonthlyTemperatureChart: React.FC<MonthlyTemperatureChartProps> = ({ data }) => {
-	const { t } = useTranslation("remote-control");
+	const { t, i18n } = useTranslation("remote-control");
+	const selectedLocale = i18n.language === "en" ? enUS : cs;
 
 	const chartConfig = {
 		avg_ts1: {
@@ -44,13 +47,23 @@ const MonthlyTemperatureChart: React.FC<MonthlyTemperatureChartProps> = ({ data 
 	const formattedData = useMemo(() => {
 		if (!data || data.length === 0) return [];
 
-		return data.map((item) => ({
-			name: `${item.month_name} ${item.year}`,
-			avg_ts1: item.avg_ts1 === -128 ? null : item.avg_ts1,
-			avg_ts2: item.avg_ts2 === -128 ? null : item.avg_ts2,
-			avg_ts4: item.avg_ts4 === -128 ? null : item.avg_ts4,
-		}));
-	}, [data]);
+		return data.map((item) => {
+			// Create a date object for the first day of the month
+			const date = new Date(item.year, item.month - 1, 1);
+			// Format the month name using date-fns and selectedLocale
+			let localizedMonth = format(date, "LLLL", { locale: selectedLocale });
+			// Capitalize first letter
+			if (localizedMonth.length > 0) {
+				localizedMonth = localizedMonth.charAt(0).toUpperCase() + localizedMonth.slice(1);
+			}
+			return {
+				name: `${localizedMonth} ${item.year}`,
+				avg_ts1: item.avg_ts1 === -128 ? null : item.avg_ts1,
+				avg_ts2: item.avg_ts2 === -128 ? null : item.avg_ts2,
+				avg_ts4: item.avg_ts4 === -128 ? null : item.avg_ts4,
+			};
+		});
+	}, [data, selectedLocale]);
 
 	const activeMetrics = useMemo(() => {
 		const metrics = ["avg_ts1", "avg_ts2", "avg_ts4"];
