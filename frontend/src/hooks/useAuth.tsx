@@ -27,8 +27,11 @@ import { useState } from "react";
 import { RegisterFormData } from "@/pages/register";
 import { ApiHandlerResult, handleApiRequest } from "@/utils/apiHandler";
 import { CodeData } from "@/api/user/model";
+import { useTranslation } from "react-i18next";
 
 export const useAuth = () => {
+	const { t } = useTranslation("user");
+
 	const { user, setUser } = useAuthContext();
 	const location = useLocation();
 	const navigate = useNavigate();
@@ -40,7 +43,7 @@ export const useAuth = () => {
 		const result = await handleApiRequest({
 			apiCall: () => registerUser(userData),
 			onSuccess: async () => loadUser(),
-			successMessage: "Registration successful!",
+			successMessage: t("auth-hook.register-success"),
 			statusHandlers: {
 				422: () => {
 					return null;
@@ -79,11 +82,11 @@ export const useAuth = () => {
 		const result = await handleApiRequest({
 			apiCall: () => loginUser(credentials),
 			// onSuccess: async () => setUser(await fetchUser()),
-			successMessage: "Login successful!",
+			successMessage: t("auth-hook.login-success"),
 			statusHandlers: {
 				429: (error) => {
 					const retryAfter = error.response?.headers["retry-after"];
-					return retryAfter ? `Too many login attempts. Please try again in ${retryAfter} seconds.` : "Too many login attempts. Please try again later.";
+					return retryAfter ? t("auth-hook.login-too-many-attempts", { seconds: retryAfter }) : t("auth-hook.login-too-many-attempts-generic");
 				},
 				422: () => {
 					return null;
@@ -114,7 +117,7 @@ export const useAuth = () => {
 		setLoading(true);
 		const result = await handleApiRequest({
 			apiCall: () => apiForgotPassword({ email }),
-			successMessage: "Password reset email sent.",
+			successMessage: t("auth-hook.forgot-password-success"),
 		});
 		setLoading(false);
 		return result;
@@ -130,7 +133,7 @@ export const useAuth = () => {
 					password,
 					password_confirmation,
 				}),
-			successMessage: "Password has been reset successfully.",
+			successMessage: t("auth-hook.password-reset-success"),
 		});
 		setLoading(false);
 		return result;
@@ -146,7 +149,7 @@ export const useAuth = () => {
 					email,
 				}),
 			onSuccess: async () => setUser(await fetchUser()),
-			successMessage: "Profile informations changed succesfully.",
+			successMessage: t("auth-hook.profile-success"),
 			statusHandlers: {
 				422: () => {
 					return null;
@@ -166,7 +169,7 @@ export const useAuth = () => {
 					password,
 					password_confirmation,
 				}),
-			successMessage: "Password changed succesfully.",
+			successMessage: t("auth-hook.change-password-success"),
 			statusHandlers: {
 				422: () => {
 					return null;
@@ -182,7 +185,7 @@ export const useAuth = () => {
 		setLoading(true);
 		const result = await handleApiRequest({
 			apiCall: () => apiVerifyEmail({ id, hash, query }),
-			successMessage: "Your email has been successfully verified.",
+			successMessage: t("auth-hook.email-verification-success"),
 		});
 		setLoading(false);
 		return result;
@@ -193,7 +196,7 @@ export const useAuth = () => {
 		setLoading(true);
 		const result = await handleApiRequest({
 			apiCall: apiResendEmailVerification,
-			successMessage: "A new verification link has been sent to your email.",
+			successMessage: t("auth-hook.email-verification-resend-success"),
 		});
 		setLoading(false);
 		return result;
@@ -224,7 +227,7 @@ export const useAuth = () => {
 		setLoading(true);
 		const result = await handleApiRequest({
 			apiCall: () => apiTwoFactorChallenge(codeData),
-			successMessage: "Two-factor authentication challenge successful.",
+			successMessage: t("auth-hook.two-factor-challenge-success"),
 			statusHandlers: {
 				422: () => {
 					return null;
@@ -240,7 +243,7 @@ export const useAuth = () => {
 		setLoading(true);
 		const result = await handleApiRequest({
 			apiCall: () => apiConfirmPassword(password),
-			successMessage: "Password confirmed successfully.",
+			successMessage: t("auth-hook.confirm-password-success"),
 		});
 		setLoading(false);
 		return result;
@@ -251,7 +254,7 @@ export const useAuth = () => {
 		setLoading(true);
 		const result = await handleApiRequest({
 			apiCall: () => apiGetConfirmedPasswordStatus(),
-			successMessage: "Password confirmed successfully.",
+			successMessage: t("auth-hook.confirm-password-status-success"),
 		});
 		setLoading(false);
 		return result;
@@ -262,7 +265,7 @@ export const useAuth = () => {
 		setLoading(true);
 		const result = await handleApiRequest({
 			apiCall: () => apiConfirmTwoFactorAuthentication(code),
-			successMessage: "Two-factor authentication confirmed successfully.",
+			successMessage: t("auth-hook.two-factor-confirm-success"),
 			onSuccess: async () => setUser(await fetchUser()),
 		});
 		setLoading(false);
@@ -274,7 +277,7 @@ export const useAuth = () => {
 		setLoading(true);
 		const result = await handleApiRequest({
 			apiCall: () => apiEnableTwoFactorAuthentication(),
-			successMessage: "Two-factor authentication enabled successfully.",
+			successMessage: t("auth-hook.two-factor-enable-success"),
 		});
 		setLoading(false);
 		return result;
@@ -286,7 +289,7 @@ export const useAuth = () => {
 		const result = await handleApiRequest({
 			apiCall: () => apiDisableTwoFactorAuthentication(),
 			onSuccess: async () => setUser(await fetchUser()),
-			successMessage: "Two-factor authentication disabled successfully.",
+			successMessage: t("auth-hook.two-factor-disable-success"),
 		});
 		setLoading(false);
 		return result;
@@ -297,7 +300,7 @@ export const useAuth = () => {
 		setLoading(true);
 		const result = await handleApiRequest({
 			apiCall: () => apiGetTwoFactorQrCode(),
-			successMessage: "Two-factor QR code generated.",
+			successMessage: t("auth-hook.two-factor-qr-success"),
 		});
 		setLoading(false);
 		return result;
@@ -308,7 +311,7 @@ export const useAuth = () => {
 		setLoading(true);
 		const result = await handleApiRequest({
 			apiCall: () => apiGetTwoFactorRecoveryCodes(),
-			successMessage: "Two-factor recovery QR code generated.",
+			successMessage: t("auth-hook.two-factor-recovery-success"),
 		});
 		setLoading(false);
 		return result;
@@ -319,7 +322,7 @@ export const useAuth = () => {
 		setLoading(true);
 		const result = await handleApiRequest({
 			apiCall: () => apiRegenerateTwoFactorRecoveryCodes(),
-			successMessage: "Two-factor recovery codes regenerated successfully.",
+			successMessage: t("auth-hook.two-factor-recovery-regenerate-success"),
 		});
 		setLoading(false);
 		return result;
@@ -330,7 +333,7 @@ export const useAuth = () => {
 		setLoading(true);
 		const result = await handleApiRequest({
 			apiCall: () => apiGetTwoFactorSecretKey(),
-			successMessage: "Two-factor secret key generated.",
+			successMessage: t("auth-hook.two-factor-secret-success"),
 		});
 		setLoading(false);
 		return result;
@@ -340,7 +343,7 @@ export const useAuth = () => {
 		setLoading(true);
 		const result = await handleApiRequest({
 			apiCall: () => apiUpdatePreferredLanguage(newLanguage),
-			successMessage: "Preferred Languague successfully set.",
+			successMessage: t("auth-hook.language-success"),
 		});
 		setLoading(false);
 		return result;

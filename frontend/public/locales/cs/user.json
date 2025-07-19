@@ -49,4 +49,28 @@
         "page-description-success": "Ověření je dokončeno. Tuto kartu nyní můžete zavřít.",
         "page-description-failed": "Ověření se nezdařilo. Zkuste to znovu později."
     }
+  ,
+  "auth-hook": {
+    "register-success": "Registrace byla úspěšná!",
+    "login-success": "Přihlášení bylo úspěšné!",
+    "login-too-many-attempts": "Příliš mnoho pokusů o přihlášení. Zkuste to prosím znovu za {{seconds}} sekund.",
+    "login-too-many-attempts-generic": "Příliš mnoho pokusů o přihlášení. Zkuste to prosím později.",
+    "forgot-password-success": "E-mail pro obnovení hesla byl odeslán.",
+    "password-reset-success": "Heslo bylo úspěšně změněno.",
+    "profile-success": "Profil byl úspěšně změněn.",
+    "change-password-success": "Heslo bylo úspěšně změněno.",
+    "email-verification-success": "Váš e-mail byl úspěšně ověřen.",
+    "email-verification-resend-success": "Nový ověřovací odkaz byl odeslán na Váš e-mail.",
+    "two-factor-challenge-success": "Dvoufaktorová autentizace byla úspěšná.",
+    "confirm-password-success": "Heslo bylo úspěšně potvrzeno.",
+    "confirm-password-status-success": "Heslo bylo úspěšně potvrzeno.",
+    "two-factor-confirm-success": "Dvoufaktorová autentizace byla potvrzena.",
+    "two-factor-enable-success": "Dvoufaktorová autentizace byla povolena.",
+    "two-factor-disable-success": "Dvoufaktorová autentizace byla zakázána.",
+    "two-factor-qr-success": "QR kód pro dvoufaktorovou autentizaci byl vygenerován.",
+    "two-factor-recovery-success": "Obnovovací kódy pro dvoufaktorovou autentizaci byly vygenerovány.",
+    "two-factor-recovery-regenerate-success": "Obnovovací kódy pro dvoufaktorovou autentizaci byly znovu vygenerovány.",
+    "two-factor-secret-success": "Tajný klíč pro dvoufaktorovou autentizaci byl vygenerován.",
+    "language-success": "Preferovaný jazyk byl úspěšně nastaven."
+  }
 }

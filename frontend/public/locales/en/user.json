@@ -49,4 +49,28 @@
         "page-description-success": "Verification is complete. You can close this tab now.",
         "page-description-failed": "Verification failed. Please try again later."
     }
+  ,
+  "auth-hook": {
+    "register-success": "Registration successful!",
+    "login-success": "Login successful!",
+    "login-too-many-attempts": "Too many login attempts. Please try again in {{seconds}} seconds.",
+    "login-too-many-attempts-generic": "Too many login attempts. Please try again later.",
+    "forgot-password-success": "Password reset email sent.",
+    "password-reset-success": "Password has been reset successfully.",
+    "profile-success": "Profile information changed successfully.",
+    "change-password-success": "Password changed successfully.",
+    "email-verification-success": "Your email has been successfully verified.",
+    "email-verification-resend-success": "A new verification link has been sent to your email.",
+    "two-factor-challenge-success": "Two-factor authentication challenge successful.",
+    "confirm-password-success": "Password confirmed successfully.",
+    "confirm-password-status-success": "Password confirmed successfully.",
+    "two-factor-confirm-success": "Two-factor authentication confirmed successfully.",
+    "two-factor-enable-success": "Two-factor authentication enabled successfully.",
+    "two-factor-disable-success": "Two-factor authentication disabled successfully.",
+    "two-factor-qr-success": "Two-factor QR code generated.",
+    "two-factor-recovery-success": "Two-factor recovery codes generated.",
+    "two-factor-recovery-regenerate-success": "Two-factor recovery codes regenerated successfully.",
+    "two-factor-secret-success": "Two-factor secret key generated.",
+    "language-success": "Preferred language successfully set."
+  }
 }
