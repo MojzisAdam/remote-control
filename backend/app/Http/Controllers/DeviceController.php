@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\DeviceResource;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Models\DeviceData;
@@ -352,37 +353,61 @@ class DeviceController extends Controller
         ]);
 
         try {
-            $device = Device::updateOrCreate(
-                ['id' => $validated['id']],
-                [
-                    'password' => Hash::make($validated['password']),
+            return DB::transaction(function () use ($validated) {
+                $updateData = [
                     'display_type' => $validated['display_type'],
-                    'last_activity' => Carbon::now(),
+                    'last_activity' => now(),
                     'ip' => $validated['ip'] ?? null,
                     'error_code' => $validated['error_code'] ?? 0,
                     'script_version' => $validated['script_v'] ?? null,
                     'fw_version' => $validated['fw_v'] ?? null,
-                ]
-            );
-            if ($device->wasRecentlyCreated) {
-                $deviceDescription = DeviceDescription::create([
-                    'device_id' => $device->id,
-                ]);
+                ];
 
-                $deviceData = DeviceData::create([
-                    'device_id' => $device->id,
-                ]);
+                $device = Device::where('id', $validated['id'])->first();
 
-                $deviceParameterChange = DeviceParameterChange::create([
-                    'device_id' => $device->id,
-                ]);
-            }
+                if (!empty($validated['password'])) {
+                    $updateData['password'] = Hash::make($validated['password']);
+                }
+
+                $wasCreated = false;
+
+                if ($device) {
+                    $changed = false;
+                    foreach ($updateData as $key => $value) {
+                        if ($device->$key !== $value) {
+                            $device->$key = $value;
+                            $changed = true;
+                        }
+                    }
+
+                    if ($changed) {
+                        $device->save();
+                    }
+                } else {
+                    $device = Device::create(array_merge(['id' => $validated['id']], $updateData));
+                    $wasCreated = true;
+                }
+
+                if ($wasCreated) {
+                    $deviceId = $device->id;
+
+                    // Batch insert related records
+                    DeviceDescription::insert(['device_id' => $deviceId]);
+                    DeviceData::insert(['device_id' => $deviceId]);
+                    DeviceParameterChange::insert(['device_id' => $deviceId]);
+                }
+
+                return response()->json([
+                    'status' => 'success',
+                ], $wasCreated ? 201 : 200);
+            });
+        } catch (\Exception $e) {
+            Log::error('Device update failed: ' . $e->getMessage());
 
             return response()->json([
-                'status' => 'success',
-            ], 201);
-        } catch (\Exception $e) {
-            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+                'status' => 'error',
+                'message' => 'Internal server error',
+            ], 500);
         }
     }
 
