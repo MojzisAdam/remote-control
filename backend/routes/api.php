@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use App\Http\Controllers\DeviceController;
-use App\Http\Controllers\GraphController;
+use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RemoteControlApiController;
 use App\Http\Controllers\RpiController;
@@ -40,9 +40,9 @@ Route::middleware(['auth:sanctum', 'device.ownership'])->group(function () {
     Route::delete('/devices/{deviceId}', [DeviceController::class, 'removeUserDevice']);
     Route::put('/devices/{deviceId}/description', [DeviceController::class, 'updateDeviceDescription']);
 
-    Route::get('/device-history/{deviceId}', [GraphController::class, 'getDeviceHistory']);
-    Route::post('/device-history/{deviceId}/custom-graph', [GraphController::class, 'getCustomGraphData']);
-    Route::get('/temperatures/monthly-average/{deviceId}', [GraphController::class, 'getMonthlyAverageTemperatures']);
+    Route::get('/device-history/{deviceId}', [HistoryController::class, 'getDeviceHistory']);
+    Route::post('/device-history/{deviceId}/custom-graph', [HistoryController::class, 'getCustomGraphData']);
+    Route::get('/temperatures/monthly-average/{deviceId}', [HistoryController::class, 'getMonthlyAverageTemperatures']);
 
     Route::post('/remote-control/{deviceId}/start-session', [RemoteControlApiController::class, 'startSession']);
     Route::get('/remote-control/{deviceId}/check-connection', [RemoteControlApiController::class, 'checkConnection']);
@@ -60,16 +60,16 @@ Route::middleware(['auth:sanctum', 'device.ownership'])->group(function () {
 });
 
 Route::middleware(['auth:sanctum', 'permission:view-history'])->group(function () {
-    Route::put('/custom-graphs/{graphId}', [GraphController::class, 'updateCustomGraph']);
-    Route::delete('/custom-graphs/{graphId}', [GraphController::class, 'deleteCustomGraph']);
+    Route::put('/custom-graphs/{graphId}', [HistoryController::class, 'updateCustomGraph']);
+    Route::delete('/custom-graphs/{graphId}', [HistoryController::class, 'deleteCustomGraph']);
 });
 
 Route::middleware(['auth:sanctum', 'device.ownership', 'permission:view-history'])->group(function () {
-    Route::get('/hidden-lines/{deviceId}', [GraphController::class, 'getHiddenLines']);
-    Route::post('/hidden-lines/{deviceId}', [GraphController::class, 'updateHiddenLines']);
-    Route::get('/custom-graphs/{deviceId}', [GraphController::class, 'getCustomGraphs']);
-    Route::post('/custom-graphs/{deviceId}', [GraphController::class, 'saveCustomGraph']);
-    Route::get('/device-history/{deviceId}/paginated', [GraphController::class, 'paginated']);
+    Route::get('/hidden-lines/{deviceId}', [HistoryController::class, 'getHiddenLines']);
+    Route::post('/hidden-lines/{deviceId}', [HistoryController::class, 'updateHiddenLines']);
+    Route::get('/custom-graphs/{deviceId}', [HistoryController::class, 'getCustomGraphs']);
+    Route::post('/custom-graphs/{deviceId}', [HistoryController::class, 'saveCustomGraph']);
+    Route::get('/device-history/{deviceId}/paginated', [HistoryController::class, 'paginated']);
 });
 
 
@@ -101,7 +101,7 @@ Route::post('/reset-password', [\Laravel\Fortify\Http\Controllers\NewPasswordCon
 
 
 Route::post('/devices', [DeviceController::class, 'updateOrCreateDevice'])->middleware('api_key:device');
-Route::post('/device-history', [GraphController::class, 'insertHistory'])->middleware('api_key:history');
+Route::post('/device-history', [HistoryController::class, 'insertHistory'])->middleware('api_key:history');
 Route::post('/device/notify', [NotificationController::class, 'notifyDeviceError'])->middleware('api_key:notify');
 
 Route::post('/261dfg59_4', [RpiController::class, 'handleRequest']);

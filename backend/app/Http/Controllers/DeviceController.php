@@ -393,8 +393,12 @@ class DeviceController extends Controller
 
                     // Batch insert related records
                     DeviceDescription::insert(['device_id' => $deviceId]);
-                    DeviceData::insert(['device_id' => $deviceId]);
-                    DeviceParameterChange::insert(['device_id' => $deviceId]);
+
+                    // Only insert DeviceData and DeviceParameterChange for device types 1 and 2
+                    if ($validated['display_type'] != '3') {
+                        DeviceData::insert(['device_id' => $deviceId]);
+                        DeviceParameterChange::insert(['device_id' => $deviceId]);
+                    }
                 }
 
                 return response()->json([
