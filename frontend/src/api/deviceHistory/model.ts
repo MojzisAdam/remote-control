@@ -1,7 +1,11 @@
-export interface DeviceHistory {
+// Base interface for common fields
+interface BaseDeviceHistory {
 	deviceId: string;
 	cas: string;
+}
 
+// Standard device history (types 1 & 2)
+export interface StandardDeviceHistory extends BaseDeviceHistory {
 	TS1?: number;
 	TS2?: number;
 	TS3?: number;
@@ -32,6 +36,48 @@ export interface DeviceHistory {
 	Prtk?: number;
 	TpnVk?: number;
 }
+
+// Daitsu device history (type 3)
+export interface DaitsuDeviceHistory extends BaseDeviceHistory {
+	T1s_z1?: number;
+	T1s_z2?: number;
+	reg_4?: number;
+	reg_100?: number;
+	reg_101?: number;
+	reg_104?: number;
+	reg_105?: number;
+	reg_106?: number;
+	reg_107?: number;
+	reg_108?: number;
+	reg_109?: number;
+	reg_110?: number;
+	reg_111?: number;
+	reg_112?: number;
+	reg_113?: number;
+	reg_115?: number;
+	reg_124?: number;
+	reg_128_1?: number;
+	reg_128_4?: number;
+	reg_128_6?: number;
+	reg_129_0?: number;
+	reg_129_2?: number;
+	reg_129_13?: number;
+	reg_129_14?: number;
+	reg_138?: number;
+	reg_140?: number;
+}
+
+// Union type for all device history types
+export type DeviceHistory = StandardDeviceHistory | DaitsuDeviceHistory;
+
+// Type guards
+export const isStandardDeviceHistory = (history: DeviceHistory): history is StandardDeviceHistory => {
+	return "TS1" in history || "chyba" in history;
+};
+
+export const isDaitsuDeviceHistory = (history: DeviceHistory): history is DaitsuDeviceHistory => {
+	return "T1s_z1" in history || "reg_124" in history;
+};
 
 export interface UserGraphPreference {
 	deviceId: string;

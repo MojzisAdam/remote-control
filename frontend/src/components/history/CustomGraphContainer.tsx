@@ -1,4 +1,4 @@
-import React, { useEffect, useState, lazy, Suspense } from "react";
+import React, { useEffect, useState, lazy, Suspense, useMemo } from "react";
 import { useDeviceHistory } from "@/hooks/useDeviceHistory";
 import { Skeleton } from "@/components/ui/skeleton";
 import { subHours, subDays, subWeeks, format } from "date-fns";
@@ -8,15 +8,17 @@ import DateRangeFilter from "@/components/history/DateRangeFilter";
 import NoDataMessage from "@/components/history/NoDataMessage";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { useTranslation } from "react-i18next";
+import { Device } from "@/api/devices/model";
+import { ChartConstantsFactory } from "@/constants/chartConstants/factory";
 
 const CustomGraph = lazy(() => import("./CustomGraph").then((mod) => ({ default: mod.CustomGraph })));
 
 interface CustomGraphContainerProps {
-	deviceId: string;
 	selectedMetrics: string[];
+	device: Device;
 }
 
-const CustomGraphContainer: React.FC<CustomGraphContainerProps> = ({ deviceId, selectedMetrics }) => {
+const CustomGraphContainer: React.FC<CustomGraphContainerProps> = ({ selectedMetrics, device }) => {
 	const { t } = useTranslation("history");
 	const { customGraphData, loadCustomGraphData, loading } = useDeviceHistory();
 
@@ -31,11 +33,17 @@ const CustomGraphContainer: React.FC<CustomGraphContainerProps> = ({ deviceId, s
 
 	const { toast } = useToast();
 
+	// Get device-specific column configuration
+	const availableColumnsConfig = useMemo(() => {
+		return ChartConstantsFactory.getGraphColumns(device);
+	}, [device]);
+
 	useEffect(() => {
 		const fetchData = async () => {
 			setIsLoading(true);
+
 			if (selectedMetrics.length > 0) {
-				const result = await loadCustomGraphData(deviceId, selectedMetrics, format(selectedFrom, "yyyy-MM-dd HH:mm:ss"), format(selectedTo, "yyyy-MM-dd HH:mm:ss"));
+				const result = await loadCustomGraphData(device.id, selectedMetrics, format(selectedFrom, "yyyy-MM-dd HH:mm:ss"), format(selectedTo, "yyyy-MM-dd HH:mm:ss"));
 				if (!result.success) {
 					setLoadingError(true);
 				}
@@ -52,13 +60,13 @@ const CustomGraphContainer: React.FC<CustomGraphContainerProps> = ({ deviceId, s
 		};
 
 		fetchData();
-	}, [deviceId, selectedMetrics]);
+	}, [device.id, selectedMetrics]);
 
 	const handleFetchData = async (fromDate?: Date, toDate?: Date) => {
 		const from = fromDate ?? selectedFrom;
 		const to = toDate ?? selectedTo;
 
-		const result = await loadCustomGraphData(deviceId, selectedMetrics, format(from, "yyyy-MM-dd HH:mm:ss"), format(to, "yyyy-MM-dd HH:mm:ss"));
+		const result = await loadCustomGraphData(device.id, selectedMetrics, format(from, "yyyy-MM-dd HH:mm:ss"), format(to, "yyyy-MM-dd HH:mm:ss"));
 
 		if (!result.success) {
 			toast({
@@ -122,6 +130,7 @@ const CustomGraphContainer: React.FC<CustomGraphContainerProps> = ({ deviceId, s
 						<CustomGraph
 							data={customGraphData}
 							selectedMetrics={selectedMetrics}
+							availableColumnsConfig={availableColumnsConfig}
 						/>
 					</Suspense>
 				</ErrorBoundary>

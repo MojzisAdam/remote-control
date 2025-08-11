@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { DeviceHistoryDataTable } from "@/components/history/table/data-table";
-import { columns } from "@/components/history/table/columns";
 import { useDeviceHistory } from "@/hooks/useDeviceHistory";
 import { Button } from "@/components/ui/button";
 import { DeviceHistory } from "@/api/deviceHistory/model";
@@ -10,12 +9,13 @@ import { useToast } from "@/hooks/use-toast";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useTranslation } from "react-i18next";
 import { Device } from "@/api/devices/model";
+import { TableColumnsFactory } from "./TableFactory";
 
-interface CustomGraphsContainerProps {
+interface EnhancedTableContainerProps {
 	device: Device;
 }
 
-const TableContainer: React.FC<CustomGraphsContainerProps> = ({ device }) => {
+const EnhancedTableContainer: React.FC<EnhancedTableContainerProps> = ({ device }) => {
 	const { t } = useTranslation(["pagination", "history"]);
 
 	const { loadPaginatedDeviceHistory, loading } = useDeviceHistory();
@@ -48,6 +48,11 @@ const TableContainer: React.FC<CustomGraphsContainerProps> = ({ device }) => {
 
 	const debouncedFromDate = useDebounce(fromDateInput, 500);
 	const debouncedToDate = useDebounce(toDateInput, 500);
+
+	// Get device-specific columns
+	const columns = useMemo(() => {
+		return TableColumnsFactory.getColumns(device);
+	}, [device.display_type]);
 
 	useEffect(() => {
 		setQuery((prev) => {
@@ -176,4 +181,4 @@ const TableContainer: React.FC<CustomGraphsContainerProps> = ({ device }) => {
 	);
 };
 
-export default TableContainer;
+export default EnhancedTableContainer;

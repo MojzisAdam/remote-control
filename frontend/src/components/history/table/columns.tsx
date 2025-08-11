@@ -1,5 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { DeviceHistory } from "@/api/deviceHistory/model";
+import { StandardDeviceHistory } from "@/api/deviceHistory/model";
 import { HoverClickPopover } from "@/components/ui/hover-popover";
 
 const formatTemperature = (value: number | undefined) => {
@@ -114,7 +114,7 @@ const formatValue = (value: number | undefined) => {
 	return value.toString();
 };
 
-export const columns: ColumnDef<DeviceHistory>[] = [
+export const columns: ColumnDef<StandardDeviceHistory>[] = [
 	{
 		accessorKey: "cas",
 		header: "Time",

@@ -1,0 +1,76 @@
+interface ChartColumn {
+	value: string;
+	label: string;
+	color: string;
+	unit: string;
+	valueMap?: Record<string, string>;
+}
+
+export const standardGraphColumns: ChartColumn[] = [
+	{ value: "TS1", label: "TS1", color: "#0800ff", unit: "°C" },
+	{ value: "TS2", label: "TS2", color: "#00d0ff", unit: "°C" },
+	{ value: "TS3", label: "TS3", color: "#9500ff", unit: "°C" },
+	{ value: "TS4", label: "TS4", color: "#6e4900", unit: "°C" },
+	{ value: "TS5", label: "TS5", color: "#ff8000", unit: "°C" },
+	{ value: "TS6", label: "TS6", color: "#1fa32c", unit: "°C" },
+	{ value: "TS7", label: "TS7", color: "#e817ff", unit: "°C" },
+	{ value: "TS8", label: "TS8", color: "#17ff49", unit: "°C" },
+	{ value: "TS9", label: "TS9", color: "#ec6263", unit: "°C" },
+	{ value: "PT", label: "PT", color: "#dbc77d", unit: "°C" },
+	{ value: "PTO", label: "PTO", color: "#d4d4d4", unit: "°C" },
+	{ value: "PTUV", label: "PTUV", color: "#996e00", unit: "°C" },
+	{ value: "PPT", label: "PPT", color: "#deca14", unit: "°C" },
+	{ value: "PTO2", label: "PTO2", color: "#15cfc2", unit: "°C" },
+	{ value: "komp", label: "komp", color: "#4a8f00", unit: "", valueMap: { "0": "Off", "10": "On" } },
+	{ value: "kvyk", label: "kvyk", color: "#ff0000", unit: "%" },
+	{ value: "run", label: "run", color: "#9500ff", unit: "", valueMap: { "0": "Off", "6": "On" } },
+	{
+		value: "reg",
+		label: "reg",
+		color: "#ffffff",
+		unit: "",
+		valueMap: { "0": "Off", "5": "TUV", "3": "TO", "9": "Cooling", "11": "Heating", "7": "Pool", "15": "TO+TUV", "13": "Cool.+TUV", "17": "Pool+TUV" },
+	},
+	{ value: "vjedn", label: "vjedn", color: "#6e4900", unit: "", valueMap: { "0": "Off", "2": "Heating", "4": "Defrosting", "6": "Cooling" } },
+	{ value: "dzto", label: "dzto", color: "#00ffdd", unit: "", valueMap: { "0": "Off", "4": "dz level 1", "7": "dz level m", "9": "dz level 2", "11": "Additional" } },
+	{ value: "dztuv", label: "dztuv", color: "#0022ff", unit: "", valueMap: { "0": "Off", "4": "dz level 1", "7": "dz level m", "9": "dz level 2", "11": "Additional" } },
+	{ value: "tstat", label: "tstat", color: "#ff7700", unit: "", valueMap: { "0": "not blocked", "-2": "blocks" } },
+	{ value: "hdo", label: "hdo", color: "#9000ff", unit: "", valueMap: { "0": "not blocked", "-3": "blocks" } },
+	{ value: "obd", label: "obd", color: "#bfbfbf", unit: "", valueMap: { "3": "Winter", "-4": "Summer" } },
+	{ value: "RPT", label: "RPT", color: "#ede90c", unit: "°C" },
+	{ value: "Prtk", label: "Prtk", color: "#1493e3", unit: "m3/h" },
+	{ value: "TpnVk", label: "TpnVk", color: "#a10000", unit: "kW" },
+	{ value: "chyba", label: "chyba", color: "#ff0000", unit: "", valueMap: { "0": "No Error", "-6": "Error" } },
+];
+
+export const standardTableColumns = [
+	{ key: "cas", label: "Time" },
+	{ key: "TS1", label: "TS1" },
+	{ key: "TS2", label: "TS2" },
+	{ key: "TS3", label: "TS3" },
+	{ key: "TS4", label: "TS4" },
+	{ key: "TS5", label: "TS5" },
+	{ key: "TS6", label: "TS6" },
+	{ key: "TS7", label: "TS7" },
+	{ key: "TS8", label: "TS8" },
+	{ key: "TS9", label: "TS9" },
+	{ key: "PTO", label: "PTO" },
+	{ key: "PTUV", label: "PTUV" },
+	{ key: "PTO2", label: "PTO2" },
+	{ key: "komp", label: "komp" },
+	{ key: "kvyk", label: "kvyk" },
+	{ key: "run", label: "run" },
+	{ key: "reg", label: "reg" },
+	{ key: "vjedn", label: "vjedn" },
+	{ key: "dzto", label: "dzto" },
+	{ key: "dztuv", label: "dztuv" },
+	{ key: "tstat", label: "tstat" },
+	{ key: "hdo", label: "hdo" },
+	{ key: "obd", label: "obd" },
+	{ key: "chyba", label: "chyba" },
+	{ key: "PT", label: "PT" },
+	{ key: "PPT", label: "PPT" },
+	{ key: "RPT", label: "RPT" },
+	{ key: "Prtk", label: "Prtk" },
+	{ key: "TpnVk", label: "TpnVk" },
+];

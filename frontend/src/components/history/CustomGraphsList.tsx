@@ -10,14 +10,15 @@ import { DeleteCustomGraphAlert } from "@/components/history/DeleteCustomGraphAl
 import { useToast } from "@/hooks/use-toast";
 import ErrorAlert from "@/components/history/ErrorAlert";
 import { useTranslation } from "react-i18next";
+import { Device } from "@/api/devices/model";
 
 import CustomGraphDialog from "./CustomGraphDialog";
 
 interface CustomGraphsListProps {
-	deviceId: string;
+	device: Device;
 }
 
-const CustomGraphsList: React.FC<CustomGraphsListProps> = ({ deviceId }) => {
+const CustomGraphsList: React.FC<CustomGraphsListProps> = ({ device }) => {
 	const { t } = useTranslation("history");
 	const [selectedMetrics, setSelectedMetrics] = useState<string[]>([]);
 	const [chartName, setChartName] = useState("");
@@ -44,7 +45,7 @@ const CustomGraphsList: React.FC<CustomGraphsListProps> = ({ deviceId }) => {
 
 	const loadCustomGraphs = async () => {
 		setIsLoading(true);
-		const result = await loadUserCustomGraphs(deviceId);
+		const result = await loadUserCustomGraphs(device.id);
 		if (!result.success) {
 			setLoadingError(true);
 		}
@@ -55,7 +56,7 @@ const CustomGraphsList: React.FC<CustomGraphsListProps> = ({ deviceId }) => {
 		if (!chartName || selectedMetrics.length === 0) return;
 
 		const graphData: Partial<UserCustomGraph> = {
-			deviceId: deviceId,
+			deviceId: device.id,
 			graphName: chartName,
 			selectedMetrics: selectedMetrics,
 		};
@@ -134,6 +135,7 @@ const CustomGraphsList: React.FC<CustomGraphsListProps> = ({ deviceId }) => {
 				isLoading={loading}
 				handleSaveGraph={handleSaveGraph}
 				editingGraph={!!editingGraph}
+				device={device}
 			/>
 
 			{/* Custom Graphs List */}
@@ -176,8 +178,8 @@ const CustomGraphsList: React.FC<CustomGraphsListProps> = ({ deviceId }) => {
 							</CardHeader>
 							<CardContent className="max-sm:px-4">
 								<CustomGraphContainer
-									deviceId={deviceId}
 									selectedMetrics={selectedMetrics}
+									device={device}
 								/>
 							</CardContent>
 						</Card>

@@ -16,7 +16,8 @@ class HistoryTableResourceDaitsu extends JsonResource
     {
         return [
             'cas' => $this->cas,
-            'reg_2' => $this->reg_2,
+            'T1s_z1' => ($this->reg_136 != 255) ? $this->reg_136 : (($this->reg_2 >> 8) & 0xFF),
+            'T1s_z2' => ($this->reg_137 != 255) ? $this->reg_137 : ($this->reg_2 & 0xFF),
             'reg_4' => $this->reg_4,
             'reg_100' => $this->reg_100,
             'reg_101' => $this->reg_101,
@@ -39,8 +40,6 @@ class HistoryTableResourceDaitsu extends JsonResource
             'reg_129_2' => $this->reg_129_2,
             'reg_129_13' => $this->reg_129_13,
             'reg_129_14' => $this->reg_129_14,
-            'reg_136' => $this->reg_136,
-            'reg_137' => $this->reg_137,
             'reg_138' => $this->reg_138,
             'reg_140' => $this->reg_140,
         ];

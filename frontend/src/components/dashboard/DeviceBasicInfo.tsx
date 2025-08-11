@@ -1,7 +1,7 @@
 import React from "react";
 import { Device } from "@/api/devices/model";
 import { useTranslation } from "react-i18next";
-import { getDisplayTypeName } from "@/utils/displayUtils";
+import { getDeviceTypeName } from "@/utils/deviceTypeUtils";
 import { HoverClickPopover } from "@/components/ui/hover-popover";
 
 interface DeviceBasicInfoProps {
@@ -22,7 +22,7 @@ export function DeviceBasicInfo({ device }: DeviceBasicInfoProps) {
 				/>
 				<InfoItem
 					label={t("more-info-sheet.basic-info.display-type")}
-					value={getDisplayTypeName(Number(device.display_type))}
+					value={getDeviceTypeName(Number(device.display_type))}
 				/>
 				<InfoItem
 					label={t("more-info-sheet.basic-info.sv")}

@@ -6,6 +6,7 @@ export const fetchDeviceHistory = async (deviceId: string, fromDate?: string, to
 	const response = await axios.get(`/device-history/${deviceId}`, {
 		params: { from_date: fromDate, to_date: toDate },
 	});
+
 	return response.data;
 };
 

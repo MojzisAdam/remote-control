@@ -2,12 +2,13 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import CustomGraphsList from "./CustomGraphsList";
 import { useTranslation } from "react-i18next";
+import { Device } from "@/api/devices/model";
 
 interface CustomGraphsContainerProps {
-	deviceId: string;
+	device: Device;
 }
 
-const CustomGraphsContainer: React.FC<CustomGraphsContainerProps> = ({ deviceId }) => {
+const CustomGraphsContainer: React.FC<CustomGraphsContainerProps> = ({ device }) => {
 	const { t } = useTranslation("history");
 
 	return (
@@ -16,7 +17,7 @@ const CustomGraphsContainer: React.FC<CustomGraphsContainerProps> = ({ deviceId 
 				<CardTitle>{t("customGraphs.title")}</CardTitle>
 			</CardHeader>
 			<CardContent className="max-sm:px-4">
-				<CustomGraphsList deviceId={deviceId} />
+				<CustomGraphsList device={device} />
 			</CardContent>
 		</Card>
 	);

@@ -18,10 +18,11 @@ class DynamicDataTransformationResourceDaitsu extends JsonResource
         $filteredData = ['cas' => $this->cas];
 
         $transformations = [
-            'reg_2' => fn() => $this->reg_2,
+            'T1s_z1' => fn() => ($this->reg_136 != 255) ? $this->reg_136 : (($this->reg_2 >> 8) & 0xFF),
+            'T1s_z2' => fn() => ($this->reg_137 != 255) ? $this->reg_137 : ($this->reg_2 & 0xFF),
             'reg_4' => fn() => $this->reg_4,
             'reg_100' => fn() => $this->reg_100,
-            'reg_101' => fn() => $this->reg_101,
+            'reg_101' => fn() => $this->transformVjedn($this->reg_101),
             'reg_104' => fn() => $this->reg_104,
             'reg_105' => fn() => $this->reg_105,
             'reg_106' => fn() => $this->reg_106,
@@ -33,16 +34,14 @@ class DynamicDataTransformationResourceDaitsu extends JsonResource
             'reg_112' => fn() => $this->reg_112,
             'reg_113' => fn() => $this->reg_113,
             'reg_115' => fn() => $this->reg_115,
-            'reg_124' => fn() => $this->reg_124,
-            'reg_128_1' => fn() => $this->reg_128_1,
-            'reg_128_4' => fn() => $this->reg_128_4,
-            'reg_128_6' => fn() => $this->reg_128_6,
-            'reg_129_0' => fn() => $this->reg_129_0,
-            'reg_129_2' => fn() => $this->reg_129_2,
-            'reg_129_13' => fn() => $this->reg_129_13,
-            'reg_129_14' => fn() => $this->reg_129_14,
-            'reg_136' => fn() => $this->reg_136,
-            'reg_137' => fn() => $this->reg_137,
+            'reg_124' => fn() => ($this->reg_124 == 0) ? 0 : -6,
+            'reg_128_1' => fn() => ($this->reg_128_1 == 0) ? 0 : 4,
+            'reg_128_4' => fn() => ($this->reg_128_4 == 0) ? 0 : 3,
+            'reg_128_6' => fn() => ($this->reg_128_6 == 0) ? 0 : 2,
+            'reg_129_0' => fn() => ($this->reg_129_0 == 0) ? 0 : 5,
+            'reg_129_2' => fn() => ($this->reg_129_2 == 0) ? 0 : 7,
+            'reg_129_13' => fn() => ($this->reg_129_13 == 0) ? 0 : 11,
+            'reg_129_14' => fn() => ($this->reg_129_14 == 0) ? 0 : 9,
             'reg_138' => fn() => $this->reg_138,
             'reg_140' => fn() => $this->reg_140,
         ];
@@ -54,5 +53,15 @@ class DynamicDataTransformationResourceDaitsu extends JsonResource
         }
 
         return $filteredData;
+    }
+    protected function transformVjedn($vjedn)
+    {
+        $mapping = [
+            0 => 0,
+            2 => 3,
+            3 => 5
+        ];
+
+        return $mapping[$vjedn] ?? $vjedn;
     }
 }

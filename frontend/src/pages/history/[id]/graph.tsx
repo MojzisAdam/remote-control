@@ -62,8 +62,12 @@ const HistoryGraphPage: React.FC = () => {
 					</div>
 					{!isLoading ? (
 						<>
-							<MainGraphContainer deviceId={deviceId as string} />
-							<CustomGraphsContainer deviceId={deviceId as string} />
+							{currentDevice && (
+								<>
+									<MainGraphContainer device={currentDevice} />
+									<CustomGraphsContainer device={currentDevice} />
+								</>
+							)}
 						</>
 					) : (
 						<>

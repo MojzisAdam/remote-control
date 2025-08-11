@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Plus, FilePenLine, Users, ArrowBigDown, UserPlus } from "lucide-react";
 import { getStatusColor } from "@/components/dashboard/DeviceCard";
-import { getDisplayTypeName } from "@/utils/displayUtils";
+import { getDeviceTypeName } from "@/utils/deviceTypeUtils";
 
 export type DeviceActions = {
 	viewDeviceUsers: (device: Device) => void;
@@ -40,7 +40,7 @@ export const getColumns = (t: (key: string) => string): ColumnDef<Device, Device
 	{
 		accessorKey: "display",
 		header: t("table.display"),
-		cell: ({ row }) => getDisplayTypeName(Number(row.original.display_type || 0)),
+		cell: ({ row }) => getDeviceTypeName(Number(row.original.display_type || 0)),
 	},
 	{
 		accessorKey: "owner",

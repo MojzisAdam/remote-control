@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { MultiSelect } from "@/components/ui/multi-select";
 import ButtonWithSpinner from "@/components/ButtonWithSpinner";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { graphColumns } from "@/constants/chartConstants";
 import { useTranslation } from "react-i18next";
+import { Device } from "@/api/devices/model";
+import { ChartConstantsFactory } from "@/constants/chartConstants/factory";
 
 interface CustomGraphDialogProps {
 	isOpen: boolean;
@@ -18,10 +19,30 @@ interface CustomGraphDialogProps {
 	isLoading: boolean;
 	handleSaveGraph: () => Promise<void>;
 	editingGraph: boolean;
+	device: Device;
 }
 
-const CustomGraphDialog: React.FC<CustomGraphDialogProps> = ({ isOpen, onOpenChange, chartName, setChartName, selectedMetrics, setSelectedMetrics, isLoading, handleSaveGraph, editingGraph }) => {
+const CustomGraphDialog: React.FC<CustomGraphDialogProps> = ({
+	isOpen,
+	onOpenChange,
+	chartName,
+	setChartName,
+	selectedMetrics,
+	setSelectedMetrics,
+	isLoading,
+	handleSaveGraph,
+	editingGraph,
+	device,
+}) => {
 	const { t } = useTranslation("history");
+
+	// Get device-specific columns
+	const availableColumns = useMemo(() => {
+		return ChartConstantsFactory.getGraphColumns(device).map((col) => ({
+			value: col.value,
+			label: col.label,
+		}));
+	}, [device]);
 
 	return (
 		<Dialog
@@ -42,7 +63,7 @@ const CustomGraphDialog: React.FC<CustomGraphDialogProps> = ({ isOpen, onOpenCha
 				/>
 				<div className="max-w-xl mt-2">
 					<MultiSelect
-						options={graphColumns}
+						options={availableColumns}
 						onValueChange={setSelectedMetrics}
 						defaultValue={selectedMetrics}
 						placeholder={t("customGraphs.metricsPlaceholder")}

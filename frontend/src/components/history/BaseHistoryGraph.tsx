@@ -5,9 +5,10 @@ import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, LineElement, CategoryScale, LinearScale, PointElement, Legend, ChartEvent, Tooltip, TimeScale, ChartOptions, TooltipItem } from "chart.js";
 import "chartjs-adapter-date-fns";
 import zoomPlugin from "chartjs-plugin-zoom";
-import { chartConfig, chartColors } from "@/constants/chartConstants";
+import { chartColors } from "@/constants/chartConstants";
 import { DeviceHistory } from "@/api/deviceHistory/model";
 import { useTranslation } from "react-i18next";
+import { ChartColumn } from "@/constants/chartConstants/factory";
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Legend, Tooltip, TimeScale, zoomPlugin);
 
@@ -18,9 +19,10 @@ interface BaseGraphProps {
 	savePreferences?: (hidden: string[]) => void;
 	className?: string;
 	height?: string;
+	availableColumnsConfig: ChartColumn[];
 }
 
-const BaseHistoryGraph: React.FC<BaseGraphProps> = ({ data = [], selectedMetrics, hiddenLines = [], savePreferences, className = "", height = "h-60 md:h-80" }) => {
+const BaseHistoryGraph: React.FC<BaseGraphProps> = ({ data = [], selectedMetrics, hiddenLines = [], savePreferences, className = "", height = "h-60 md:h-80", availableColumnsConfig }) => {
 	const { t } = useTranslation("history");
 	const { resolvedTheme } = useTheme();
 	const [isZoomEnabled, setIsZoomEnabled] = useState(false);
@@ -43,6 +45,20 @@ const BaseHistoryGraph: React.FC<BaseGraphProps> = ({ data = [], selectedMetrics
 	}, []);
 
 	const currentColors = resolvedTheme === "dark" ? chartColors.dark : chartColors.light;
+
+	// Create dynamic chart config based on available columns
+	const dynamicChartConfig = useMemo(() => {
+		const config: Record<string, { label: string; color: string; unit: string; valueMap?: Record<string, string> }> = {};
+		availableColumnsConfig.forEach((col) => {
+			config[col.value] = {
+				label: col.label,
+				color: col.color,
+				unit: col.unit || "",
+				valueMap: col.valueMap,
+			};
+		});
+		return config;
+	}, [availableColumnsConfig]);
 
 	const handleChartClick = () => setIsZoomEnabled(true);
 
@@ -114,24 +130,24 @@ const BaseHistoryGraph: React.FC<BaseGraphProps> = ({ data = [], selectedMetrics
 	const chartData = useMemo(() => {
 		return {
 			labels: data.map((item) => new Date(item.cas)),
-			datasets: Object.keys(chartConfig)
+			datasets: Object.keys(dynamicChartConfig)
 				.filter((key) => (selectedMetrics ? selectedMetrics.includes(key) : true))
 				.map((key) => ({
-					label: chartConfig[key as keyof typeof chartConfig].label,
+					label: dynamicChartConfig[key as keyof typeof dynamicChartConfig].label,
 					data: data.map((item) => {
 						const value = item[key as keyof DeviceHistory];
 						return hidden.includes(key) || value == null ? null : Number(value);
 					}),
-					borderColor: hidden.includes(key) ? "#808080" : chartConfig[key as keyof typeof chartConfig].color,
-					backgroundColor: hidden.includes(key) ? "#808080" : chartConfig[key as keyof typeof chartConfig].color,
+					borderColor: hidden.includes(key) ? "#808080" : dynamicChartConfig[key as keyof typeof dynamicChartConfig].color,
+					backgroundColor: hidden.includes(key) ? "#808080" : dynamicChartConfig[key as keyof typeof dynamicChartConfig].color,
 					hidden: hidden.includes(key),
 					pointRadius: 0,
 					pointHitRadius: 15,
 					borderWidth: 2,
-					unit: chartConfig[key as keyof typeof chartConfig].unit,
+					unit: dynamicChartConfig[key as keyof typeof dynamicChartConfig].unit,
 				})),
 		};
-	}, [data, hidden, selectedMetrics, isMobile]);
+	}, [data, hidden, selectedMetrics, isMobile, dynamicChartConfig]);
 
 	const options: ChartOptions<"line"> = {
 		layout: {
@@ -178,10 +194,10 @@ const BaseHistoryGraph: React.FC<BaseGraphProps> = ({ data = [], selectedMetrics
 						const value = tooltipItem.raw;
 						const unit = (dataset as unknown as { unit: string }).unit;
 
-						const key = Object.keys(chartConfig).find((k) => chartConfig[k as keyof typeof chartConfig].label === label);
+						const key = Object.keys(dynamicChartConfig).find((k) => dynamicChartConfig[k as keyof typeof dynamicChartConfig].label === label);
 
 						if (key) {
-							const config = chartConfig[key as keyof typeof chartConfig];
+							const config = dynamicChartConfig[key as keyof typeof dynamicChartConfig];
 
 							const valueMap = config.valueMap;
 							if (valueMap && value !== null && typeof value === "number") {

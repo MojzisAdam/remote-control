@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { useUserManagement } from "@/hooks/useUserManagement";
-import TableContainer from "@/components/history/table/TableContainer";
+import EnhancedTableContainer from "@/components/history/table/EnhancedTableContainer";
 import DeviceNotFound from "@/components/deviceNotFound";
 import { ChartLine, History } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -59,9 +59,7 @@ const HistoryTablePage: React.FC = () => {
 						</Button>
 					</div>
 					{!isLoading ? (
-						<>
-							<TableContainer deviceId={deviceId as string} />
-						</>
+						<>{currentDevice && <EnhancedTableContainer device={currentDevice} />}</>
 					) : (
 						<>
 							<Skeleton className="w-full h-96" />

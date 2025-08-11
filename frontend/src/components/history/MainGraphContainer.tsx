@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense } from "react";
+import React, { useState, useEffect, lazy, Suspense, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDeviceHistory } from "@/hooks/useDeviceHistory";
@@ -16,14 +16,16 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Dialog, DialogContent, DialogTitle, DialogHeader, DialogDescription } from "@/components/ui/dialog";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { useTranslation } from "react-i18next";
+import { Device } from "@/api/devices/model";
+import { ChartConstantsFactory } from "@/constants/chartConstants/factory";
 
 const MainGraph = lazy(() => import("./MainGraph").then((mod) => ({ default: mod.MainGraph })));
 
 interface MainGraphContainerProps {
-	deviceId: string;
+	device: Device;
 }
 
-const MainGraphContainer: React.FC<MainGraphContainerProps> = ({ deviceId }) => {
+const MainGraphContainer: React.FC<MainGraphContainerProps> = ({ device }) => {
 	const { t } = useTranslation("history");
 	const { loading, deviceHistory, hiddenLines, loadDeviceHistory, saveGraphPreferences, loadGraphPreferences } = useDeviceHistory();
 	const [selectedFrom, setSelectedFrom] = useState<Date>(new Date(new Date().setDate(new Date().getDate() - 1)));
@@ -36,12 +38,19 @@ const MainGraphContainer: React.FC<MainGraphContainerProps> = ({ deviceId }) => 
 
 	const { toast } = useToast();
 
-	const { logData, isLogging, connectionStatus, stopLogging, startLogging } = useMqttLogger({ deviceId });
+	const { logData, isLogging, connectionStatus, stopLogging, startLogging } = useMqttLogger({ deviceId: device.id });
+
+	// Get device-specific column configuration
+	const availableColumnsConfig = useMemo(() => {
+		return ChartConstantsFactory.getGraphColumns(device);
+	}, [device]);
 
 	useEffect(() => {
 		const fetchData = async () => {
 			setIsLoading(true);
-			const result = await Promise.all([loadDeviceHistory(deviceId), loadGraphPreferences(deviceId)]);
+
+			const result = await Promise.all([loadDeviceHistory(device.id), loadGraphPreferences(device.id)]);
+
 			if (!result[0].success || !result[1].success) {
 				setLoadingError(true);
 			}
@@ -57,7 +66,7 @@ const MainGraphContainer: React.FC<MainGraphContainerProps> = ({ deviceId }) => 
 		};
 
 		fetchData();
-	}, [deviceId]);
+	}, [device.id]);
 
 	const toggleFullscreenDialog = () => {
 		setIsFullscreenDialog(!isFullscreenDialog);
@@ -67,7 +76,7 @@ const MainGraphContainer: React.FC<MainGraphContainerProps> = ({ deviceId }) => 
 		const from = fromDate ?? selectedFrom;
 		const to = toDate ?? selectedTo;
 
-		const result = await loadDeviceHistory(deviceId, format(from, "yyyy-MM-dd HH:mm:ss"), format(to, "yyyy-MM-dd HH:mm:ss"));
+		const result = await loadDeviceHistory(device.id, format(from, "yyyy-MM-dd HH:mm:ss"), format(to, "yyyy-MM-dd HH:mm:ss"));
 
 		if (!result.success) {
 			toast({
@@ -97,7 +106,7 @@ const MainGraphContainer: React.FC<MainGraphContainerProps> = ({ deviceId }) => 
 	};
 
 	const saveHiddenLines = async (newHiddenLines: string[]) => {
-		const result = await saveGraphPreferences(deviceId, newHiddenLines);
+		const result = await saveGraphPreferences(device.id, newHiddenLines);
 		if (result.success) {
 			toast({
 				title: t("toast.saveSuccess.title"),
@@ -125,6 +134,7 @@ const MainGraphContainer: React.FC<MainGraphContainerProps> = ({ deviceId }) => 
 							savePreferences={saveHiddenLines}
 							className="w-full h-full"
 							isFullscreen={dialogMode}
+							availableColumnsConfig={availableColumnsConfig}
 						/>
 					</Suspense>
 				</ErrorBoundary>
