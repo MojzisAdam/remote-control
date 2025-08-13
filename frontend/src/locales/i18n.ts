@@ -12,7 +12,7 @@ i18next
 	.init({
 		interpolation: { escapeValue: false },
 		fallbackLng: "cs",
-		ns: ["global", "user", "dashboard", "cimErrors"],
+		ns: ["global", "user", "dashboard", "cimErrors", "daitsuErrors"],
 		defaultNS: "global",
 		backend: {
 			loadPath: "/locales/{{lng}}/{{ns}}.json",

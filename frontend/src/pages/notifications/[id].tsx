@@ -402,7 +402,10 @@ const DeviceNotificationsPage: React.FC = () => {
 													<div className="flex items-start gap-2">
 														<AlertCircle className="h-4 w-4 text-muted-foreground mt-0.5" />
 														<div>
-															<span className="font-medium">{t("errorCode")}:</span> <span className="text-muted-foreground">{notification.error_code} </span>
+															<span className="font-medium">{t("errorCode")}:</span>{" "}
+															{currentDevice && (
+																<span className="text-muted-foreground">{deviceErrors.getDisplayErrorCode(notification.error_code, currentDevice.display_type)}</span>
+															)}
 														</div>
 													</div>
 
@@ -411,7 +414,9 @@ const DeviceNotificationsPage: React.FC = () => {
 															<AlertCircle className="h-4 w-4 text-muted-foreground mt-0.5" />
 															<div>
 																<span className="font-medium">{t("errorExplanation")}:</span>{" "}
-																<span className="text-muted-foreground">{deviceErrors.error(notification.error_code, parseInt(currentDevice.fw_version || "0"))}</span>
+																<span className="text-muted-foreground">
+																	{deviceErrors.error(notification.error_code, parseInt(currentDevice.fw_version || "0"), currentDevice.display_type)}
+																</span>
 															</div>
 														</div>
 													)}

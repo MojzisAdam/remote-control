@@ -2,22 +2,26 @@ import React from "react";
 import { Search } from "lucide-react";
 import deviceErrors from "@/utils/deviceErrors";
 import { HoverClickPopover } from "@/components/ui/hover-popover";
+import { DeviceType } from "@/utils/deviceTypeUtils";
 
 interface ErrorHintProps {
 	errorCode: string | number;
 	firmwareVersion?: number;
+	deviceType?: string;
 }
 
-const ErrorHint: React.FC<ErrorHintProps> = ({ errorCode, firmwareVersion = 813 }) => {
+const ErrorHint: React.FC<ErrorHintProps> = ({ errorCode, firmwareVersion = 813, deviceType = DeviceType.RPI }) => {
 	const errorCodeInt = parseInt(errorCode.toString(), 10);
 	const firmwareVersionInt = parseInt(firmwareVersion.toString(), 10);
 
-	const errorMessage = deviceErrors.error(errorCodeInt, firmwareVersionInt);
-	const errorDescription = deviceErrors.errorDescribe(errorCodeInt, firmwareVersionInt);
+	const errorMessage = deviceErrors.error(errorCodeInt, firmwareVersionInt, deviceType);
+	const errorDescription = deviceErrors.errorDescribe(errorCodeInt, firmwareVersionInt, deviceType);
+
+	const displayErrorCode = deviceErrors.getDisplayErrorCode(errorCodeInt, deviceType);
 
 	return (
 		<div className="flex items-center">
-			{errorCodeInt}
+			{displayErrorCode}
 			<HoverClickPopover
 				content={
 					<div className="whitespace-pre-wrap text-sm">
