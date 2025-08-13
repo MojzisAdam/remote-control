@@ -51,4 +51,14 @@ interface DeviceHistoryHandlerInterface
      * Get the error column name for this device type
      */
     public function getErrorColumn(): string;
+
+    /**
+     * Get available columns for this device type
+     */
+    public function getAvailableColumns(): array;
+
+    /**
+     * Get temperature columns for this device type (used for monthly averages)
+     */
+    public function getTemperatureColumns(): array;
 }

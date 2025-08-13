@@ -57,6 +57,47 @@ class StandardDeviceHistoryHandler implements DeviceHistoryHandlerInterface
         return 'chyba';
     }
 
+    public function getAvailableColumns(): array
+    {
+        return [
+            'device_id',
+            'cas',
+            'TS1',
+            'TS2',
+            'TS3',
+            'TS4',
+            'TS5',
+            'TS6',
+            'TS7',
+            'TS8',
+            'TS9',
+            'PTO',
+            'PTUV',
+            'PTO2',
+            'komp',
+            'kvyk',
+            'run',
+            'reg',
+            'vjedn',
+            'dzto',
+            'dztuv',
+            'tstat',
+            'hdo',
+            'obd',
+            'chyba',
+            'PT',
+            'PPT',
+            'RPT',
+            'Prtk',
+            'TpnVk'
+        ];
+    }
+
+    public function getTemperatureColumns(): array
+    {
+        return ['TS1', 'TS2', 'TS4'];
+    }
+
     public function getInsertValidationRules(): array
     {
         return [

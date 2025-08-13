@@ -51,7 +51,23 @@ class HistoryController extends Controller
         $query = $handler->getQuery($deviceId);
         $query = $handler->applyDateRange($query, $request);
 
-        $selectedColumns = array_merge(['cas'], $validated['selectedMetrics']);
+        // Get available columns for this device type
+        $availableColumns = $handler->getAvailableColumns();
+
+        // Filter selected metrics to only include existing columns
+        $validMetrics = array_intersect($validated['selectedMetrics'], $availableColumns);
+
+        // Always include 'cas' column
+        $selectedColumns = array_merge(['cas'], $validMetrics);
+
+        // Remove duplicates in case 'cas' was in selectedMetrics
+        $selectedColumns = array_unique($selectedColumns);
+
+        // Log warning if some columns were filtered out
+        $invalidColumns = array_diff($validated['selectedMetrics'], $availableColumns);
+        if (!empty($invalidColumns)) {
+        }
+
         $history = $query->orderBy('cas', 'asc')->get($selectedColumns);
 
         return DeviceHistoryResourceFactory::makeDynamicDataTransformation($handler, $history);
@@ -170,46 +186,59 @@ class HistoryController extends Controller
     }
     public function getMonthlyAverageTemperatures(Request $request, $deviceId)
     {
-        $deviceExists = Device::where('id', $deviceId)->exists();
-
-        if (!$deviceExists) {
+        $device = Device::where('id', $deviceId)->first();
+        if (!$device) {
             return response()->json(['error' => 'Device not found'], 404);
         }
 
+        $handler = DeviceHistoryHandlerFactory::make($device);
         $startDate = Carbon::now()->subYear()->startOfDay();
 
-        $query = DeviceHistory::select([
+        // Get appropriate temperature columns based on device type
+        $temperatureColumns = $handler->getTemperatureColumns();
+
+        if (empty($temperatureColumns)) {
+            return response()->json(['error' => 'No temperature columns available for this device type'], 400);
+        }
+
+        $selectArray = [
             DB::raw('YEAR(cas) as year'),
             DB::raw('MONTH(cas) as month'),
-            DB::raw('AVG(TS1) as avg_ts1'),
-            DB::raw('AVG(TS2) as avg_ts2'),
-            DB::raw('AVG(TS4) as avg_ts4'),
-        ])
+        ];
+
+        foreach ($temperatureColumns as $column) {
+            $selectArray[] = DB::raw("AVG({$column}) as avg_{$column}");
+        }
+
+        $query = $handler->getQuery($deviceId)
+            ->select($selectArray)
             ->where('cas', '>=', $startDate)
-            ->whereNotNull('TS1')
-            ->whereNotNull('TS2')
-            ->whereNotNull('TS4')
             ->groupBy(DB::raw('YEAR(cas)'), DB::raw('MONTH(cas)'))
             ->orderBy(DB::raw('YEAR(cas)'))
             ->orderBy(DB::raw('MONTH(cas)'));
 
-        if ($deviceId) {
-            $query->where('device_id', $deviceId);
+        // Apply not null conditions for temperature columns
+        foreach ($temperatureColumns as $column) {
+            $query->whereNotNull($column);
         }
 
         $monthlyAverages = $query->get();
 
-        $formattedResponse = $monthlyAverages->map(function ($item) {
+        $formattedResponse = $monthlyAverages->map(function ($item) use ($temperatureColumns) {
             $monthName = Carbon::createFromDate($item->year, $item->month, 1)->format('F');
 
-            return [
+            $result = [
                 'year' => $item->year,
                 'month' => $item->month,
                 'month_name' => $monthName,
-                'avg_ts1' => round($item->avg_ts1, 2),
-                'avg_ts2' => round($item->avg_ts2, 2),
-                'avg_ts4' => round($item->avg_ts4, 2),
             ];
+
+            foreach ($temperatureColumns as $column) {
+                $avgKey = "avg_{$column}";
+                $result[$avgKey] = round($item->$avgKey, 2);
+            }
+
+            return $result;
         });
 
         return response()->json([
@@ -218,8 +247,8 @@ class HistoryController extends Controller
                 'period' => 'Past 12 months',
                 'start_date' => $startDate->format('Y-m-d'),
                 'end_date' => Carbon::now()->format('Y-m-d'),
-                'sensors' => ['TS1', 'TS2', 'TS4'],
-                'device_id' => $deviceId ?? 'all'
+                'sensors' => $temperatureColumns,
+                'device_id' => $deviceId
             ]
         ]);
     }
