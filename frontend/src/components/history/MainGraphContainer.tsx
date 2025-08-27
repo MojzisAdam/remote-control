@@ -19,7 +19,7 @@ import { useTranslation } from "react-i18next";
 import { Device } from "@/api/devices/model";
 import { ChartConstantsFactory } from "@/constants/chartConstants/factory";
 
-const MainGraph = lazy(() => import("./MainGraph").then((mod) => ({ default: mod.MainGraph })));
+const MainGraph = lazy(() => import("@/components/history/MainGraph").then((mod) => ({ default: mod.MainGraph })));
 
 interface MainGraphContainerProps {
 	device: Device;

@@ -19,7 +19,9 @@
   "parameterEdit": {
     "updateFailed": "Update failed",
     "updating": "Updating...",
-    "noParameters": "No parameters available"
+    "noParameters": "No parameters available",
+    "currentValue": "Current Value",
+    "bit": "Bit"
   },
   "common": {
     "retry": "Retry",
@@ -76,9 +78,9 @@
       "TS2": "Outdoor temperature",
       "TS4": "DHW (boiler)",
       "komp": "Compressor",
-      "avg_ts1": "Average output temperature",
-      "avg_ts2": "Average outdoor temperature",
-      "avg_ts4": "Average DHW (boiler)"
+      "avg_TS1": "Average output temperature",
+      "avg_TS2": "Average outdoor temperature",
+      "avg_TS4": "Average DHW (boiler)"
     },
     "units": {
       "celsius": "°C",
@@ -175,6 +177,115 @@
       "percent": "%", 
       "m3h": "m³/h",
       "kw": "kW"
+    }
+  },
+  "daitsu": {
+    "deviceStates": {
+      "title": "Device States",
+      "sections": {
+        "operation": "Operation Mode",
+        "blocking": "Blocking & Errors",
+        "performance": "Performance & Activity",
+        "statusBits": "Status & Load Output Bits",
+        "firmware": "Firmware Versions"
+      },
+      "labels": {
+        "reg_100": "Operating frequency",
+        "reg_101": "Operating mode",
+        "reg_102": "Fan speed",
+        "reg_122": "Compressor operating time",
+        "reg_124": "Current fault",
+        "reg_128": "Status bit 1",
+        "reg_129": "Load output",
+        "reg_132": "Unit target frequency",
+        "reg_138": "Water flow",
+        "script_version": "Script version"
+      },
+      "values": {
+        "unknown": "Unknown",
+        "noBitsSet": "No active bits",
+        "on": "ON",
+        "off": "OFF",
+        "modes": {
+          "off": "Off",
+          "cooling": "Cooling",
+          "heating": "Heating"
+        },
+        "error": "Error",
+        "noError": "No Error"
+      },
+      "units": {
+        "hz": "Hz",
+        "rpm": "r/min",
+        "hours": "hours",
+        "m3h": "m³/h"
+      },
+      "bits": {
+        "reg_128": {
+          "bit1": "Defrosting",
+          "bit2": "Anti-freezing",
+          "bit3": "Oil return",
+          "bit4": "Remote On/Off",
+          "bit5": "Outdoor unit test mode",
+          "bit6": "Room temp controller heating",
+          "bit7": "Room temp controller cooling",
+          "bit8": "Solar energy signal input",
+          "bit9": "Water tank anti-freeze operation"
+        },
+        "reg_129": {
+          "bit0": "Electric heater IBH1",
+          "bit2": "Electric heater TBH",
+          "bit3": "Water pump PUMP_I",
+          "bit4": "SV1",
+          "bit6": "External water pump P_o",
+          "bit7": "Water return pump P_d",
+          "bit8": "Mixed water pump P_c",
+          "bit9": "SV2",
+          "bit10": "HEAT4",
+          "bit11": "Solar water pump",
+          "bit12": "ALARM",
+          "bit13": "RUN",
+          "bit14": "External heater",
+          "bit15": "DEFROST"
+        }
+      }
+    },
+    "temperature": {
+      "title": "Temperatures",
+      "labels": {
+        "reg_2": "T1s",
+        "reg_3": "Ts - Room temperature",
+        "reg_4": "T5s - Water tank",
+        "reg_104": "TW_in - Water inlet temperature",
+        "reg_105": "TW_out - Water outlet temperature",
+        "reg_106": "T3 - Condenser temperature",
+        "reg_107": "T4 - Outdoor temperature",
+        "reg_108": "Tp - Outlet temperature",
+        "reg_109": "Th - Suction temperature",
+        "reg_110": "T1 - Water temperature",
+        "reg_111": "Tw2 - Water flow temperature in zone 2",
+        "reg_112": "T2 - Refrigerant temperature",
+        "reg_113": "T2B - Cooling gas temperature",
+        "reg_114": "Ta - Ambient temperature",
+        "reg_115": "T5 - Water tank temperature",
+        "reg_120": "Tbt1",
+        "reg_121": "Tbt2",
+        "reg_135": "TF module temperature",
+        "reg_136": "T1S zone 1",
+        "reg_137": "T1S zone 2",
+        "T1s_z1": "T1s zone 1",
+        "T1s_z2": "T1s zone 2"
+      }
+    },
+    "charts" : {
+        "config": {
+            "reg_107": "Outdoor temperature",
+            "reg_110": "Water temperature",
+            "reg_115": "Water tank temperature",
+            "avg_reg_107": "Average outdoor temperature",
+            "avg_reg_110": "Average water temperature",
+            "avg_reg_115": "Average water tank temperature"
+        }
     }
   }
 }

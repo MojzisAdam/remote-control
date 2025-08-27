@@ -19,7 +19,9 @@
   "parameterEdit": {
     "updateFailed": "Aktualizace selhala",
     "updating": "Probíhá aktualizace...",
-    "noParameters": "Žádné dostupné parametry"
+    "noParameters": "Žádné dostupné parametry",
+    "currentValue": "Aktuální hodnota",
+    "bit": "Bit"
   },
   "common": {
     "retry": "Zkusit znovu",
@@ -76,9 +78,9 @@
       "TS2": "Venkovní teplota",
       "TS4": "TUV (bojler)",
       "komp": "Kompresor",
-      "avg_ts1": "Průměrná výstupní teplota",
-      "avg_ts2": "Průměrná venkovní teplota",
-      "avg_ts4": "Průměrná TUV (bojler)"
+      "avg_TS1": "Průměrná výstupní teplota",
+      "avg_TS2": "Průměrná venkovní teplota",
+      "avg_TS4": "Průměrná TUV (bojler)"
     },
     "units": {
       "celsius": "°C",
@@ -175,6 +177,115 @@
       "percent": "%", 
       "m3h": "m³/h",
       "kw": "kW"
+    }
+  },
+  "daitsu": {
+    "deviceStates": {
+      "title": "Stavy zařízení",
+      "sections": {
+        "operation": "Provozní režim",
+        "blocking": "Blokace a chyby",
+        "performance": "Výkon a provoz",
+        "statusBits": "Stavové a výstupní bity",
+        "firmware": "Verze firmwaru"
+      },
+      "labels": {
+        "reg_100": "Pracovní frekvence",
+        "reg_101": "Provozní režim",
+        "reg_102": "Rychlost ventilátoru",
+        "reg_122": "Doba chodu kompresoru",
+        "reg_124": "Aktuální chyba",
+        "reg_128": "Stavový bit 1",
+        "reg_129": "Výstup zatížení",
+        "reg_132": "Cílová frekvence jednotky",
+        "reg_138": "Průtok vody",
+        "script_version": "Verze skriptu"
+      },
+      "values": {
+        "unknown": "Neznámé",
+        "noBitsSet": "Žádné aktivní bity",
+        "on": "ZAPNUTO",
+        "off": "VYPNUTO",
+        "modes": {
+          "off": "Vypnuto",
+          "cooling": "Chlazení",
+          "heating": "Topení"
+        },
+        "error": "Chyba",
+        "noError": "Žádná chyba"
+      },
+      "units": {
+        "hz": "Hz",
+        "rpm": "ot/min",
+        "hours": "hodin",
+        "m3h": "m³/h"
+      },
+      "bits": {
+        "reg_128": {
+          "bit1": "Odtávání",
+          "bit2": "Ochrana proti zmrznutí",
+          "bit3": "Návrat oleje",
+          "bit4": "Dálkové zapnutí/vypnutí",
+          "bit5": "Testovací režim venkovní jednotky",
+          "bit6": "Prostorový regulátor topení",
+          "bit7": "Prostorový regulátor chlazení",
+          "bit8": "Signál solární energie",
+          "bit9": "Provoz proti zamrznutí nádrže na vodu"
+        },
+        "reg_129": {
+          "bit0": "Elektrický ohřívač IBH1",
+          "bit2": "Elektrický ohřívač TBH",
+          "bit3": "Vodní čerpadlo PUMP_I",
+          "bit4": "SV1",
+          "bit6": "Externí vodní čerpadlo P_o",
+          "bit7": "Vratné vodní čerpadlo P_d",
+          "bit8": "Směšovací vodní čerpadlo P_c",
+          "bit9": "SV2",
+          "bit10": "HEAT4",
+          "bit11": "Solární vodní čerpadlo",
+          "bit12": "ALARM",
+          "bit13": "RUN",
+          "bit14": "Externí ohřívač",
+          "bit15": "DEFROST"
+        }
+      }
+    },
+    "temperature": {
+      "title": "Teploty",
+      "labels": {
+        "reg_2": "T1s",
+        "reg_3": "Ts - pokojová teplota",
+        "reg_4": "T5s - vodní nádrž",
+        "reg_104": "TW_in - Teplota vody na vstupu",
+        "reg_105": "TW_out -Výstupní teplota vody",
+        "reg_106": "T3- Teplota kondenzátoru",
+        "reg_107": "T4- Venkovní teplota",
+        "reg_108": "Tp - Výstupní teplota",
+        "reg_109": "Th - Teplota sání",
+        "reg_110": "T1 - Teplota vody",
+        "reg_111": "Tw2 - Teplota průtoku vody v zóně 2",
+        "reg_112": "T2 - Teplota chladiva",
+        "reg_113": "T2B - Tepleta chladícího plynu",
+        "reg_114": "Ta - Teplota prostoru",
+        "reg_115": "T5 - Teplota vodní nádrže",
+        "reg_120": "Tbt1",
+        "reg_121": "Tbt2",
+        "reg_135": "Teplota modulu TF",
+        "reg_136": "T1S zóny 1",
+        "reg_137": "T1S zóny 2",
+        "T1s_z1": "T1s zóny 1",
+        "T1s_z2": "T1s zóny 2"
+      }
+    },
+    "charts" : {
+        "config": {
+            "reg_107": "Venkovní teplota",
+            "reg_110": "Teplota vody",
+            "reg_115": "Teplota vodní nádrže",
+            "avg_reg_107": "Průměrná venkovní teplota",
+            "avg_reg_110": "Průměrná teplota vody",
+            "avg_reg_115": "Průměrná teplota vodní nádrže"
+        }
     }
   }
 }

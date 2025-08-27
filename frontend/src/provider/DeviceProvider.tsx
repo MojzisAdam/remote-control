@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useState, useEffect, useRef } from "react";
+import React, { createContext, useContext, useState, useEffect, useRef, useCallback } from "react";
 import { Device } from "@/api/devices/model";
-import { useDevices } from "@/hooks/useDevices";
+import { fetchDevice } from "@/api/devices/actions";
+import { handleApiRequest } from "@/utils/apiHandler";
 
 interface CachedDevice {
 	device: Device;
@@ -26,31 +27,43 @@ export const DeviceProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	const [currentDevice, setCurrentDevice] = useState<Device | null>(null);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [notFound, setNotFound] = useState<boolean>(false);
-	const [deviceCache, setDeviceCache] = useState<Record<string, CachedDevice>>({});
-	const { getDevice } = useDevices();
 
 	const currentDeviceIdRef = useRef<string | null>(null);
-
+	const loadingDeviceIdRef = useRef<string | null>(null);
+	const deviceCacheRef = useRef<Record<string, CachedDevice>>({});
 	const refreshIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
 	const isCacheExpired = (timestamp: number): boolean => {
 		return Date.now() - timestamp > CACHE_EXPIRATION;
 	};
 
-	const fetchAndCacheDevice = async (deviceId: string): Promise<void> => {
+	const fetchAndCacheDevice = useCallback(async (deviceId: string): Promise<void> => {
+		// Prevent multiple simultaneous calls for the same device
+		if (loadingDeviceIdRef.current === deviceId) {
+			return;
+		}
+
+		loadingDeviceIdRef.current = deviceId;
 		setIsLoading(true);
 		try {
-			const result = await getDevice(deviceId);
+			const result = await handleApiRequest({
+				apiCall: () => fetchDevice(deviceId),
+				successMessage: "Device fetched successfully",
+				statusHandlers: {
+					404: () => setNotFound(true),
+				},
+			});
+
 			if (result.success) {
 				const device = result.data.device;
 				setCurrentDevice(device);
-				setDeviceCache((prev) => ({
-					...prev,
+				deviceCacheRef.current = {
+					...deviceCacheRef.current,
 					[deviceId]: {
 						device,
 						timestamp: Date.now(),
 					},
-				}));
+				};
 				setNotFound(false);
 			} else {
 				setCurrentDevice(null);
@@ -63,42 +76,48 @@ export const DeviceProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 			setCurrentDevice(null);
 		} finally {
 			setIsLoading(false);
+			loadingDeviceIdRef.current = null;
 		}
-	};
+	}, []);
 
-	const loadDevice = async (deviceId: string): Promise<void> => {
-		if (!deviceId) {
-			setCurrentDevice(null);
-			setNotFound(true);
-			return;
-		}
+	const loadDevice = useCallback(
+		async (deviceId: string): Promise<void> => {
+			if (!deviceId) {
+				setCurrentDevice(null);
+				setNotFound(true);
+				return;
+			}
 
-		currentDeviceIdRef.current = deviceId;
+			currentDeviceIdRef.current = deviceId;
 
-		// setupAutoRefresh(deviceId);
+			const cachedEntry = deviceCacheRef.current[deviceId];
+			if (cachedEntry && !isCacheExpired(cachedEntry.timestamp)) {
+				setCurrentDevice(cachedEntry.device);
+				setNotFound(false);
+				return;
+			}
 
-		const cachedEntry = deviceCache[deviceId];
-		if (cachedEntry && !isCacheExpired(cachedEntry.timestamp)) {
-			setCurrentDevice(cachedEntry.device);
-			setNotFound(false);
-			return;
-		}
-		await fetchAndCacheDevice(deviceId);
-	};
+			await fetchAndCacheDevice(deviceId);
+		},
+		[fetchAndCacheDevice]
+	);
 
-	const forceLoadDevice = async (deviceId: string): Promise<void> => {
-		if (!deviceId) {
-			setCurrentDevice(null);
-			setNotFound(true);
-			return;
-		}
+	const forceLoadDevice = useCallback(
+		async (deviceId: string): Promise<void> => {
+			if (!deviceId) {
+				setCurrentDevice(null);
+				setNotFound(true);
+				return;
+			}
 
-		currentDeviceIdRef.current = deviceId;
+			currentDeviceIdRef.current = deviceId;
 
-		// setupAutoRefresh(deviceId);
+			// setupAutoRefresh(deviceId);
 
-		await fetchAndCacheDevice(deviceId);
-	};
+			await fetchAndCacheDevice(deviceId);
+		},
+		[fetchAndCacheDevice]
+	);
 
 	const setupAutoRefresh = (deviceId: string): void => {
 		if (refreshIntervalRef.current) {
@@ -115,16 +134,16 @@ export const DeviceProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 		}, AUTO_REFRESH_INTERVAL);
 	};
 
-	const updateDevice = (device: Device): void => {
+	const updateDevice = useCallback((device: Device): void => {
 		setCurrentDevice(device);
-		setDeviceCache((prev) => ({
-			...prev,
+		deviceCacheRef.current = {
+			...deviceCacheRef.current,
 			[device.id]: {
 				device,
 				timestamp: Date.now(),
 			},
-		}));
-	};
+		};
+	}, []);
 
 	useEffect(() => {
 		return () => {

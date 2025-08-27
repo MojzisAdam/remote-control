@@ -38,3 +38,7 @@ export const getDeviceTypeName = (deviceOrType: Device | string | number): strin
 export const getErrorField = (device: Device): string => {
 	return isDaitsuDevice(device) ? "reg_124" : "chyba";
 };
+
+export const getChartDeviceType = (device: Device): "standard" | "daitsu" => {
+	return isDaitsuDevice(device) ? "daitsu" : "standard";
+};

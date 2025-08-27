@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 import { Device } from "@/api/devices/model";
 import { ChartConstantsFactory } from "@/constants/chartConstants/factory";
 
-const CustomGraph = lazy(() => import("./CustomGraph").then((mod) => ({ default: mod.CustomGraph })));
+const CustomGraph = lazy(() => import("@/components/history/CustomGraph").then((mod) => ({ default: mod.CustomGraph })));
 
 interface CustomGraphContainerProps {
 	selectedMetrics: string[];

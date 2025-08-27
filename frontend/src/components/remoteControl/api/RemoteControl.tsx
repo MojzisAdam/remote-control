@@ -1,27 +1,28 @@
 import React, { useState, useMemo } from "react";
 import useRemoteControlApi from "@/hooks/useRemoteControlApi";
-import ConnectionStatusIndicator from "@/components/remoteControl/remoteControlApi/ConnectionStatusIndicator";
-import HomeDashboard from "./HomeOverviewModern";
-import TemperaturesChartContainer from "./TemperaturesChart";
-import MonthlyTemperaturesContainer from "./MonthlyTemperatures";
-import TemperatureDisplay from "./TemperatureDisplay";
-import DeviceStates from "./DeviceStates";
-import DeviceParameters from "./DeviceParameters";
+import ConnectionStatusIndicator from "@/components/remoteControl/api/ConnectionStatusIndicator";
+import HomeDashboard from "../shared/HomeOverview";
+import TemperaturesChartContainer from "@/components/remoteControl/shared/charts/TemperaturesChart";
+import MonthlyTemperaturesContainer from "@/components/remoteControl/shared/charts/MonthlyTemperatures";
+import TemperatureDisplay from "../shared/TemperatureDisplay";
+import DeviceStates from "@/components/remoteControl/shared/DeviceStates";
+import DeviceParameters from "../shared/DeviceParameters";
 import { LayoutDashboard, Sliders } from "lucide-react";
 import { DeviceData } from "@/api/remoteControlApi/model";
-import DeviceLoader from "@/components/remoteControl/DeviceLoader";
+import DeviceLoader from "@/components/remoteControl/shared/DeviceLoader";
 import { useAuth } from "@/hooks/useAuth";
+import { Device } from "@/api/devices/model";
 
 interface RemoteControlApiProps {
-	deviceId: string;
+	device: Device;
 	onDataReceived?: (data: DeviceData) => void;
 }
 
-const RemoteControlApi: React.FC<RemoteControlApiProps> = ({ deviceId, onDataReceived }) => {
+const RemoteControlApi: React.FC<RemoteControlApiProps> = ({ device, onDataReceived }) => {
 	const { hasPermission } = useAuth();
 	const canViewExtendedParams = hasPermission("edit-all-parameters");
 
-	const { deviceData, connectionStatus, error, lastSuccessfulFetch, retryConnection, updateDeviceParameter } = useRemoteControlApi(deviceId, onDataReceived);
+	const { deviceData, connectionStatus, error, lastSuccessfulFetch, retryConnection, updateDeviceParameter } = useRemoteControlApi(device.id, onDataReceived);
 
 	const [activePage, setActivePage] = useState<"overview" | "parameters">("overview");
 
@@ -157,8 +158,8 @@ const RemoteControlApi: React.FC<RemoteControlApiProps> = ({ deviceId, onDataRec
 						>
 							<HomeDashboard deviceData={overviewData} />
 							<div className="flex justify-between gap-8 max-sm:flex-col w-full">
-								<TemperaturesChartContainer deviceId={deviceId} />
-								<MonthlyTemperaturesContainer deviceId={deviceId} />
+								{device && <TemperaturesChartContainer device={device} />}
+								{device && <MonthlyTemperaturesContainer device={device} />}
 							</div>
 							<div className="flex gap-8 max-sm:flex-col w-full">
 								<TemperatureDisplay data={temperatureData} />
@@ -169,7 +170,7 @@ const RemoteControlApi: React.FC<RemoteControlApiProps> = ({ deviceId, onDataRec
 					{activePage === "parameters" && (
 						<>
 							<DeviceParameters
-								deviceId={deviceId}
+								deviceId={device.id}
 								deviceData={parametersData}
 								onUpdateParameter={updateDeviceParameter}
 							/>

@@ -187,6 +187,20 @@
     box-shadow: 0 3px 8px rgba(156, 163, 175, 0.5);
 }
 
+.home_tuvto-cool {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--status-active-light);
+    box-shadow: 0 3px 8px rgba(36, 104, 182, 0.5);
+    margin-right: 12px;
+}
+
+.dark .home_tuvto-cool {
+    background: var(--status-active-dark);
+    box-shadow: 0 3px 8px rgba(18, 135, 231, 0.5);
+}
+
 .want-temp-home {
     display: flex;
     align-items: center;

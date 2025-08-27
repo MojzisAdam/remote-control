@@ -7,27 +7,29 @@ import { useDeviceHistory } from "@/hooks/useDeviceHistory";
 import { useQuery } from "@tanstack/react-query";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { useTranslation } from "react-i18next";
+import { Device } from "@/api/devices/model";
+import { isDaitsuDevice } from "@/utils/deviceTypeUtils";
 
-const SimpleChart = lazy(() => import("./SimpleChart").then((mod) => ({ default: mod.SimpleChart })));
+const SimpleChart = lazy(() => import("@/components/remoteControl/shared/charts/SimpleChart").then((mod) => ({ default: mod.SimpleChart })));
 
 interface TemperaturesChartContainerProps {
-	deviceId: string;
+	device: Device;
 }
 
-const selectedMetrics = ["TS1", "TS2", "TS4"];
-
-const TemperaturesChartContainer: React.FC<TemperaturesChartContainerProps> = ({ deviceId }) => {
+const TemperaturesChartContainer: React.FC<TemperaturesChartContainerProps> = ({ device }) => {
 	const { t } = useTranslation("remote-control");
 	const { loadCustomGraphData } = useDeviceHistory();
+
+	const selectedMetrics = isDaitsuDevice(device) ? ["reg_107", "reg_110", "reg_115"] : ["TS1", "TS2", "TS4"];
 
 	const {
 		data: customGraphData,
 		isLoading: loading,
 		error,
 	} = useQuery({
-		queryKey: ["temperature-chart", deviceId, selectedMetrics],
+		queryKey: ["temperature-chart", device.id, selectedMetrics],
 		queryFn: async () => {
-			const result = await loadCustomGraphData(deviceId, selectedMetrics);
+			const result = await loadCustomGraphData(device.id, selectedMetrics);
 			if (!result.success) {
 				throw new Error("Failed to load temperature chart data");
 			}
@@ -94,4 +96,6 @@ const TemperaturesChartContainer: React.FC<TemperaturesChartContainerProps> = ({
 	);
 };
 
-export default memo(TemperaturesChartContainer);
+export default memo(TemperaturesChartContainer, (prevProps, nextProps) => {
+	return prevProps.device.id === nextProps.device.id && prevProps.device.display_type === nextProps.device.display_type;
+});

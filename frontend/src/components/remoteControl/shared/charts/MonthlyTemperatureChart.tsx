@@ -8,6 +8,8 @@ import { cs, enUS } from "date-fns/locale";
 
 interface MonthlyTemperatureChartProps {
 	data: MonthlyTemperatureData[];
+	sensors: string[];
+	deviceType?: "standard" | "daitsu";
 }
 
 interface TooltipPayload {
@@ -22,27 +24,34 @@ interface CustomTooltipProps {
 	label?: string;
 }
 
-const MonthlyTemperatureChart: React.FC<MonthlyTemperatureChartProps> = ({ data }) => {
+const MonthlyTemperatureChart: React.FC<MonthlyTemperatureChartProps> = ({ data, sensors, deviceType = "standard" }) => {
 	const { t, i18n } = useTranslation("remote-control");
 	const selectedLocale = i18n.language === "en" ? enUS : cs;
 
-	const chartConfig = {
-		avg_ts1: {
-			label: t("charts.config.avg_ts1"),
-			color: "#00ad2e",
-			unit: t("charts.units.celsius"),
-		},
-		avg_ts2: {
-			label: t("charts.config.avg_ts2"),
-			color: "#00d0ff",
-			unit: t("charts.units.celsius"),
-		},
-		avg_ts4: {
-			label: t("charts.config.avg_ts4"),
-			color: "#f59e0b",
-			unit: t("charts.units.celsius"),
-		},
-	};
+	const chartConfig = useMemo(() => {
+		const config: Record<string, { label: string; color: string; unit: string }> = {};
+
+		sensors.forEach((sensor, index) => {
+			const avgKey = `avg_${sensor}`;
+			const colors = ["#00ad2e", "#00d0ff", "#f59e0b", "#8b5cf6", "#ef4444"];
+
+			// Get label from translations based on device type
+			let labelKey: string;
+			if (deviceType === "daitsu") {
+				labelKey = `daitsu.charts.config.${avgKey}`;
+			} else {
+				labelKey = `charts.config.${avgKey}`;
+			}
+
+			config[avgKey] = {
+				label: t(labelKey, sensor), // Fallback to sensor name if translation not found
+				color: colors[index % colors.length],
+				unit: t("charts.units.celsius"),
+			};
+		});
+
+		return config;
+	}, [sensors, deviceType, t]);
 
 	const formattedData = useMemo(() => {
 		if (!data || data.length === 0) return [];
@@ -56,19 +65,26 @@ const MonthlyTemperatureChart: React.FC<MonthlyTemperatureChartProps> = ({ data 
 			if (localizedMonth.length > 0) {
 				localizedMonth = localizedMonth.charAt(0).toUpperCase() + localizedMonth.slice(1);
 			}
-			return {
+
+			const formattedItem: any = {
 				name: `${localizedMonth} ${item.year}`,
-				avg_ts1: item.avg_ts1 === -128 ? null : item.avg_ts1,
-				avg_ts2: item.avg_ts2 === -128 ? null : item.avg_ts2,
-				avg_ts4: item.avg_ts4 === -128 ? null : item.avg_ts4,
 			};
+
+			// Add temperature data for each sensor
+			sensors.forEach((sensor) => {
+				const avgKey = `avg_${sensor}`;
+				const value = item[avgKey] as number;
+				formattedItem[avgKey] = value === -128 ? null : value;
+			});
+
+			return formattedItem;
 		});
-	}, [data, selectedLocale]);
+	}, [data, sensors, selectedLocale]);
 
 	const activeMetrics = useMemo(() => {
-		const metrics = ["avg_ts1", "avg_ts2", "avg_ts4"];
-		return metrics.filter((metric) => formattedData.some((item) => item[metric as keyof typeof item] !== null));
-	}, [formattedData]);
+		const metrics = sensors.map((sensor) => `avg_${sensor}`);
+		return metrics.filter((metric) => formattedData.some((item) => item[metric] !== null));
+	}, [formattedData, sensors]);
 
 	const formatYAxis = (value: number) => `${value} ${t("charts.units.celsius")}`;
 
@@ -178,5 +194,5 @@ const MonthlyTemperatureChart: React.FC<MonthlyTemperatureChartProps> = ({ data 
 };
 
 export const SimpleChart = React.memo(MonthlyTemperatureChart, (prevProps, nextProps) => {
-	return prevProps.data === nextProps.data;
+	return prevProps.data === nextProps.data && prevProps.sensors === nextProps.sensors && prevProps.deviceType === nextProps.deviceType;
 });

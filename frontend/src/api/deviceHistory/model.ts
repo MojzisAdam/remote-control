@@ -95,9 +95,7 @@ export interface MonthlyTemperatureData {
 	year: number;
 	month: number;
 	month_name: string;
-	avg_ts1: number;
-	avg_ts2: number;
-	avg_ts4: number;
+	[key: string]: number | string;
 }
 
 export interface MonthlyTemperatureResponse {

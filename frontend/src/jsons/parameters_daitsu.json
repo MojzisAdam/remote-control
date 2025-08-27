@@ -1,0 +1,1311 @@
+{
+    "reg_0": {
+        "register": 0,
+        "default_value": 0,
+        "user_access": true,
+        "description": "Power on or off control.",
+        "type": "bitfield",
+        "bits": {
+            "0": {
+                "description": "Air conditioning (zone 1)",
+                "options": {
+                    "0": "Off",
+                    "1": "On"
+                }
+            },
+            "1": {
+                "description": "Floor heating (zone 2)",
+                "options": {
+                    "0": "Off",
+                    "1": "On"
+                }
+            },
+            "2": {
+                "description": "DHW",
+                "options": {
+                    "0": "Off",
+                    "1": "On"
+                }
+            },
+            "3": {
+                "description": "Floor heating (zone 2)",
+                "options": {
+                    "0": "Off",
+                    "1": "On"
+                }
+            }
+        }
+    },
+    "reg_1": {
+        "type": "options",
+        "register": 1,
+        "default_value": 0,
+        "user_access": false,
+        "description": "Mode",
+        "options": {
+            "0": "Auto",
+            "1": "Cooling",
+            "2": "Heating"
+        }
+    },
+    "reg_2": {
+        "register": 2,
+        "default_value": 50,
+        "user_access": true,
+        "description": "Water temperature T1S",
+        "type": "bitfield",
+        "ranges": {
+            "timer_hours": {
+                "description": "Zone 1",
+                "start_bit": 0,
+                "end_bit": 7,
+                "min_value": 0,
+                "max_value": 255,
+                "unit": "°C"
+            },
+            "priority_level": {
+                "description": "Zone 2",
+                "start_bit": 8,
+                "end_bit": 15,
+                "min_value": 0,
+                "max_value": 255,
+                "unit": "°C"
+            }
+        }
+    },
+  "reg_3": {
+    "register": 3,
+    "type": "float",
+    "default_value": 21,
+    "min_value": 17,
+    "max_value": 30,
+    "increment_value": 0.1,
+    "multiplied": 2,
+    "unit": "°C",
+    "user_access": true,
+    "description": "Air temperature Ts"
+  },
+  "reg_4": {
+    "register": 4,
+    "type": "int",
+    "default_value": 40,
+    "min_value": 20,
+    "max_value": 75,
+    "user_access": true,
+    "unit": "°C",
+    "description": "T5S Tank water temperature"
+  },
+  "reg_5": {
+    "register": 5,
+    "type": "bitfield",
+    "default_value": 0,
+    "user_access": true,
+    "description": "Function settings",
+    "bits": {
+      "13": { "description": "Climate curve valid (zone 2)", "options": { "0": "Invalid", "1": "Valid" }},
+      "12": { "description": "Climate curve valid (zone 1)", "options": { "0": "Invalid", "1": "Valid" }},
+      "11": { "description": "Constant water recycle pump DHW running", "options": { "0": "Off", "1": "On" }},
+      "10": { "description": "ECO Mode", "options": { "0": "Disabled", "1": "Enabled" }},
+      "8":  { "description": "Holiday home", "options": { "0": "Normal", "1": "Holiday" }},
+      "7":  { "description": "Silent mode level", "options": { "0": "Level 1", "1": "Level 2" }},
+      "6":  { "description": "Silent mode active", "options": { "0": "Inactive", "1": "Active" }},
+      "5":  { "description": "Away holiday", "options": { "0": "Normal", "1": "Away" }},
+      "4":  { "description": "Disinfection", "options": { "0": "Disabled", "1": "Enabled" }}
+    }
+  },
+  "reg_6": {
+    "register": 6,
+    "type": "bitfield",
+    "default_value": 0,
+    "user_access": true,
+    "description": "Climate curve selection",
+    "ranges": {
+      "zone1": {
+        "description": "Climate curve (zone 1)",
+        "start_bit": 0,
+        "end_bit": 7,
+        "min_value": 1,
+        "max_value": 9
+      },
+      "zone2": {
+        "description": "Climate curve (zone 2)",
+        "start_bit": 8,
+        "end_bit": 15,
+        "min_value": 1,
+        "max_value": 9
+      }
+    }
+  },
+  "reg_7": {
+    "register": 7,
+    "type": "options",
+    "default_value": 0,
+    "user_access": true,
+    "description": "Forced water heating",
+    "options": {
+      "0": "Invalid",
+      "1": "Forced on address",
+      "2": "Forced off"
+    }
+  },
+  "reg_8": {
+    "register": 8,
+    "type": "options",
+    "default_value": 0,
+    "user_access": true,
+    "description": "Forced TBH",
+    "options": {
+      "0": "Invalid",
+      "1": "Forced on address",
+      "2": "Forced off"
+    }
+  },
+   "reg_9": {
+    "register": 9,
+    "type": "options",
+    "default_value": 0,
+    "user_access": true,
+    "description": "Forced TBH",
+    "options": {
+      "0": "Invalid",
+      "1": "Forced on address",
+      "2": "Forced off"
+    }
+  },
+  "reg_10": {
+    "register": 10,
+    "type": "int",
+    "default_value": 0,
+    "min_value": 0,
+    "max_value": 24,
+    "user_access": true,
+    "unit": "hours",
+    "description": "t_SG_MAX"
+  },
+  "reg_13": {
+    "register": 13,
+    "type": "int",
+    "default_value": 5,
+    "min_value": 0,
+    "max_value": 60,
+    "user_access": true,
+    "unit": "seconds",
+    "description": "t_ANTILOCK (anti-lock time)"
+  },
+  "reg_200": {
+        "register": 200,
+        "type": "bitfield",
+        "description": "Typ zařízení",
+        "user_access": false,
+        "ranges": {
+            "8-15": {
+                "description": "Typ (Tepelné čerpadlo vzduch-voda=0x07)",
+                "start_bit": 7,
+                "end_bit": 15,
+                "min_value": 0,
+                "max_value": 255
+            },
+            "4-7": {
+                "description": "Kód výrobku (0x1*)",
+                "start_bit": 4,
+                "end_bit": 7,
+                "min_value": 1,
+                "max_value": 16
+            },
+            "0-3": {
+                "description": "Podtyp (R32=0x*2)",
+                "start_bit": 0,
+                "end_bit": 3,
+                "min_value": 1,
+                "max_value": 16
+            }
+        }
+    },
+    "reg_201": {
+        "register": 201,
+        "type": "bitfield",
+        "description": "Horní limit T1S pro chlazení",
+        "unit": "°C",
+        "ranges": {
+            "zone1": {
+                "start_bit": 0,
+                "end_bit": 7,
+                "min_value": 1,
+                "max_value": 255,
+                "description": "Horní limit T1S pro chlazení (zóna 1)"
+            },
+            "zone2": {
+                "start_bit": 8,
+                "end_bit": 15,
+                "min_value": 15,
+                "max_value": 255,
+                "description": "Horní limit T1S pro chlazení (zóna 2)"
+            }
+        }
+    },
+    "reg_202": {
+        "register": 202,
+        "type": "bitfield",
+        "description": "Dolní limit T1S pro chlazení",
+        "unit": "°C",
+        "ranges": {
+            "zone1": {
+                "start_bit": 0,
+                "end_bit": 7,
+                "min_value": 1,
+                "max_value": 255,
+                "description": "Dolní limit T1S pro chlazení (zóna 1)"
+            },
+            "zone2": {
+                "start_bit": 8,
+                "end_bit": 15,
+                "min_value": 1,
+                "max_value": 255,
+                "description": "Dolní limit T1S pro chlazení (zóna 2)"
+            }
+        }
+    },
+    "reg_203": {
+        "register": 203,
+        "type": "bitfield",
+        "description": "Horní limit T1S pro vytápění",
+        "unit": "°C",
+        "ranges": {
+            "zone1": {
+                "start_bit": 0,
+                "end_bit": 7,
+                "min_value": 1,
+                "max_value": 255,
+                "description": "Horní limit T1S pro vytápění (zóna 1)"
+            },
+            "zone2": {
+                "start_bit": 8,
+                "end_bit": 15,
+                "min_value": 1,
+                "max_value": 255,
+                "description": "Horní limit T1S pro vytápění (zóna 2)"
+            }
+        }
+    },
+    "reg_204": {
+        "register": 204,
+        "type": "bitfield",
+        "description": "Dolní limit T1S pro vytápění",
+        "unit": "°C",
+        "ranges": {
+            "zone1": {
+                "start_bit": 0,
+                "end_bit": 7,
+                "min_value": 1,
+                "max_value": 255,
+                "description": "Dolní limit T1S pro vytápění (zóna 1)"
+            },
+            "zone2": {
+                "start_bit": 8,
+                "end_bit": 15,
+                "min_value": 1,
+                "max_value": 255,
+                "description": "Dolní limit T1S pro vytápění (zóna 2)"
+            }
+        }
+    },
+    "reg_205": {
+        "register": 205,
+        "type": "float",
+        "description": "TS setting upper limit",
+        "unit": "°C",
+        "multiplied": 2,
+        "step": 0.1
+    },
+    "reg_206": {
+        "register": 206,
+        "type": "float",
+        "description": "TS setting lower limit",
+        "unit": "°C",
+        "multiplied": 2,
+        "step": 0.1
+    },
+    "reg_207": {
+        "register": 207,
+        "type": "int",
+        "description": "Water heating upper limit",
+        "unit": "°C"
+    },
+    "reg_208": {
+        "register": 208,
+        "type": "int",
+        "description": "Water heating lower limit",
+        "unit": "°C"
+    },
+    "reg_209": {
+        "register": 209,
+        "type": "int",
+        "default_value": 5,
+        "min_value": 5,
+        "max_value": 120,
+        "increment_value": 1,
+        "unit": "minutes",
+        "user_access": true,
+        "description": "DHW Pump running time"
+    },
+    "reg_210": {
+        "register": 210,
+        "type": "bitfield",
+        "description": "Parameter settings 1",
+        "bits": {
+            "15": {
+                "description": "Water heating enable",
+                "options": {
+                    "0": "Disabled",
+                    "1": "Enabled"
+                }
+            },
+            "14": {
+                "description": "Supports TBH heater (read-only)",
+                "options": {
+                    "0": "No",
+                    "1": "Yes"
+                }
+            },
+            "13": {
+                "description": "Supports disinfection",
+                "options": {
+                    "0": "No",
+                    "1": "Yes"
+                }
+            },
+            "12": {
+                "description": "DHW pump supported",
+                "options": {
+                    "0": "No",
+                    "1": "Yes"
+                }
+            },
+            "10": {
+                "description": "DHW pump valid in disinfection mode",
+                "options": {
+                    "0": "No",
+                    "1": "Yes"
+                }
+            },
+            "9": {
+                "description": "Cooling enable",
+                "options": {
+                    "0": "Disabled",
+                    "1": "Enabled"
+                }
+            },
+            "7": {
+                "description": "Heating enable",
+                "options": {
+                    "0": "Disabled",
+                    "1": "Enabled"
+                }
+            },
+            "5": {
+                "description": "PumpI silent mode",
+                "options": {
+                    "0": "Disabled",
+                    "1": "Enabled"
+                }
+            },
+            "4": {
+                "description": "Supports room temperature sensor Ta",
+                "options": {
+                    "0": "No",
+                    "1": "Yes"
+                }
+            },
+            "3": {
+                "description": "Supports room thermostat",
+                "options": {
+                    "0": "No",
+                    "1": "Yes"
+                }
+            },
+            "2": {
+                "description": "Room thermostat active",
+                "options": {
+                    "0": "No",
+                    "1": "Yes"
+                }
+            },
+            "1": {
+                "description": "Dual room thermostat",
+                "options": {
+                    "0": "No",
+                    "1": "Yes"
+                }
+            },
+            "0": {
+                "description": "Priority",
+                "options": {
+                    "0": "Room first",
+                    "1": "Water first"
+                }
+            }
+        }
+    },
+    "reg_211": {
+        "register": 211,
+        "type": "bitfield",
+        "description": "Parameter settings 2",
+        "bits": {
+            "14": {
+                "description": "M1M2 used for AHS control",
+                "options": {
+                    "0": "No",
+                    "1": "Yes"
+                }
+            },
+            "13": {
+                "description": "RT_Ta_PCNEn set enable",
+                "options": {
+                    "0": "Disabled",
+                    "1": "Enabled"
+                }
+            },
+            "12": {
+                "description": "Tbt2 sensor valid",
+                "options": {
+                    "0": "No",
+                    "1": "Yes"
+                }
+            },
+            "11": {
+                "description": "Pipe length selection",
+                "options": {
+                    "0": "<=10m",
+                    "1": ">10m"
+                }
+            },
+            "10": {
+                "description": "Solar input port",
+                "options": {
+                    "0": "CN18",
+                    "1": "CN11"
+                }
+            },
+            "9": {
+                "description": "Solar kit enable",
+                "options": {
+                    "0": "Disabled",
+                    "1": "Enabled"
+                }
+            },
+            "8": {
+                "description": "Port definition",
+                "options": {
+                    "0": "Remote On/Off",
+                    "1": "DHW heater"
+                }
+            },
+            "7": {
+                "description": "Smart grid",
+                "options": {
+                    "0": "Disabled",
+                    "1": "Enabled"
+                }
+            },
+            "6": {
+                "description": "Tw2 sensor enable",
+                "options": {
+                    "0": "Disabled",
+                    "1": "Enabled"
+                }
+            },
+            "5": {
+                "description": "Cooling T1S high/low temp setting",
+                "options": {
+                    "0": "Low",
+                    "1": "High"
+                }
+            },
+            "4": {
+                "description": "Heating T1S high/low temp setting",
+                "options": {
+                    "0": "Low",
+                    "1": "High"
+                }
+            },
+            "3": {
+                "description": "Dual zone enable",
+                "options": {
+                    "0": "Disabled",
+                    "1": "Enabled"
+                }
+            },
+            "2": {
+                "description": "Ta sensor position",
+                "options": {
+                    "0": "HMI",
+                    "1": "IDU"
+                }
+            },
+            "1": {
+                "description": "Tbt1 sensor enable",
+                "options": {
+                    "0": "Disabled",
+                    "1": "Enabled"
+                }
+            },
+            "0": {
+                "description": "IBH/AHS install position",
+                "options": {
+                    "0": "Pipe",
+                    "1": "Buffer tank"
+                }
+            }
+        }
+    },
+    "reg_212": {
+        "register": 212,
+        "type": "int",
+        "default_value": 10,
+        "min_value": 1,
+        "max_value": 30,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "dT5_On"
+    },
+    "reg_213": {
+        "register": 213,
+        "type": "int",
+        "default_value": 10,
+        "min_value": 5,
+        "max_value": 40,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "dT1S5"
+    },
+    "reg_214": {
+        "register": 214,
+        "type": "int",
+        "default_value": 5,
+        "min_value": 5,
+        "max_value": 30,
+        "increment_value": 1,
+        "unit": "min",
+        "user_access": true,
+        "description": "T_Interval_DHW"
+    },
+    "reg_215": {
+        "register": 215,
+        "type": "int",
+        "default_value": 43,
+        "min_value": 35,
+        "max_value": 43,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "T4DHWmax"
+    },
+    "reg_216": {
+        "register": 216,
+        "type": "int",
+        "default_value": -10,
+        "min_value": -25,
+        "max_value": 30,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "T4DHWmin"
+    },
+    "reg_217": {
+        "register": 217,
+        "type": "int",
+        "default_value": 30,
+        "min_value": 0,
+        "max_value": 240,
+        "increment_value": 5,
+        "unit": "min",
+        "user_access": true,
+        "description": "t_TBH_delay"
+    },
+    "reg_218": {
+        "register": 218,
+        "type": "int",
+        "default_value": 5,
+        "min_value": 0,
+        "max_value": 10,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "dT5S_TBH_off"
+    },
+    "reg_219": {
+        "register": 219,
+        "type": "int",
+        "default_value": 5,
+        "min_value": -5,
+        "max_value": 50,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "T4_TBH_on"
+    },
+    "reg_220": {
+        "register": 220,
+        "type": "int",
+        "default_value": 65,
+        "min_value": 60,
+        "max_value": 70,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "T5s_DI - Disinfection temperature"
+    },
+    "reg_221": {
+        "register": 221,
+        "type": "int",
+        "default_value": 210,
+        "min_value": 90,
+        "max_value": 300,
+        "increment_value": 1,
+        "unit": "min",
+        "user_access": true,
+        "description": "t_DI_max - Maximum disinfection duration"
+    },
+    "reg_222": {
+        "register": 222,
+        "type": "int",
+        "default_value": 15,
+        "min_value": 5,
+        "max_value": 60,
+        "increment_value": 1,
+        "unit": "min",
+        "user_access": true,
+        "description": "t_DI_hightemp - High temperature disinfection duration"
+    },
+    "reg_223": {
+        "register": 223,
+        "type": "int",
+        "default_value": 5,
+        "min_value": 5,
+        "max_value": 30,
+        "increment_value": 1,
+        "unit": "min",
+        "user_access": true,
+        "description": "t_interval_C - Compressor start time interval in cooling mode"
+    },
+    "reg_224": {
+        "register": 224,
+        "type": "int",
+        "default_value": 5,
+        "min_value": 2,
+        "max_value": 10,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "dT1SC"
+    },
+    "reg_225": {
+        "register": 225,
+        "type": "int",
+        "default_value": 2,
+        "min_value": 1,
+        "max_value": 10,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "dTSC"
+    },
+    "reg_226": {
+        "register": 226,
+        "type": "int",
+        "default_value": 43,
+        "min_value": 35,
+        "max_value": 46,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "T4cmax"
+    },
+    "reg_227": {
+        "register": 227,
+        "type": "int",
+        "default_value": 10,
+        "min_value": -5,
+        "max_value": 25,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "T4cmin"
+    },
+    "reg_228": {
+        "register": 228,
+        "type": "int",
+        "default_value": 5,
+        "min_value": 5,
+        "max_value": 60,
+        "increment_value": 1,
+        "unit": "min",
+        "user_access": true,
+        "description": "t_interval_H - Compressor start time interval in heating mode"
+    },
+    "reg_229": {
+        "register": 229,
+        "type": "int",
+        "default_value": 5,
+        "min_value": 2,
+        "max_value": 20,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "dT1SH"
+    },
+    "reg_230": {
+        "register": 230,
+        "type": "int",
+        "default_value": 2,
+        "min_value": 1,
+        "max_value": 10,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "dTSH"
+    },
+    "reg_231": {
+        "register": 231,
+        "type": "int",
+        "default_value": 25,
+        "min_value": 20,
+        "max_value": 35,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "T4hmax"
+    },
+    "reg_232": {
+        "register": 232,
+        "type": "int",
+        "default_value": -15,
+        "min_value": -25,
+        "max_value": 30,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "T4hmin"
+    },
+    "reg_233": {
+        "register": 233,
+        "type": "int",
+        "default_value": -5,
+        "min_value": -15,
+        "max_value": 10,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "T4_IBH_on - Ambient temperature for IBH auxiliary electric heater activation"
+    },
+    "reg_234": {
+        "register": 234,
+        "type": "int",
+        "user_access": true,
+        "unit": "°C",
+        "description": "dT1_IBH_on - Return temperature difference for auxiliary hydraulic module activation"
+    },
+    "reg_235": {
+        "register": 235,
+        "type": "int",
+        "user_access": true,
+        "unit": "min",
+        "description": "t_IBH_delay - IBH auxiliary electric heater activation delay time"
+    },
+    "reg_237": {
+        "register": 237,
+        "type": "int",
+        "user_access": true,
+        "unit": "°C",
+        "description": "T4_AHS_on - Ambient trigger temperature for AHS activation"
+    },
+    "reg_238": {
+        "register": 238,
+        "type": "float",
+        "default_value": 0.5,
+        "unit": "°C",
+        "user_access": true,
+        "description": "dT1_AHS_on - Temperature difference between set heat pump outlet water temperature (T1S)"
+    },
+    "reg_240": {
+        "register": 240,
+        "type": "int",
+        "default_value": 30,
+        "min_value": 5,
+        "max_value": 120,
+        "increment_value": 1,
+        "unit": "min",
+        "user_access": true,
+        "description": "t_AHS_delay - External heater AHS activation delay time"
+    },
+    "reg_241": {
+        "register": 241,
+        "type": "int",
+        "default_value": 120,
+        "min_value": 10,
+        "max_value": 600,
+        "increment_value": 1,
+        "unit": "min",
+        "user_access": true,
+        "description": "t_DHWHP_max - Maximum water heating time by heat pump"
+    },
+    "reg_242": {
+        "register": 242,
+        "type": "int",
+        "default_value": 30,
+        "min_value": 10,
+        "max_value": 600,
+        "increment_value": 1,
+        "unit": "min",
+        "user_access": true,
+        "description": "t_DHWHP_restrict - Restricted water heating time by heat pump"
+    },
+    "reg_243": {
+        "register": 243,
+        "type": "int",
+        "default_value": 25,
+        "min_value": 20,
+        "max_value": 29,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "T4autocmin"
+    },
+    "reg_244": {
+        "register": 244,
+        "type": "int",
+        "default_value": 17,
+        "min_value": 10,
+        "max_value": 17,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "T4autohmax"
+    },
+    "reg_245": {
+        "register": 245,
+        "type": "int",
+        "default_value": 25,
+        "min_value": 20,
+        "max_value": 29,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "T1S_H.A_H"
+    },
+    "reg_246": {
+        "register": 246,
+        "type": "int",
+        "default_value": 25,
+        "min_value": 20,
+        "max_value": 25,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "T5S_H.A_DHW - Holiday mode T1 setting in water heating mode"
+    },
+    "reg_247": {
+        "register": 247,
+        "type": "int",
+        "default_value": 10,
+        "min_value": 10,
+        "max_value": 100,
+        "increment_value": 10,
+        "user_access": true,
+        "description": "PER_START ratio"
+    },
+    "reg_248": {
+        "register": 248,
+        "type": "int",
+        "default_value": 5,
+        "min_value": 1,
+        "max_value": 60,
+        "increment_value": 1,
+        "user_access": true,
+        "description": "TIME_ADJUST"
+    },
+    "reg_249": {
+        "register": 249,
+        "type": "int",
+        "default_value": 15,
+        "min_value": 0,
+        "max_value": 50,
+        "increment_value": 1,
+        "user_access": true,
+        "description": "dTbt2"
+    },
+    "reg_250": {
+        "register": 250,
+        "type": "int",
+        "default_value": 0,
+        "min_value": 0,
+        "max_value": 200,
+        "increment_value": 1,
+        "unit": "100W",
+        "user_access": true,
+        "description": "IBH1 Power"
+    },
+    "reg_251": {
+        "register": 251,
+        "type": "int",
+        "default_value": 0,
+        "min_value": 0,
+        "max_value": 200,
+        "increment_value": 1,
+        "unit": "100W",
+        "user_access": true,
+        "description": "IBH2 Power"
+    },
+    "reg_252": {
+        "register": 252,
+        "type": "int",
+        "default_value": 0,
+        "min_value": 0,
+        "max_value": 200,
+        "increment_value": 1,
+        "unit": "100W",
+        "user_access": true,
+        "description": "TBH Power"
+    },
+    "reg_253": {
+        "register": 253,
+        "type": "reserved",
+        "user_access": false,
+        "description": "Comfort parameter - Reserved, error address reported when querying this register"
+    },
+    "reg_254": {
+        "register": 254,
+        "type": "reserved",
+        "user_access": false,
+        "description": "Comfort parameter - Reserved, error address reported when querying this register"
+    },
+    "reg_255": {
+        "register": 255,
+        "type": "int",
+        "default_value": 8,
+        "min_value": 4,
+        "max_value": 15,
+        "increment_value": 1,
+        "unit": "days",
+        "user_access": true,
+        "description": "t_DRYUP - Temperature rise day number"
+    },
+    "reg_256": {
+        "register": 256,
+        "type": "int",
+        "default_value": 5,
+        "min_value": 3,
+        "max_value": 7,
+        "increment_value": 1,
+        "unit": "days",
+        "user_access": true,
+        "description": "t_HIGHPEAK - Drying day number"
+    },
+    "reg_257": {
+        "register": 257,
+        "type": "int",
+        "default_value": 5,
+        "min_value": 4,
+        "max_value": 15,
+        "increment_value": 1,
+        "unit": "days",
+        "user_access": true,
+        "description": "t_DRYD - Temperature drop day number"
+    },
+    "reg_258": {
+        "register": 258,
+        "type": "int",
+        "default_value": 45,
+        "min_value": 30,
+        "max_value": 55,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "T_DRYPEAK - Highest drying temperature"
+    },
+    "reg_259": {
+        "register": 259,
+        "type": "int",
+        "default_value": 72,
+        "min_value": 48,
+        "max_value": 96,
+        "increment_value": 1,
+        "unit": "hours",
+        "user_access": true,
+        "description": "t_firstFH - Floor heating operation time at first startup"
+    },
+    "reg_260": {
+        "register": 260,
+        "type": "int",
+        "default_value": 25,
+        "min_value": 25,
+        "max_value": 35,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "T1S (floor heating) - Floor heating T1S first time"
+    },
+    "reg_261": {
+        "register": 261,
+        "type": "int",
+        "default_value": 10,
+        "min_value": 5,
+        "max_value": 25,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "T1SetC1 - Ninth temperature curve parameter for cooling mode"
+    },
+    "reg_262": {
+        "register": 262,
+        "type": "int",
+        "default_value": 16,
+        "min_value": 5,
+        "max_value": 25,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "T1SetC2 - Ninth temperature curve parameter for cooling mode"
+    },
+    "reg_263": {
+        "register": 263,
+        "type": "int",
+        "default_value": 35,
+        "min_value": -5,
+        "max_value": 46,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "T4C1 - Ninth temperature curve parameter for cooling mode"
+    },
+    "reg_264": {
+        "register": 264,
+        "type": "int",
+        "default_value": 25,
+        "min_value": -5,
+        "max_value": 46,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "T4C2 - Ninth temperature curve parameter for cooling mode"
+    },
+    "reg_265": {
+        "register": 265,
+        "type": "int",
+        "default_value": 35,
+        "min_value": 25,
+        "max_value": 65,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "T1SetH1 - Ninth temperature curve parameter for heating mode"
+    },
+    "reg_266": {
+        "register": 266,
+        "type": "int",
+        "default_value": 28,
+        "min_value": 25,
+        "max_value": 65,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "T1SetH2 - Ninth temperature curve parameter for heating mode"
+    },
+    "reg_267": {
+        "register": 267,
+        "type": "int",
+        "default_value": -5,
+        "min_value": -25,
+        "max_value": 30,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "T4H1 - Ninth temperature curve parameter for heating mode"
+    },
+    "reg_268": {
+        "register": 268,
+        "type": "int",
+        "default_value": 7,
+        "min_value": -25,
+        "max_value": 30,
+        "increment_value": 1,
+        "unit": "°C",
+        "user_access": true,
+        "description": "T4H2 - Ninth temperature curve parameter for heating mode"
+    },
+    "reg_269": {
+        "register": 269,
+        "type": "options",
+        "default_value": 0,
+        "user_access": true,
+        "description": "POWER LIMITATION - Power limitation type",
+        "options": {
+            "0": "NONE",
+            "1": "Type 1",
+            "2": "Type 2",
+            "3": "Type 3",
+            "4": "Type 4",
+            "5": "Type 5",
+            "6": "Type 6",
+            "7": "Type 7",
+            "8": "Type 8"
+        }
+    },
+    "reg_270": {
+        "register": 270,
+        "type": "bitfield",
+        "user_access": true,
+        "description": "T4_FRESH timing parameters",
+        "ranges": {
+            "t_T4_FRESH_C": {
+                "description": "HB: t_T4_FRESH_C (cooling)",
+                "start_bit": 8,
+                "end_bit": 15,
+                "min_value": 1,
+                "max_value": 12,
+                "unit": "0.5 hours",
+                "multiplied": 2
+            },
+            "t_T4_FRESH_H": {
+                "description": "LB: t_T4_FRESH_H (heating)",
+                "start_bit": 0,
+                "end_bit": 7,
+                "min_value": 1,
+                "max_value": 12,
+                "unit": "0.5 hours",
+                "multiplied": 2
+            }
+        }
+    },
+    "reg_271": {
+        "register": 271,
+        "type": "int",
+        "min_value": 1,
+        "max_value": 40,
+        "unit": "0.5 hours",
+        "multiplied": 2,
+        "user_access": true,
+        "description": "T_PUMPI_DELAY"
+    },
+    "reg_272": {
+        "register": 272,
+        "type": "bitfield",
+        "user_access": true,
+        "description": "EMISSION TYPE - Terminal element type for individual zones and modes",
+        "ranges": {
+            "zone2_cooling": {
+                "description": "Zone 2 terminal type for cooling mode",
+                "start_bit": 12,
+                "end_bit": 15
+            },
+            "zone1_cooling": {
+                "description": "Zone 1 terminal type for cooling mode",
+                "start_bit": 8,
+                "end_bit": 11
+            },
+            "zone2_heating": {
+                "description": "Zone 2 terminal type for heating mode",
+                "start_bit": 4,
+                "end_bit": 7
+            },
+            "zone1_heating": {
+                "description": "Zone 1 terminal type for heating mode",
+                "start_bit": 0,
+                "end_bit": 3
+            }
+        }
+    },
+    "fhi": {
+        "type": "int",
+        "register": "fhi",
+        "description": "History recording frequency",
+        "default_value": 180,
+        "min_value": 180,
+        "max_value": 3600,
+        "increment_value": 1,
+        "user_access": false,
+		"unit": "s"
+    },
+    "virtual_1": {
+        "register": 5001,
+        "type": "int",
+        "default_value": 0,
+        "min_value": 0,
+        "max_value": 255,
+        "user_access": true,
+        "unit": "°C",
+        "description": "Curve cool zone 1"
+    },
+    "virtual_2": {
+        "register": 5002,
+        "type": "int",
+        "default_value": 0,
+        "min_value": 0,
+        "max_value": 255,
+        "user_access": true,
+        "unit": "°C",
+        "description": "Curve cool zone 2"
+    },
+    "virtual_3": {
+        "register": 5003,
+        "type": "int",
+        "default_value": 0,
+        "min_value": 0,
+        "max_value": 255,
+        "user_access": true,
+        "unit": "°C",
+        "description": "Curve heat zone 1"
+    },
+    "virtual_4": {
+        "register": 5004,
+        "type": "int",
+        "default_value": 0,
+        "min_value": 0,
+        "max_value": 255,
+        "user_access": true,
+        "unit": "°C",
+        "description": "Curve heat zone 2"
+    },
+    "virtual_5": {
+        "register": 5005,
+        "type": "int",
+        "default_value": 0,
+        "min_value": 0,
+        "max_value": 255,
+        "user_access": true,
+        "unit": "°C",
+        "description": "Water temp cool zone 1"
+    },
+    "virtual_6": {
+        "register": 5006,
+        "type": "int",
+        "default_value": 0,
+        "min_value": 0,
+        "max_value": 255,
+        "user_access": true,
+        "unit": "°C",
+        "description": "Water temp cool zone 2"
+    },
+    "virtual_7": {
+        "register": 5007,
+        "type": "int",
+        "default_value": 0,
+        "min_value": 0,
+        "max_value": 255,
+        "user_access": true,
+        "unit": "°C",
+        "description": "Water temp heat zone 1"
+    },
+    "virtual_8": {
+        "register": 5008,
+        "type": "int",
+        "default_value": 0,
+        "min_value": 0,
+        "max_value": 255,
+        "user_access": true,
+        "unit": "°C",
+        "description": "Water temp heat zone 2"
+    }
+}

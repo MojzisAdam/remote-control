@@ -7,29 +7,33 @@ import { useDeviceHistory } from "@/hooks/useDeviceHistory";
 import { useQuery } from "@tanstack/react-query";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { useTranslation } from "react-i18next";
+import { Device } from "@/api/devices/model";
+import { getChartDeviceType } from "@/utils/deviceTypeUtils";
 
 const SimpleChart = lazy(() => import("./MonthlyTemperatureChart").then((mod) => ({ default: mod.SimpleChart })));
 
 interface MonthlyTemperaturesContainerProps {
-	deviceId: string;
+	device: Device;
 }
 
-const MonthlyTemperaturesContainer: React.FC<MonthlyTemperaturesContainerProps> = ({ deviceId }) => {
+const MonthlyTemperaturesContainer: React.FC<MonthlyTemperaturesContainerProps> = ({ device }) => {
 	const { t } = useTranslation("remote-control");
 	const { loadMonthlyTemperatures } = useDeviceHistory();
 
+	const deviceType = getChartDeviceType(device);
+
 	const {
-		data: temperatureData,
+		data: temperatureResponse,
 		isLoading: loading,
 		error,
 	} = useQuery({
-		queryKey: ["temperature-chart", deviceId],
+		queryKey: ["temperature-chart", device.id],
 		queryFn: async () => {
-			const result = await loadMonthlyTemperatures(deviceId);
+			const result = await loadMonthlyTemperatures(device.id);
 			if (!result.success) {
 				throw new Error("Failed to load temperature chart data");
 			}
-			return result.data.data || [];
+			return result.data;
 		},
 		staleTime: 1 * 60 * 1000,
 		gcTime: 30 * 60 * 1000,
@@ -38,7 +42,10 @@ const MonthlyTemperaturesContainer: React.FC<MonthlyTemperaturesContainerProps> 
 	});
 
 	const chartError = error !== null;
+	const temperatureData = temperatureResponse?.data || [];
+	const sensors = temperatureResponse?.meta?.sensors || [];
 	const isDataAvailable = temperatureData && temperatureData.length > 0;
+
 	if (chartError) {
 		return (
 			<div className="w-full">
@@ -79,7 +86,10 @@ const MonthlyTemperaturesContainer: React.FC<MonthlyTemperaturesContainerProps> 
 									</div>
 								}
 							>
-								<SimpleChart data={temperatureData} />
+								<SimpleChart
+									data={temperatureData}
+									sensors={sensors}
+								/>
 							</Suspense>
 						</ErrorBoundary>
 					</>
@@ -89,4 +99,6 @@ const MonthlyTemperaturesContainer: React.FC<MonthlyTemperaturesContainerProps> 
 	);
 };
 
-export default memo(MonthlyTemperaturesContainer);
+export default memo(MonthlyTemperaturesContainer, (prevProps, nextProps) => {
+	return prevProps.device.id === nextProps.device.id && prevProps.device.display_type === nextProps.device.display_type;
+});

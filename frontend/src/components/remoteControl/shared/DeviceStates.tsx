@@ -1,5 +1,5 @@
 import React from "react";
-import ErrorHint from "./ErrorHint";
+import ErrorHint from "@/components/remoteControl/shared/ErrorHint";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { NotebookText } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -241,6 +241,7 @@ const DeviceStates: React.FC<DeviceStatesProps> = ({ data }) => {
 							<ErrorHint
 								errorCode={value ? value : 0}
 								firmwareVersion={data.reg_834}
+								deviceType="1"
 							/>
 						) : (
 							getStateDescription(key, value)

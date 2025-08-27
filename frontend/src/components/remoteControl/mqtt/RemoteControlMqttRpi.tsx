@@ -1,19 +1,19 @@
 import { useState, useEffect, useRef, useCallback, useMemo, useReducer } from "react";
 import { useMqtt } from "@/hooks/useMqtt";
-import DeviceStates from "./DeviceStates";
-import TemperatureDisplay from "./TemperatureDisplay";
-import HomeDashboard from "./HomeOverviewModern";
-import TemperaturesChartContainer from "./TemperaturesChart";
-import MonthlyTemperaturesContainer from "./MonthlyTemperatures";
-import ConnectionStatusIndicator from "@/components/remoteControl/ConnectionStatusIndicator";
-import DeviceLoader from "@/components/remoteControl/DeviceLoader";
+import DeviceStates from "@/components/remoteControl/shared//DeviceStates";
+import TemperatureDisplay from "@/components/remoteControl/shared/TemperatureDisplay";
+import HomeDashboard from "@/components/remoteControl/shared/HomeOverview";
+import TemperaturesChartContainer from "@/components/remoteControl/shared/charts/TemperaturesChart";
+import MonthlyTemperaturesContainer from "@/components/remoteControl/shared/charts/MonthlyTemperatures";
+import ConnectionStatusIndicator from "@/components/remoteControl/shared/ConnectionStatusIndicator";
+import DeviceLoader from "@/components/remoteControl/shared/DeviceLoader";
 import { LayoutDashboard, Sliders, Boxes, Box, RefreshCw, Loader2 } from "lucide-react";
-import DeviceParameters from "./DeviceParameters";
+import DeviceParameters from "../shared/DeviceParameters";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { useDevices } from "@/hooks/useDevices";
-import { useDeviceContext } from "@/provider/DeviceProvider";
 import { useAuth } from "@/hooks/useAuth";
+import { Device } from "@/api/devices/model";
 
 interface DeviceData {
 	[key: string]: number | string | undefined;
@@ -77,9 +77,10 @@ interface DeviceData {
 	fhi?: number;
 }
 
-interface RemoteControlMqttProps {
-	deviceId: string;
+interface RemoteControlMqttRpiProps {
+	device: Device;
 	onDataReceived?: (data: DeviceData) => void;
+	onVersionUpdate?: (fwVersion: string, scriptVersion: string) => void;
 }
 
 const CONNECTION_TIMEOUT = 20000;
@@ -95,17 +96,15 @@ const deviceDataReducer = (state: DeviceData, action: { type: string; payload?: 
 	}
 };
 
-const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataReceived }) => {
+const RemoteControlMqttRpi: React.FC<RemoteControlMqttRpiProps> = ({ device, onDataReceived, onVersionUpdate }) => {
 	const { t } = useTranslation("remote-control");
 	const { updateDeviceVersions } = useDevices();
-	const { currentDevice, updateDevice } = useDeviceContext();
-	const { client, connectionStatus, error, connectClient, disconnectClient, publishMessage, subscribeToTopic, lastMessage } = useMqtt(deviceId);
+	const { client, connectionStatus, error, connectClient, disconnectClient, publishMessage, subscribeToTopic, lastMessage } = useMqtt(device.id);
 
 	const { hasPermission } = useAuth();
 	const canViewExtendedParams = hasPermission("edit-all-parameters");
 
 	const [deviceData, dispatchDeviceData] = useReducer(deviceDataReducer, {});
-	const startCounter = useRef<number>(0b000);
 	const [containerPageShown, setContainerPageShown] = useState<boolean>(false);
 	const [deviceConnectionStatus, setDeviceConnectionStatus] = useState<"connecting" | "connected" | "disconnected" | "offline">("connecting");
 	const [lastMessageTimestamp, setLastMessageTimestamp] = useState<number | null>(null);
@@ -132,31 +131,30 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 	const versionsUpdated = useRef<boolean>(false);
 
 	useEffect(() => {
+		versionsUpdated.current = false;
+	}, [device.id]);
+
+	useEffect(() => {
 		if (deviceData.fw_v && deviceData.reg_834 && !versionsUpdated.current) {
 			const updateVersions = async () => {
+				versionsUpdated.current = true;
+
 				try {
-					const result = await updateDeviceVersions(deviceId, `${deviceData.reg_834}`, `${deviceData.fw_v}`);
-
-					if (result.success && currentDevice) {
-						const updatedDevice = {
-							...currentDevice,
-							fw_version: `${deviceData.reg_834}`,
-							script_version: `${deviceData.fw_v}`,
-						};
-						updateDevice(updatedDevice);
+					if (onVersionUpdate) {
+						await onVersionUpdate(`${deviceData.reg_834}`, `${deviceData.fw_v}`);
+					} else {
+						await updateDeviceVersions(device.id, `${deviceData.reg_834}`, `${deviceData.fw_v}`);
 					}
-
-					versionsUpdated.current = true;
 				} catch (error) {
 					console.error("Failed to update device versions:", error);
 				}
 			};
 
-			if (currentDevice && (currentDevice.fw_version !== `${deviceData.reg_834}` || currentDevice.script_version !== `${deviceData.fw_v}`)) {
+			if (device && (device.fw_version !== `${deviceData.reg_834}` || device.script_version !== `${deviceData.fw_v}`)) {
 				updateVersions();
 			}
 		}
-	}, [deviceId, deviceData.fw_v, deviceData.reg_834, updateDeviceVersions, updateDevice]);
+	}, [device.id, device.fw_version, device.script_version, deviceData.fw_v, deviceData.reg_834, updateDeviceVersions, onVersionUpdate]);
 
 	useEffect(() => {
 		connectionStatusRef.current = deviceConnectionStatus;
@@ -206,7 +204,7 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 		const setupSubscription = async () => {
 			if (connectionStatus !== "connected" || isSubscribed.current) return;
 			try {
-				const topic = `/amit_cim/publish/${deviceId}/#`;
+				const topic = `cim/v1/${device.id}/data/remote`;
 				await subscribeToTopic(topic);
 				isSubscribed.current = true;
 				sendInitialMessage();
@@ -219,7 +217,7 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 		const sendInitialMessage = async () => {
 			if (connectionStatus !== "connected" || !isSubscribed.current || hasPublishedInitialMessage.current) return;
 			try {
-				const sendTopic = `/amit_cim/subscribe/${deviceId}/w`;
+				const sendTopic = `cim/v1/${device.id}/cmd/remote_control`;
 				await publishMessage(sendTopic, JSON.stringify({ send: 1 }), { qos: 1 });
 				hasPublishedInitialMessage.current = true;
 			} catch (err) {
@@ -229,7 +227,7 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 
 		setupSubscription();
 		startConnectionTimeout();
-	}, [connectionStatus, subscribeToTopic, publishMessage, deviceId]);
+	}, [connectionStatus, subscribeToTopic, publishMessage, device.id]);
 
 	useEffect(() => {
 		if (!lastMessage) return;
@@ -244,7 +242,7 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 			const { topic, message } = lastMessage;
 			const payload = JSON.parse(message);
 
-			if (topic.includes("/publish_s/") && topic.includes("/params")) {
+			if (topic === `cim/v1/${device.id}/data/parameters`) {
 				const formattedPayload = formatExtendedPayload(payload);
 				setExtendedData((prev) => ({ ...prev, ...formattedPayload }));
 				setLastExtendedMessageTimestamp(Date.now());
@@ -258,7 +256,7 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 
 			let newData: DeviceData = {};
 
-			if (topic.endsWith("1")) {
+			if (topic === `cim/v1/${device.id}/data/remote`) {
 				newData = {
 					reg_33: payload.reg_33,
 					reg_35: payload.reg_35,
@@ -271,10 +269,6 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 					reg_71: payload.reg_71,
 					reg_75: payload.reg_75,
 					reg_76: payload.reg_76,
-				};
-				startCounter.current |= 0b001;
-			} else if (topic.endsWith("2")) {
-				newData = {
 					reg_77: payload.reg_77,
 					reg_78: payload.reg_78,
 					reg_96: payload.reg_96,
@@ -287,10 +281,6 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 					reg_128: formatInt16(payload.reg_128),
 					reg_133: payload.reg_133,
 					reg_192: payload.reg_192,
-				};
-				startCounter.current |= 0b010;
-			} else if (topic.endsWith("3")) {
-				newData = {
 					reg_193: payload.reg_193,
 					reg_257: payload.reg_257,
 					reg_258: payload.reg_258,
@@ -327,7 +317,6 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 					fw_v: payload.fw_v,
 					fhi: payload.fhi,
 				};
-				startCounter.current |= 0b100;
 			}
 
 			dispatchDeviceData({ type: "UPDATE", payload: newData });
@@ -340,7 +329,7 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 				}
 			}
 
-			if (startCounter.current === 0b111 && !containerPageShown) {
+			if (!containerPageShown) {
 				setContainerPageShown(true);
 			}
 		} catch (err) {
@@ -379,28 +368,7 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 
 	const publishMqtt = useCallback(
 		async (register: number, value: number) => {
-			const name = typeof register === "number" ? `reg_${register}` : register;
-
-			const topic = ["reg_64", "reg_65", "reg_71", "reg_68", "reg_75", "reg_76", "reg_77", "reg_78", "reg_33", "reg_35"].includes(name)
-				? `/amit_cim/subscribe/${deviceId}/1`
-				: `/amit_cim/subscribe/${deviceId}/2`;
-			const message = JSON.stringify({
-				reg_change: 1,
-				[`${name}_change`]: 1,
-				[name]: value,
-			});
-			try {
-				await publishMessage(topic, message, { qos: 1 });
-			} catch (error) {
-				console.error("Failed to publish MQTT message:", error);
-			}
-		},
-		[deviceId, publishMessage]
-	);
-
-	const publishMqttExtended = useCallback(
-		async (register: number, value: number) => {
-			const topic = `/amit_cim/subscribe/${deviceId}/change`;
+			const topic = `cim/v1/${device.id}/cmd/prmt_change_1`;
 			const message = JSON.stringify({
 				reg_change: 1,
 				reg_name: register,
@@ -412,7 +380,24 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 				console.error("Failed to publish MQTT message:", error);
 			}
 		},
-		[deviceId, publishMessage]
+		[device.id, publishMessage]
+	);
+
+	const publishMqttExtended = useCallback(
+		async (register: number, value: number) => {
+			const topic = `cim/v1/${device.id}/cmd/prmt_change_2`;
+			const message = JSON.stringify({
+				reg_change: 1,
+				reg_name: register,
+				reg_value: value,
+			});
+			try {
+				await publishMessage(topic, message, { qos: 1 });
+			} catch (error) {
+				console.error("Failed to publish MQTT message:", error);
+			}
+		},
+		[device.id, publishMessage]
 	);
 
 	const toggleExtendedParameters = useCallback(() => {
@@ -428,11 +413,11 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 		const setupExtendedSubscription = async () => {
 			try {
 				setExtendedReloading(true);
-				const topic = `/amit_cim/publish_s/${deviceId}/params`;
+				const topic = `cim/v1/${device.id}/data/parameters`;
 				await subscribeToTopic(topic);
 				isExtendedSubscribed.current = true;
 
-				const sendTopic = `/amit_cim/subscribe/${deviceId}/ws`;
+				const sendTopic = `cim/v1/${device.id}/cmd/all_prmts`;
 				await publishMessage(sendTopic, JSON.stringify({ send: 1 }), { qos: 1 });
 			} catch (err) {
 				console.error("Failed to subscribe to extended parameters topic:", err);
@@ -444,7 +429,7 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 		};
 
 		setupExtendedSubscription();
-	}, [showExtendedParams, connectionStatus, subscribeToTopic, publishMessage, deviceId]);
+	}, [showExtendedParams, connectionStatus, subscribeToTopic, publishMessage, device.id]);
 
 	const refreshExtendedData = useCallback(async () => {
 		setExtendedReloading(true);
@@ -452,21 +437,21 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 		setLastExtendedMessageTimestamp(null);
 		setShowReloadButton(false);
 		try {
-			const sendTopic = `/amit_cim/subscribe/${deviceId}/ws`;
+			const sendTopic = `cim/v1/${device.id}/cmd/all_prmts`;
 			await publishMessage(sendTopic, JSON.stringify({ send: 1 }));
 		} catch (err) {
 			console.error("Failed to refresh extended parameters:", err);
 		}
-	}, [deviceId, publishMessage]);
+	}, [device.id, publishMessage]);
 
 	useEffect(() => {
 		if ((deviceConnectionStatus === "disconnected" || deviceConnectionStatus === "offline") && isExtendedSubscribed.current) {
 			if (client && connectionStatus === "connected") {
-				client.unsubscribe(`/amit_cim/publish_s/${deviceId}/params`);
+				client.unsubscribe(`cim/v1/${device.id}/data/parameters`);
 			}
 			isExtendedSubscribed.current = false;
 		}
-	}, [deviceConnectionStatus, client, connectionStatus, deviceId]);
+	}, [deviceConnectionStatus, client, connectionStatus, device.id]);
 
 	useEffect(() => {
 		if (deviceConnectionStatus === "connected" && lastExtendedMessageTimestamp) {
@@ -634,8 +619,8 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 								<HomeDashboard deviceData={overviewData} />
 							</div>
 							<div className="flex justify-between gap-8 max-sm:flex-col w-full">
-								<TemperaturesChartContainer deviceId={deviceId} />
-								<MonthlyTemperaturesContainer deviceId={deviceId} />
+								<TemperaturesChartContainer device={device} />
+								<MonthlyTemperaturesContainer device={device} />
 							</div>
 							<div className="flex gap-8 max-sm:flex-col w-full">
 								<TemperatureDisplay data={temperatureData} />
@@ -678,7 +663,7 @@ const RemoteControlMqtt: React.FC<RemoteControlMqttProps> = ({ deviceId, onDataR
 								</div>
 							)}
 							<DeviceParameters
-								deviceId={deviceId}
+								deviceId={device.id}
 								deviceData={parametersData}
 								onUpdateParameter={showExtendedParams ? publishMqttExtended : publishMqtt}
 								isExtendedMode={showExtendedParams}
@@ -714,4 +699,4 @@ export const formatExtendedPayload = (payload: ExtendedPayload): ExtendedPayload
 	return formatted;
 };
 
-export default RemoteControlMqtt;
+export default RemoteControlMqttRpi;
