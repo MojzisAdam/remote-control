@@ -13,16 +13,29 @@ import { useDebounce } from "@/hooks/useDebounce";
 import PageHeading from "@/components/PageHeading";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
-import parametersDataEN from "@/jsons/parameters.json";
-import parametersDataCZ from "@/jsons/parameters_cz.json";
 import usePageTitle from "@/hooks/usePageTitle";
 import { useUserManagement } from "@/hooks/useUserManagement";
 import { useDeviceContext } from "@/provider/DeviceProvider";
 import { cs, enUS } from "date-fns/locale";
 import { format } from "date-fns";
+import { isDaitsuDevice } from "@/utils/deviceTypeUtils";
 
 interface ParameterOption {
 	[key: string]: string;
+}
+
+interface BitfieldBit {
+	description: string;
+	options: ParameterOption;
+}
+
+interface BitfieldRange {
+	description: string;
+	start_bit: number;
+	end_bit: number;
+	min_value?: number;
+	max_value?: number;
+	unit?: string;
 }
 
 interface BaseParameter {
@@ -60,7 +73,13 @@ interface SwitchParameter extends BaseParameter {
 	options: ParameterOption;
 }
 
-type Parameter = IntParameter | FloatParameter | OptionsParameter | SwitchParameter;
+interface BitfieldParameter extends BaseParameter {
+	type: "bitfield";
+	bits?: { [bitNumber: string]: BitfieldBit };
+	ranges?: { [rangeName: string]: BitfieldRange };
+}
+
+type Parameter = IntParameter | FloatParameter | OptionsParameter | SwitchParameter | BitfieldParameter;
 
 const DeviceParameterLog = () => {
 	const { id: deviceId } = useParams<{ id: string }>();
@@ -70,15 +89,61 @@ const DeviceParameterLog = () => {
 
 	const { i18n, t } = useTranslation(["parameterLog", "pagination"]);
 	const selectedLocale = i18n.language === "en" ? enUS : cs;
-	const parametersData = i18n.language === "cs" ? parametersDataCZ : parametersDataEN;
 
 	const { setLastVisited } = useUserManagement();
 	const { currentDevice, isLoading: initialLoading, notFound, loadDevice } = useDeviceContext();
+
+	// State for dynamically loaded parameters data
+	const [parametersData, setParametersData] = useState<Record<string, any>>({});
+	const [parametersLoading, setParametersLoading] = useState(true);
+	const [parametersReady, setParametersReady] = useState(false);
+
+	// Dynamically load parameter data based on device type and language
+	useEffect(() => {
+		const loadParametersData = async () => {
+			if (!currentDevice) {
+				setParametersReady(false);
+				return;
+			}
+
+			setParametersLoading(true);
+			setParametersReady(false);
+			try {
+				let parameterModule;
+
+				if (isDaitsuDevice(currentDevice)) {
+					if (i18n.language === "cs") {
+						parameterModule = await import("@/jsons/parameters_daitsu_cz.json");
+					} else {
+						parameterModule = await import("@/jsons/parameters_daitsu.json");
+					}
+				} else {
+					if (i18n.language === "cs") {
+						parameterModule = await import("@/jsons/parameters_cz.json");
+					} else {
+						parameterModule = await import("@/jsons/parameters.json");
+					}
+				}
+
+				setParametersData(parameterModule.default);
+				setParametersReady(true);
+			} catch (error) {
+				console.error("Failed to load parameters data:", error);
+				setParametersData({});
+				setParametersReady(true);
+			} finally {
+				setParametersLoading(false);
+			}
+		};
+
+		loadParametersData();
+	}, [currentDevice, i18n.language]);
 
 	const [totalPages, setTotalPages] = useState<number>(0);
 	const [from, setFrom] = useState<number>(0);
 	const [to, setTo] = useState<number>(0);
 	const [totalRecords, setTotalRecords] = useState<number>(0);
+	const [logsLoaded, setLogsLoaded] = useState(false);
 
 	usePageTitle(t("parameterLog:pageTitle", { deviceId }));
 
@@ -106,6 +171,22 @@ const DeviceParameterLog = () => {
 		});
 	}, [debouncedSearchTerm]);
 
+	// Only load logs when parameters are ready AND device is loaded
+	useEffect(() => {
+		if (!initialLoading && parametersReady && deviceId && !loading) {
+			loadLogs();
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [parametersReady, initialLoading, deviceId]);
+
+	// Handle query changes (search, pagination) - only if already initialized
+	useEffect(() => {
+		if (parametersReady && !initialLoading && logsLoaded && deviceId) {
+			loadLogs();
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [query]);
+
 	const formatDate = (dateString: string) => {
 		const date = new Date(dateString);
 		return format(date, "dd/MM/yyyy HH:mm:ss", { locale: selectedLocale });
@@ -123,13 +204,6 @@ const DeviceParameterLog = () => {
 		fetchData();
 	}, [deviceId]);
 
-	useEffect(() => {
-		if (!initialLoading && deviceId) {
-			loadLogs();
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [query]);
-
 	const loadLogs = async () => {
 		if (typeof deviceId === "string") {
 			const result = await fetchLogs(deviceId, {
@@ -143,6 +217,7 @@ const DeviceParameterLog = () => {
 				setFrom(result.data.meta.from || 0);
 				setTo(result.data.meta.to || 0);
 				setTotalRecords(result.data.meta.total || 0);
+				setLogsLoaded(true);
 			} else {
 				toast({ title: t("parameterLog:errorTitle"), description: t("parameterLog:errorDescription"), variant: "destructive" });
 			}
@@ -174,7 +249,47 @@ const DeviceParameterLog = () => {
 	const formatValue = (paramKey: string, value: string | undefined | null): ReactNode => {
 		if (!value) return <span className="text-muted-foreground italic">{t("parameterLog:notSet")}</span>;
 
-		const paramInfo = parametersData[paramKey as keyof typeof parametersData] as Parameter;
+		if (paramKey.includes("_bit_") || paramKey.includes("_range_")) {
+			const baseKey = paramKey.includes("_bit_") ? paramKey.split("_bit_")[0] : paramKey.split("_range_")[0];
+			const baseParam = parametersData[baseKey as keyof typeof parametersData] as unknown as BitfieldParameter;
+
+			console.log("Processing bitfield param:", paramKey, "baseKey:", baseKey, "baseParam:", baseParam, "value:", value);
+
+			if (baseParam && baseParam.type === "bitfield") {
+				if (paramKey.includes("_bit_")) {
+					// This is a bit parameter - display the text option
+					const bitNumber = paramKey.split("_bit_")[1];
+					const bitConfig = baseParam.bits?.[bitNumber];
+
+					console.log("Bit config:", bitNumber, bitConfig);
+
+					if (bitConfig && bitConfig.options) {
+						const optionText = bitConfig.options[value];
+						console.log("Option text for value", value, ":", optionText);
+						return <span>{optionText || value}</span>;
+					}
+				} else if (paramKey.includes("_range_")) {
+					// This is a range parameter - display value with unit
+					const rangeName = paramKey.split("_range_")[1];
+					const rangeConfig = baseParam.ranges?.[rangeName];
+
+					console.log("Range config:", rangeName, rangeConfig);
+
+					if (rangeConfig) {
+						return (
+							<span>
+								{value}
+								{rangeConfig.unit ? ` ${rangeConfig.unit}` : ""}
+							</span>
+						);
+					}
+				}
+			}
+			return value;
+		}
+
+		// For regular parameters, look up the parameter info
+		const paramInfo = parametersData[paramKey as keyof typeof parametersData] as unknown as Parameter;
 
 		if (!paramInfo) return value;
 
@@ -200,13 +315,39 @@ const DeviceParameterLog = () => {
 			case "options":
 			case "switch":
 				return <span>{paramInfo.options?.[value] || value}</span>;
+			case "bitfield":
+				// For direct bitfield values, show hex representation
+				return <span>0x{Number(value).toString(16).toUpperCase().padStart(2, "0")}</span>;
 			default:
 				return value;
 		}
 	};
 
 	const getParameterDescription = (paramKey: string): string => {
-		const paramInfo = parametersData[paramKey as keyof typeof parametersData] as Parameter;
+		if (paramKey.includes("_bit_") || paramKey.includes("_range_")) {
+			const baseKey = paramKey.includes("_bit_") ? paramKey.split("_bit_")[0] : paramKey.split("_range_")[0];
+			const baseParam = parametersData[baseKey as keyof typeof parametersData] as unknown as BitfieldParameter;
+
+			if (baseParam && baseParam.type === "bitfield") {
+				if (paramKey.includes("_bit_")) {
+					// This is a bit parameter
+					const bitNumber = paramKey.split("_bit_")[1];
+					const bitConfig = baseParam.bits?.[bitNumber];
+					if (bitConfig) {
+						return bitConfig.description;
+					}
+				} else if (paramKey.includes("_range_")) {
+					// This is a range parameter
+					const rangeName = paramKey.split("_range_")[1];
+					const rangeConfig = baseParam.ranges?.[rangeName];
+					if (rangeConfig) {
+						return rangeConfig.description;
+					}
+				}
+			}
+		}
+
+		const paramInfo = parametersData[paramKey as keyof typeof parametersData] as unknown as Parameter;
 		return paramInfo?.description || t("parameterLog:unknownParam");
 	};
 
@@ -257,7 +398,7 @@ const DeviceParameterLog = () => {
 							onChange={(e) => setSearchInput(e.target.value)}
 						/>
 					</form>
-					{loading && !initialLoading ? <Loader2 className="animate-spin h-4 w-4 max-md:absolute max-md:bottom-6" /> : null}
+					{(loading && logsLoaded) || parametersLoading ? <Loader2 className="animate-spin h-4 w-4 max-md:absolute max-md:bottom-6" /> : null}
 				</div>
 
 				{/* Logs table */}
@@ -274,7 +415,7 @@ const DeviceParameterLog = () => {
 							</TableRow>
 						</TableHeader>
 						<TableBody>
-							{initialLoading ? (
+							{initialLoading || !parametersReady || !logsLoaded ? (
 								Array(parseInt(query.pageSize))
 									.fill(0)
 									.map((_, i) => (
