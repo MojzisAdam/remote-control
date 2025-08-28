@@ -132,4 +132,77 @@ class TrafficAnalyticsController extends Controller
             'period' => $period,
         ]);
     }
+
+    /**
+     * Delete old traffic logs
+     */
+    public function deleteOldLogs(Request $request)
+    {
+        $request->validate([
+            'period' => 'required|in:week,month,3months,6months,year',
+        ]);
+
+        $period = $request->get('period');
+        $deletedCount = 0;
+
+        try {
+            // Calculate the cutoff date based on the period
+            $cutoffDate = match ($period) {
+                'week' => now()->subWeek(),
+                'month' => now()->subMonth(),
+                '3months' => now()->subMonths(3),
+                '6months' => now()->subMonths(6),
+                'year' => now()->subYear(),
+            };
+
+            // Delete logs older than the cutoff date
+            $deletedCount = TrafficLog::where('created_at', '<', $cutoffDate)->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => "Successfully deleted {$deletedCount} log entries older than " . $cutoffDate->format('Y-m-d H:i:s'),
+                'deleted_count' => $deletedCount,
+                'cutoff_date' => $cutoffDate->format('Y-m-d H:i:s'),
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error deleting traffic logs: ' . $e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while deleting logs. Please try again.',
+            ], 500);
+        }
+    }
+
+    /**
+     * Get statistics about log storage
+     */
+    public function getLogStats(Request $request)
+    {
+        $totalLogs = TrafficLog::count();
+        $logsLastWeek = TrafficLog::where('created_at', '>=', now()->subWeek())->count();
+        $logsLastMonth = TrafficLog::where('created_at', '>=', now()->subMonth())->count();
+        $logsLast3Months = TrafficLog::where('created_at', '>=', now()->subMonths(3))->count();
+        $logsLast6Months = TrafficLog::where('created_at', '>=', now()->subMonths(6))->count();
+        $logsLastYear = TrafficLog::where('created_at', '>=', now()->subYear())->count();
+
+        $oldestLog = TrafficLog::oldest()->first();
+        $newestLog = TrafficLog::latest()->first();
+
+        return response()->json([
+            'total_logs' => $totalLogs,
+            'logs_last_week' => $logsLastWeek,
+            'logs_last_month' => $logsLastMonth,
+            'logs_last_3_months' => $logsLast3Months,
+            'logs_last_6_months' => $logsLast6Months,
+            'logs_last_year' => $logsLastYear,
+            'oldest_log_date' => $oldestLog ? $oldestLog->created_at->format('Y-m-d H:i:s') : null,
+            'newest_log_date' => $newestLog ? $newestLog->created_at->format('Y-m-d H:i:s') : null,
+            'logs_older_than_week' => $totalLogs - $logsLastWeek,
+            'logs_older_than_month' => $totalLogs - $logsLastMonth,
+            'logs_older_than_3_months' => $totalLogs - $logsLast3Months,
+            'logs_older_than_6_months' => $totalLogs - $logsLast6Months,
+            'logs_older_than_year' => $totalLogs - $logsLastYear,
+        ]);
+    }
 }

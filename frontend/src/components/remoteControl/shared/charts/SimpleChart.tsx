@@ -31,8 +31,8 @@ const HistoryGraph: React.FC<HistoryGraphProps> = ({ data, selectedMetrics }) =>
 		komp: { label: t("charts.config.komp"), color: "#10b981", unit: t("charts.units.percent") },
 
 		reg_107: { label: t("daitsu.charts.config.reg_107"), color: "#00ad2e", unit: t("charts.units.celsius") },
-		reg_110: { label: t("daitsu.charts.config.reg_110"), color: "#f59e0b", unit: t("charts.units.celsius") },
-		reg_115: { label: t("daitsu.charts.config.reg_115"), color: "#10b981", unit: t("charts.units.celsius") },
+		reg_110: { label: t("daitsu.charts.config.reg_110"), color: "#00d0ff", unit: t("charts.units.celsius") },
+		reg_115: { label: t("daitsu.charts.config.reg_115"), color: "#f59e0b", unit: t("charts.units.celsius") },
 	};
 
 	const formattedData = useMemo(() => {

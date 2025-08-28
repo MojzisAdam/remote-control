@@ -24,6 +24,8 @@ Route::middleware(['notfound.unauthorized'])->prefix('admin')->group(function ()
         Route::get('/users', [TrafficAnalyticsController::class, 'getUserActivity'])->name('traffic.users');
         Route::get('/ips', [TrafficAnalyticsController::class, 'getIpActivity'])->name('traffic.ips');
         Route::get('/response-times', [TrafficAnalyticsController::class, 'getResponseTimes'])->name('traffic.response');
+        Route::get('/stats', [TrafficAnalyticsController::class, 'getLogStats'])->name('traffic.stats');
+        Route::delete('/cleanup', [TrafficAnalyticsController::class, 'deleteOldLogs'])->name('traffic.cleanup');
     });
 
     // Update Manager Routes
