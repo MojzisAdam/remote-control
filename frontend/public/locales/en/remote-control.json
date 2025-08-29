@@ -186,7 +186,7 @@
         "operation": "Operation Mode",
         "blocking": "Blocking & Errors",
         "performance": "Performance & Activity",
-        "statusBits": "Status & Load Output Bits",
+        "statusBits": "States & Load Output",
         "firmware": "Firmware Versions"
       },
       "labels": {
@@ -195,7 +195,7 @@
         "reg_102": "Fan speed",
         "reg_122": "Compressor operating time",
         "reg_124": "Current fault",
-        "reg_128": "Status bit 1",
+        "reg_128": "States",
         "reg_129": "Load output",
         "reg_132": "Unit target frequency",
         "reg_138": "Water flow",

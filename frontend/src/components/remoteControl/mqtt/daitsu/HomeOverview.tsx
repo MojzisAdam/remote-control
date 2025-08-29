@@ -505,13 +505,13 @@ const HomePage: React.FC<HomePageProps> = ({ deviceData }) => {
 					</p>
 				)}
 
-				{getBit(deviceData.reg_210 ?? 0, 2) === 1 ? (
+				{getBit(deviceData.reg_210 ?? 0, 4) === 1 ? (
 					<p>
 						<span className={getBit(deviceData.reg_128 ?? 0, 6) === 1 ? "home_tuvto-on" : getBit(deviceData.reg_128 ?? 0, 7) === 1 ? "home_tuvto-cool" : "home_tuvto-off"}></span>
 						<ThermostatIcon />
 						<span
 							className="want-temp-home"
-							data-descr={`${deviceData.reg_3} °C`}
+							data-descr={`${deviceData.reg_3 !== undefined ? deviceData.reg_3 / 2 : "---"} °C`}
 						>
 							{getTemperatureDisplay(deviceData.reg_114)}
 						</span>

@@ -116,16 +116,16 @@ const groupIcons: Record<string, ReactNode> = {
 const parameterGroups = {
 	basicParameters: [0, 1, 5, 7, 8, 9, 10, 13, 209, 210, 211],
 	commonRegulatorParameters: [
-		6, 200, 215, 216, 217, 221, 222, 223, 224, 225, 228, 229, 230, 235, 238, 240, 241, 242, 245, 246, 247, 248, 249, 250, 251, 252, 254, 255, 256, 257, 258, 259, 260, 269, 270, 271, 272,
+		215, 216, 217, 221, 222, 223, 224, 225, 228, 229, 230, 235, 238, 240, 241, 242, 245, 246, 247, 248, 249, 250, 251, 252, 254, 255, 256, 257, 258, 259, 260, 269, 270, 271,
 	],
-	heatingCircuitParameters: [2, 201, 202, 203, 204, 205, 206, 218, 220, 5001, 5002, 5003, 5004, 5005, 5006, 5007, 5008],
-	domesticHotWaterParameters: [4, 207, 208, 212, 213, 214, 219, 226, 227, 231, 232, 233, 234, 237, 243, 244, 261, 262, 263, 264, 265, 266, 267, 268],
+	heatingCircuitParameters: [2, 6, 201, 202, 203, 204, 205, 206, 218, 220, 261, 262, 263, 264, 265, 266, 267, 268],
+	domesticHotWaterParameters: [4, 207, 208, 212, 213, 214, 219, 226, 227, 231, 232, 233, 234, 237, 243, 244],
 	bivalentSourceParameters: [],
 	photovoltaicParameters: [],
 	roomThermostatParameters: [3],
 	basicParameters2: [],
 	heatingCircuit2Parameters: [],
-	extendedParameters: ["fhi"],
+	extendedParameters: ["fhi", 200, 272],
 };
 
 // Utility functions for bitfield operations
@@ -302,7 +302,8 @@ export const DeviceParameters: React.FC<DeviceParametersProps> = ({ deviceId, de
 	}, [deviceData, isExtendedMode]);
 
 	const availableGroups = useMemo(() => {
-		return Object.keys(groupedParameters);
+		// Return groups in the order they are defined in parameterGroups
+		return Object.keys(parameterGroups).filter((group) => group in groupedParameters);
 	}, [groupedParameters]);
 
 	useEffect(() => {

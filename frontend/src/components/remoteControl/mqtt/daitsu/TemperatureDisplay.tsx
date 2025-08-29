@@ -126,7 +126,7 @@ const TemperatureDisplay: React.FC<TemperatureDisplayProps> = ({ data }) => {
 	const desiredTemperatures = [
 		{ key: "T1s_z1", value: getDesiredTempSensorOne(data.reg_2, data.reg_136, 1) },
 		{ key: "T1s_z2", value: getDesiredTempSensorOne(data.reg_2, data.reg_137, 2) },
-		{ key: "reg_3", value: data.reg_3 },
+		{ key: "reg_3", value: data.reg_3 !== undefined ? data.reg_3 / 2 : undefined },
 		{ key: "reg_4", value: data.reg_4 },
 	].filter((item) => item.value !== undefined && item.value != 255);
 

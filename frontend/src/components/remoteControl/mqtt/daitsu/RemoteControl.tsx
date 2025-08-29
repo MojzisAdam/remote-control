@@ -60,15 +60,6 @@ export interface DeviceData {
 	reg_267?: number;
 	reg_268?: number;
 
-	virtual_1?: number;
-	virtual_2?: number;
-	virtual_3?: number;
-	virtual_4?: number;
-	virtual_5?: number;
-	virtual_6?: number;
-	virtual_7?: number;
-	virtual_8?: number;
-
 	script_version?: string;
 	fhi?: number;
 }
@@ -299,15 +290,6 @@ const RemoteControlMqttRpi: React.FC<RemoteControlMqttRpiProps> = ({ device, onD
 					reg_267: payload.reg_267,
 					reg_268: payload.reg_268,
 
-					virtual_1: payload.virtual_1,
-					virtual_2: payload.virtual_2,
-					virtual_3: payload.virtual_3,
-					virtual_4: payload.virtual_4,
-					virtual_5: payload.virtual_5,
-					virtual_6: payload.virtual_6,
-					virtual_7: payload.virtual_7,
-					virtual_8: payload.virtual_8,
-
 					script_version: payload.script_version,
 					fhi: payload.fhi,
 				};
@@ -530,15 +512,7 @@ const RemoteControlMqttRpi: React.FC<RemoteControlMqttRpiProps> = ({ device, onD
 			reg_3: deviceData.reg_3,
 			reg_4: deviceData.reg_4,
 			reg_5: deviceData.reg_5,
-
-			virtual_1: deviceData.virtual_1,
-			virtual_2: deviceData.virtual_2,
-			virtual_3: deviceData.virtual_3,
-			virtual_4: deviceData.virtual_4,
-			virtual_5: deviceData.virtual_5,
-			virtual_6: deviceData.virtual_6,
-			virtual_7: deviceData.virtual_7,
-			virtual_8: deviceData.virtual_8,
+			reg_6: deviceData.reg_6,
 
 			fhi: canViewExtendedParams ? deviceData.fhi : undefined,
 		};
@@ -612,7 +586,10 @@ const RemoteControlMqttRpi: React.FC<RemoteControlMqttRpiProps> = ({ device, onD
 							</div>
 							<div className="flex gap-8 max-sm:flex-col w-full">
 								<TemperatureDisplay data={temperatureData} />
-								<DeviceStates data={stateData} />
+								<DeviceStates
+									data={stateData}
+									hasExtendedView={canViewExtendedParams}
+								/>
 							</div>
 						</div>
 					)}

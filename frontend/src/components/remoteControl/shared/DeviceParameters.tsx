@@ -221,7 +221,8 @@ export const DeviceParameters: React.FC<DeviceParametersProps> = ({ deviceId, de
 	}, [deviceData, isExtendedMode]);
 
 	const availableGroups = useMemo(() => {
-		return Object.keys(groupedParameters);
+		// Return groups in the order they are defined in parameterGroups
+		return Object.keys(parameterGroups).filter((group) => group in groupedParameters);
 	}, [groupedParameters]);
 
 	useEffect(() => {

@@ -186,7 +186,7 @@
         "operation": "Provozní režim",
         "blocking": "Blokace a chyby",
         "performance": "Výkon a provoz",
-        "statusBits": "Stavové a výstupní bity",
+        "statusBits": "Stavy a výstupy",
         "firmware": "Verze firmwaru"
       },
       "labels": {
@@ -195,7 +195,7 @@
         "reg_102": "Rychlost ventilátoru",
         "reg_122": "Doba chodu kompresoru",
         "reg_124": "Aktuální chyba",
-        "reg_128": "Stavový bit 1",
+        "reg_128": "Stavy",
         "reg_129": "Výstup zatížení",
         "reg_132": "Cílová frekvence jednotky",
         "reg_138": "Průtok vody",

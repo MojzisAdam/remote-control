@@ -18,9 +18,10 @@ interface DeviceStatesProps {
 		reg_130?: number;
 		script_version?: string;
 	};
+	hasExtendedView?: boolean;
 }
 
-const DeviceStates: React.FC<DeviceStatesProps> = ({ data }) => {
+const DeviceStates: React.FC<DeviceStatesProps> = ({ data, hasExtendedView }) => {
 	const { t } = useTranslation("remote-control");
 
 	const display_version: boolean = false;
@@ -215,6 +216,8 @@ const DeviceStates: React.FC<DeviceStatesProps> = ({ data }) => {
 		...(data.reg_138 !== undefined ? [{ key: "reg_138", value: data.reg_138 }] : []), // Water flow
 	];
 
+	const circulatorCards = createBitCards(data.reg_129, "reg_129", [3, 6, 8]);
+
 	// Define which specific bits to display for each register
 	const reg128DisplayBits = [1, 2, 3, 4, 5, 6, 7, 8, 9]; // Display all bits 0-9
 	const reg129DisplayBits = [11, 12, 13, 14, 15]; // Display all bits 0-15
@@ -286,26 +289,29 @@ const DeviceStates: React.FC<DeviceStatesProps> = ({ data }) => {
 					{/* Performance States */}
 					<div>
 						<SectionTitle title={t("daitsu.deviceStates.sections.performance")} />
-						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">{performanceStates.map(renderStateCard)}</div>
-					</div>
-
-					{/* Auxiliary States - Status Bits */}
-					<div>
-						<SectionTitle title={t("daitsu.deviceStates.sections.statusBits")} />
-						<div className="space-y-6">
-							{/* reg_128 Status Bit 1 */}
-							<div>
-								<h3 className="text-md font-medium text-gray-600 dark:text-gray-300 mb-3">{t("daitsu.deviceStates.labels.reg_128")}</h3>
-								<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">{reg128BitCards.map((card) => renderBitCard(card, "reg_128"))}</div>
-							</div>
-
-							{/* reg_129 Load Output */}
-							<div>
-								<h3 className="text-md font-medium text-gray-600 dark:text-gray-300 mb-3">{t("daitsu.deviceStates.labels.reg_129")}</h3>
-								<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">{reg129BitCards.map((card) => renderBitCard(card, "reg_129"))}</div>
-							</div>
+						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+							{performanceStates.map(renderStateCard)} {circulatorCards.map((card) => renderBitCard(card, "reg_129"))}
 						</div>
 					</div>
+
+					{hasExtendedView && (
+						<div>
+							<SectionTitle title={t("daitsu.deviceStates.sections.statusBits")} />
+							<div className="space-y-6">
+								{/* reg_128 Status Bit 1 */}
+								<div>
+									<h3 className="text-md font-medium text-gray-600 dark:text-gray-300 mb-3">{t("daitsu.deviceStates.labels.reg_128")}</h3>
+									<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">{reg128BitCards.map((card) => renderBitCard(card, "reg_128"))}</div>
+								</div>
+
+								{/* reg_129 Load Output */}
+								<div>
+									<h3 className="text-md font-medium text-gray-600 dark:text-gray-300 mb-3">{t("daitsu.deviceStates.labels.reg_129")}</h3>
+									<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">{reg129BitCards.map((card) => renderBitCard(card, "reg_129"))}</div>
+								</div>
+							</div>
+						</div>
+					)}
 
 					{/* Firmware Info */}
 					{display_version && (

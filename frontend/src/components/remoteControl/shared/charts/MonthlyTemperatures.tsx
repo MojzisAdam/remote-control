@@ -89,6 +89,7 @@ const MonthlyTemperaturesContainer: React.FC<MonthlyTemperaturesContainerProps> 
 								<SimpleChart
 									data={temperatureData}
 									sensors={sensors}
+									deviceType={deviceType}
 								/>
 							</Suspense>
 						</ErrorBoundary>

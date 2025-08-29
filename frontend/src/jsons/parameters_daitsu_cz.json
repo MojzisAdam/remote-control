@@ -3,7 +3,7 @@
         "register": 0,
         "default_value": 0,
         "user_access": true,
-        "description": "Ovládání zapnutí nebo vypnutí",
+        "description": "Ovládání zapnutí/vypnutí",
         "type": "bitfield",
         "bits": {
             "0": {
@@ -14,7 +14,7 @@
                 }
             },
             "1": {
-                "description": "Podlahové vytápění (zóna 2)",
+                "description": "Podlahové vytápění (zóna 1)",
                 "options": {
                     "0": "Vypnuto",
                     "1": "Zapnuto"
@@ -39,13 +39,13 @@
     "reg_1": {
         "type": "options",
         "register": 1,
-        "default_value": 0,
-        "user_access": false,
+        "default_value": 1,
+        "user_access": true,
         "description": "Režim",
         "options": {
-            "0": "Automatický",
-            "1": "Chlazení",
-            "2": "Vytápění"
+            "1": "Auto",
+            "2": "Chlazení",
+            "3": "Vytápění"
         }
     },
     "reg_2": {
@@ -56,19 +56,19 @@
         "type": "bitfield",
         "ranges": {
             "timer_hours": {
-                "description": "Zóna 1",
+                "description": "Teplota vody T1S (zóna 1)",
                 "start_bit": 0,
                 "end_bit": 7,
-                "min_value": 0,
-                "max_value": 255,
+                "min_value": 5,
+                "max_value": 70,
                 "unit": "°C"
             },
             "priority_level": {
-                "description": "Zóna 2",
+                "description": "Teplota vody T1S (zóna 2)",
                 "start_bit": 8,
                 "end_bit": 15,
-                "min_value": 0,
-                "max_value": 255,
+                "min_value": 5,
+                "max_value": 70,
                 "unit": "°C"
             }
         }
@@ -79,8 +79,8 @@
     "default_value": 21,
     "min_value": 17,
     "max_value": 30,
-    "increment_value": 0.1,
-    "multiplied": 1,
+    "increment_value": 0.5,
+    "multiplied": 2,
     "unit": "°C",
     "user_access": true,
     "description": "Teplota vzduchu Ts"
@@ -102,14 +102,14 @@
     "user_access": true,
     "description": "Nastavení funkcí",
     "bits": {
-      "13": { "description": "Teplotní křivka platná (zóna 2)", "options": { "0": "Neplatná", "1": "Platná" }},
-      "12": { "description": "Teplotní křivka platná (zóna 1)", "options": { "0": "Neplatná", "1": "Platná" }},
-      "11": { "description": "Stálý recirkulační čerpadlo TUV v provozu", "options": { "0": "Vypnuto", "1": "Zapnuto" }},
+      "13": { "description": "Platnost klimatické křivky (zóna 2)", "options": { "0": "Neplatná", "1": "Platná" }},
+      "12": { "description": "Platnost klimatické křivky (zóna 1)", "options": { "0": "Neplatná", "1": "Platná" }},
+      "11": { "description": "Trvalý chod recirkulačního čerpadla TUV", "options": { "0": "Vypnuto", "1": "Zapnuto" }},
       "10": { "description": "ECO režim", "options": { "0": "Zakázáno", "1": "Povoleno" }},
-      "8":  { "description": "Prázdninový dům", "options": { "0": "Normální", "1": "Prázdniny" }},
+      "8":  { "description": "Rekreační dům", "options": { "0": "Normální", "1": "Rekreace" }},
       "7":  { "description": "Úroveň tichého režimu", "options": { "0": "Úroveň 1", "1": "Úroveň 2" }},
-      "6":  { "description": "Tichý režim aktivní", "options": { "0": "Neaktivní", "1": "Aktivní" }},
-      "5":  { "description": "Nepřítomnost - prázdniny", "options": { "0": "Normální", "1": "Nepřítomen" }},
+      "6":  { "description": "Aktivní tichý režim", "options": { "0": "Neaktivní", "1": "Aktivní" }},
+      "5":  { "description": "Odjezd/dovolená", "options": { "0": "Normální", "1": "Odjezd" }},
       "4":  { "description": "Dezinfekce", "options": { "0": "Zakázáno", "1": "Povoleno" }}
     }
   },
@@ -118,17 +118,17 @@
     "type": "bitfield",
     "default_value": 0,
     "user_access": true,
-    "description": "Výběr teplotní křivky",
+    "description": "Výběr klimatické křivky",
     "ranges": {
       "zone1": {
-        "description": "Teplotní křivka (zóna 1)",
+        "description": "Klimatická křivka (zóna 1)",
         "start_bit": 0,
         "end_bit": 7,
         "min_value": 1,
         "max_value": 9
       },
       "zone2": {
-        "description": "Teplotní křivka (zóna 2)",
+        "description": "Klimatická křivka (zóna 2)",
         "start_bit": 8,
         "end_bit": 15,
         "min_value": 1,
@@ -140,36 +140,36 @@
     "register": 7,
     "type": "options",
     "default_value": 0,
-    "user_access": true,
-    "description": "Nucený ohřev vody",
+    "user_access": false,
+    "description": "Nucené ohřívání vody",
     "options": {
-      "0": "Neplatný",
-      "1": "Nucené zapnutí na adrese",
-      "2": "Nucené vypnutí"
+      "0": "Neplatné",
+      "1": "Nuceně zapnuto na adrese",
+      "2": "Nuceně vypnuto"
     }
   },
   "reg_8": {
     "register": 8,
     "type": "options",
     "default_value": 0,
-    "user_access": true,
-    "description": "Nucený TBH",
+    "user_access": false,
+    "description": "Nucené TBH",
     "options": {
-      "0": "Neplatný",
-      "1": "Nucené zapnutí na adrese",
-      "2": "Nucené vypnutí"
+      "0": "Neplatné",
+      "1": "Nuceně zapnuto na adrese",
+      "2": "Nuceně vypnuto"
     }
   },
    "reg_9": {
     "register": 9,
     "type": "options",
     "default_value": 0,
-    "user_access": true,
-    "description": "Nucený TBH",
+    "user_access": false,
+    "description": "Nucené TBH",
     "options": {
-      "0": "Neplatný",
-      "1": "Nucené zapnutí na adrese",
-      "2": "Nucené vypnutí"
+      "0": "Neplatné",
+      "1": "Nuceně zapnuto na adrese",
+      "2": "Nuceně vypnuto"
     }
   },
   "reg_10": {
@@ -178,7 +178,7 @@
     "default_value": 0,
     "min_value": 0,
     "max_value": 24,
-    "user_access": true,
+    "user_access": false,
     "unit": "hodin",
     "description": "t_SG_MAX"
   },
@@ -188,7 +188,7 @@
     "default_value": 5,
     "min_value": 0,
     "max_value": 60,
-    "user_access": true,
+    "user_access": false,
     "unit": "sekund",
     "description": "t_ANTILOCK (čas proti zablokování)"
   },
@@ -203,21 +203,21 @@
                 "start_bit": 7,
                 "end_bit": 15,
                 "min_value": 0,
-                "max_value": 255
+                "max_value": 63
             },
             "4-7": {
                 "description": "Kód výrobku (0x1*)",
                 "start_bit": 4,
                 "end_bit": 7,
                 "min_value": 1,
-                "max_value": 16
+                "max_value": 15
             },
             "0-3": {
                 "description": "Podtyp (R32=0x*2)",
                 "start_bit": 0,
                 "end_bit": 3,
                 "min_value": 1,
-                "max_value": 16
+                "max_value": 15
             }
         }
     },
@@ -226,19 +226,20 @@
         "type": "bitfield",
         "description": "Horní limit T1S pro chlazení",
         "unit": "°C",
+        "user_access": false,
         "ranges": {
             "zone1": {
                 "start_bit": 0,
                 "end_bit": 7,
                 "min_value": 1,
-                "max_value": 255,
+                "max_value": 100,
                 "description": "Horní limit T1S pro chlazení (zóna 1)"
             },
             "zone2": {
                 "start_bit": 8,
                 "end_bit": 15,
                 "min_value": 15,
-                "max_value": 255,
+                "max_value": 100,
                 "description": "Horní limit T1S pro chlazení (zóna 2)"
             }
         }
@@ -248,19 +249,20 @@
         "type": "bitfield",
         "description": "Dolní limit T1S pro chlazení",
         "unit": "°C",
+        "user_access": false,
         "ranges": {
             "zone1": {
                 "start_bit": 0,
                 "end_bit": 7,
                 "min_value": 1,
-                "max_value": 255,
+                "max_value": 100,
                 "description": "Dolní limit T1S pro chlazení (zóna 1)"
             },
             "zone2": {
                 "start_bit": 8,
                 "end_bit": 15,
                 "min_value": 1,
-                "max_value": 255,
+                "max_value": 100,
                 "description": "Dolní limit T1S pro chlazení (zóna 2)"
             }
         }
@@ -270,19 +272,20 @@
         "type": "bitfield",
         "description": "Horní limit T1S pro vytápění",
         "unit": "°C",
+        "user_access": false,
         "ranges": {
             "zone1": {
                 "start_bit": 0,
                 "end_bit": 7,
                 "min_value": 1,
-                "max_value": 255,
+                "max_value": 100,
                 "description": "Horní limit T1S pro vytápění (zóna 1)"
             },
             "zone2": {
                 "start_bit": 8,
                 "end_bit": 15,
                 "min_value": 1,
-                "max_value": 255,
+                "max_value": 100,
                 "description": "Horní limit T1S pro vytápění (zóna 2)"
             }
         }
@@ -292,19 +295,20 @@
         "type": "bitfield",
         "description": "Dolní limit T1S pro vytápění",
         "unit": "°C",
+        "user_access": false,
         "ranges": {
             "zone1": {
                 "start_bit": 0,
                 "end_bit": 7,
                 "min_value": 1,
-                "max_value": 255,
+                "max_value": 100,
                 "description": "Dolní limit T1S pro vytápění (zóna 1)"
             },
             "zone2": {
                 "start_bit": 8,
                 "end_bit": 15,
                 "min_value": 1,
-                "max_value": 255,
+                "max_value": 100,
                 "description": "Dolní limit T1S pro vytápění (zóna 2)"
             }
         }
@@ -313,29 +317,41 @@
         "register": 205,
         "type": "float",
         "description": "Horní limit nastavení TS",
+        "user_access": false,
         "unit": "°C",
         "multiplied": 2,
-        "step": 0.1
+        "step": 0.1,
+        "min_value": 0,
+        "max_value": 100
     },
     "reg_206": {
         "register": 206,
         "type": "float",
         "description": "Dolní limit nastavení TS",
+        "user_access": false,
         "unit": "°C",
         "multiplied": 2,
-        "step": 0.1
+        "step": 0.1,
+        "min_value": 0,
+        "max_value": 100
     },
     "reg_207": {
         "register": 207,
         "type": "int",
         "description": "Horní limit ohřevu vody",
-        "unit": "°C"
+        "user_access": false,
+        "unit": "°C",
+        "min_value": 0,
+        "max_value": 100
     },
     "reg_208": {
         "register": 208,
         "type": "int",
         "description": "Dolní limit ohřevu vody",
-        "unit": "°C"
+        "user_access": false,
+        "unit": "°C",
+        "min_value": 0,
+        "max_value": 100
     },
     "reg_209": {
         "register": 209,
@@ -345,103 +361,104 @@
         "max_value": 120,
         "increment_value": 1,
         "unit": "minut",
-        "user_access": true,
+        "user_access": false,
         "description": "Doba chodu čerpadla TUV"
     },
     "reg_210": {
         "register": 210,
         "type": "bitfield",
-        "description": "Parameter settings 1",
+        "description": "Nastavení parametrů 1",
+        "user_access": false,
         "bits": {
             "15": {
-                "description": "Water heating enable",
+                "description": "Povolení ohřevu vody",
                 "options": {
-                    "0": "Disabled",
-                    "1": "Enabled"
+                    "0": "Zakázáno",
+                    "1": "Povoleno"
                 }
             },
             "14": {
-                "description": "Supports TBH heater (read-only)",
+                "description": "Podporuje TBH ohřívač (pouze pro čtení)",
                 "options": {
-                    "0": "No",
-                    "1": "Yes"
+                    "0": "Ne",
+                    "1": "Ano"
                 }
             },
             "13": {
-                "description": "Supports disinfection",
+                "description": "Podporuje dezinfekci",
                 "options": {
-                    "0": "No",
-                    "1": "Yes"
+                    "0": "Ne",
+                    "1": "Ano"
                 }
             },
             "12": {
-                "description": "DHW pump supported",
+                "description": "Podporuje čerpadlo TUV",
                 "options": {
-                    "0": "No",
-                    "1": "Yes"
+                    "0": "Ne",
+                    "1": "Ano"
                 }
             },
             "10": {
-                "description": "DHW pump valid in disinfection mode",
+                "description": "Čerpadlo TUV platné v režimu dezinfekce",
                 "options": {
-                    "0": "No",
-                    "1": "Yes"
+                    "0": "Ne",
+                    "1": "Ano"
                 }
             },
             "9": {
-                "description": "Cooling enable",
+                "description": "Povolení chlazení",
                 "options": {
-                    "0": "Disabled",
-                    "1": "Enabled"
+                    "0": "Zakázáno",
+                    "1": "Povoleno"
                 }
             },
             "7": {
-                "description": "Heating enable",
+                "description": "Povolení vytápění",
                 "options": {
-                    "0": "Disabled",
-                    "1": "Enabled"
+                    "0": "Zakázáno",
+                    "1": "Povoleno"
                 }
             },
             "5": {
-                "description": "PumpI silent mode",
+                "description": "Tichý režim čerpadla",
                 "options": {
-                    "0": "Disabled",
-                    "1": "Enabled"
+                    "0": "Zakázáno",
+                    "1": "Povoleno"
                 }
             },
             "4": {
-                "description": "Supports room temperature sensor Ta",
+                "description": "Podporuje teplotní čidlo místnosti Ta",
                 "options": {
-                    "0": "No",
-                    "1": "Yes"
+                    "0": "Ne",
+                    "1": "Ano"
                 }
             },
             "3": {
-                "description": "Supports room thermostat",
+                "description": "Podporuje pokojový termostat",
                 "options": {
-                    "0": "No",
-                    "1": "Yes"
+                    "0": "Ne",
+                    "1": "Ano"
                 }
             },
             "2": {
-                "description": "Room thermostat active",
+                "description": "Aktivní pokojový termostat",
                 "options": {
-                    "0": "No",
-                    "1": "Yes"
+                    "0": "Ne",
+                    "1": "Ano"
                 }
             },
             "1": {
-                "description": "Dual room thermostat",
+                "description": "Duální pokojový termostat",
                 "options": {
-                    "0": "No",
-                    "1": "Yes"
+                    "0": "Ne",
+                    "1": "Ano"
                 }
             },
             "0": {
-                "description": "Priority",
+                "description": "Priorita",
                 "options": {
-                    "0": "Room first",
-                    "1": "Water first"
+                    "0": "Místnost první",
+                    "1": "Voda první"
                 }
             }
         }
@@ -450,23 +467,24 @@
         "register": 211,
         "type": "bitfield",
         "description": "Nastavení parametrů 2",
+        "user_access": false,
         "bits": {
             "14": {
-                "description": "M1M2 použito pro řízení AHS",
+                "description": "M1M2 použité pro ovládání AHS",
                 "options": {
                     "0": "Ne",
                     "1": "Ano"
                 }
             },
             "13": {
-                "description": "RT_Ta_PCNEn set povoleno",
+                "description": "Povolení nastavení RT_Ta_PCNEn",
                 "options": {
                     "0": "Zakázáno",
                     "1": "Povoleno"
                 }
             },
             "12": {
-                "description": "Snímač Tbt2 platný",
+                "description": "Platnost čidla Tbt2",
                 "options": {
                     "0": "Ne",
                     "1": "Ano"
@@ -480,14 +498,14 @@
                 }
             },
             "10": {
-                "description": "Port solárního vstupu",
+                "description": "Vstupní port solárního systému",
                 "options": {
                     "0": "CN18",
                     "1": "CN11"
                 }
             },
             "9": {
-                "description": "Povolení solární sady",
+                "description": "Povolení solárního kitu",
                 "options": {
                     "0": "Zakázáno",
                     "1": "Povoleno"
@@ -496,7 +514,7 @@
             "8": {
                 "description": "Definice portu",
                 "options": {
-                    "0": "Dálkové Zap/Vyp",
+                    "0": "Dálkové zapnutí/vypnutí",
                     "1": "Ohřívač TUV"
                 }
             },
@@ -508,7 +526,7 @@
                 }
             },
             "6": {
-                "description": "Povolení snímače Tw2",
+                "description": "Povolení čidla Tw2",
                 "options": {
                     "0": "Zakázáno",
                     "1": "Povoleno"
@@ -529,21 +547,21 @@
                 }
             },
             "3": {
-                "description": "Povolení dvojité zóny",
+                "description": "Povolení duální zóny",
                 "options": {
                     "0": "Zakázáno",
                     "1": "Povoleno"
                 }
             },
             "2": {
-                "description": "Pozice snímače Ta",
+                "description": "Pozice čidla Ta",
                 "options": {
                     "0": "HMI",
                     "1": "IDU"
                 }
             },
             "1": {
-                "description": "Povolení snímače Tbt1",
+                "description": "Povolení čidla Tbt1",
                 "options": {
                     "0": "Zakázáno",
                     "1": "Povoleno"
@@ -553,7 +571,7 @@
                 "description": "Instalační pozice IBH/AHS",
                 "options": {
                     "0": "Potrubí",
-                    "1": "Zásobníkový tank"
+                    "1": "Vyrovnávací zásobník"
                 }
             }
         }
@@ -566,7 +584,7 @@
         "max_value": 30,
         "increment_value": 1,
         "unit": "°C",
-        "user_access": true,
+        "user_access": false,
         "description": "dT5_On"
     },
     "reg_213": {
@@ -577,7 +595,7 @@
         "max_value": 40,
         "increment_value": 1,
         "unit": "°C",
-        "user_access": true,
+        "user_access": false,
         "description": "dT1S5"
     },
     "reg_214": {
@@ -588,7 +606,7 @@
         "max_value": 30,
         "increment_value": 1,
         "unit": "min",
-        "user_access": true,
+        "user_access": false,
         "description": "T_Interval_DHW"
     },
     "reg_215": {
@@ -599,7 +617,7 @@
         "max_value": 43,
         "increment_value": 1,
         "unit": "°C",
-        "user_access": true,
+        "user_access": false,
         "description": "T4DHWmax"
     },
     "reg_216": {
@@ -621,7 +639,7 @@
         "max_value": 240,
         "increment_value": 5,
         "unit": "min",
-        "user_access": true,
+        "user_access": false,
         "description": "t_TBH_delay"
     },
     "reg_218": {
@@ -632,7 +650,7 @@
         "max_value": 10,
         "increment_value": 1,
         "unit": "°C",
-        "user_access": true,
+        "user_access": false,
         "description": "dT5S_TBH_off"
     },
     "reg_219": {
@@ -643,7 +661,7 @@
         "max_value": 50,
         "increment_value": 1,
         "unit": "°C",
-        "user_access": true,
+        "user_access": false,
         "description": "T4_TBH_on"
     },
     "reg_220": {
@@ -654,8 +672,8 @@
         "max_value": 70,
         "increment_value": 1,
         "unit": "°C",
-        "user_access": true,
-        "description": "T5s_DI - Teplota pro dezinfekci"
+        "user_access": false,
+        "description": "T5s_DI - Teplota dezinfekce"
     },
     "reg_221": {
         "register": 221,
@@ -665,7 +683,7 @@
         "max_value": 300,
         "increment_value": 1,
         "unit": "min",
-        "user_access": true,
+        "user_access": false,
         "description": "t_DI_max - Maximální doba trvání dezinfekce"
     },
     "reg_222": {
@@ -676,8 +694,8 @@
         "max_value": 60,
         "increment_value": 1,
         "unit": "min",
-        "user_access": true,
-        "description": "t_DI_hightemp - Doba trvání vysoké teploty dezinfekce"
+        "user_access": false,
+        "description": "t_DI_hightemp - Doba dezinfekce při vysoké teplotě"
     },
     "reg_223": {
         "register": 223,
@@ -687,7 +705,7 @@
         "max_value": 30,
         "increment_value": 1,
         "unit": "min",
-        "user_access": true,
+        "user_access": false,
         "description": "t_interval_C - Časový interval spuštění kompresoru v režimu chlazení"
     },
     "reg_224": {
@@ -698,7 +716,7 @@
         "max_value": 10,
         "increment_value": 1,
         "unit": "°C",
-        "user_access": true,
+        "user_access": false,
         "description": "dT1SC"
     },
     "reg_225": {
@@ -709,7 +727,7 @@
         "max_value": 10,
         "increment_value": 1,
         "unit": "°C",
-        "user_access": true,
+        "user_access": false,
         "description": "dTSC"
     },
     "reg_226": {
@@ -720,7 +738,7 @@
         "max_value": 46,
         "increment_value": 1,
         "unit": "°C",
-        "user_access": true,
+        "user_access": false,
         "description": "T4cmax"
     },
     "reg_227": {
@@ -731,7 +749,7 @@
         "max_value": 25,
         "increment_value": 1,
         "unit": "°C",
-        "user_access": true,
+        "user_access": false,
         "description": "T4cmin"
     },
     "reg_228": {
@@ -742,7 +760,7 @@
         "max_value": 60,
         "increment_value": 1,
         "unit": "min",
-        "user_access": true,
+        "user_access": false,
         "description": "t_interval_H - Časový interval spuštění kompresoru v režimu vytápění"
     },
     "reg_229": {
@@ -753,7 +771,7 @@
         "max_value": 20,
         "increment_value": 1,
         "unit": "°C",
-        "user_access": true,
+        "user_access": false,
         "description": "dT1SH"
     },
     "reg_230": {
@@ -764,7 +782,7 @@
         "max_value": 10,
         "increment_value": 1,
         "unit": "°C",
-        "user_access": true,
+        "user_access": false,
         "description": "dTSH"
     },
     "reg_231": {
@@ -775,7 +793,7 @@
         "max_value": 35,
         "increment_value": 1,
         "unit": "°C",
-        "user_access": true,
+        "user_access": false,
         "description": "T4hmax"
     },
     "reg_232": {
@@ -786,7 +804,7 @@
         "max_value": 30,
         "increment_value": 1,
         "unit": "°C",
-        "user_access": true,
+        "user_access": false,
         "description": "T4hmin"
     },
     "reg_233": {
@@ -797,37 +815,45 @@
         "max_value": 10,
         "increment_value": 1,
         "unit": "°C",
-        "user_access": true,
-        "description": "T4_IBH_on - Teplota okolí pro zapnutí pomocného elektrického ohřevu hydraulického modulu IBH"
+        "user_access": false,
+        "description": "T4_IBH_on - Venkovní teplota pro aktivaci IBH pomocného elektrického ohřívače"
     },
     "reg_234": {
         "register": 234,
         "type": "int",
-        "user_access": true,
+        "user_access": false,
         "unit": "°C",
-        "description": "dT1_IBH_on - Teplotní rozdíl zpětného chodu pro zapnutí pomocného hydraulického modulu"
+        "description": "dT1_IBH_on - Rozdíl vratné teploty pro aktivaci pomocného hydraulického modulu",
+        "min_value": 0,
+        "max_value": 100
     },
     "reg_235": {
         "register": 235,
         "type": "int",
-        "user_access": true,
+        "user_access": false,
         "unit": "min",
-        "description": "t_IBH_delay - Doba zpoždění zapnutí pomocného elektrického ohřevu hydraulického modulu IBH"
+        "description": "t_IBH_delay - Doba zpoždění aktivace IBH pomocného elektrického ohřívače",
+        "min_value": 0,
+        "max_value": 100
     },
     "reg_237": {
         "register": 237,
         "type": "int",
-        "user_access": true,
+        "user_access": false,
         "unit": "°C",
-        "description": "T4_AHS_on - Spouštěcí teplota okolí pro zapnutí AHS"
+        "description": "T4_AHS_on - Venkovní spouštěcí teplota pro aktivaci AHS",
+        "min_value": 0,
+        "max_value": 100
     },
     "reg_238": {
         "register": 238,
         "type": "float",
         "default_value": 0.5,
         "unit": "°C",
-        "user_access": true,
-        "description": "dT1_AHS_on - Rozdíl teplot mezi nastavenou teplotou výstupní vody z tepelného čerpadla (T1S) a teplotou tepelného čerpadla (T1S)"
+        "user_access": false,
+        "description": "dT1_AHS_on - Teplotní rozdíl mezi nastavenou výstupní teplotou vody z tepelného čerpadla (T1S)",
+        "min_value": 0,
+        "max_value": 100
     },
     "reg_240": {
         "register": 240,
@@ -837,8 +863,8 @@
         "max_value": 120,
         "increment_value": 1,
         "unit": "min",
-        "user_access": true,
-        "description": "t_AHS_delay - Doba zpoždění pro zapnutí externího ohřívače AHS"
+        "user_access": false,
+        "description": "t_AHS_delay - Doba zpoždění aktivace externího ohřívače AHS"
     },
     "reg_241": {
         "register": 241,
@@ -848,8 +874,8 @@
         "max_value": 600,
         "increment_value": 1,
         "unit": "min",
-        "user_access": true,
-        "description": "t_DHWHP_max - Nejdelší doba ohřevu vody tepelným čerpadlem"
+        "user_access": false,
+        "description": "t_DHWHP_max - Maximální doba ohřevu vody tepelným čerpadlem"
     },
     "reg_242": {
         "register": 242,
@@ -859,8 +885,8 @@
         "max_value": 600,
         "increment_value": 1,
         "unit": "min",
-        "user_access": true,
-        "description": "t_DHWHP_restrict - Doba omezeného ohřevu vody tepelným čerpadlem"
+        "user_access": false,
+        "description": "t_DHWHP_restrict - Omezená doba ohřevu vody tepelným čerpadlem"
     },
     "reg_243": {
         "register": 243,
@@ -870,7 +896,7 @@
         "max_value": 29,
         "increment_value": 1,
         "unit": "°C",
-        "user_access": true,
+        "user_access": false,
         "description": "T4autocmin"
     },
     "reg_244": {
@@ -881,7 +907,7 @@
         "max_value": 17,
         "increment_value": 1,
         "unit": "°C",
-        "user_access": true,
+        "user_access": false,
         "description": "T4autohmax"
     },
     "reg_245": {
@@ -892,7 +918,7 @@
         "max_value": 29,
         "increment_value": 1,
         "unit": "°C",
-        "user_access": true,
+        "user_access": false,
         "description": "T1S_H.A_H"
     },
     "reg_246": {
@@ -904,7 +930,7 @@
         "increment_value": 1,
         "unit": "°C",
         "user_access": true,
-        "description": "T5S_H.A_DHW - V prázdninovém režimu nastavení T1 v režimu ohřevu vody"
+        "description": "T5S_H.A_DHW - Rekreační režim nastavení T1 v režimu ohřevu vody"
     },
     "reg_247": {
         "register": 247,
@@ -913,7 +939,7 @@
         "min_value": 10,
         "max_value": 100,
         "increment_value": 10,
-        "user_access": true,
+        "user_access": false,
         "description": "Poměr PER_START"
     },
     "reg_248": {
@@ -923,7 +949,7 @@
         "min_value": 1,
         "max_value": 60,
         "increment_value": 1,
-        "user_access": true,
+        "user_access": false,
         "description": "TIME_ADJUST"
     },
     "reg_249": {
@@ -933,7 +959,7 @@
         "min_value": 0,
         "max_value": 50,
         "increment_value": 1,
-        "user_access": true,
+        "user_access": false,
         "description": "dTbt2"
     },
     "reg_250": {
@@ -943,8 +969,9 @@
         "min_value": 0,
         "max_value": 200,
         "increment_value": 1,
-        "unit": "100W",
-        "user_access": true,
+        "multiplied": 10,
+        "unit": "kW",
+        "user_access": false,
         "description": "Výkon IBH1"
     },
     "reg_251": {
@@ -954,8 +981,9 @@
         "min_value": 0,
         "max_value": 200,
         "increment_value": 1,
-        "unit": "100W",
-        "user_access": true,
+        "multiplied": 10,
+        "unit": "kW",
+        "user_access": false,
         "description": "Výkon IBH2"
     },
     "reg_252": {
@@ -965,21 +993,10 @@
         "min_value": 0,
         "max_value": 200,
         "increment_value": 1,
-        "unit": "100W",
-        "user_access": true,
+        "multiplied": 10,
+        "unit": "kW",
+        "user_access": false,
         "description": "Výkon TBH"
-    },
-    "reg_253": {
-        "register": 253,
-        "type": "reserved",
-        "user_access": false,
-        "description": "Parametr pohodlí - Rezervováno, při dotazu na tento registr je hlášena chybná adresa"
-    },
-    "reg_254": {
-        "register": 254,
-        "type": "reserved",
-        "user_access": false,
-        "description": "Parametr pohodlí - Rezervováno, při dotazu na tento registr je hlášena chybná adresa"
     },
     "reg_255": {
         "register": 255,
@@ -989,8 +1006,8 @@
         "max_value": 15,
         "increment_value": 1,
         "unit": "dní",
-        "user_access": true,
-        "description": "t_DRYUP - Číslo dne nárůstu teploty"
+        "user_access": false,
+        "description": "t_DRYUP - Počet dnů zvyšování teploty"
     },
     "reg_256": {
         "register": 256,
@@ -1000,8 +1017,8 @@
         "max_value": 7,
         "increment_value": 1,
         "unit": "dní",
-        "user_access": true,
-        "description": "t_HIGHPEAK - Číslo dne sušení"
+        "user_access": false,
+        "description": "t_HIGHPEAK - Počet dnů sušení"
     },
     "reg_257": {
         "register": 257,
@@ -1011,8 +1028,8 @@
         "max_value": 15,
         "increment_value": 1,
         "unit": "dní",
-        "user_access": true,
-        "description": "t_DRYD - Číslo dne poklesu teploty"
+        "user_access": false,
+        "description": "t_DRYD - Počet dnů snižování teploty"
     },
     "reg_258": {
         "register": 258,
@@ -1022,7 +1039,7 @@
         "max_value": 55,
         "increment_value": 1,
         "unit": "°C",
-        "user_access": true,
+        "user_access": false,
         "description": "T_DRYPEAK - Nejvyšší teplota sušení"
     },
     "reg_259": {
@@ -1033,7 +1050,7 @@
         "max_value": 96,
         "increment_value": 1,
         "unit": "hodin",
-        "user_access": true,
+        "user_access": false,
         "description": "t_firstFH - Doba provozu podlahového vytápění při prvním spuštění"
     },
     "reg_260": {
@@ -1044,8 +1061,8 @@
         "max_value": 35,
         "increment_value": 1,
         "unit": "°C",
-        "user_access": true,
-        "description": "T1S (podlahové vytápění) - T1S podlahového vytápění poprvé"
+        "user_access": false,
+        "description": "T1S (podlahové vytápění) - T1S podlahového vytápění při prvním spuštění"
     },
     "reg_261": {
         "register": 261,
@@ -1055,8 +1072,8 @@
         "max_value": 25,
         "increment_value": 1,
         "unit": "°C",
-        "user_access": true,
-        "description": "T1SetC1 - Parametr deváté teplotní křivky pro režim chlazení"
+        "user_access": false,
+        "description": "T1SetC1 - Devátý parametr teplotní křivky pro režim chlazení"
     },
     "reg_262": {
         "register": 262,
@@ -1066,8 +1083,8 @@
         "max_value": 25,
         "increment_value": 1,
         "unit": "°C",
-        "user_access": true,
-        "description": "T1SetC2 - Parametr deváté teplotní křivky pro režim chlazení"
+        "user_access": false,
+        "description": "T1SetC2 - Devátý parametr teplotní křivky pro režim chlazení"
     },
     "reg_263": {
         "register": 263,
@@ -1077,8 +1094,8 @@
         "max_value": 46,
         "increment_value": 1,
         "unit": "°C",
-        "user_access": true,
-        "description": "T4C1 - Parametr deváté teplotní křivky pro režim chlazení"
+        "user_access": false,
+        "description": "T4C1 - Devátý parametr teplotní křivky pro režim chlazení"
     },
     "reg_264": {
         "register": 264,
@@ -1088,8 +1105,8 @@
         "max_value": 46,
         "increment_value": 1,
         "unit": "°C",
-        "user_access": true,
-        "description": "T4C2 - Parametr deváté teplotní křivky pro režim chlazení"
+        "user_access": false,
+        "description": "T4C2 - Devátý parametr teplotní křivky pro režim chlazení"
     },
     "reg_265": {
         "register": 265,
@@ -1099,8 +1116,8 @@
         "max_value": 65,
         "increment_value": 1,
         "unit": "°C",
-        "user_access": true,
-        "description": "T1SetH1 - Parametr deváté teplotní křivky pro režim vytápění"
+        "user_access": false,
+        "description": "T1SetH1 - Devátý parametr teplotní křivky pro režim vytápění"
     },
     "reg_266": {
         "register": 266,
@@ -1110,8 +1127,8 @@
         "max_value": 65,
         "increment_value": 1,
         "unit": "°C",
-        "user_access": true,
-        "description": "T1SetH2 - Parametr deváté teplotní křivky pro režim vytápění"
+        "user_access": false,
+        "description": "T1SetH2 - Devátý parametr teplotní křivky pro režim vytápění"
     },
     "reg_267": {
         "register": 267,
@@ -1121,8 +1138,8 @@
         "max_value": 30,
         "increment_value": 1,
         "unit": "°C",
-        "user_access": true,
-        "description": "T4H1 - Parametr deváté teplotní křivky pro režim vytápění"
+        "user_access": false,
+        "description": "T4H1 - Devátý parametr teplotní křivky pro režim vytápění"
     },
     "reg_268": {
         "register": 268,
@@ -1132,32 +1149,32 @@
         "max_value": 30,
         "increment_value": 1,
         "unit": "°C",
-        "user_access": true,
-        "description": "T4H2 - Parametr deváté teplotní křivky pro režim vytápění"
+        "user_access": false,
+        "description": "T4H2 - Devátý parametr teplotní křivky pro režim vytápění"
     },
     "reg_269": {
         "register": 269,
         "type": "options",
         "default_value": 0,
-        "user_access": true,
-        "description": "OMEZENÍ PŘÍKONU - Typ omezení příkonu",
+        "user_access": false,
+        "description": "OMEZENÍ VÝKONU - Typ omezení výkonu",
         "options": {
-            "0": "NON",
-            "1": "typ 1",
-            "2": "typ 2",
-            "3": "typ 3",
-            "4": "typ 4",
-            "5": "typ 5",
-            "6": "typ 6",
-            "7": "typ 7",
-            "8": "typ 8"
+            "0": "ŽÁDNÉ",
+            "1": "Typ 1",
+            "2": "Typ 2",
+            "3": "Typ 3",
+            "4": "Typ 4",
+            "5": "Typ 5",
+            "6": "Typ 6",
+            "7": "Typ 7",
+            "8": "Typ 8"
         }
     },
     "reg_270": {
         "register": 270,
         "type": "bitfield",
-        "user_access": true,
-        "description": "T4_FRESH timing parameters",
+        "user_access": false,
+        "description": "Časové parametry T4_FRESH",
         "ranges": {
             "t_T4_FRESH_C": {
                 "description": "HB: t_T4_FRESH_C (chlazení)",
@@ -1165,7 +1182,7 @@
                 "end_bit": 15,
                 "min_value": 1,
                 "max_value": 12,
-                "unit": "0.5 hodin",
+                "unit": "0,5 hodin",
                 "multiplied": 2
             },
             "t_T4_FRESH_H": {
@@ -1174,7 +1191,7 @@
                 "end_bit": 7,
                 "min_value": 1,
                 "max_value": 12,
-                "unit": "0.5 hodin",
+                "unit": "0,5 hodin",
                 "multiplied": 2
             }
         }
@@ -1184,34 +1201,34 @@
         "type": "int",
         "min_value": 1,
         "max_value": 40,
-        "unit": "0.5 hodin",
+        "unit": "0,5 hodin",
         "multiplied": 2,
-        "user_access": true,
+        "user_access": false,
         "description": "T_PUMPI_DELAY"
     },
     "reg_272": {
         "register": 272,
         "type": "bitfield",
-        "user_access": true,
-        "description": "TYP EMISE - Typ koncových prvků pro jednotlivé zóny a režimy",
+        "user_access": false,
+        "description": "TYP EMISÍ - Typ koncového prvku pro jednotlivé zóny a režimy",
         "ranges": {
             "zone2_cooling": {
-                "description": "Typ konce zóny 2 pro režim chlazení",
+                "description": "Typ koncového prvku zóny 2 pro režim chlazení",
                 "start_bit": 12,
                 "end_bit": 15
             },
             "zone1_cooling": {
-                "description": "Typ konce zóny 1 pro režim chlazení",
+                "description": "Typ koncového prvku zóny 1 pro režim chlazení",
                 "start_bit": 8,
                 "end_bit": 11
             },
             "zone2_heating": {
-                "description": "Typ konce zóny 2 pro režim vytápění",
+                "description": "Typ koncového prvku zóny 2 pro režim vytápění",
                 "start_bit": 4,
                 "end_bit": 7
             },
             "zone1_heating": {
-                "description": "Typ konce zóny 1 pro režim vytápění",
+                "description": "Typ koncového prvku zóny 1 pro režim vytápění",
                 "start_bit": 0,
                 "end_bit": 3
             }
@@ -1220,92 +1237,12 @@
     "fhi": {
         "type": "int",
         "register": "fhi",
-        "description": "Frekvence zapísování historie",
+        "description": "Frekvence záznamu historie",
         "default_value": 180,
         "min_value": 180,
         "max_value": 3600,
         "increment_value": 1,
         "user_access": false,
 		"unit": "s"
-    },
-    "virtual_1": {
-        "register": 5001,
-        "type": "int",
-        "default_value": 0,
-        "min_value": 0,
-        "max_value": 255,
-        "user_access": true,
-        "unit": "°C",
-        "description": "Křivka chlazení zóna 1"
-    },
-    "virtual_2": {
-        "register": 5002,
-        "type": "int",
-        "default_value": 0,
-        "min_value": 0,
-        "max_value": 255,
-        "user_access": true,
-        "unit": "°C",
-        "description": "Křivka chlazení zóna 2"
-    },
-    "virtual_3": {
-        "register": 5003,
-        "type": "int",
-        "default_value": 0,
-        "min_value": 0,
-        "max_value": 255,
-        "user_access": true,
-        "unit": "°C",
-        "description": "Křivka vytápění zóna 1"
-    },
-    "virtual_4": {
-        "register": 5004,
-        "type": "int",
-        "default_value": 0,
-        "min_value": 0,
-        "max_value": 255,
-        "user_access": true,
-        "unit": "°C",
-        "description": "Křivka vytápění zóna 2"
-    },
-    "virtual_5": {
-        "register": 5005,
-        "type": "int",
-        "default_value": 0,
-        "min_value": 0,
-        "max_value": 255,
-        "user_access": true,
-        "unit": "°C",
-        "description": "Teplota vody chlazení zóna 1"
-    },
-    "virtual_6": {
-        "register": 5006,
-        "type": "int",
-        "default_value": 0,
-        "min_value": 0,
-        "max_value": 255,
-        "user_access": true,
-        "unit": "°C",
-        "description": "Teplota vody chlazení zóna 2"
-    },
-    "virtual_7": {
-        "register": 5007,
-        "type": "int",
-        "default_value": 0,
-        "min_value": 0,
-        "max_value": 255,
-        "user_access": true,
-        "unit": "°C",
-        "description": "Teplota vody vytápění zóna 1"
-    },
-    "virtual_8": {
-        "register": 5008,
-        "type": "int",
-        "default_value": 0,
-        "min_value": 0,
-        "max_value": 255,
-        "user_access": true,
-        "unit": "°C",
-        "description": "Teplota vody vytápění zóna 2"
     }
 }
