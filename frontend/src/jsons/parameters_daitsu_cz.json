@@ -14,7 +14,7 @@
                 }
             },
             "1": {
-                "description": "Podlahové vytápění (zóna 1)",
+                "description": "Topení/chlazení (zóna 1)",
                 "options": {
                     "0": "Vypnuto",
                     "1": "Zapnuto"
@@ -28,7 +28,7 @@
                 }
             },
             "3": {
-                "description": "Podlahové vytápění (zóna 2)",
+                "description": "Topení/chlazení (zóna 2)",
                 "options": {
                     "0": "Vypnuto",
                     "1": "Zapnuto"
@@ -56,7 +56,7 @@
         "type": "bitfield",
         "ranges": {
             "timer_hours": {
-                "description": "Teplota vody T1S (zóna 1)",
+                "description": "Žádaná teplota výstupu  T1S (zóna 1)",
                 "start_bit": 0,
                 "end_bit": 7,
                 "min_value": 5,
@@ -64,7 +64,7 @@
                 "unit": "°C"
             },
             "priority_level": {
-                "description": "Teplota vody T1S (zóna 2)",
+                "description": "Žádaná teplota výstupu  T1S (zóna 2)",
                 "start_bit": 8,
                 "end_bit": 15,
                 "min_value": 5,
@@ -83,7 +83,7 @@
     "multiplied": 2,
     "unit": "°C",
     "user_access": true,
-    "description": "Teplota vzduchu Ts"
+    "description": "Žádaná teplota vzduchu Ts"
   },
   "reg_4": {
     "register": 4,
@@ -93,7 +93,7 @@
     "max_value": 75,
     "user_access": true,
     "unit": "°C",
-    "description": "T5S Teplota vody v zásobníku"
+    "description": "Žádaná teplota TUV T5S"
   },
   "reg_5": {
     "register": 5,
@@ -102,8 +102,8 @@
     "user_access": true,
     "description": "Nastavení funkcí",
     "bits": {
-      "13": { "description": "Platnost klimatické křivky (zóna 2)", "options": { "0": "Neplatná", "1": "Platná" }},
-      "12": { "description": "Platnost klimatické křivky (zóna 1)", "options": { "0": "Neplatná", "1": "Platná" }},
+      "13": { "description": "Platná křivka vytápění/chlazení (zóna 2)", "options": { "0": "Neplatná", "1": "Platná" }},
+      "12": { "description": "Platná křivka vytápění/chlazení (zóna 1)", "options": { "0": "Neplatná", "1": "Platná" }},
       "11": { "description": "Trvalý chod recirkulačního čerpadla TUV", "options": { "0": "Vypnuto", "1": "Zapnuto" }},
       "10": { "description": "ECO režim", "options": { "0": "Zakázáno", "1": "Povoleno" }},
       "8":  { "description": "Rekreační dům", "options": { "0": "Normální", "1": "Rekreace" }},
@@ -121,14 +121,14 @@
     "description": "Výběr klimatické křivky",
     "ranges": {
       "zone1": {
-        "description": "Klimatická křivka (zóna 1)",
+        "description": "Křivka topení/chlazení (zóna 1)",
         "start_bit": 0,
         "end_bit": 7,
         "min_value": 1,
         "max_value": 9
       },
       "zone2": {
-        "description": "Klimatická křivka (zóna 2)",
+        "description": "Křivka topení/chlazení (zóna 2)",
         "start_bit": 8,
         "end_bit": 15,
         "min_value": 1,

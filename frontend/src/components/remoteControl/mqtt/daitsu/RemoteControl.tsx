@@ -502,10 +502,6 @@ const RemoteControlMqttRpi: React.FC<RemoteControlMqttRpiProps> = ({ device, onD
 
 	const parametersData = useMemo(() => {
 		const baseParams = {
-			reg_265: deviceData.reg_265,
-			reg_266: deviceData.reg_266,
-			reg_267: deviceData.reg_267,
-			reg_268: deviceData.reg_268,
 			reg_0: deviceData.reg_0,
 			reg_1: deviceData.reg_1,
 			reg_2: deviceData.reg_2,
@@ -513,6 +509,10 @@ const RemoteControlMqttRpi: React.FC<RemoteControlMqttRpiProps> = ({ device, onD
 			reg_4: deviceData.reg_4,
 			reg_5: deviceData.reg_5,
 			reg_6: deviceData.reg_6,
+			reg_265: deviceData.reg_265,
+			reg_266: deviceData.reg_266,
+			reg_267: deviceData.reg_267,
+			reg_268: deviceData.reg_268,
 
 			fhi: canViewExtendedParams ? deviceData.fhi : undefined,
 		};
@@ -580,11 +580,11 @@ const RemoteControlMqttRpi: React.FC<RemoteControlMqttRpiProps> = ({ device, onD
 							<div className="max-sm:-mx-[calc((100vw-100%)/2)] w-full max-sm:w-screen">
 								<HomeDashboard deviceData={overviewData} />
 							</div>
-							<div className="flex justify-between gap-8 max-sm:flex-col w-full">
+							<div className="flex justify-between gap-4 max-md:gap-6 max-sm:flex-col max-[1600px]:flex-col w-full">
 								<TemperaturesChartContainer device={device} />
 								<MonthlyTemperaturesContainer device={device} />
 							</div>
-							<div className="flex gap-8 max-sm:flex-col w-full">
+							<div className="flex gap-4 max-md:gap-6 max-sm:flex-col max-[1200px]:flex-col w-full">
 								<TemperatureDisplay data={temperatureData} />
 								<DeviceStates
 									data={stateData}

@@ -14,7 +14,7 @@
                 }
             },
             "1": {
-                "description": "Floor heating (zone 1)",
+                "description": "Heating/cooling (zone 1)",
                 "options": {
                     "0": "Off",
                     "1": "On"
@@ -28,7 +28,7 @@
                 }
             },
             "3": {
-                "description": "Floor heating (zone 2)",
+                "description": "Heating/cooling (zone 2)",
                 "options": {
                     "0": "Off",
                     "1": "On"
@@ -56,7 +56,7 @@
         "type": "bitfield",
         "ranges": {
             "timer_hours": {
-                "description": "Water temperature T1S (zone 1)",
+                "description": "Desired outlet temperature T1S (zone 1)",
                 "start_bit": 0,
                 "end_bit": 7,
                 "min_value": 5,
@@ -64,7 +64,7 @@
                 "unit": "°C"
             },
             "priority_level": {
-                "description": "Water temperature T1S (zone 2)",
+                "description": "Desired outlet temperature T1S (zone 2)",
                 "start_bit": 8,
                 "end_bit": 15,
                 "min_value": 5,
@@ -83,7 +83,7 @@
     "multiplied": 2,
     "unit": "°C",
     "user_access": true,
-    "description": "Air temperature Ts"
+    "description": "Desired air temperature Ts"
   },
   "reg_4": {
     "register": 4,
@@ -93,7 +93,7 @@
     "max_value": 75,
     "user_access": true,
     "unit": "°C",
-    "description": "T5S Tank water temperature"
+    "description": "DHW temperature setpoint T5S"
   },
   "reg_5": {
     "register": 5,
@@ -102,8 +102,8 @@
     "user_access": true,
     "description": "Function settings",
     "bits": {
-      "13": { "description": "Climate curve valid (zone 2)", "options": { "0": "Invalid", "1": "Valid" }},
-      "12": { "description": "Climate curve valid (zone 1)", "options": { "0": "Invalid", "1": "Valid" }},
+      "13": { "description": "Heating/cooling curve valid (zone 2)", "options": { "0": "Invalid", "1": "Valid" }},
+      "12": { "description": "Heating/cooling curve valid (zone 1)", "options": { "0": "Invalid", "1": "Valid" }},
       "11": { "description": "Constant water recycle pump DHW running", "options": { "0": "Off", "1": "On" }},
       "10": { "description": "ECO Mode", "options": { "0": "Disabled", "1": "Enabled" }},
       "8":  { "description": "Holiday home", "options": { "0": "Normal", "1": "Holiday" }},
@@ -121,14 +121,14 @@
     "description": "Climate curve selection",
     "ranges": {
       "zone1": {
-        "description": "Climate curve (zone 1)",
+        "description": "Heating/cooling curve (zone 1)",
         "start_bit": 0,
         "end_bit": 7,
         "min_value": 1,
         "max_value": 9
       },
       "zone2": {
-        "description": "Climate curve (zone 2)",
+        "description": "Heating/cooling curve (zone 2)",
         "start_bit": 8,
         "end_bit": 15,
         "min_value": 1,

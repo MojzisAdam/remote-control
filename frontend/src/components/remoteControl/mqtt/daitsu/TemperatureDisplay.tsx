@@ -106,18 +106,18 @@ const TemperatureDisplay: React.FC<TemperatureDisplayProps> = ({ data }) => {
 	};
 
 	const temperatureReadings = [
+		{ key: "reg_110", value: data.reg_110 },
+		{ key: "reg_107", value: data.reg_107 },
+		{ key: "reg_115", value: data.reg_115 },
 		{ key: "reg_104", value: data.reg_104 },
 		{ key: "reg_105", value: data.reg_105 },
 		{ key: "reg_106", value: data.reg_106 },
-		{ key: "reg_107", value: data.reg_107 },
 		{ key: "reg_108", value: data.reg_108 },
 		{ key: "reg_109", value: data.reg_109 },
-		{ key: "reg_110", value: data.reg_110 },
 		{ key: "reg_111", value: data.reg_111 },
 		{ key: "reg_112", value: data.reg_112 },
 		{ key: "reg_113", value: data.reg_113 },
 		{ key: "reg_114", value: data.reg_114 },
-		{ key: "reg_115", value: data.reg_115 },
 		{ key: "reg_120", value: data.reg_120 },
 		{ key: "reg_121", value: data.reg_121 },
 		{ key: "reg_135", value: data.reg_135 },
@@ -139,9 +139,9 @@ const TemperatureDisplay: React.FC<TemperatureDisplayProps> = ({ data }) => {
 				key={key}
 				className={`flex flex-col rounded-xl overflow-hidden transition-all hover:shadow-md border dark:shadow-zinc-900/55`}
 			>
-				<div className="px-4 py-3 bg-white dark:bg-zinc-900 h-full flex flex-col justify-between">
-					<div className="text-sm font-medium text-gray-500 dark:text-gray-400">{getLabel(key)}</div>
-					<div className={`mt-1 text-xl font-semibold ${textColor}`}>{formatTemperature(value)}</div>
+				<div className="px-3 py-2 md:px-4 md:py-3 bg-white dark:bg-zinc-900 h-full flex flex-col justify-between">
+					<div className="text-[13px] min-[1700px]:text-[14px] leading-[1.4] font-medium text-gray-500 dark:text-gray-400">{getLabel(key)}</div>
+					<div className={`mt-1 text-[16px] min-[1700px]:text-[17px] leading-[1.5] font-semibold ${textColor}`}>{formatTemperature(value)}</div>
 				</div>
 				<div className={`h-2 w-full ${bgColor}`}></div>
 			</div>
@@ -168,7 +168,7 @@ const TemperatureDisplay: React.FC<TemperatureDisplayProps> = ({ data }) => {
 				{temperatureReadings.length > 0 && (
 					<div>
 						<SectionTitle title={t("temperature.current")} />
-						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">{temperatureReadings.map(renderTemperatureCard)}</div>
+						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-3 md:gap-4">{temperatureReadings.map(renderTemperatureCard)}</div>
 					</div>
 				)}
 
@@ -176,7 +176,7 @@ const TemperatureDisplay: React.FC<TemperatureDisplayProps> = ({ data }) => {
 				{desiredTemperatures.length > 0 && (
 					<div>
 						<SectionTitle title={t("temperature.desired")} />
-						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">{desiredTemperatures.map(renderTemperatureCard)}</div>
+						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-3 md:gap-4">{desiredTemperatures.map(renderTemperatureCard)}</div>
 					</div>
 				)}
 			</CardContent>

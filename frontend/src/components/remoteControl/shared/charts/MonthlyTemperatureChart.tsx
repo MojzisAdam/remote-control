@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { format } from "date-fns";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, CartesianGrid } from "recharts";
 import { ChartContainer } from "@/components/ui/chart";
@@ -27,6 +27,21 @@ interface CustomTooltipProps {
 const MonthlyTemperatureChart: React.FC<MonthlyTemperatureChartProps> = ({ data, sensors, deviceType = "standard" }) => {
 	const { t, i18n } = useTranslation("remote-control");
 	const selectedLocale = i18n.language === "en" ? enUS : cs;
+	const [containerWidth, setContainerWidth] = useState<number>(0);
+
+	// Hook to track container width for responsive behavior
+	useEffect(() => {
+		const handleResize = () => {
+			const container = document.querySelector("[data-chart-container]");
+			if (container) {
+				setContainerWidth(container.clientWidth);
+			}
+		};
+
+		handleResize();
+		window.addEventListener("resize", handleResize);
+		return () => window.removeEventListener("resize", handleResize);
+	}, []);
 
 	const chartConfig = useMemo(() => {
 		const config: Record<string, { label: string; color: string; unit: string }> = {};
@@ -68,6 +83,8 @@ const MonthlyTemperatureChart: React.FC<MonthlyTemperatureChartProps> = ({ data,
 
 			const formattedItem: any = {
 				name: `${localizedMonth} ${item.year}`,
+				shortName: `${format(date, "MMM", { locale: selectedLocale })} ${item.year.toString().slice(-2)}`, // Short format for mobile
+				fullDate: date, // Keep full date for sorting/reference
 			};
 
 			// Add temperature data for each sensor
@@ -88,7 +105,44 @@ const MonthlyTemperatureChart: React.FC<MonthlyTemperatureChartProps> = ({ data,
 
 	const formatYAxis = (value: number) => `${value} ${t("charts.units.celsius")}`;
 
-	const formatXAxisTick = (value: string) => {
+	// Responsive X-axis configuration
+	const getXAxisConfig = useMemo(() => {
+		const isSmallScreen = containerWidth < 640; // Tailwind sm breakpoint
+		const isMediumScreen = containerWidth < 768; // Tailwind md breakpoint
+		const dataLength = formattedData.length;
+
+		let interval: number | "preserveStartEnd" = 0;
+		let angle = 0;
+		let height = 40;
+
+		if (isSmallScreen && dataLength > 6) {
+			// On very small screens with lots of data, show every 2nd or 3rd item
+			interval = dataLength > 12 ? 2 : 1;
+			angle = -45;
+			height = 60;
+		} else if (isMediumScreen && dataLength > 8) {
+			// On medium screens, angle text if there's too much data
+			angle = -30;
+			height = 50;
+		} else if (dataLength > 12) {
+			// On larger screens, still angle if there's a lot of data
+			angle = -15;
+			height = 45;
+		}
+
+		return { interval, angle, height };
+	}, [containerWidth, formattedData.length]);
+
+	const formatXAxisTick = (value: string, index: number) => {
+		const isSmallScreen = containerWidth < 640;
+		const item = formattedData[index];
+
+		// Use short format on small screens
+		if (isSmallScreen && item?.shortName) {
+			return item.shortName;
+		}
+
+		// Otherwise use abbreviated format
 		const parts = value.split(" ");
 		return parts.length === 2 ? `${parts[0].substring(0, 3)} ${parts[1]}` : value;
 	};
@@ -138,10 +192,11 @@ const MonthlyTemperatureChart: React.FC<MonthlyTemperatureChartProps> = ({ data,
 			<ChartContainer
 				config={chartConfig}
 				className="h-[300px] w-full"
+				data-chart-container
 			>
 				<BarChart
 					data={formattedData}
-					margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+					margin={{ top: 10, right: 10, left: 0, bottom: getXAxisConfig.height - 40 }}
 					barGap={2}
 					barCategoryGap="15%"
 				>
@@ -151,12 +206,16 @@ const MonthlyTemperatureChart: React.FC<MonthlyTemperatureChartProps> = ({ data,
 					/>
 					<XAxis
 						dataKey="name"
-						tick={{ fontSize: 10 }}
+						tick={{
+							fontSize: containerWidth < 640 ? 9 : 10,
+						}}
 						tickFormatter={formatXAxisTick}
-						interval={0}
+						interval={getXAxisConfig.interval}
 						padding={{ left: 10, right: 10 }}
-						height={40}
+						height={getXAxisConfig.height}
 						tickMargin={8}
+						angle={getXAxisConfig.angle}
+						textAnchor={getXAxisConfig.angle < 0 ? "end" : "middle"}
 					/>
 					<YAxis
 						tickFormatter={formatYAxis}

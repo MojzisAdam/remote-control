@@ -254,27 +254,27 @@
       "title": "Temperatures",
       "labels": {
         "reg_2": "T1s",
-        "reg_3": "Ts - Room temperature",
-        "reg_4": "T5s - Water tank",
-        "reg_104": "TW_in - Water inlet temperature",
-        "reg_105": "TW_out - Water outlet temperature",
+        "reg_3": "Ts - Room temperature requirement",
+        "reg_4": "T5s - DHW demand (boiler)",
+        "reg_104": "TW_in - Water temperature at the inlet to the exchanger",
+        "reg_105": "TW_out - Outlet water temperature from the exchanger",
         "reg_106": "T3 - Condenser temperature",
         "reg_107": "T4 - Outdoor temperature",
         "reg_108": "Tp - Outlet temperature",
         "reg_109": "Th - Suction temperature",
-        "reg_110": "T1 - Water temperature",
+        "reg_110": "T1 - Water outlet temperature",
         "reg_111": "Tw2 - Water flow temperature in zone 2",
         "reg_112": "T2 - Refrigerant temperature",
         "reg_113": "T2B - Cooling gas temperature",
         "reg_114": "Ta - Ambient temperature",
-        "reg_115": "T5 - Water tank temperature",
+        "reg_115": "T5 - DHW temperature (boiler)",
         "reg_120": "Tbt1",
         "reg_121": "Tbt2",
         "reg_135": "TF module temperature",
         "reg_136": "T1S zone 1",
         "reg_137": "T1S zone 2",
-        "T1s_z1": "T1s zone 1",
-        "T1s_z2": "T1s zone 2"
+        "T1s_z1": "T1s - Zone 1 Demand",
+        "T1s_z2": "T1s - Zone 2 Demand"
       }
     },
     "charts" : {
@@ -283,8 +283,8 @@
             "reg_110": "Water temperature",
             "reg_115": "Water tank temperature",
             "avg_reg_107": "Average outdoor temperature",
-            "avg_reg_110": "Average water temperature",
-            "avg_reg_115": "Average water tank temperature"
+            "avg_reg_110": "Average outlet temperature",
+            "avg_reg_115": "Average DHW (boiler)"
         }
     }
   }

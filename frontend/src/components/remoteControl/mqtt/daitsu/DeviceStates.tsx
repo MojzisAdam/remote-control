@@ -61,9 +61,9 @@ const DeviceStates: React.FC<DeviceStatesProps> = ({ data, hasExtendedView }) =>
 				key={key}
 				className="flex flex-col rounded-xl overflow-hidden transition-all hover:shadow-md border dark:shadow-zinc-900/55"
 			>
-				<div className="px-4 py-3 bg-white dark:bg-zinc-900 h-full flex flex-col justify-between">
-					<div className="text-sm font-medium text-gray-500 dark:text-gray-400">{getBitName(register, bitNumber)}</div>
-					<div className={`mt-1 text-lg font-semibold ${textColor}`}>
+				<div className="px-3 py-2 md:px-4 md:py-3 bg-white dark:bg-zinc-900 h-full flex flex-col justify-between">
+					<div className="text-[13px] min-[1700px]:text-[14px] leading-[1.4] font-medium text-gray-500 dark:text-gray-400">{getBitName(register, bitNumber)}</div>
+					<div className={`mt-1 text-[16px] min-[1700px]:text-[17px] leading-[1.5] font-semibold ${textColor}`}>
 						{isUnknown ? t("daitsu.deviceStates.values.unknown") : isOn ? t("daitsu.deviceStates.values.on") : t("daitsu.deviceStates.values.off")}
 					</div>
 				</div>
@@ -237,9 +237,9 @@ const DeviceStates: React.FC<DeviceStatesProps> = ({ data, hasExtendedView }) =>
 				key={key}
 				className="flex flex-col rounded-xl overflow-hidden transition-all hover:shadow-md border dark:shadow-zinc-900/55"
 			>
-				<div className="px-4 py-3 bg-white dark:bg-zinc-900 h-full flex flex-col justify-between">
-					<div className="text-sm font-medium text-gray-500 dark:text-gray-400">{getLabel(key)}</div>
-					<div className={`mt-1 text-lg font-semibold ${textColor}`}>
+				<div className="px-3 py-2 md:px-4 md:py-3 bg-white dark:bg-zinc-900 h-full flex flex-col justify-between">
+					<div className="text-[13px] min-[1700px]:text-[14px] leading-[1.4] font-medium text-gray-500 dark:text-gray-400">{getLabel(key)}</div>
+					<div className={`mt-1 text-[16px] min-[1700px]:text-[17px] leading-[1.5] font-semibold ${textColor}`}>
 						{key === "reg_124" ? (
 							<ErrorHint
 								errorCode={value ? (value as number) : 0}
@@ -277,19 +277,19 @@ const DeviceStates: React.FC<DeviceStatesProps> = ({ data, hasExtendedView }) =>
 					{/* Operation States */}
 					<div>
 						<SectionTitle title={t("daitsu.deviceStates.sections.operation")} />
-						<div className="grid grid-cols-1 md:grid-cols-3 gap-4">{operationStates.map(renderStateCard)}</div>
+						<div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-3 md:gap-4">{operationStates.map(renderStateCard)}</div>
 					</div>
 
 					{/* Blocking States */}
 					<div>
 						<SectionTitle title={t("daitsu.deviceStates.sections.blocking")} />
-						<div className="grid grid-cols-1 md:grid-cols-3 gap-4">{blockingStates.map(renderStateCard)}</div>
+						<div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-3 md:gap-4">{blockingStates.map(renderStateCard)}</div>
 					</div>
 
 					{/* Performance States */}
 					<div>
 						<SectionTitle title={t("daitsu.deviceStates.sections.performance")} />
-						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+						<div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-3 md:gap-4">
 							{performanceStates.map(renderStateCard)} {circulatorCards.map((card) => renderBitCard(card, "reg_129"))}
 						</div>
 					</div>
@@ -300,14 +300,14 @@ const DeviceStates: React.FC<DeviceStatesProps> = ({ data, hasExtendedView }) =>
 							<div className="space-y-6">
 								{/* reg_128 Status Bit 1 */}
 								<div>
-									<h3 className="text-md font-medium text-gray-600 dark:text-gray-300 mb-3">{t("daitsu.deviceStates.labels.reg_128")}</h3>
-									<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">{reg128BitCards.map((card) => renderBitCard(card, "reg_128"))}</div>
+									<h3 className="text-sm md:text-md font-medium text-gray-600 dark:text-gray-300 mb-3">{t("daitsu.deviceStates.labels.reg_128")}</h3>
+									<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-3 md:gap-4">{reg128BitCards.map((card) => renderBitCard(card, "reg_128"))}</div>
 								</div>
 
 								{/* reg_129 Load Output */}
 								<div>
-									<h3 className="text-md font-medium text-gray-600 dark:text-gray-300 mb-3">{t("daitsu.deviceStates.labels.reg_129")}</h3>
-									<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">{reg129BitCards.map((card) => renderBitCard(card, "reg_129"))}</div>
+									<h3 className="text-sm md:text-md font-medium text-gray-600 dark:text-gray-300 mb-3">{t("daitsu.deviceStates.labels.reg_129")}</h3>
+									<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-3 md:gap-4">{reg129BitCards.map((card) => renderBitCard(card, "reg_129"))}</div>
 								</div>
 							</div>
 						</div>
@@ -317,7 +317,7 @@ const DeviceStates: React.FC<DeviceStatesProps> = ({ data, hasExtendedView }) =>
 					{display_version && (
 						<div>
 							<SectionTitle title={t("daitsu.deviceStates.sections.firmware")} />
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">{firmwareInfo.map(renderStateCard)}</div>
+							<div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">{firmwareInfo.map(renderStateCard)}</div>
 						</div>
 					)}
 				</div>

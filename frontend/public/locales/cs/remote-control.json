@@ -254,27 +254,27 @@
       "title": "Teploty",
       "labels": {
         "reg_2": "T1s",
-        "reg_3": "Ts - pokojová teplota",
-        "reg_4": "T5s - vodní nádrž",
-        "reg_104": "TW_in - Teplota vody na vstupu",
-        "reg_105": "TW_out -Výstupní teplota vody",
+        "reg_3": "Ts - Požadavek pokojová teplota",
+        "reg_4": "T5s - Požadavek TUV (bojler)",
+        "reg_104": "TW_in - Teplota vody na vstupu do výměníku",
+        "reg_105": "TW_out - Výstupní teplota vody z výměníku",
         "reg_106": "T3- Teplota kondenzátoru",
         "reg_107": "T4- Venkovní teplota",
         "reg_108": "Tp - Výstupní teplota",
         "reg_109": "Th - Teplota sání",
-        "reg_110": "T1 - Teplota vody",
+        "reg_110": "T1 - Teplota výstupu vody",
         "reg_111": "Tw2 - Teplota průtoku vody v zóně 2",
         "reg_112": "T2 - Teplota chladiva",
         "reg_113": "T2B - Tepleta chladícího plynu",
         "reg_114": "Ta - Teplota prostoru",
-        "reg_115": "T5 - Teplota vodní nádrže",
+        "reg_115": "T5 - Teplota TUV (bojler)",
         "reg_120": "Tbt1",
         "reg_121": "Tbt2",
         "reg_135": "Teplota modulu TF",
         "reg_136": "T1S zóny 1",
         "reg_137": "T1S zóny 2",
-        "T1s_z1": "T1s zóny 1",
-        "T1s_z2": "T1s zóny 2"
+        "T1s_z1": "T1s - Požadavek Zóna 1",
+        "T1s_z2": "T2s - Požadavek Zóna 2"
       }
     },
     "charts" : {
@@ -283,8 +283,8 @@
             "reg_110": "Teplota vody",
             "reg_115": "Teplota vodní nádrže",
             "avg_reg_107": "Průměrná venkovní teplota",
-            "avg_reg_110": "Průměrná teplota vody",
-            "avg_reg_115": "Průměrná teplota vodní nádrže"
+            "avg_reg_110": "Průměrná výstupní teplota",
+            "avg_reg_115": "Průměrná TUV (bojler)"
         }
     }
   }

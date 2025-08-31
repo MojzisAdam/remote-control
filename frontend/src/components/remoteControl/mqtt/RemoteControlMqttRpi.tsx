@@ -618,11 +618,11 @@ const RemoteControlMqttRpi: React.FC<RemoteControlMqttRpiProps> = ({ device, onD
 							<div className="max-sm:-mx-[calc((100vw-100%)/2)] w-full max-sm:w-screen">
 								<HomeDashboard deviceData={overviewData} />
 							</div>
-							<div className="flex justify-between gap-8 max-sm:flex-col w-full">
+							<div className="flex justify-between gap-4 max-md:gap-6 max-sm:flex-col max-[1600px]:flex-col w-full">
 								<TemperaturesChartContainer device={device} />
 								<MonthlyTemperaturesContainer device={device} />
 							</div>
-							<div className="flex gap-8 max-sm:flex-col w-full">
+							<div className="flex gap-4 max-md:gap-6 max-sm:flex-col max-[1200px]:flex-col w-full">
 								<TemperatureDisplay data={temperatureData} />
 								<DeviceStates data={stateData} />
 							</div>

@@ -234,9 +234,9 @@ const DeviceStates: React.FC<DeviceStatesProps> = ({ data }) => {
 				key={key}
 				className="flex flex-col rounded-xl overflow-hidden transition-all hover:shadow-md border dark:shadow-zinc-900/55"
 			>
-				<div className="px-4 py-3 bg-white dark:bg-zinc-900 h-full flex flex-col justify-between">
-					<div className="text-sm font-medium text-gray-500 dark:text-gray-400">{getLabel(key)}</div>
-					<div className={`mt-1 text-lg font-semibold ${textColor}`}>
+				<div className="px-3 py-2 md:px-4 md:py-3 bg-white dark:bg-zinc-900 h-full flex flex-col justify-between">
+					<div className="text-[13px] min-[1700px]:text-[14px] leading-[1.4] font-medium text-gray-500 dark:text-gray-400">{getLabel(key)}</div>
+					<div className={`mt-1 text-[16px] min-[1700px]:text-[17px] leading-[1.5] font-semibold ${textColor}`}>
 						{key === "reg_512" ? (
 							<ErrorHint
 								errorCode={value ? value : 0}
@@ -273,32 +273,32 @@ const DeviceStates: React.FC<DeviceStatesProps> = ({ data }) => {
 					{/* Operation States */}
 					<div>
 						<SectionTitle title={t("deviceStates.sections.operation")} />
-						<div className="grid grid-cols-1 md:grid-cols-3 gap-4">{operationStates.map(renderStateCard)}</div>
+						<div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-3 md:gap-4">{operationStates.map(renderStateCard)}</div>
 					</div>
 
 					{/* Blocking States */}
 					<div>
 						<SectionTitle title={t("deviceStates.sections.blocking")} />
-						<div className="grid grid-cols-1 md:grid-cols-3 gap-4">{blockingStates.map(renderStateCard)}</div>
+						<div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-3 md:gap-4">{blockingStates.map(renderStateCard)}</div>
 					</div>
 
 					{/* Performance States */}
 					<div>
 						<SectionTitle title={t("deviceStates.sections.performance")} />
-						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">{performanceStates.map(renderStateCard)}</div>
+						<div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-3 md:gap-4">{performanceStates.map(renderStateCard)}</div>
 					</div>
 
 					{/* Auxiliary States */}
 					<div>
 						<SectionTitle title={t("deviceStates.sections.auxiliary")} />
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">{auxiliaryStates.map(renderStateCard)}</div>
+						<div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-3 md:gap-4">{auxiliaryStates.map(renderStateCard)}</div>
 					</div>
 
 					{/* Firmware Info */}
 					{display_version && (
 						<div>
 							<SectionTitle title={t("deviceStates.sections.firmware")} />
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">{firmwareInfo.map(renderStateCard)}</div>
+							<div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-3 md:gap-4">{firmwareInfo.map(renderStateCard)}</div>
 						</div>
 					)}
 				</div>
