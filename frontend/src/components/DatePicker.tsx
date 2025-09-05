@@ -42,17 +42,31 @@ export function DatePicker({ value, onChange, className }: DatePickerProps) {
 	}, [open]);
 
 	return (
-		<Popover open={open} onOpenChange={setOpen} modal={true}>
+		<Popover
+			open={open}
+			onOpenChange={setOpen}
+			modal={true}
+		>
 			<PopoverTrigger asChild>
-				<Button variant={"outline"} className={cn("w-[280px] justify-start text-left font-normal", !value && "text-muted-foreground", className)} onClick={() => setOpen((prev) => !prev)}>
+				<Button
+					variant={"outline"}
+					className={cn("w-[280px] justify-start text-left font-normal", !value && "text-muted-foreground", className)}
+					onClick={() => setOpen((prev) => !prev)}
+				>
 					<CalendarIcon />
 					{value ? format(dateObj!, "PPP", { locale: selectedLocale }) : <span>{t("DatePicker.placeholder")}</span>}
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent className="w-auto p-0" align="start" side="bottom">
+			<PopoverContent
+				className="w-auto p-0"
+				align="start"
+				side="bottom"
+			>
 				<Calendar
 					mode="single"
+					captionLayout="dropdown"
 					selected={dateObj}
+					defaultMonth={dateObj}
 					onSelect={(selectedDate) => {
 						if (selectedDate) {
 							const normalizedDate = new Date(Date.UTC(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate()));

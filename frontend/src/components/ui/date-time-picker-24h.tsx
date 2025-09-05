@@ -60,7 +60,9 @@ export function DateTimePicker24h({ value, onChange }: DateTimePicker24hProps) {
 					<Calendar
 						mode="single"
 						selected={value}
+						captionLayout="dropdown"
 						onSelect={handleDateSelect}
+						defaultMonth={value}
 						initialFocus
 						locale={selectedLocale}
 					/>
