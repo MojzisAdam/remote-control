@@ -120,6 +120,68 @@ body {
     }
 }
 
+/* Accent Color Classes */
+.accent-blue {
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 98%;
+    --ring: 217 91% 60%;
+    --chart-1: 217 91% 60%;
+    --chart-2: 220 85% 65%;
+    --chart-3: 214 95% 68%;
+    --chart-4: 210 98% 78%;
+    --chart-5: 212 97% 87%;
+}
+
+.accent-green {
+    --primary: 142.1 76.2% 36.3%;
+    --primary-foreground: 355.7 100% 97.3%;
+    --ring: 142.1 76.2% 36.3%;
+    --chart-1: 142.1 76.2% 36.3%;
+    --chart-2: 138.5 76.5% 59.6%;
+    --chart-3: 158.1 64.4% 51.6%;
+    --chart-4: 134.9 50.2% 51.8%;
+    --chart-5: 120.1 61.8% 69.5%;
+}
+
+.accent-purple {
+    --primary: 262.1 83.3% 57.8%;
+    --primary-foreground: 210 40% 98%;
+    --ring: 262.1 83.3% 57.8%;
+    --chart-1: 262.1 83.3% 57.8%;
+    --chart-2: 268.4 71% 70%;
+    --chart-3: 252.5 95% 85%;
+    --chart-4: 280.7 89% 78%;
+    --chart-5: 292.2 84% 61%;
+}
+
+.accent-red {
+    --primary: 348 83% 47%;
+    --primary-foreground: 0 0% 98%;
+    --ring: 348 83% 47%;
+    --chart-1: 348 83% 47%;
+    --chart-2: 355 85% 55%;
+    --chart-3: 340 90% 60%;
+    --chart-4: 350 95% 65%;
+    --chart-5: 345 88% 70%;
+}
+
+/* Dark mode adjustments for accent colors */
+.dark.accent-blue {
+    --primary: 217 91% 63%;
+}
+
+.dark.accent-green {
+    --primary: 142.1 76.2% 46.3%;
+}
+
+.dark.accent-purple {
+    --primary: 262.1 83.3% 67.8%;
+}
+
+.dark.accent-red {
+    --primary: 348 83% 54%;
+}
+
 
 @layer base {
     * {

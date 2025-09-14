@@ -97,7 +97,7 @@ const NotificationIcon: React.FC = () => {
 				>
 					<Bell className="h-6 w-6" />
 					{unseenCount > 0 && (
-						<div className="absolute text-xs top-0 right-0 p-1 leading-none translate-x-1/4 -translate-y-1/4 rounded-full h-4 w-auto min-w-4 text-center flex items-center justify-center text-white dark:text-black bg-primary dark:bg-primary">
+						<div className="absolute text-xs top-0 right-0 p-1 leading-none translate-x-1/4 -translate-y-1/4 rounded-full h-4 w-auto min-w-4 text-center flex items-center justify-center text-white dark:text-black bg-black dark:bg-white">
 							{unseenCount > 9 ? "9+" : unseenCount}
 						</div>
 					)}

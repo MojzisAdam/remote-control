@@ -11,6 +11,7 @@ import { Save, RotateCcw, Layout, Palette, Moon, Sun, Languages, Globe } from "l
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "next-themes";
+import { useAccentColor } from "@/hooks/useAccentColor";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import usePageTitle from "@/hooks/usePageTitle";
 
@@ -21,6 +22,7 @@ const Settings: React.FC = () => {
 	const { toast } = useToast();
 	const { t, i18n } = useTranslation("settings");
 	const { setTheme, theme } = useTheme();
+	const { accentColor, setAccentColor } = useAccentColor();
 
 	usePageTitle("Settings");
 
@@ -170,7 +172,7 @@ const Settings: React.FC = () => {
 						</CardHeader>
 						<CardContent className="px-4 sm:px-6 space-y-6">
 							<div className="space-y-4">
-								<Label className="text-sm">{t("tabs.themeShort")}</Label>
+								<Label className="text-sm">{t("appearance.theme")}</Label>
 								<div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
 									<Button
 										variant={theme === "light" ? "default" : "outline"}
@@ -200,6 +202,58 @@ const Settings: React.FC = () => {
 											<Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
 										</div>
 										<span>{t("themes.automatic")}</span>
+									</Button>
+								</div>
+							</div>
+
+							<Separator />
+
+							<div className="space-y-4">
+								<Label className="text-sm">{t("appearance.accentColor")}</Label>
+								<div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+									<Button
+										variant={accentColor === "default" ? "default" : "outline"}
+										className="flex flex-col items-center justify-center gap-2 p-3 h-auto w-full"
+										onClick={() => setAccentColor("default")}
+									>
+										<div className={`w-4 h-4 rounded-full ${accentColor === "default" ? "bg-secondary border-primary" : "bg-gray-400"}`}></div>
+										<span>{t("accents.default")}</span>
+									</Button>
+
+									<Button
+										variant={accentColor === "blue" ? "default" : "outline"}
+										className="flex flex-col items-center justify-center gap-2 p-3 h-auto w-full"
+										onClick={() => setAccentColor("blue")}
+									>
+										<div className={`w-4 h-4 rounded-full ${accentColor === "blue" ? "bg-white border-blue-500" : "bg-blue-500"}`}></div>
+										<span>{t("accents.blue")}</span>
+									</Button>
+
+									<Button
+										variant={accentColor === "green" ? "default" : "outline"}
+										className="flex flex-col items-center justify-center gap-2 p-3 h-auto w-full"
+										onClick={() => setAccentColor("green")}
+									>
+										<div className={`w-4 h-4 rounded-full ${accentColor === "green" ? "bg-white border-green-500" : "bg-green-500"}`}></div>
+										<span>{t("accents.green")}</span>
+									</Button>
+
+									<Button
+										variant={accentColor === "purple" ? "default" : "outline"}
+										className="flex flex-col items-center justify-center gap-2 p-3 h-auto w-full"
+										onClick={() => setAccentColor("purple")}
+									>
+										<div className={`w-4 h-4 rounded-full ${accentColor === "purple" ? "bg-white border-purple-500" : "bg-purple-500"}`}></div>
+										<span>{t("accents.purple")}</span>
+									</Button>
+
+									<Button
+										variant={accentColor === "red" ? "default" : "outline"}
+										className="flex flex-col items-center justify-center gap-2 p-3 h-auto w-full"
+										onClick={() => setAccentColor("red")}
+									>
+										<div className={`w-4 h-4 rounded-full ${accentColor === "red" ? "bg-white border-2 border-red-500" : "bg-red-500"}`}></div>
+										<span>{t("accents.red")}</span>
 									</Button>
 								</div>
 							</div>

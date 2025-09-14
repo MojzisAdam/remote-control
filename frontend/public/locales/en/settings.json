@@ -20,7 +20,9 @@
   },
   "appearance": {
     "title": "Appearance",
-    "description": "Customize how the application looks"
+    "description": "Customize how the application looks",
+    "theme": "Theme",
+    "accentColor": "Accent Color"
   },
   "language": {
     "title": "Language Settings",
@@ -31,6 +33,13 @@
     "light": "Light",
     "dark": "Dark",
     "automatic": "Automatic"
+  },
+  "accents": {
+    "default": "Default",
+    "blue": "Blue",
+    "green": "Green",
+    "purple": "Purple",
+    "red": "Red"
   },
   "saveChanges": {
     "full": "Save changes",

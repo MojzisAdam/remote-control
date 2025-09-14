@@ -603,7 +603,7 @@ export const DeviceParameters: React.FC<DeviceParametersProps> = ({ deviceId, de
 				<Tabs
 					value={activeTab}
 					onValueChange={setActiveTab}
-					className="flex flex-col xl:flex-row w-full gap-8"
+					className="flex flex-col xl:flex-row w-full gap-8 "
 				>
 					<div className="max-sm:-mx-[calc((100vw-100%)/2)] max-sm:w-screen mb-4 max-sm:bg-muted max-sm:overflow-x-scroll">
 						<TabsList className="flex flex-row xl:flex-col max-xl:overflow-x-scroll xl:mb-0 xl:mr-4 xl:h-fit w-auto h-full gap-2 max-sm:justify-normal max-sm:w-fit max-sm:mx-auto max-sm:rounded-none">
@@ -612,8 +612,8 @@ export const DeviceParameters: React.FC<DeviceParametersProps> = ({ deviceId, de
 									key={group}
 									value={group}
 									className="flex items-center justify-center xl:justify-start gap-2 py-3 px-4 text-sm whitespace-nowrap xl:w-full rounded-lg
-                data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 dark:data-[state=active]:bg-blue-900/20 dark:data-[state=active]:text-blue-400
-                transition-all hover:bg-gray-200 dark:hover:bg-gray-800 max-sm:first:ml-2 max-sm:last:mr-2"
+                data-[state=active]:bg-blue-50 data-[state=active]:text-primary dark:data-[state=active]:bg-background/50 dark:data-[state=active]:text-primary
+                transition-all hover:bg-gray-200 dark:hover:bg-background/30 max-sm:first:ml-2 max-sm:last:mr-2"
 								>
 									{groupIcons[group]}
 									<span className="hidden xl:inline">{t(`parameterGroups.${group}`)}</span>
@@ -626,7 +626,7 @@ export const DeviceParameters: React.FC<DeviceParametersProps> = ({ deviceId, de
 						<TabsContent
 							key={group}
 							value={group}
-							className="mt-0 flex-1 w-full"
+							className="mt-0 flex-1 w-full focus-visible:ring-0"
 						>
 							<Card className="shadow-sm">
 								<CardHeader className="pb-2 mb-2">
@@ -646,7 +646,7 @@ export const DeviceParameters: React.FC<DeviceParametersProps> = ({ deviceId, de
 													key={key}
 													className={`p-4 border rounded-lg flex flex-col transition-all dark:bg-zinc-900/60 overflow-hidden ${
 														// param.user_access &&
-														value !== null ? "cursor-pointer hover:border-blue-400 dark:hover:border-blue-400 hover:shadow-md" : ""
+														value !== null ? "cursor-pointer hover:border-primary dark:hover:border-primary hover:shadow-md" : ""
 													} ${
 														pendingUpdate
 															? pendingUpdate.error

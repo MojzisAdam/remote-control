@@ -185,7 +185,7 @@ const FavouriteDevices: React.FC<FavouriteDevicesProps> = ({ moreInfo, devices }
 						>
 							{/* Render the Last Visited Device (Non-Draggable) */}
 							{displayLastVisited && lastVisitedDevice && (
-								<div className="p-4 bg-gray-50 dark:bg-zinc-900 rounded-lg shadow-md min-w-[250px] max-w-[250px] flex justify-between flex-col gap-6 relative border-2 border-blue-500 dark:border-blue-800">
+								<div className="p-4 bg-gray-50 dark:bg-zinc-900 rounded-lg shadow-md min-w-[250px] max-w-[250px] flex justify-between flex-col gap-6 relative border-2 border-primary/70 dark:border-primary/50">
 									<TooltipProvider>
 										<Tooltip>
 											<TooltipTrigger asChild>

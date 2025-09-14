@@ -20,7 +20,9 @@
   },
   "appearance": {
     "title": "Vzhled",
-    "description": "Upravte si vzhled aplikace"
+    "description": "Upravte si vzhled aplikace",
+    "theme": "Motiv",
+    "accentColor": "Akcentová barva"
   },
   "language": {
     "title": "Nastavení jazyka",
@@ -31,6 +33,13 @@
     "light": "Světlý",
     "dark": "Tmavý",
     "automatic": "Automatický"
+  },
+  "accents": {
+    "default": "Výchozí",
+    "blue": "Modrá",
+    "green": "Zelená",
+    "purple": "Fialová",
+    "red": "Červená"
   },
   "saveChanges": {
     "full": "Uložit změny",

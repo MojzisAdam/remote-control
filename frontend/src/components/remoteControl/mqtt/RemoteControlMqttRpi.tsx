@@ -581,7 +581,7 @@ const RemoteControlMqttRpi: React.FC<RemoteControlMqttRpiProps> = ({ device, onD
 									onClick={() => setActivePage("overview")}
 									className={`p-2 rounded-lg transition-all duration-200 ${
 										activePage === "overview"
-											? "bg-white text-blue-600 shadow-sm dark:bg-zinc-700 dark:text-blue-400"
+											? "bg-white text-primary shadow-sm dark:bg-zinc-700 dark:text-primary"
 											: "text-gray-600 hover:bg-gray-200 dark:text-gray-400 dark:hover:bg-zinc-700 dark:hover:text-gray-300"
 									}`}
 									aria-label={t("remote-control.buttonOverview")}
@@ -593,7 +593,7 @@ const RemoteControlMqttRpi: React.FC<RemoteControlMqttRpiProps> = ({ device, onD
 									onClick={() => setActivePage("parameters")}
 									className={`p-2 rounded-lg transition-all duration-200 ${
 										activePage === "parameters"
-											? "bg-white text-blue-600 shadow-sm dark:bg-zinc-700 dark:text-blue-400"
+											? "bg-white text-primary shadow-sm dark:bg-zinc-700 dark:text-primary"
 											: "text-gray-600 hover:bg-gray-200 dark:text-gray-400 dark:hover:bg-zinc-700 dark:hover:text-gray-300"
 									}`}
 									aria-label={t("remote-control.buttonParameters")}
