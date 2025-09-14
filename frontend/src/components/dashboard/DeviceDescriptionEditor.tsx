@@ -47,6 +47,7 @@ const DeviceDescriptionEditor: React.FC<DeviceDescriptionEditorProps> = ({ devic
 				setIsEditing(false);
 				setErrorsInf({});
 				setStatusInf(null);
+				setEditedFields({});
 				updateDeviceSheet(device);
 			}
 		} catch {

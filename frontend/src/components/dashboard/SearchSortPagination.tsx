@@ -10,11 +10,12 @@ import { ListFilter } from "lucide-react";
 interface SearchSortPaginationProps {
 	devices: Device[];
 	setFilteredDevices: (devices: Device[]) => void;
+	onPaginationChange?: (info: { currentPage: number; totalPages: number; setCurrentPage: (page: number) => void; from: number; to: number; totalDevices: number }) => void;
 }
 
 const STATUSES = ["All", "Online", "Error", "Offline"];
 
-const SearchSortPagination: React.FC<SearchSortPaginationProps> = ({ devices, setFilteredDevices }) => {
+const SearchSortPagination: React.FC<SearchSortPaginationProps> = ({ devices, setFilteredDevices, onPaginationChange }) => {
 	const { t } = useTranslation("dashboard");
 
 	const [searchQuery, setSearchQuery] = useState("");
@@ -28,7 +29,6 @@ const SearchSortPagination: React.FC<SearchSortPaginationProps> = ({ devices, se
 	const [totalPages, setTotalPages] = useState<number>(0);
 
 	const filteredDevices = useMemo(() => {
-		setCurrentPage(1);
 		return devices.filter((device) => {
 			const matchesSearch =
 				searchQuery === "" ||
@@ -41,6 +41,25 @@ const SearchSortPagination: React.FC<SearchSortPaginationProps> = ({ devices, se
 			return matchesSearch && matchesStatus;
 		});
 	}, [devices, searchQuery, statusFilter]);
+
+	// Reset page only when search or status filter changes, not when devices array updates
+	useEffect(() => {
+		setCurrentPage(1);
+	}, [searchQuery, statusFilter]);
+
+	// Notify parent about pagination changes
+	useEffect(() => {
+		if (onPaginationChange) {
+			onPaginationChange({
+				currentPage,
+				totalPages,
+				setCurrentPage,
+				from,
+				to,
+				totalDevices,
+			});
+		}
+	}, [currentPage, totalPages, onPaginationChange, from, to, totalDevices]);
 
 	const paginatedDevices = useMemo(() => {
 		const start = (currentPage - 1) * itemsPerPage;
@@ -55,7 +74,14 @@ const SearchSortPagination: React.FC<SearchSortPaginationProps> = ({ devices, se
 			setTotalPages(0);
 		} else {
 			setTotalDevices(filteredDevices.length);
-			setTotalPages(Math.ceil(filteredDevices.length / itemsPerPage));
+			const newTotalPages = Math.ceil(filteredDevices.length / itemsPerPage);
+			setTotalPages(newTotalPages);
+
+			// Ensure current page doesn't exceed total pages
+			if (currentPage > newTotalPages && newTotalPages > 0) {
+				setCurrentPage(newTotalPages);
+				return; // Exit early, will re-run with updated currentPage
+			}
 
 			const startIndex = (currentPage - 1) * itemsPerPage + 1;
 			const endIndex = Math.min(currentPage * itemsPerPage, filteredDevices.length);

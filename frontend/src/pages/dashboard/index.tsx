@@ -11,6 +11,7 @@ import DeviceStatusSummary from "@/components/dashboard/DeviceStatusSummary";
 import FavouriteDevices from "@/components/dashboard/FavouriteDevices";
 import DeviceList from "@/components/dashboard/DeviceList";
 import SearchSortPagination from "@/components/dashboard/SearchSortPagination";
+import BottomPagination from "@/components/dashboard/BottomPagination";
 import EmptyDeviceState from "@/components/dashboard/EmptyDeviceState";
 import usePageTitle from "@/hooks/usePageTitle";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -26,6 +27,14 @@ const Dashboard: React.FC = () => {
 	const { updateDevice } = useDeviceContext();
 
 	const [filteredDevices, setFilteredDevices] = useState<Device[]>([]);
+	const [paginationInfo, setPaginationInfo] = useState<{
+		currentPage: number;
+		totalPages: number;
+		setCurrentPage: (page: number) => void;
+		from: number;
+		to: number;
+		totalDevices: number;
+	} | null>(null);
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -115,10 +124,19 @@ const Dashboard: React.FC = () => {
 								<SearchSortPagination
 									devices={devices}
 									setFilteredDevices={setFilteredDevices}
+									onPaginationChange={setPaginationInfo}
 								/>
 								<DeviceList
 									devices={filteredDevices}
 									moreInfo={moreInfo}
+								/>
+								<BottomPagination
+									currentPage={paginationInfo?.currentPage || 1}
+									totalPages={paginationInfo?.totalPages || 0}
+									onPageChange={(page) => paginationInfo?.setCurrentPage(page)}
+									from={paginationInfo?.from || 0}
+									to={paginationInfo?.to || 0}
+									totalDevices={paginationInfo?.totalDevices || 0}
 								/>
 							</>
 						)}
