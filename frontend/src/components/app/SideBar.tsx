@@ -167,7 +167,7 @@ export function DashboardSideBar() {
 												<SidebarMenuItem key={item.title}>
 													<SidebarMenuButton
 														onClick={item.action}
-														className="text-primary flex items-center"
+														className="flex items-center"
 													>
 														<item.icon />
 														<span>{item.title}</span>

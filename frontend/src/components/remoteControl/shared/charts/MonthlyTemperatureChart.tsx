@@ -113,21 +113,21 @@ const MonthlyTemperatureChart: React.FC<MonthlyTemperatureChartProps> = ({ data,
 
 		let interval: number | "preserveStartEnd" = 0;
 		let angle = 0;
-		let height = 40;
+		let height = 35;
 
 		if (isSmallScreen && dataLength > 6) {
 			// On very small screens with lots of data, show every 2nd or 3rd item
 			interval = dataLength > 12 ? 2 : 1;
 			angle = -45;
-			height = 60;
+			height = 35;
 		} else if (isMediumScreen && dataLength > 8) {
 			// On medium screens, angle text if there's too much data
 			angle = -30;
-			height = 50;
+			height = 35;
 		} else if (dataLength > 12) {
 			// On larger screens, still angle if there's a lot of data
 			angle = -15;
-			height = 45;
+			height = 35;
 		}
 
 		return { interval, angle, height };
@@ -196,7 +196,7 @@ const MonthlyTemperatureChart: React.FC<MonthlyTemperatureChartProps> = ({ data,
 			>
 				<BarChart
 					data={formattedData}
-					margin={{ top: 10, right: 10, left: 0, bottom: getXAxisConfig.height - 40 }}
+					margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
 					barGap={2}
 					barCategoryGap="15%"
 				>
