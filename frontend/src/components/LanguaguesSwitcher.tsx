@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Languages } from "lucide-react";
+import { isCzech, isEnglish } from "@/utils/syncLang";
 
 const LanguaguesSwitcher = () => {
 	const { i18n } = useTranslation("global");
@@ -24,13 +25,13 @@ const LanguaguesSwitcher = () => {
 			<DropdownMenuContent align="end">
 				<DropdownMenuItem
 					onClick={() => langSwitch("cs")}
-					className={i18n.language === "cs" ? "font-bold text-blue-500" : ""}
+					className={isCzech(i18n.language) ? "font-bold text-blue-500" : ""}
 				>
 					Čeština
 				</DropdownMenuItem>
 				<DropdownMenuItem
 					onClick={() => langSwitch("en")}
-					className={i18n.language === "en" ? "font-bold text-blue-500" : ""}
+					className={isEnglish(i18n.language) ? "font-bold text-blue-500" : ""}
 				>
 					English
 				</DropdownMenuItem>

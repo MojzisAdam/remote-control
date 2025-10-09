@@ -14,6 +14,8 @@ i18next
 		fallbackLng: "cs",
 		ns: ["global", "user", "dashboard", "cimErrors", "daitsuErrors"],
 		defaultNS: "global",
+		supportedLngs: ["cs", "en"],
+		lowerCaseLng: true,
 		backend: {
 			loadPath: "/locales/{{lng}}/{{ns}}.json",
 		},

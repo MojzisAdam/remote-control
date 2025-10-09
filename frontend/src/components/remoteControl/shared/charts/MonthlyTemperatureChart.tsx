@@ -150,8 +150,18 @@ const MonthlyTemperatureChart: React.FC<MonthlyTemperatureChartProps> = ({ data,
 	const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label }) => {
 		if (active && payload && payload.length) {
 			return (
-				<div className="bg-white dark:bg-gray-800 p-3 border border-gray-200 dark:border-gray-700 shadow-md rounded-md">
-					<p className="text-gray-600 dark:text-gray-300 text-sm font-medium mb-2">{label}</p>
+				<div
+					className={`
+					bg-white dark:bg-gray-800
+					border border-gray-200 dark:border-gray-700
+					shadow-md rounded-md
+					p-3 sm:p-4
+					max-w-[220px] sm:max-w-xs
+					text-xs sm:text-sm
+					break-words
+				`}
+				>
+					<p className="text-gray-600 dark:text-gray-300 font-medium mb-2 truncate">{label}</p>
 					{payload.map((entry, index) => {
 						const metricKey = entry.dataKey as keyof typeof chartConfig;
 						const unit = chartConfig[metricKey]?.unit || "";
@@ -160,17 +170,17 @@ const MonthlyTemperatureChart: React.FC<MonthlyTemperatureChartProps> = ({ data,
 						return (
 							<div
 								key={`item-${index}`}
-								className="flex justify-between items-center mb-1"
+								className="flex justify-between items-center mb-1 gap-2"
 							>
 								<span
 									style={{ color: entry.color }}
-									className="text-sm mr-4"
+									className="truncate"
 								>
 									{chartConfig[metricKey]?.label || metricKey}:
 								</span>
 								<span
 									style={{ color: entry.color }}
-									className="text-sm font-medium"
+									className="font-medium whitespace-nowrap"
 								>
 									{entry.value.toFixed(1)} {unit}
 								</span>
@@ -188,10 +198,10 @@ const MonthlyTemperatureChart: React.FC<MonthlyTemperatureChartProps> = ({ data,
 	}
 
 	return (
-		<div className="flex flex-col w-full">
+		<div className="flex flex-col w-full overflow-visible">
 			<ChartContainer
 				config={chartConfig}
-				className="h-[300px] w-full"
+				className="h-[300px] w-full overflow-visible"
 				data-chart-container
 			>
 				<BarChart

@@ -14,6 +14,8 @@ import { useTheme } from "next-themes";
 import { useAccentColor } from "@/hooks/useAccentColor";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import usePageTitle from "@/hooks/usePageTitle";
+import { isCzech, isEnglish } from "@/utils/syncLang";
+import { is } from "date-fns/locale";
 
 const Settings: React.FC = () => {
 	const [settings, setSettings] = useState<AppSettings>(getSettings());
@@ -272,7 +274,7 @@ const Settings: React.FC = () => {
 								<Label className="text-sm">Language</Label>
 								<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 									<Button
-										variant={i18n.language === "en" ? "default" : "outline"}
+										variant={isEnglish(i18n.language) ? "default" : "outline"}
 										className="flex items-center justify-start gap-2 p-3 h-auto w-full"
 										onClick={() => handleLanguageChange("en")}
 									>
@@ -281,7 +283,7 @@ const Settings: React.FC = () => {
 									</Button>
 
 									<Button
-										variant={i18n.language === "cs" ? "default" : "outline"}
+										variant={isCzech(i18n.language) ? "default" : "outline"}
 										className="flex items-center justify-start gap-2 p-3 h-auto w-full"
 										onClick={() => handleLanguageChange("cs")}
 									>

@@ -19,6 +19,7 @@ import { useDeviceContext } from "@/provider/DeviceProvider";
 import { cs, enUS } from "date-fns/locale";
 import { format } from "date-fns";
 import { isDaitsuDevice } from "@/utils/deviceTypeUtils";
+import { isCzech, isEnglish } from "@/utils/syncLang";
 
 interface ParameterOption {
 	[key: string]: string;
@@ -112,13 +113,13 @@ const DeviceParameterLog = () => {
 				let parameterModule;
 
 				if (isDaitsuDevice(currentDevice)) {
-					if (i18n.language === "cs") {
+					if (isCzech(i18n.language)) {
 						parameterModule = await import("@/jsons/parameters_daitsu_cz.json");
 					} else {
 						parameterModule = await import("@/jsons/parameters_daitsu.json");
 					}
 				} else {
-					if (i18n.language === "cs") {
+					if (isCzech(i18n.language)) {
 						parameterModule = await import("@/jsons/parameters_cz.json");
 					} else {
 						parameterModule = await import("@/jsons/parameters.json");

@@ -12,6 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { useTranslation } from "react-i18next";
 import parametersDataEN from "@/jsons/parameters_daitsu.json";
 import parametersDataCZ from "@/jsons/parameters_daitsu_cz.json";
+import { isCzech } from "@/utils/syncLang";
 
 import { useDeviceParameterLogs } from "@/hooks/useDeviceParameterLogs";
 
@@ -155,7 +156,7 @@ const setRangeValue = (value: number, startBit: number, endBit: number, rangeVal
 export const DeviceParameters: React.FC<DeviceParametersProps> = ({ deviceId, deviceData, onUpdateParameter, isExtendedMode = false }) => {
 	const { logChange } = useDeviceParameterLogs();
 	const { i18n, t } = useTranslation("remote-control");
-	const parametersData = i18n.language === "cs" ? parametersDataCZ : parametersDataEN;
+	const parametersData = isCzech(i18n.language) ? parametersDataCZ : parametersDataEN;
 
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 	const [selectedParameter, setSelectedParameter] = useState<{

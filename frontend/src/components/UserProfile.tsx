@@ -18,6 +18,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "next-themes";
 import { useToast } from "@/hooks/use-toast";
+import { isCzech, isEnglish } from "@/utils/syncLang";
 
 export function UserProfile() {
 	const { toast } = useToast();
@@ -86,13 +87,13 @@ export function UserProfile() {
 						<DropdownMenuSubContent>
 							<DropdownMenuItem
 								onClick={() => langSwitch("cs")}
-								className={i18n.language === "cs" ? "font-bold text-blue-500" : ""}
+								className={isCzech(i18n.language) ? "font-bold text-blue-500" : ""}
 							>
 								Čeština
 							</DropdownMenuItem>
 							<DropdownMenuItem
 								onClick={() => langSwitch("en")}
-								className={i18n.language === "en" ? "font-bold text-blue-500" : ""}
+								className={isEnglish(i18n.language) ? "font-bold text-blue-500" : ""}
 							>
 								English
 							</DropdownMenuItem>
