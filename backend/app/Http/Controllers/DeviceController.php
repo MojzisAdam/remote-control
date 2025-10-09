@@ -346,6 +346,7 @@ class DeviceController extends Controller
             'id' => 'required|string',
             'password' => 'present|nullable|string',
             'display_type' => 'required|string',
+            'device_type_id' => 'nullable|string|exists:device_types,id',
             'ip' => 'nullable|ip',
             'error_code' => 'nullable|integer',
             'script_v' => 'nullable|string',
@@ -356,6 +357,7 @@ class DeviceController extends Controller
             return DB::transaction(function () use ($validated) {
                 $updateData = [
                     'display_type' => $validated['display_type'],
+                    'device_type_id' => $validated['device_type_id'] ?? null,
                     'last_activity' => now(),
                     'ip' => $validated['ip'] ?? null,
                     'error_code' => $validated['error_code'] ?? 0,
@@ -394,7 +396,7 @@ class DeviceController extends Controller
                     // Batch insert related records
                     DeviceDescription::insert(['device_id' => $deviceId]);
 
-                    // Only insert DeviceData and DeviceParameterChange for device types 1 and 2
+                    // Only insert DeviceData and DeviceParameterChange for device display types 1 and 2
                     if ($validated['display_type'] != '3') {
                         DeviceData::insert(['device_id' => $deviceId]);
                         DeviceParameterChange::insert(['device_id' => $deviceId]);

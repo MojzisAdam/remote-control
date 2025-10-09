@@ -1,4 +1,4 @@
-import { Home, Settings, Users, Laptop, History, Computer, Bell, ScrollText, Info } from "lucide-react";
+import { Home, Settings, Users, Laptop, History, Computer, Bell, ScrollText, Info, ServerCog } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Link } from "react-router-dom";
@@ -178,6 +178,25 @@ export function DashboardSideBar() {
 								</SidebarGroupContent>
 							</>
 						)}
+
+						<Separator className="my-2" />
+
+						<SidebarGroupContent title={t("sidebar.automations")}>
+							<SidebarMenu>
+								<SidebarMenuItem key="Settings">
+									<SidebarMenuButton asChild>
+										<Link
+											to={routes.automations}
+											className={isActiveLink(routes.automations)}
+											onClick={() => setOpenMobile(false)}
+										>
+											<ServerCog />
+											<span>{t("sidebar.automations")}</span>
+										</Link>
+									</SidebarMenuButton>
+								</SidebarMenuItem>
+							</SidebarMenu>
+						</SidebarGroupContent>
 
 						{/* Admin Controls Group */}
 						{(hasPermission("manage-users") || hasPermission("manage-devices")) && (

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import {
 	listUserDevices,
 	addDevice,
@@ -32,8 +32,13 @@ export const useDevices = () => {
 		in_error: 0,
 	});
 
+	// Clear error helper
+	const clearError = useCallback(() => {
+		setError(null);
+	}, []);
+
 	// Helper function to sort devices consistently
-	const sortDevices = (devicesToSort: Device[]): Device[] => {
+	const sortDevices = useCallback((devicesToSort: Device[]): Device[] => {
 		return [...devicesToSort].sort((a, b) => {
 			// First compare by own_name (devices with own_name come first)
 			if (a.own_name && b.own_name) {
@@ -47,10 +52,24 @@ export const useDevices = () => {
 			// If neither has own_name, sort by id
 			return a.id.localeCompare(b.id);
 		});
-	};
+	}, []);
+
+	const getDeviceStatus = useCallback((device: Device): "online" | "error" | "offline" => {
+		if (!device.last_activity) return "offline";
+
+		const lastActivityTime = new Date(device.last_activity).getTime();
+		const fiveMinutesAgo = Date.now() - 10 * 60 * 1000;
+
+		if (lastActivityTime >= fiveMinutesAgo) {
+			return device.error_code > 0 ? "error" : "online";
+		}
+
+		return "offline";
+	}, []);
 
 	// Fetch all devices added by the user
-	const fetchUserDevices = async (): Promise<ApiHandlerResult> => {
+	const fetchUserDevices = useCallback(async (): Promise<ApiHandlerResult> => {
+		clearError();
 		setLoading(true);
 		const result = await handleApiRequest({
 			apiCall: listUserDevices,
@@ -69,7 +88,7 @@ export const useDevices = () => {
 		}
 		setLoading(false);
 		return result;
-	};
+	}, [clearError, getDeviceStatus, sortDevices]);
 
 	const fetchDevicesWithFilters = async (
 		filters: {
@@ -240,19 +259,6 @@ export const useDevices = () => {
 
 		setLoading(false);
 		return result;
-	};
-
-	const getDeviceStatus = (device: Device): "online" | "error" | "offline" => {
-		if (!device.last_activity) return "offline";
-
-		const lastActivityTime = new Date(device.last_activity).getTime();
-		const fiveMinutesAgo = Date.now() - 10 * 60 * 1000;
-
-		if (lastActivityTime >= fiveMinutesAgo) {
-			return device.error_code > 0 ? "error" : "online";
-		}
-
-		return "offline";
 	};
 
 	const updateDeviceList = (updatedDevice: Device) => {

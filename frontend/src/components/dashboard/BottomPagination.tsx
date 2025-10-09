@@ -20,7 +20,7 @@ const BottomPagination: React.FC<BottomPaginationProps> = ({ currentPage, totalP
 	}
 
 	return (
-		<div className="flex items-center justify-end space-x-2 py-4 max-lg:justify-start mt-2">
+		<div className="flex items-center justify-end space-x-2 py-4 max-lg:justify-start mt-2 pb-0">
 			<div className="text-sm text-muted-foreground">
 				<p>
 					{t("search-sort-pagination.showing")} <span>{from}</span> {t("search-sort-pagination.to")} <span>{to}</span> {t("search-sort-pagination.of")} <span>{totalDevices}</span>

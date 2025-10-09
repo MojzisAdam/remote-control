@@ -75,7 +75,7 @@ const DeviceNameEditor: React.FC<DeviceNameEditorProps> = ({ device, updateDevic
 									<Loader2 className="animate-spin" />
 								</Button>
 							) : (
-								<div className="space-x-1">
+								<div className="flex space-x-1">
 									<Button
 										variant="ghost"
 										size="icon"

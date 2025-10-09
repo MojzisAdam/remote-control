@@ -1,0 +1,53 @@
+{
+    "status": {
+        "success": "Úspěch",
+        "failed": "Selhalo",
+        "skipped": "Přeskočeno",
+        "partial": "Částečné",
+        "warning": "Varování",
+        "unknown": "Neznámé"
+    },
+    "statusDescriptions": {
+        "success": "Automatizace byla úspěšně provedena",
+        "failed": "Provedení automatizace selhalo",
+        "skipped": "Automatizace byla přeskočena kvůli nesplněným podmínkám",
+        "partial": "Automatizace byla provedena částečně - některé akce byly dokončeny",
+        "warning": "Automatizace byla provedena s varováními",
+        "unknown": "Neznámý stav"
+    },
+    "logs": {
+        "title": "Protokoly provedení",
+        "description": "Zobrazte podrobné protokoly provedení této automatizace včetně stavu, časových značek a detailů chyb.",
+        "noLogs": "Nenalezeny žádné protokoly provedení",
+        "noLogsDescription": "Tato automatizace ještě nebyla provedena.",
+        "noMatches": "Žádné protokoly neodpovídají vašim aktuálním filtrům",
+        "totalExecutions": "Celkem provedení",
+        "successful": "Úspěšné",
+        "failed": "Selhané", 
+        "skipped": "Přeskočené",
+        "partial": "Částečné",
+        "warning": "Varování",
+        "successRate": "Míra úspěšnosti",
+        "executedAt": "Provedeno",
+        "duration": "Doba trvání",
+        "details": "Detaily",
+        "status": "Stav",
+        "filterAll": "Vše",
+        "refresh": "Obnovit",
+        "search": "Hledat v protokolech...",
+        "automationNotFound": "Automatizace nenalezena",
+        "automationNotFoundDescription": "Automatizace, kterou hledáte, neexistuje nebo nemáte oprávnění ji zobrazit.",
+        "backToAutomations": "Zpět na automatizace",
+        "loadingError": "Chyba při načítání protokolů automatizace",
+        "unexpectedError": "Při načítání protokolů došlo k neočekávané chybě"
+    },
+    "statistics": {
+        "total": "Celkem",
+        "successful": "Úspěšné", 
+        "failed": "Selhané",
+        "skipped": "Přeskočené",
+        "partial": "Částečné",
+        "warning": "Varování",
+        "successRate": "Míra úspěšnosti"
+    }
+}

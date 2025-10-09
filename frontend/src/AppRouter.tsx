@@ -22,6 +22,9 @@ import LoadingPage from "@/components/loadingPage";
 import AppLayout from "@/components/layouts/AppLayout";
 import GuestLayout from "@/components/layouts/GuestLayout";
 import ErrorLayout from "@/components/layouts/ErrorLayout";
+import AutomationList from "@/pages/automations";
+import AutomationBuilder from "@/pages/automations/builder";
+import AutomationLogs from "@/pages/automations/logs";
 import { ForcePasswordChangeModal } from "@/components/user-management/force-password-change-modal";
 
 const PUBLIC_PAGES = ["/", "/login", "/register", "/forgot-password", "/email-verification", "/reset-password", "/404", "/apps"];
@@ -184,6 +187,22 @@ const AppRouter: React.FC = () => {
 					<Route
 						path="/settings"
 						element={<Settings />}
+					/>
+					<Route
+						path="/automations"
+						element={<AutomationList />}
+					/>
+					<Route
+						path="/automations/builder"
+						element={<AutomationBuilder />}
+					/>
+					<Route
+						path="/automations/builder/:automationId"
+						element={<AutomationBuilder />}
+					/>
+					<Route
+						path="/automations/logs/:automationId"
+						element={<AutomationLogs />}
 					/>
 				</Route>
 

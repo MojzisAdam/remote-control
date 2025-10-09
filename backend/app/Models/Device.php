@@ -18,6 +18,7 @@ class Device extends Model
         'password',
         'ip',
         'display_type',
+        'device_type_id',
         'script_version',
         'fw_version',
         'last_activity',
@@ -25,6 +26,14 @@ class Device extends Model
         'send_data_until',
         'error_code',
     ];
+
+    /**
+     * Get the device type for this device
+     */
+    public function type()
+    {
+        return $this->belongsTo(DeviceType::class, 'device_type_id');
+    }
 
     protected $casts = [
         'send_data' => 'boolean',
@@ -58,5 +67,29 @@ class Device extends Model
     public function description()
     {
         return $this->hasOne(DeviceDescription::class);
+    }
+
+    /**
+     * Get automation triggers that reference this device
+     */
+    public function automationTriggers()
+    {
+        return $this->hasMany(AutomationTrigger::class);
+    }
+
+    /**
+     * Get automation conditions that reference this device
+     */
+    public function automationConditions()
+    {
+        return $this->hasMany(AutomationCondition::class);
+    }
+
+    /**
+     * Get automation actions that target this device
+     */
+    public function automationActions()
+    {
+        return $this->hasMany(AutomationAction::class);
     }
 }

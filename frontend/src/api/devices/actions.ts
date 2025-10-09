@@ -1,5 +1,5 @@
 import axios from "@/utils/axios";
-import { Device, DeviceDescription, DeviceUser, DeviceParameterLog } from "@/api/devices/model";
+import { Device, DeviceDescription, DeviceUser, DeviceParameterLog, DeviceType } from "@/api/devices/model";
 import { AxiosResponse } from "axios";
 import { User } from "@/api/user/model";
 
@@ -137,4 +137,46 @@ export const addDeviceToUser = async (deviceId: string, email: string, ownName: 
 		own_name: ownName,
 	});
 	return response.data;
+};
+
+// Get all device types
+export const listDeviceTypes = async (search?: string): Promise<DeviceType[]> => {
+	const response = await axios.get("/device-types", { params: { search } });
+	return response.data.device_types;
+};
+
+// Get a specific device type by ID
+export const getDeviceType = async (id: string): Promise<DeviceType> => {
+	const response = await axios.get(`/device-types/${id}`);
+	return response.data.device_type;
+};
+
+// Create a new device type
+export const createDeviceType = async (data: { id: string; name: string; description?: string; capabilities: Record<string, any> | string[] }): Promise<DeviceType> => {
+	const response = await axios.post("/device-types", data);
+	return response.data.device_type;
+};
+
+// Update a device type
+export const updateDeviceType = async (id: string, data: Partial<{ name: string; description?: string; capabilities: Record<string, any> | string[] }>): Promise<DeviceType> => {
+	const response = await axios.put(`/device-types/${id}`, data);
+	return response.data.device_type;
+};
+
+// Delete a device type
+export const deleteDeviceType = async (id: string): Promise<{ message: string }> => {
+	const response = await axios.delete(`/device-types/${id}`);
+	return { message: response.data.message };
+};
+
+// Get all devices belonging to a device type
+export const getDevicesByType = async (typeId: string): Promise<Device[]> => {
+	const response = await axios.get(`/device-types/${typeId}/devices`);
+	return response.data.devices;
+};
+
+// Get capabilities of a specific device
+export const getDeviceCapabilities = async (deviceId: string): Promise<Record<string, any> | string[]> => {
+	const response = await axios.get(`/devices/${deviceId}/capabilities`);
+	return response.data.capabilities;
 };

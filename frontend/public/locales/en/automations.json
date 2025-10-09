@@ -1,0 +1,53 @@
+{
+    "status": {
+        "success": "Success",
+        "failed": "Failed",
+        "skipped": "Skipped",
+        "partial": "Partial",
+        "warning": "Warning",
+        "unknown": "Unknown"
+    },
+    "statusDescriptions": {
+        "success": "Automation executed successfully",
+        "failed": "Automation execution failed",
+        "skipped": "Automation was skipped due to conditions not being met",
+        "partial": "Automation partially executed - some actions completed",
+        "warning": "Automation executed with warnings",
+        "unknown": "Unknown status"
+    },
+    "logs": {
+        "title": "Execution Logs",
+        "description": "View detailed execution logs for this automation including status, timestamps, and error details.",
+        "noLogs": "No execution logs found",
+        "noLogsDescription": "This automation hasn't been executed yet.",
+        "noMatches": "No logs match your current filters",
+        "totalExecutions": "Total Executions",
+        "successful": "Successful",
+        "failed": "Failed", 
+        "skipped": "Skipped",
+        "partial": "Partial",
+        "warning": "Warning",
+        "successRate": "Success Rate",
+        "executedAt": "Executed At",
+        "duration": "Duration",
+        "details": "Details",
+        "status": "Status",
+        "filterAll": "All",
+        "refresh": "Refresh",
+        "search": "Search logs...",
+        "automationNotFound": "Automation Not Found",
+        "automationNotFoundDescription": "The automation you're looking for doesn't exist or you don't have permission to view it.",
+        "backToAutomations": "Back to Automations",
+        "loadingError": "Error loading automation logs",
+        "unexpectedError": "An unexpected error occurred while loading logs"
+    },
+    "statistics": {
+        "total": "Total",
+        "successful": "Successful", 
+        "failed": "Failed",
+        "skipped": "Skipped",
+        "partial": "Partial",
+        "warning": "Warning",
+        "successRate": "Success Rate"
+    }
+}

@@ -21,6 +21,7 @@ class DeviceResource extends JsonResource
             'id' => $this->id,
             'ip' => $this->ip,
             'display_type' => $this->display_type,
+            'device_type_id' => $this->device_type_id,
             'script_version' => $this->script_version,
             'fw_version' => $this->fw_version,
             'last_activity' => $this->last_activity,

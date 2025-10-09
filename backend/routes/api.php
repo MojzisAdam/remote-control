@@ -10,6 +10,9 @@ use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RemoteControlApiController;
 use App\Http\Controllers\RpiController;
+use App\Http\Controllers\AutomationController;
+use App\Http\Controllers\AutomationRunnerController;
+use App\Http\Controllers\DeviceTypeController;
 
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -32,6 +35,26 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/notifications/{notificationId}/mark-as-seen', [NotificationController::class, 'markNotificationAsSeen']);
     Route::get('/notifications/unseen', [NotificationController::class, 'getUnseenNotifications']);
     Route::put('/notifications/mark-all-seen', [NotificationController::class, 'markAllNotificationsAsSeen']);
+
+    Route::get('/automations/stats', [AutomationController::class, 'stats']);
+    Route::apiResource('automations', AutomationController::class);
+    Route::put('/automations/{automation}/toggle', [AutomationController::class, 'toggle']);
+    Route::get('/automations/{automation}/logs', [AutomationController::class, 'logs']);
+    Route::get('/automations/{automation}/logs/stats', [AutomationController::class, 'logsStats']);
+
+    Route::post('/device-types/validate-mqtt-config', [DeviceTypeController::class, 'validateMqttConfiguration']);
+
+    Route::get('/device-types', [DeviceTypeController::class, 'index']);
+    Route::get('/device-types/{id}', [DeviceTypeController::class, 'show']);
+    Route::get('/device-types/{typeId}/devices', [DeviceTypeController::class, 'getDevices']);
+    Route::get('/devices/{deviceId}/capabilities', [DeviceTypeController::class, 'getDeviceCapabilities']);
+});
+
+Route::middleware(['auth:sanctum', 'permission:manage-device-types'])->group(function () {
+    Route::post('/device-types', [DeviceTypeController::class, 'store']);
+    Route::put('/device-types/{id}', [DeviceTypeController::class, 'update']);
+    Route::patch('/device-types/{id}', [DeviceTypeController::class, 'update']);
+    Route::delete('/device-types/{id}', [DeviceTypeController::class, 'destroy']);
 });
 
 Route::middleware(['auth:sanctum', 'device.ownership'])->group(function () {
@@ -73,7 +96,7 @@ Route::middleware(['auth:sanctum', 'device.ownership', 'permission:view-history'
 });
 
 
-Route::middleware('auth:sanctum', 'permission:manage-devices')->group(function () {
+Route::middleware(['auth:sanctum', 'permission:manage-devices'])->group(function () {
     Route::get('/manage-devices', [DeviceController::class, 'listDevices']);
     Route::get('/manage-devices/summary', [DeviceController::class, 'deviceSummary']);
     Route::get('/devices/{deviceId}/users', [DeviceController::class, 'getDeviceUsers']);
@@ -82,7 +105,7 @@ Route::middleware('auth:sanctum', 'permission:manage-devices')->group(function (
     Route::post('/manage-devices/add-to-user', [DeviceController::class, 'addDeviceToUser']);
 });
 
-Route::middleware('auth:sanctum', 'permission:manage-users')->group(function () {
+Route::middleware(['auth:sanctum', 'permission:manage-users'])->group(function () {
     Route::get('/users', [UserManagementController::class, 'index']);
     Route::get('/users/{user}', [UserManagementController::class, 'show']);
     Route::post('/users', [UserManagementController::class, 'store']);
@@ -103,6 +126,23 @@ Route::post('/reset-password', [\Laravel\Fortify\Http\Controllers\NewPasswordCon
 Route::post('/devices', [DeviceController::class, 'updateOrCreateDevice'])->middleware('api_key:device');
 Route::post('/device-history', [HistoryController::class, 'insertHistory'])->middleware('api_key:history');
 Route::post('/device/notify', [NotificationController::class, 'notifyDeviceError'])->middleware('api_key:notify');
+
+// Automation runner routes
+Route::middleware('api_key:automation_runner')->group(function () {
+    Route::get('/automation-runner/active-automations', [AutomationRunnerController::class, 'getActiveAutomations']);
+    Route::post('/automation-runner/log-execution', [AutomationRunnerController::class, 'logExecution']);
+    Route::post('/automation-runner/log-batch-execution', [AutomationRunnerController::class, 'logBatchExecution']);
+    Route::post('/automation-runner/devices/data', [AutomationRunnerController::class, 'getDevicesData']);
+    Route::get('/automation-runner/health', [AutomationRunnerController::class, 'health']);
+
+    Route::get('/automation-runner/device-types', [DeviceTypeController::class, 'index']);
+
+    // MQTT topic management routes
+    Route::get('/automation-runner/mqtt-topics', [DeviceTypeController::class, 'getAutomationTopics']);
+    Route::get('/automation-runner/device-types/automation-enabled', [DeviceTypeController::class, 'getAutomationEnabledDeviceTypes']);
+    Route::get('/automation-runner/device-types/{deviceTypeId}/topics', [DeviceTypeController::class, 'getMqttTopics']);
+    Route::get('/automation-runner/device-types/{deviceTypeId}/devices-with-topics', [DeviceTypeController::class, 'getDevicesWithTopics']);
+});
 
 Route::post('/261dfg59_4', [RpiController::class, 'handleRequest']);
 Route::post('/261dfg59_4.php', [RpiController::class, 'handleRequest']);

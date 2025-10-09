@@ -31,6 +31,7 @@
     "@tailwindcss/vite": "^4.0.17",
     "@tanstack/react-query": "^5.69.2",
     "@tanstack/react-table": "^8.20.6",
+    "@xyflow/react": "^12.8.5",
     "axios": "^1.7.9",
     "chart.js": "^4.4.8",
     "chartjs-adapter-date-fns": "^3.0.0",

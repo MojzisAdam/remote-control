@@ -84,6 +84,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get the automations for the user
+     */
+    public function automations()
+    {
+        return $this->hasMany(Automation::class);
+    }
+
+    /**
      * Check if the user is a super admin.
      * 
      * @return bool

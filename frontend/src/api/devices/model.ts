@@ -2,6 +2,7 @@ export interface Device {
 	id: string;
 	ip: string;
 	display_type: string;
+	device_type_id?: string;
 	script_version: string;
 	fw_version: string;
 	last_activity: string | null;
@@ -13,6 +14,7 @@ export interface Device {
 	updated_at?: string;
 
 	description?: DeviceDescription;
+	type?: DeviceType;
 	own_name?: string;
 	favourite?: boolean;
 	notifications?: boolean;
@@ -20,6 +22,15 @@ export interface Device {
 	favouriteOrder: number;
 
 	status: "online" | "error" | "offline";
+}
+
+export interface DeviceType {
+	id: string;
+	name: string;
+	description?: string;
+	capabilities: string[] | Record<string, any>;
+	created_at: string;
+	updated_at: string;
 }
 
 export type DeviceDescription = {

@@ -7,6 +7,10 @@ const routes = {
 	parameterLog: (deviceId: string) => `/parameter-log/${deviceId}`,
 	settings: "/settings",
 	apps: "/apps",
+	automations: "/automations",
+	automationBuilder: "/automations/builder",
+	automationBuilderEdit: (automationId: number) => `/automations/builder/${automationId}`,
+	automationLogs: (automationId: number) => `/automations/logs/${automationId}`,
 };
 
 export default routes;
