@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import {
 	getAutomations,
 	getAutomation,
@@ -15,6 +16,7 @@ import { ApiHandlerResult, handleApiRequest } from "@/utils/apiHandler";
 import { Automation, CreateAutomationRequest, UpdateAutomationRequest, AutomationListResponse, AutomationLogsResponse } from "@/api/automation/model";
 
 export const useAutomations = () => {
+	const { t } = useTranslation("automations");
 	const [loading, setLoading] = useState(false);
 	const [automations, setAutomations] = useState<Automation[]>([]);
 	const [currentAutomation, setCurrentAutomation] = useState<Automation | null>(null);
@@ -49,13 +51,12 @@ export const useAutomations = () => {
 
 			const result = await handleApiRequest({
 				apiCall: () => getAutomations(params),
-				successMessage: "Automations fetched successfully",
+				successMessage: t("hookMessages.automationsFetched"),
 				statusHandlers: {
-					404: () => setError("No automations found"),
-					403: () => setError("You are not authorized to view automations"),
+					404: () => setError(t("hookMessages.noAutomationsFound")),
+					403: () => setError(t("hookMessages.notAuthorizedToViewAutomations")),
 				},
 			});
-
 			if (result.success && result.data) {
 				const response = result.data as AutomationListResponse;
 				setAutomations(response.data || []);
@@ -81,9 +82,9 @@ export const useAutomations = () => {
 
 		const result = await handleApiRequest({
 			apiCall: () => getAutomationStats(params),
-			successMessage: "Automation stats fetched successfully",
+			successMessage: t("hookMessages.automationStatsFetched"),
 			statusHandlers: {
-				403: () => setError("You are not authorized to view automation statistics"),
+				403: () => setError(t("hookMessages.notAuthorizedToViewStats")),
 			},
 		});
 
@@ -103,13 +104,12 @@ export const useAutomations = () => {
 
 			const result = await handleApiRequest({
 				apiCall: () => getAutomation(id),
-				successMessage: "Automation fetched successfully",
+				successMessage: t("hookMessages.automationFetched"),
 				statusHandlers: {
-					404: () => setError("Automation not found"),
-					403: () => setError("You are not authorized to view this automation"),
+					404: () => setError(t("hookMessages.automationNotFound")),
+					403: () => setError(t("hookMessages.notAuthorizedToView")),
 				},
 			});
-
 			if (result.success && result.data) {
 				setCurrentAutomation(result.data.data as Automation);
 			}
@@ -141,10 +141,10 @@ export const useAutomations = () => {
 
 		const result = await handleApiRequest({
 			apiCall: () => createAutomation(data),
-			successMessage: "Automation created successfully",
+			successMessage: t("hookMessages.automationCreated"),
 			statusHandlers: {
-				422: () => setError("Validation failed. Please check your input"),
-				403: () => setError("You do not have access to one or more specified devices"),
+				422: () => setError(t("hookMessages.validationFailed")),
+				403: () => setError(t("hookMessages.noAccessToDevices")),
 			},
 		});
 
@@ -164,11 +164,11 @@ export const useAutomations = () => {
 
 		const result = await handleApiRequest({
 			apiCall: () => updateAutomation(id, data),
-			successMessage: "Automation updated successfully",
+			successMessage: t("hookMessages.automationUpdated"),
 			statusHandlers: {
-				404: () => setError("Automation not found"),
-				403: () => setError("You are not authorized to update this automation"),
-				422: () => setError("Validation failed. Please check your input"),
+				404: () => setError(t("hookMessages.automationNotFound")),
+				403: () => setError(t("hookMessages.notAuthorizedToUpdate")),
+				422: () => setError(t("hookMessages.validationFailed")),
 			},
 		});
 
@@ -192,10 +192,10 @@ export const useAutomations = () => {
 
 		const result = await handleApiRequest({
 			apiCall: () => deleteAutomation(id),
-			successMessage: "Automation deleted successfully",
+			successMessage: t("hookMessages.automationDeleted"),
 			statusHandlers: {
-				404: () => setError("Automation not found"),
-				403: () => setError("You are not authorized to delete this automation"),
+				404: () => setError(t("hookMessages.automationNotFound")),
+				403: () => setError(t("hookMessages.notAuthorizedToDelete")),
 			},
 		});
 
@@ -219,10 +219,10 @@ export const useAutomations = () => {
 
 		const result = await handleApiRequest({
 			apiCall: () => toggleAutomation(id),
-			successMessage: "Automation status updated successfully",
+			successMessage: t("hookMessages.automationStatusUpdated"),
 			statusHandlers: {
-				404: () => setError("Automation not found"),
-				403: () => setError("You are not authorized to modify this automation"),
+				404: () => setError(t("hookMessages.automationNotFound")),
+				403: () => setError(t("hookMessages.notAuthorizedToModify")),
 			},
 		});
 
@@ -268,10 +268,10 @@ export const useAutomations = () => {
 
 		const result = await handleApiRequest({
 			apiCall: () => getAutomationLogs(id, params),
-			successMessage: "Automation logs fetched successfully",
+			successMessage: t("hookMessages.automationLogsFetched"),
 			statusHandlers: {
-				404: () => setError("Automation not found"),
-				403: () => setError("You are not authorized to view logs for this automation"),
+				404: () => setError(t("hookMessages.automationNotFound")),
+				403: () => setError(t("hookMessages.notAuthorizedToViewLogs")),
 			},
 		});
 
@@ -289,10 +289,10 @@ export const useAutomations = () => {
 	): Promise<ApiHandlerResult> => {
 		const result = await handleApiRequest({
 			apiCall: () => getAutomationLogsStats(id, params),
-			successMessage: "Automation logs stats fetched successfully",
+			successMessage: t("hookMessages.automationLogsStatsFetched"),
 			statusHandlers: {
-				404: () => setError("Automation not found"),
-				403: () => setError("You are not authorized to view logs statistics for this automation"),
+				404: () => setError(t("hookMessages.automationNotFound")),
+				403: () => setError(t("hookMessages.notAuthorizedToViewLogsStats")),
 			},
 		});
 

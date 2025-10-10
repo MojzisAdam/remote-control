@@ -7,6 +7,7 @@ import { Settings, Trash2, Smartphone, Bell, FileText, Wrench } from "lucide-rea
 import { FlowData } from "@/api/automation/model";
 import { getActionIconComponent, getActionTypeLabel } from "@/constants/automation";
 import { useDeviceCapabilityHelper } from "@/hooks/useDeviceCapabilityHelper";
+import { useTranslation } from "react-i18next";
 import { Device } from "@/api/devices/model";
 
 interface ActionNodeProps extends NodeProps {
@@ -17,6 +18,7 @@ interface ActionNodeProps extends NodeProps {
 }
 
 const ActionNode: React.FC<ActionNodeProps> = ({ data, selected, id, onDelete, onSettings, devices, capabilityHelper }) => {
+	const { t } = useTranslation("automations");
 	const actionData = data as FlowData;
 
 	const { getFieldOptionsForDevice } = capabilityHelper;
@@ -43,7 +45,7 @@ const ActionNode: React.FC<ActionNodeProps> = ({ data, selected, id, onDelete, o
 
 	const getConfigSummary = () => {
 		const config = actionData.config;
-		if (!config) return <p className="text-xs text-yellow-600">Not configured</p>;
+		if (!config) return <p className="text-xs text-yellow-600">{t("builder.notConfigured")}</p>;
 
 		const actionType = actionData.action_type;
 		const deviceName = config.device_id ? getDeviceName(config.device_id) : null;
@@ -109,7 +111,7 @@ const ActionNode: React.FC<ActionNodeProps> = ({ data, selected, id, onDelete, o
 						{deviceName}
 					</div>
 				) : (
-					<p className="text-xs">Configured</p>
+					<p className="text-xs">{t("builder.configured")}</p>
 				);
 		}
 	};
@@ -123,12 +125,12 @@ const ActionNode: React.FC<ActionNodeProps> = ({ data, selected, id, onDelete, o
 					<div className="flex items-center space-x-2">
 						<div className="p-1 bg-green-100 dark:bg-green-700  rounded">{getActionIcon(actionType)}</div>
 						<div>
-							<h4 className="text-sm font-medium">Action</h4>
+							<h4 className="text-sm font-medium">{t("nodes.action")}</h4>
 							<Badge
 								variant="secondary"
 								className="text-xs"
 							>
-								{getActionTypeLabel(actionType)}
+								{t(getActionTypeLabel(actionType).labelKey)}
 							</Badge>
 						</div>
 					</div>

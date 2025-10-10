@@ -4,7 +4,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 import { HardDrive } from "lucide-react";
 import { Device } from "@/api/devices/model";
-import { getConditionTypes, DAYS_OF_WEEK } from "@/constants/automation";
+import { getConditionTypes, DAYS_OF_WEEK, getDayNameKey } from "@/constants/automation";
+import { useTranslation } from "react-i18next";
 
 interface ConditionConfigurationProps {
 	conditionType: string;
@@ -26,6 +27,7 @@ interface ConditionConfigurationProps {
 }
 
 const ConditionConfiguration: React.FC<ConditionConfigurationProps> = ({ conditionType, config, devices, onConfigChange, onConditionTypeChange, getCapabilitiesForRole }) => {
+	const { t } = useTranslation("automations");
 	const selectedDeviceId = config.device_id;
 	const fieldOptions = selectedDeviceId ? getCapabilitiesForRole(selectedDeviceId) : [];
 
@@ -37,23 +39,23 @@ const ConditionConfiguration: React.FC<ConditionConfigurationProps> = ({ conditi
 		switch (selectedField.type) {
 			case "number":
 				return [
-					{ value: "=", label: "is equal to (=)" },
-					{ value: "!=", label: "is not equal to (≠)" },
-					{ value: ">", label: "is greater than (>)" },
-					{ value: "<", label: "is less than (<)" },
-					{ value: ">=", label: "is greater or equal (≥)" },
-					{ value: "<=", label: "is less or equal (≤)" },
+					{ value: "=", label: t("builder.isEqualTo") },
+					{ value: "!=", label: t("builder.isNotEqualTo") },
+					{ value: ">", label: t("builder.isGreaterThan") },
+					{ value: "<", label: t("builder.isLessThan") },
+					{ value: ">=", label: t("builder.isGreaterOrEqual") },
+					{ value: "<=", label: t("builder.isLessOrEqual") },
 				];
 			case "boolean":
 			case "enum":
 				return [
-					{ value: "=", label: "is" },
-					{ value: "!=", label: "is not" },
+					{ value: "=", label: t("builder.is") },
+					{ value: "!=", label: t("builder.isNot") },
 				];
 			default:
 				return [
-					{ value: "=", label: "is equal to (=)" },
-					{ value: "!=", label: "is not equal to (≠)" },
+					{ value: "=", label: t("builder.isEqualTo") },
+					{ value: "!=", label: t("builder.isNotEqualTo") },
 				];
 		}
 	};
@@ -65,13 +67,13 @@ const ConditionConfiguration: React.FC<ConditionConfigurationProps> = ({ conditi
 			case "boolean":
 				return (
 					<div>
-						<Label htmlFor="value">Value</Label>
+						<Label htmlFor="value">{t("builder.value")}</Label>
 						<Select
 							value={config.value?.toString() || ""}
 							onValueChange={(value) => onConfigChange("value", value === "true")}
 						>
 							<SelectTrigger>
-								<SelectValue placeholder="Select value" />
+								<SelectValue placeholder={t("builder.selectValue")} />
 							</SelectTrigger>
 							<SelectContent>
 								<SelectItem value="true">{selectedField.labels?.["1"] || "True"}</SelectItem>
@@ -84,7 +86,9 @@ const ConditionConfiguration: React.FC<ConditionConfigurationProps> = ({ conditi
 			case "number":
 				return (
 					<div>
-						<Label htmlFor="value">Value {selectedField.unit && `(${selectedField.unit})`}</Label>
+						<Label htmlFor="value">
+							{t("builder.value")} {selectedField.unit && `(${selectedField.unit})`}
+						</Label>
 						<Input
 							id="value"
 							type="number"
@@ -93,9 +97,11 @@ const ConditionConfiguration: React.FC<ConditionConfigurationProps> = ({ conditi
 							step={selectedField.increment_value || 1}
 							value={config.value || ""}
 							onChange={(e) => onConfigChange("value", parseFloat(e.target.value))}
-							placeholder={`Enter value${
-								selectedField.min_value !== undefined && selectedField.max_value !== undefined ? ` (${selectedField.min_value}-${selectedField.max_value})` : ""
-							}`}
+							placeholder={
+								selectedField.min_value !== undefined && selectedField.max_value !== undefined
+									? t("builder.enterValueWithRange", { min: selectedField.min_value, max: selectedField.max_value })
+									: t("builder.enterValue")
+							}
 						/>
 					</div>
 				);
@@ -103,7 +109,7 @@ const ConditionConfiguration: React.FC<ConditionConfigurationProps> = ({ conditi
 			case "enum":
 				return (
 					<div>
-						<Label htmlFor="value">Value</Label>
+						<Label htmlFor="value">{t("builder.value")}</Label>
 						<Select
 							value={config.value?.toString() || ""}
 							onValueChange={(value) => {
@@ -112,7 +118,7 @@ const ConditionConfiguration: React.FC<ConditionConfigurationProps> = ({ conditi
 							}}
 						>
 							<SelectTrigger>
-								<SelectValue placeholder="Select value" />
+								<SelectValue placeholder={t("builder.selectValue")} />
 							</SelectTrigger>
 							<SelectContent>
 								{selectedField.values?.map((option) => (
@@ -131,13 +137,13 @@ const ConditionConfiguration: React.FC<ConditionConfigurationProps> = ({ conditi
 			default:
 				return (
 					<div>
-						<Label htmlFor="value">Value</Label>
+						<Label htmlFor="value">{t("builder.value")}</Label>
 						<Input
 							id="value"
 							type="text"
 							value={config.value || ""}
 							onChange={(e) => onConfigChange("value", e.target.value)}
-							placeholder="Enter value"
+							placeholder={t("builder.enterValue")}
 						/>
 					</div>
 				);
@@ -148,13 +154,13 @@ const ConditionConfiguration: React.FC<ConditionConfigurationProps> = ({ conditi
 		<div className="space-y-4">
 			{/* Condition type */}
 			<div>
-				<Label htmlFor="condition-type">Condition Type</Label>
+				<Label htmlFor="condition-type">{t("builder.conditionType")}</Label>
 				<Select
 					value={conditionType || ""}
 					onValueChange={(value) => onConditionTypeChange?.(value)}
 				>
 					<SelectTrigger>
-						<SelectValue placeholder="Select condition type" />
+						<SelectValue placeholder={t("builder.selectConditionType")} />
 					</SelectTrigger>
 					<SelectContent>
 						{getConditionTypes().map((option: any) => (
@@ -162,7 +168,7 @@ const ConditionConfiguration: React.FC<ConditionConfigurationProps> = ({ conditi
 								key={option.value}
 								value={option.value}
 							>
-								{option.label}
+								{t(option.labelKey)}
 							</SelectItem>
 						))}
 					</SelectContent>
@@ -174,7 +180,7 @@ const ConditionConfiguration: React.FC<ConditionConfigurationProps> = ({ conditi
 				<>
 					{/* Device */}
 					<div>
-						<Label htmlFor="device">Device</Label>
+						<Label htmlFor="device">{t("builder.device")}</Label>
 						<Select
 							value={config.device_id || ""}
 							onValueChange={(value) => {
@@ -185,7 +191,7 @@ const ConditionConfiguration: React.FC<ConditionConfigurationProps> = ({ conditi
 							}}
 						>
 							<SelectTrigger>
-								<SelectValue placeholder="Select a device" />
+								<SelectValue placeholder={t("builder.selectDevice")} />
 							</SelectTrigger>
 							<SelectContent>
 								{devices.map((device) => (
@@ -206,7 +212,7 @@ const ConditionConfiguration: React.FC<ConditionConfigurationProps> = ({ conditi
 					{/* Field */}
 					{config.device_id && (
 						<div>
-							<Label htmlFor="field">What to check</Label>
+							<Label htmlFor="field">{t("builder.whatToCheck")}</Label>
 							<Select
 								value={config.field || ""}
 								onValueChange={(value) => {
@@ -216,7 +222,7 @@ const ConditionConfiguration: React.FC<ConditionConfigurationProps> = ({ conditi
 								}}
 							>
 								<SelectTrigger>
-									<SelectValue placeholder="Select what to check" />
+									<SelectValue placeholder={t("builder.selectWhatToCheck")} />
 								</SelectTrigger>
 								<SelectContent>
 									{fieldOptions.length > 0 ? (
@@ -233,7 +239,7 @@ const ConditionConfiguration: React.FC<ConditionConfigurationProps> = ({ conditi
 											value="__none"
 											disabled
 										>
-											No fields available
+											{t("builder.noFieldsAvailable")}
 										</SelectItem>
 									)}
 								</SelectContent>
@@ -245,13 +251,13 @@ const ConditionConfiguration: React.FC<ConditionConfigurationProps> = ({ conditi
 					{config.field && selectedField && (
 						<>
 							<div>
-								<Label htmlFor="operator">Condition</Label>
+								<Label htmlFor="operator">{t("builder.condition")}</Label>
 								<Select
 									value={config.operator || ""}
 									onValueChange={(value) => onConfigChange("operator", value)}
 								>
 									<SelectTrigger>
-										<SelectValue placeholder="Select condition" />
+										<SelectValue placeholder={t("builder.selectCondition")} />
 									</SelectTrigger>
 									<SelectContent>
 										{getOperatorOptions().map((op) => (
@@ -277,7 +283,7 @@ const ConditionConfiguration: React.FC<ConditionConfigurationProps> = ({ conditi
 			{conditionType === "time" && (
 				<>
 					<div>
-						<Label htmlFor="time">Time</Label>
+						<Label htmlFor="time">{t("builder.time")}</Label>
 						<Input
 							id="time"
 							type="time"
@@ -291,7 +297,7 @@ const ConditionConfiguration: React.FC<ConditionConfigurationProps> = ({ conditi
 			{/* Day of week condition */}
 			{conditionType === "day_of_week" && (
 				<div>
-					<Label htmlFor="days">Days of Week</Label>
+					<Label htmlFor="days">{t("builder.daysOfWeek")}</Label>
 					<div className="grid grid-cols-2 gap-2 mt-2">
 						{DAYS_OF_WEEK.map((day) => (
 							<label
@@ -307,7 +313,7 @@ const ConditionConfiguration: React.FC<ConditionConfigurationProps> = ({ conditi
 										onConfigChange("days_of_week", updatedDays);
 									}}
 								/>
-								<span className="capitalize">{day}</span>
+								<span>{t(getDayNameKey(day))}</span>
 							</label>
 						))}
 					</div>

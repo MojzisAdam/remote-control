@@ -4,6 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { HardDrive } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { Device } from "@/api/devices/model";
 import { getActionTypes } from "@/constants/automation";
@@ -28,6 +29,7 @@ interface ActionConfigurationProps {
 }
 
 const ActionConfiguration: React.FC<ActionConfigurationProps> = ({ actionType, config, devices, onConfigChange, onActionTypeChange, getCapabilitiesForRole }) => {
+	const { t } = useTranslation("automations");
 	const selectedDeviceId = config.device_id;
 	const fieldOptions = selectedDeviceId ? getCapabilitiesForRole(selectedDeviceId) : [];
 
@@ -40,13 +42,13 @@ const ActionConfiguration: React.FC<ActionConfigurationProps> = ({ actionType, c
 			case "boolean":
 				return (
 					<div>
-						<Label htmlFor="value">Value</Label>
+						<Label htmlFor="value">{t("builder.value")}</Label>
 						<Select
 							value={config.value?.toString() || ""}
 							onValueChange={(value) => onConfigChange("value", value === "true")}
 						>
 							<SelectTrigger>
-								<SelectValue placeholder="Select value" />
+								<SelectValue placeholder={t("builder.selectValue")} />
 							</SelectTrigger>
 							<SelectContent>
 								<SelectItem value="true">{selectedField.labels?.["1"] || "True"}</SelectItem>
@@ -64,10 +66,10 @@ const ActionConfiguration: React.FC<ActionConfigurationProps> = ({ actionType, c
 				return (
 					<div>
 						<Label htmlFor="value">
-							Value {selectedField.unit && `(${selectedField.unit})`}
+							{t("builder.value")} {selectedField.unit && `(${selectedField.unit})`}
 							{min !== undefined && max !== undefined && (
 								<span className="text-xs text-muted-foreground ml-2">
-									Range: {min} - {max}
+									{t("builder.range")}: {min} - {max}
 								</span>
 							)}
 						</Label>
@@ -79,7 +81,7 @@ const ActionConfiguration: React.FC<ActionConfigurationProps> = ({ actionType, c
 							step={step}
 							value={config.value || ""}
 							onChange={(e) => onConfigChange("value", parseFloat(e.target.value))}
-							placeholder={`Enter value${min !== undefined ? ` (${min}-${max})` : ""}`}
+							placeholder={min !== undefined && max !== undefined ? t("builder.enterValueWithRange", { min, max }) : t("builder.enterValue")}
 						/>
 					</div>
 				);
@@ -87,7 +89,7 @@ const ActionConfiguration: React.FC<ActionConfigurationProps> = ({ actionType, c
 			case "enum":
 				return (
 					<div>
-						<Label htmlFor="value">Value</Label>
+						<Label htmlFor="value">{t("builder.value")}</Label>
 						<Select
 							value={config.value?.toString() || ""}
 							onValueChange={(value) => {
@@ -97,7 +99,7 @@ const ActionConfiguration: React.FC<ActionConfigurationProps> = ({ actionType, c
 							}}
 						>
 							<SelectTrigger>
-								<SelectValue placeholder="Select value" />
+								<SelectValue placeholder={t("builder.selectValue")} />
 							</SelectTrigger>
 							<SelectContent>
 								{selectedField.values?.map((option) => (
@@ -116,13 +118,13 @@ const ActionConfiguration: React.FC<ActionConfigurationProps> = ({ actionType, c
 			default:
 				return (
 					<div>
-						<Label htmlFor="value">Value</Label>
+						<Label htmlFor="value">{t("builder.value")}</Label>
 						<Input
 							id="value"
 							type="text"
 							value={config.value || ""}
 							onChange={(e) => onConfigChange("value", e.target.value)}
-							placeholder="Enter value"
+							placeholder={t("builder.enterValue")}
 						/>
 					</div>
 				);
@@ -133,13 +135,13 @@ const ActionConfiguration: React.FC<ActionConfigurationProps> = ({ actionType, c
 		<div className="space-y-4">
 			{/* Action type */}
 			<div>
-				<Label htmlFor="action-type">Action Type</Label>
+				<Label htmlFor="action-type">{t("builder.actionType")}</Label>
 				<Select
 					value={actionType || ""}
 					onValueChange={(value) => onActionTypeChange?.(value)}
 				>
 					<SelectTrigger>
-						<SelectValue placeholder="Select action type" />
+						<SelectValue placeholder={t("builder.selectActionType")} />
 					</SelectTrigger>
 					<SelectContent>
 						{getActionTypes().map((option: any) => (
@@ -147,7 +149,7 @@ const ActionConfiguration: React.FC<ActionConfigurationProps> = ({ actionType, c
 								key={option.value}
 								value={option.value}
 							>
-								{option.label}
+								{t(option.labelKey)}
 							</SelectItem>
 						))}
 					</SelectContent>
@@ -159,7 +161,7 @@ const ActionConfiguration: React.FC<ActionConfigurationProps> = ({ actionType, c
 				<>
 					{/* Device */}
 					<div>
-						<Label htmlFor="device">Device</Label>
+						<Label htmlFor="device">{t("builder.device")}</Label>
 						<Select
 							value={config.device_id || ""}
 							onValueChange={(value) => {
@@ -170,7 +172,7 @@ const ActionConfiguration: React.FC<ActionConfigurationProps> = ({ actionType, c
 							}}
 						>
 							<SelectTrigger>
-								<SelectValue placeholder="Select a device" />
+								<SelectValue placeholder={t("builder.selectDevice")} />
 							</SelectTrigger>
 							<SelectContent>
 								{devices.map((device) => (
@@ -191,7 +193,7 @@ const ActionConfiguration: React.FC<ActionConfigurationProps> = ({ actionType, c
 					{/* Field */}
 					{config.device_id && (
 						<div>
-							<Label htmlFor="field">Field to Control</Label>
+							<Label htmlFor="field">{t("builder.fieldToControl")}</Label>
 							<Select
 								value={config.field || ""}
 								onValueChange={(value) => {
@@ -202,7 +204,7 @@ const ActionConfiguration: React.FC<ActionConfigurationProps> = ({ actionType, c
 								}}
 							>
 								<SelectTrigger>
-									<SelectValue placeholder="Select a field" />
+									<SelectValue placeholder={t("builder.selectField")} />
 								</SelectTrigger>
 								<SelectContent>
 									{fieldOptions.length > 0 ? (
@@ -219,7 +221,7 @@ const ActionConfiguration: React.FC<ActionConfigurationProps> = ({ actionType, c
 											value="__none"
 											disabled
 										>
-											No controllable fields available
+											{t("builder.noControllableFields")}
 										</SelectItem>
 									)}
 								</SelectContent>
@@ -235,12 +237,12 @@ const ActionConfiguration: React.FC<ActionConfigurationProps> = ({ actionType, c
 			{/* Notification */}
 			{actionType === "notify" && (
 				<div>
-					<Label htmlFor="message">Notification Message</Label>
+					<Label htmlFor="message">{t("builder.notificationMessage")}</Label>
 					<Textarea
 						id="message"
 						value={config.message || ""}
 						onChange={(e) => onConfigChange("message", e.target.value)}
-						placeholder="Enter notification message"
+						placeholder={t("builder.enterNotificationMessage")}
 						rows={3}
 					/>
 				</div>
@@ -249,12 +251,12 @@ const ActionConfiguration: React.FC<ActionConfigurationProps> = ({ actionType, c
 			{/* Log */}
 			{actionType === "log" && (
 				<div>
-					<Label htmlFor="message">Log Message</Label>
+					<Label htmlFor="message">{t("builder.logMessage")}</Label>
 					<Textarea
 						id="message"
 						value={config.message || ""}
 						onChange={(e) => onConfigChange("message", e.target.value)}
-						placeholder="Enter log message"
+						placeholder={t("builder.enterLogMessage")}
 						rows={3}
 					/>
 				</div>

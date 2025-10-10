@@ -3,13 +3,16 @@ import { Handle, Position, NodeProps } from "@xyflow/react";
 import { Card } from "@/components/ui/card";
 import { Play } from "lucide-react";
 import { FlowData } from "@/api/automation/model";
+import { useTranslation } from "react-i18next";
 
 const StartNode: React.FC<NodeProps> = ({ data, selected }) => {
+	const { t } = useTranslation("automations");
+
 	return (
 		<Card className={`min-w-[120px] ${selected ? "ring-2 ring-primary" : ""}`}>
 			<div className="p-3 flex items-center justify-center space-x-2 bg-green-50 dark:bg-green-200 rounded-md">
 				<Play className="w-4 h-4 text-green-600" />
-				<span className="text-sm font-medium text-green-700">Start</span>
+				<span className="text-sm font-medium text-green-700">{t("nodes.start")}</span>
 			</div>
 			<Handle
 				type="source"

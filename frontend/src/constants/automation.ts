@@ -16,17 +16,23 @@ export const getTriggerTypes = () => [
 	{
 		value: "time",
 		label: "Time-based",
+		labelKey: "constants.triggerTypes.time",
 		description: "Execute at specific times and days",
+		descriptionKey: "constants.triggerTypes.timeDescription",
 	},
 	{
 		value: "state_change",
 		label: "Device State Change",
+		labelKey: "constants.triggerTypes.stateChange",
 		description: "Execute when device state changes",
+		descriptionKey: "constants.triggerTypes.stateChangeDescription",
 	},
 	{
 		value: "interval",
 		label: "Interval",
+		labelKey: "constants.triggerTypes.interval",
 		description: "Execute at regular intervals",
+		descriptionKey: "constants.triggerTypes.intervalDescription",
 	},
 ];
 
@@ -35,17 +41,23 @@ export const getConditionTypes = () => [
 	{
 		value: "simple",
 		label: "Simple Condition",
+		labelKey: "constants.conditionTypes.simple",
 		description: "Compare device value with a threshold",
+		descriptionKey: "constants.conditionTypes.simpleDescription",
 	},
 	{
 		value: "time",
 		label: "Time Condition",
+		labelKey: "constants.conditionTypes.time",
 		description: "Check specific time",
+		descriptionKey: "constants.conditionTypes.timeDescription",
 	},
 	{
 		value: "day_of_week",
 		label: "Day of Week",
+		labelKey: "constants.conditionTypes.dayOfWeek",
 		description: "Check specific days of the week",
+		descriptionKey: "constants.conditionTypes.dayOfWeekDescription",
 	},
 ];
 
@@ -54,17 +66,23 @@ export const getActionTypes = () => [
 	{
 		value: "device_control",
 		label: "Control Device",
+		labelKey: "constants.actionTypes.deviceControl",
 		description: "Change device parameters",
+		descriptionKey: "constants.actionTypes.deviceControlDescription",
 	},
 	{
 		value: "notify",
 		label: "Send Notification",
+		labelKey: "constants.actionTypes.notify",
 		description: "Send notification to user",
+		descriptionKey: "constants.actionTypes.notifyDescription",
 	},
 	{
 		value: "log",
 		label: "Log Message",
+		labelKey: "constants.actionTypes.log",
 		description: "Write entry to automation log",
+		descriptionKey: "constants.actionTypes.logDescription",
 	},
 ];
 
@@ -117,13 +135,13 @@ export const getActionIconComponent = (type: string): LucideIcon => {
 export const getTriggerTypeLabel = (type: string) => {
 	switch (type) {
 		case "time":
-			return "Time";
+			return { label: "Time", labelKey: "constants.typeLabels.time" };
 		case "state_change":
-			return "State Change";
+			return { label: "State Change", labelKey: "constants.typeLabels.stateChange" };
 		case "interval":
-			return "Interval";
+			return { label: "Interval", labelKey: "constants.typeLabels.interval" };
 		default:
-			return "Unknown";
+			return { label: "Unknown", labelKey: "constants.typeLabels.unknown" };
 	}
 };
 
@@ -131,13 +149,13 @@ export const getTriggerTypeLabel = (type: string) => {
 export const getConditionTypeLabel = (type: string) => {
 	switch (type) {
 		case "simple":
-			return "Simple";
+			return { label: "Simple", labelKey: "constants.typeLabels.simple" };
 		case "time":
-			return "Time";
+			return { label: "Time", labelKey: "constants.typeLabels.time" };
 		case "day_of_week":
-			return "Day of Week";
+			return { label: "Day of Week", labelKey: "constants.typeLabels.dayOfWeek" };
 		default:
-			return "Condition";
+			return { label: "Unknown", labelKey: "constants.typeLabels.unknown" };
 	}
 };
 
@@ -145,13 +163,13 @@ export const getConditionTypeLabel = (type: string) => {
 export const getActionTypeLabel = (type: string) => {
 	switch (type) {
 		case "device_control":
-			return "Device Control";
+			return { label: "Device Control", labelKey: "constants.typeLabels.deviceControl" };
 		case "notify":
-			return "Notification";
+			return { label: "Notification", labelKey: "constants.typeLabels.notification" };
 		case "log":
-			return "Log";
+			return { label: "Log", labelKey: "constants.typeLabels.log" };
 		default:
-			return "Unknown";
+			return { label: "Unknown", labelKey: "constants.typeLabels.unknown" };
 	}
 };
 
@@ -176,19 +194,19 @@ export const getOperatorSymbol = (operator: string) => {
 };
 
 // Available operators based on field type
-export const getOperators = (fieldType: string): { value: string; label: string }[] => {
+export const getOperators = (fieldType: string): { value: string; label: string; labelKey: string }[] => {
 	const numericOperators = [
-		{ value: "<", label: "Less than" },
-		{ value: "<=", label: "Less than or equal" },
-		{ value: "=", label: "Equal to" },
-		{ value: ">=", label: "Greater than or equal" },
-		{ value: ">", label: "Greater than" },
-		{ value: "!=", label: "Not equal to" },
+		{ value: "<", label: "Less than", labelKey: "constants.operators.lessThan" },
+		{ value: "<=", label: "Less than or equal", labelKey: "constants.operators.lessThanOrEqual" },
+		{ value: "=", label: "Equal to", labelKey: "constants.operators.equalTo" },
+		{ value: ">=", label: "Greater than or equal", labelKey: "constants.operators.greaterThanOrEqual" },
+		{ value: ">", label: "Greater than", labelKey: "constants.operators.greaterThan" },
+		{ value: "!=", label: "Not equal to", labelKey: "constants.operators.notEqualTo" },
 	];
 
 	const stringOperators = [
-		{ value: "=", label: "Equal to" },
-		{ value: "!=", label: "Not equal to" },
+		{ value: "=", label: "Equal to", labelKey: "constants.operators.equalTo" },
+		{ value: "!=", label: "Not equal to", labelKey: "constants.operators.notEqualTo" },
 	];
 
 	return fieldType === "number" ? numericOperators : stringOperators;
@@ -197,15 +215,25 @@ export const getOperators = (fieldType: string): { value: string; label: string 
 // Days of week options (full names for configuration)
 export const DAYS_OF_WEEK = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
 
+// Helper function to get day name translation key
+export const getDayNameKey = (day: string): string => {
+	return `constants.daysOfWeek.${day}`;
+};
+
+// Helper function to get short day name translation key
+export const getDayShortKey = (day: string): string => {
+	return `constants.daysOfWeekShort.${day}`;
+};
+
 // Days of week options with metadata
-export const getDaysOfWeek = (): { value: string; label: string; short: string }[] => {
+export const getDaysOfWeek = (): { value: string; label: string; labelKey: string; short: string; shortKey: string }[] => {
 	return [
-		{ value: "mon", label: "Monday", short: "Mon" },
-		{ value: "tue", label: "Tuesday", short: "Tue" },
-		{ value: "wed", label: "Wednesday", short: "Wed" },
-		{ value: "thu", label: "Thursday", short: "Thu" },
-		{ value: "fri", label: "Friday", short: "Fri" },
-		{ value: "sat", label: "Saturday", short: "Sat" },
-		{ value: "sun", label: "Sunday", short: "Sun" },
+		{ value: "mon", label: "Monday", labelKey: "constants.daysOfWeek.monday", short: "Mon", shortKey: "constants.daysOfWeek.mondayShort" },
+		{ value: "tue", label: "Tuesday", labelKey: "constants.daysOfWeek.tuesday", short: "Tue", shortKey: "constants.daysOfWeek.tuesdayShort" },
+		{ value: "wed", label: "Wednesday", labelKey: "constants.daysOfWeek.wednesday", short: "Wed", shortKey: "constants.daysOfWeek.wednesdayShort" },
+		{ value: "thu", label: "Thursday", labelKey: "constants.daysOfWeek.thursday", short: "Thu", shortKey: "constants.daysOfWeek.thursdayShort" },
+		{ value: "fri", label: "Friday", labelKey: "constants.daysOfWeek.friday", short: "Fri", shortKey: "constants.daysOfWeek.fridayShort" },
+		{ value: "sat", label: "Saturday", labelKey: "constants.daysOfWeek.saturday", short: "Sat", shortKey: "constants.daysOfWeek.saturdayShort" },
+		{ value: "sun", label: "Sunday", labelKey: "constants.daysOfWeek.sunday", short: "Sun", shortKey: "constants.daysOfWeek.sundayShort" },
 	];
 };

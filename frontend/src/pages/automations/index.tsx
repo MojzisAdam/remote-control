@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,6 +19,7 @@ import { Automation } from "@/api/automation/model";
 import routes from "@/constants/routes";
 
 const AutomationList: React.FC = () => {
+	const { t } = useTranslation("automations");
 	const navigate = useNavigate();
 	const [searchQuery, setSearchQuery] = useState("");
 	const [filterEnabled, setFilterEnabled] = useState<boolean | null>(null);
@@ -58,9 +60,10 @@ const AutomationList: React.FC = () => {
 	const handleToggleAutomation = async (automation: Automation) => {
 		const result = await toggleAutomationStatus(automation.id);
 		if (result.success) {
+			const action = automation.enabled ? t("disabled") : t("enabled");
 			toast({
-				title: "Success",
-				description: `Automation ${automation.enabled ? "disabled" : "enabled"} successfully`,
+				title: t("success"),
+				description: t("list.toggleSuccess", { action }),
 			});
 		}
 	};
@@ -72,8 +75,8 @@ const AutomationList: React.FC = () => {
 		const result = await deleteExistingAutomation(automationToDelete.id);
 		if (result.success) {
 			toast({
-				title: "Success",
-				description: "Automation deleted successfully",
+				title: t("success"),
+				description: t("list.deleteSuccess"),
 			});
 		}
 
@@ -113,17 +116,17 @@ const AutomationList: React.FC = () => {
 
 	const getStatusBadge = (automation: Automation) => {
 		if (automation.is_draft) {
-			return <Badge variant="outline">Draft</Badge>;
+			return <Badge variant="outline">{t("draft")}</Badge>;
 		}
 
 		if (!automation.enabled) {
-			return <Badge variant="secondary">Disabled</Badge>;
+			return <Badge variant="secondary">{t("disabled")}</Badge>;
 		}
 
 		// Check if the last execution failed (only the most recent log)
 		const lastLog = automation.recent_logs?.[0];
 		if (lastLog && lastLog.status === "failed") {
-			return <Badge variant="destructive">Error</Badge>;
+			return <Badge variant="destructive">{t("error")}</Badge>;
 		}
 
 		return (
@@ -131,14 +134,14 @@ const AutomationList: React.FC = () => {
 				variant="default"
 				className="bg-green-500 hover:bg-green-600"
 			>
-				Active
+				{t("active")}
 			</Badge>
 		);
 	};
 
 	const formatLastRun = (automation: Automation) => {
 		if (!automation.stats || automation.stats.last_execution === undefined || automation.stats.last_execution === null) {
-			return "Never run";
+			return t("neverRun");
 		}
 
 		const date = new Date(automation.stats.last_execution);
@@ -150,14 +153,14 @@ const AutomationList: React.FC = () => {
 			{/* Header */}
 			<div className="flex justify-between items-center gap-8">
 				<div>
-					<h1 className="text-2xl font-bold flex flex-wrap items-center gap-2 max-sm:text-xl">Automations</h1>
+					<h1 className="text-2xl font-bold flex flex-wrap items-center gap-2 max-sm:text-xl">{t("list.title")}</h1>
 				</div>
 				<Button
 					onClick={handleCreateNew}
 					className="gap-2"
 				>
 					<Plus className="w-4 h-4" />
-					Create
+					{t("list.createNew")}
 				</Button>
 			</div>
 
@@ -167,7 +170,7 @@ const AutomationList: React.FC = () => {
 					<CardContent className="p-4">
 						<div className="flex items-center justify-between">
 							<div>
-								<p className="text-sm text-muted-foreground">Total</p>
+								<p className="text-sm text-muted-foreground">{t("statistics.total")}</p>
 								<p className="text-2xl font-bold">{automationStats.total}</p>
 							</div>
 							<Activity className="w-8 h-8 text-blue-500" />
@@ -178,7 +181,7 @@ const AutomationList: React.FC = () => {
 					<CardContent className="p-4">
 						<div className="flex items-center justify-between">
 							<div>
-								<p className="text-sm text-muted-foreground">Active</p>
+								<p className="text-sm text-muted-foreground">{t("statistics.active")}</p>
 								<p className="text-2xl font-bold text-green-600">{automationStats.enabled}</p>
 							</div>
 							<CheckCircle className="w-8 h-8 text-green-500" />
@@ -189,7 +192,7 @@ const AutomationList: React.FC = () => {
 					<CardContent className="p-4">
 						<div className="flex items-center justify-between">
 							<div>
-								<p className="text-sm text-muted-foreground">Disabled</p>
+								<p className="text-sm text-muted-foreground">{t("statistics.disabled")}</p>
 								<p className="text-2xl font-bold text-gray-600">{automationStats.disabled}</p>
 							</div>
 							<Pause className="w-8 h-8 text-gray-500" />
@@ -200,7 +203,7 @@ const AutomationList: React.FC = () => {
 					<CardContent className="p-4">
 						<div className="flex items-center justify-between">
 							<div>
-								<p className="text-sm text-muted-foreground">With Errors</p>
+								<p className="text-sm text-muted-foreground">{t("statistics.withErrors")}</p>
 								<p className="text-2xl font-bold text-red-600">{automationStats.withErrors}</p>
 							</div>
 							<AlertCircle className="w-8 h-8 text-red-500" />
@@ -216,7 +219,7 @@ const AutomationList: React.FC = () => {
 						<div className="relative flex-1">
 							<Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
 							<Input
-								placeholder="Search automations..."
+								placeholder={t("list.searchPlaceholder")}
 								value={searchQuery}
 								onChange={(e) => setSearchQuery(e.target.value)}
 								className="pl-10"
@@ -228,21 +231,21 @@ const AutomationList: React.FC = () => {
 								size="sm"
 								onClick={() => setFilterEnabled(null)}
 							>
-								All
+								{t("list.filterAll")}
 							</Button>
 							<Button
 								variant={filterEnabled === true ? "default" : "outline"}
 								size="sm"
 								onClick={() => setFilterEnabled(true)}
 							>
-								Active
+								{t("list.filterActive")}
 							</Button>
 							<Button
 								variant={filterEnabled === false ? "default" : "outline"}
 								size="sm"
 								onClick={() => setFilterEnabled(false)}
 							>
-								Disabled
+								{t("list.filterDisabled")}
 							</Button>
 						</div>
 					</div>
@@ -267,24 +270,22 @@ const AutomationList: React.FC = () => {
 					<Card>
 						<CardContent className="p-8 text-center">
 							<div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto"></div>
-							<p className="mt-4 text-muted-foreground">Loading automations...</p>
+							<p className="mt-4 text-muted-foreground">{t("loading")}</p>
 						</CardContent>
 					</Card>
 				) : automations.length === 0 ? (
 					<Card>
 						<CardContent className="p-8 text-center">
 							<Activity className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-							<h3 className="text-lg font-medium mb-2">No automations found</h3>
-							<p className="text-muted-foreground mb-4">
-								{searchQuery || filterEnabled !== null ? "No automations match your current filters" : "Get started by creating your first automation"}
-							</p>
+							<h3 className="text-lg font-medium mb-2">{t("list.noAutomations")}</h3>
+							<p className="text-muted-foreground mb-4">{searchQuery || filterEnabled !== null ? t("list.noMatches") : t("list.noAutomationsDescription")}</p>
 							{!searchQuery && filterEnabled === null && (
 								<Button
 									onClick={handleCreateNew}
 									className="gap-2"
 								>
 									<Plus className="w-4 h-4" />
-									Create Automation
+									{t("list.createNew")}
 								</Button>
 							)}
 						</CardContent>
@@ -309,12 +310,15 @@ const AutomationList: React.FC = () => {
 											<div className="flex items-center gap-1">
 												<Activity className="w-4 h-4" />
 												<span>
-													{automation.triggers?.length || 0} triggers, {automation.conditions?.length || 0} conditions, {automation.actions?.length || 0} actions
+													{automation.triggers?.length || 0} {t("triggers")}, {automation.conditions?.length || 0} {t("conditions")}, {automation.actions?.length || 0}{" "}
+													{t("actions")}
 												</span>
 											</div>
 											<div className="flex items-center gap-1">
 												<Clock className="w-4 h-4" />
-												<span>Last run: {formatLastRun(automation)}</span>
+												<span>
+													{t("lastRun")}: {formatLastRun(automation)}
+												</span>
 											</div>
 										</div>
 									</div>
@@ -326,7 +330,7 @@ const AutomationList: React.FC = () => {
 												onCheckedChange={() => handleToggleAutomation(automation)}
 												disabled={toggleLoading[automation.id] || automation.is_draft}
 											/>
-											<span className="text-xs">{automation.enabled ? "Enabled" : "Disabled"}</span>
+											<span className="text-xs">{automation.enabled ? t("list.enabledToggle") : t("list.disabledToggle")}</span>
 											{toggleLoading[automation.id] && <div className="animate-spin w-4 h-4 border-2 border-primary border-t-transparent rounded-full"></div>}
 										</div>
 
@@ -336,7 +340,7 @@ const AutomationList: React.FC = () => {
 											size="sm"
 										>
 											<Edit className="w-4 h-4 mr-2" />
-											Edit
+											{t("edit")}
 										</Button>
 
 										<DropdownMenu>
@@ -351,7 +355,7 @@ const AutomationList: React.FC = () => {
 											<DropdownMenuContent align="end">
 												<DropdownMenuItem onClick={() => handleViewLogs(automation.id)}>
 													<Eye className="w-4 h-4 mr-2" />
-													View Logs
+													{t("list.viewLogs")}
 												</DropdownMenuItem>
 												<Separator />
 												<DropdownMenuItem
@@ -359,7 +363,7 @@ const AutomationList: React.FC = () => {
 													className="text-red-600"
 												>
 													<Trash2 className="w-4 h-4 mr-2" />
-													Delete
+													{t("delete")}
 												</DropdownMenuItem>
 											</DropdownMenuContent>
 										</DropdownMenu>
@@ -377,7 +381,7 @@ const AutomationList: React.FC = () => {
 					<CardContent className="p-4">
 						<div className="flex items-center justify-between">
 							<div className="text-sm text-muted-foreground">
-								Showing {pagination.from || 0} to {pagination.to || 0} of {pagination.total} results
+								{t("list.showing")} {pagination.from || 0} {t("list.to")} {pagination.to || 0} {t("list.of")} {pagination.total} {t("list.results")}
 							</div>
 							<div className="flex items-center gap-2">
 								<Button
@@ -386,7 +390,7 @@ const AutomationList: React.FC = () => {
 									onClick={() => handlePageChange(pagination.current_page - 1)}
 									disabled={pagination.current_page === 1}
 								>
-									Previous
+									{t("list.previous")}
 								</Button>
 								{Array.from({ length: Math.min(5, pagination.last_page) }, (_, i) => {
 									const startPage = Math.max(1, pagination.current_page - 2);
@@ -409,7 +413,7 @@ const AutomationList: React.FC = () => {
 									onClick={() => handlePageChange(pagination.current_page + 1)}
 									disabled={pagination.current_page === pagination.last_page}
 								>
-									Next
+									{t("list.next")}
 								</Button>
 							</div>
 						</div>
@@ -424,18 +428,18 @@ const AutomationList: React.FC = () => {
 			>
 				<AlertDialogContent>
 					<AlertDialogHeader>
-						<AlertDialogTitle>Delete Automation</AlertDialogTitle>
-						<AlertDialogDescription>
-							Are you sure you want to delete "{automationToDelete?.name}"? This action cannot be undone and will permanently remove the automation and all its execution logs.
-						</AlertDialogDescription>
+						<AlertDialogTitle>
+							{t("delete")} {t("title")}
+						</AlertDialogTitle>
+						<AlertDialogDescription>{t("list.confirmDelete", { name: automationToDelete?.name })}</AlertDialogDescription>
 					</AlertDialogHeader>
 					<AlertDialogFooter>
-						<AlertDialogCancel>Cancel</AlertDialogCancel>
+						<AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
 						<AlertDialogAction
 							onClick={handleDeleteAutomation}
 							className="bg-red-600 hover:bg-red-700"
 						>
-							Delete
+							{t("delete")}
 						</AlertDialogAction>
 					</AlertDialogFooter>
 				</AlertDialogContent>

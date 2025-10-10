@@ -55,5 +55,8 @@
     },
     "loading": {
         "message": "Loading..."
+    },
+    "common": {
+        "cancel": "Cancel"
     }
 }

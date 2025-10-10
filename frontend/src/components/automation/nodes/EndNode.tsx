@@ -2,13 +2,16 @@ import React from "react";
 import { Handle, Position, NodeProps } from "@xyflow/react";
 import { Card } from "@/components/ui/card";
 import { Square } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const EndNode: React.FC<NodeProps> = ({ data, selected }) => {
+	const { t } = useTranslation("automations");
+
 	return (
 		<Card className={`min-w-[120px] ${selected ? "ring-2 ring-primary" : ""}`}>
 			<div className="p-3 flex items-center justify-center space-x-2 bg-red-50 dark:bg-red-100 rounded-md">
 				<Square className="w-4 h-4 text-red-600" />
-				<span className="text-sm font-medium text-red-700">End</span>
+				<span className="text-sm font-medium text-red-700">{t("nodes.end")}</span>
 			</div>
 			<Handle
 				type="target"

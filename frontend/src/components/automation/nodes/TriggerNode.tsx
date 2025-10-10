@@ -7,6 +7,7 @@ import { Settings, Trash2, Smartphone, Clock, Timer, Activity, Wifi } from "luci
 import { FlowData } from "@/api/automation/model";
 import { getTriggerIconComponent, getTriggerTypeLabel } from "@/constants/automation";
 import { useDeviceCapabilityHelper } from "@/hooks/useDeviceCapabilityHelper";
+import { useTranslation } from "react-i18next";
 
 import { Device } from "@/api/devices/model";
 
@@ -18,6 +19,7 @@ interface TriggerNodeProps extends NodeProps {
 }
 
 const TriggerNode: React.FC<TriggerNodeProps> = ({ data, selected, id, onDelete, onSettings, devices, capabilityHelper }) => {
+	const { t } = useTranslation("automations");
 	const triggerData = data as FlowData;
 
 	const { getFieldOptionsForDevice } = capabilityHelper;
@@ -44,7 +46,7 @@ const TriggerNode: React.FC<TriggerNodeProps> = ({ data, selected, id, onDelete,
 
 	const getConfigSummary = () => {
 		const config = triggerData.config;
-		if (!config) return <p className="text-xs text-yellow-600">Not configured</p>;
+		if (!config) return <p className="text-xs text-yellow-600">{t("builder.notConfigured")}</p>;
 
 		const triggerType = triggerData.trigger_type;
 		const deviceName = config.device_id ? getDeviceName(config.device_id) : null;
@@ -62,7 +64,7 @@ const TriggerNode: React.FC<TriggerNodeProps> = ({ data, selected, id, onDelete,
 						{config.time && (
 							<div className="flex items-center gap-1 text-xs">
 								<Clock className="w-3 h-3" />
-								At {config.time}
+								{t("nodes.atTime", { time: config.time })}
 							</div>
 						)}
 					</div>
@@ -79,7 +81,7 @@ const TriggerNode: React.FC<TriggerNodeProps> = ({ data, selected, id, onDelete,
 						{config.interval && (
 							<div className="flex items-center gap-1 text-xs">
 								<Timer className="w-3 h-3" />
-								Every {config.interval} min
+								{t("nodes.everyMinutes", { interval: config.interval })}
 							</div>
 						)}
 					</div>
@@ -100,7 +102,7 @@ const TriggerNode: React.FC<TriggerNodeProps> = ({ data, selected, id, onDelete,
 									const fieldInfo = getFieldDisplayInfo(config.device_id, config.field);
 									return (
 										<span>
-											{fieldInfo.label} changes
+											{t("nodes.fieldChanges", { field: fieldInfo.label })}
 											{fieldInfo.unit && <span className="text-muted-foreground ml-1">({fieldInfo.unit})</span>}
 										</span>
 									);
@@ -133,7 +135,7 @@ const TriggerNode: React.FC<TriggerNodeProps> = ({ data, selected, id, onDelete,
 						{deviceName}
 					</div>
 				) : (
-					<p className="text-xs">Configured</p>
+					<p className="text-xs">{t("builder.configured")}</p>
 				);
 		}
 	};
@@ -147,12 +149,12 @@ const TriggerNode: React.FC<TriggerNodeProps> = ({ data, selected, id, onDelete,
 					<div className="flex items-center space-x-2">
 						<div className="p-1 bg-blue-100 dark:bg-blue-700 rounded">{getTriggerIcon(triggerType)}</div>
 						<div>
-							<h4 className="text-sm font-medium">Trigger</h4>
+							<h4 className="text-sm font-medium">{t("nodes.trigger")}</h4>
 							<Badge
 								variant="secondary"
 								className="text-xs"
 							>
-								{getTriggerTypeLabel(triggerType)}
+								{t(getTriggerTypeLabel(triggerType).labelKey)}
 							</Badge>
 						</div>
 					</div>

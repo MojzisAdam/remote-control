@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { ArrowLeft, Calendar, CheckCircle, XCircle, AlertTriangle, Clock, Search, RefreshCw, Edit } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -24,6 +25,7 @@ interface AutomationLogsParams extends Record<string, string | undefined> {
 }
 
 const AutomationLogs: React.FC = () => {
+	const { t } = useTranslation("automations");
 	// Extract automationId from URL parameters
 	const { automationId: automationIdParam } = useParams<AutomationLogsParams>();
 	const automationId = automationIdParam ? parseInt(automationIdParam, 10) : undefined;
@@ -133,16 +135,16 @@ const AutomationLogs: React.FC = () => {
 				}
 			} else {
 				toast({
-					title: "Error",
-					description: "Failed to load automation logs",
+					title: t("error"),
+					description: t("logs.loadingError"),
 					variant: "destructive",
 				});
 			}
 		} catch (error) {
 			console.error("Error loading logs:", error);
 			toast({
-				title: "Error",
-				description: "An unexpected error occurred while loading logs",
+				title: t("error"),
+				description: t("logs.unexpectedError"),
 				variant: "destructive",
 			});
 		} finally {
@@ -172,16 +174,16 @@ const AutomationLogs: React.FC = () => {
 				setFilteredStats(response.filtered_stats);
 			} else {
 				toast({
-					title: "Error",
-					description: "Failed to load logs statistics",
+					title: t("error"),
+					description: t("logs.loadingStats"),
 					variant: "destructive",
 				});
 			}
 		} catch (error) {
 			console.error("Error loading logs stats:", error);
 			toast({
-				title: "Error",
-				description: "An unexpected error occurred while loading statistics",
+				title: t("error"),
+				description: t("logs.unexpectedError"),
 				variant: "destructive",
 			});
 		} finally {
@@ -228,21 +230,21 @@ const AutomationLogs: React.FC = () => {
 						className="bg-green-500 hover:bg-green-600"
 					>
 						<CheckCircle className="w-3 h-3 mr-1" />
-						Success
+						{t("status.success")}
 					</Badge>
 				);
 			case "failed":
 				return (
 					<Badge variant="destructive">
 						<XCircle className="w-3 h-3 mr-1" />
-						Failed
+						{t("status.failed")}
 					</Badge>
 				);
 			case "skipped":
 				return (
 					<Badge variant="secondary">
 						<Clock className="w-3 h-3 mr-1" />
-						Skipped
+						{t("status.skipped")}
 					</Badge>
 				);
 			case "partial":
@@ -252,7 +254,7 @@ const AutomationLogs: React.FC = () => {
 						className="border-yellow-500 text-yellow-700 bg-yellow-50"
 					>
 						<AlertTriangle className="w-3 h-3 mr-1" />
-						Partial
+						{t("status.partial")}
 					</Badge>
 				);
 			case "warning":
@@ -262,14 +264,14 @@ const AutomationLogs: React.FC = () => {
 						className="border-orange-500 text-orange-700 bg-orange-50"
 					>
 						<AlertTriangle className="w-3 h-3 mr-1" />
-						Warning
+						{t("status.warning")}
 					</Badge>
 				);
 			default:
 				return (
 					<Badge variant="secondary">
 						<AlertTriangle className="w-3 h-3 mr-1" />
-						Unknown
+						{t("status.unknown")}
 					</Badge>
 				);
 		}
@@ -310,12 +312,12 @@ const AutomationLogs: React.FC = () => {
 			<div className="mx-auto">
 				<div className="text-center py-12">
 					<AlertTriangle className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-					<h2 className="text-2xl font-bold mb-2">Automation Not Found</h2>
-					<p className="text-muted-foreground mb-6">The automation you're looking for doesn't exist or you don't have permission to view it.</p>
+					<h2 className="text-2xl font-bold mb-2">{t("logs.automationNotFound")}</h2>
+					<p className="text-muted-foreground mb-6">{t("logs.automationNotFoundDescription")}</p>
 					<Button asChild>
 						<Link to={routes.automations}>
 							<ArrowLeft className="w-4 h-4 mr-2" />
-							Back to Automations
+							{t("logs.backToAutomations")}
 						</Link>
 					</Button>
 				</div>
@@ -331,12 +333,12 @@ const AutomationLogs: React.FC = () => {
 						<div className="flex items-center gap-3 mb-2">
 							<Calendar className="w-6 h-6 text-primary" />
 							<div>
-								<h1 className="text-2xl font-bold flex flex-wrap items-center gap-2 max-sm:text-xl">Execution Logs</h1>
+								<h1 className="text-2xl font-bold flex flex-wrap items-center gap-2 max-sm:text-xl">{t("logs.title")}</h1>
 							</div>
 						</div>
 						<div className="flex gap-2 items-center flex-row">
-							<Badge variant={currentAutomation.enabled ? "default" : "secondary"}>{currentAutomation.enabled ? "Active" : "Disabled"}</Badge>
-							{currentAutomation.is_draft && <Badge variant="outline">Draft</Badge>}
+							<Badge variant={currentAutomation.enabled ? "default" : "secondary"}>{currentAutomation.enabled ? t("active") : t("disabled")}</Badge>
+							{currentAutomation.is_draft && <Badge variant="outline">{t("draft")}</Badge>}
 						</div>
 						<p className="text-lg text-muted-foreground mt-2">{currentAutomation.name}</p>
 						{currentAutomation.description && <p className="text-muted-foreground mt-2 text-sm">{currentAutomation.description}</p>}
@@ -350,7 +352,7 @@ const AutomationLogs: React.FC = () => {
 						>
 							<Link to={routes.automations}>
 								<ArrowLeft className="w-4 h-4 mr-2" />
-								List
+								{t("logs.list")}
 							</Link>
 						</Button>
 						<Button
@@ -360,7 +362,7 @@ const AutomationLogs: React.FC = () => {
 						>
 							<Link to={routes.automationBuilderEdit(currentAutomation.id)}>
 								<Edit className="w-4 h-4 mr-2" />
-								Edit
+								{t("logs.edit")}
 							</Link>
 						</Button>
 					</div>
@@ -373,7 +375,7 @@ const AutomationLogs: React.FC = () => {
 					<CardContent className="p-4">
 						<div className="flex items-center justify-between">
 							<div>
-								<p className="text-sm text-muted-foreground">Total (All)</p>
+								<p className="text-sm text-muted-foreground">{t("logs.totalAll")}</p>
 								<p className="text-2xl font-bold">{totalStats.total}</p>
 							</div>
 							<Clock className="w-6 h-6 text-blue-500" />
@@ -384,7 +386,7 @@ const AutomationLogs: React.FC = () => {
 					<CardContent className="p-4">
 						<div className="flex items-center justify-between">
 							<div>
-								<p className="text-sm text-muted-foreground">Successful</p>
+								<p className="text-sm text-muted-foreground">{t("logs.successful")}</p>
 								<p className="text-2xl font-bold text-green-600">
 									{filteredStats.successful}
 									{filteredStats.total !== totalStats.total && <span className="text-sm text-muted-foreground ml-1">/ {totalStats.successful}</span>}
@@ -398,7 +400,7 @@ const AutomationLogs: React.FC = () => {
 					<CardContent className="p-4">
 						<div className="flex items-center justify-between">
 							<div>
-								<p className="text-sm text-muted-foreground">Failed</p>
+								<p className="text-sm text-muted-foreground">{t("logs.failed")}</p>
 								<p className="text-2xl font-bold text-red-600">
 									{filteredStats.failed}
 									{filteredStats.total !== totalStats.total && <span className="text-sm text-muted-foreground ml-1">/ {totalStats.failed}</span>}
@@ -412,7 +414,7 @@ const AutomationLogs: React.FC = () => {
 					<CardContent className="p-4">
 						<div className="flex items-center justify-between">
 							<div>
-								<p className="text-sm text-muted-foreground">Skipped</p>
+								<p className="text-sm text-muted-foreground">{t("logs.skipped")}</p>
 								<p className="text-2xl font-bold text-gray-600">
 									{filteredStats.skipped}
 									{filteredStats.total !== totalStats.total && <span className="text-sm text-muted-foreground ml-1">/ {totalStats.skipped}</span>}
@@ -426,7 +428,7 @@ const AutomationLogs: React.FC = () => {
 					<CardContent className="p-4">
 						<div className="flex items-center justify-between">
 							<div>
-								<p className="text-sm text-muted-foreground">Partial</p>
+								<p className="text-sm text-muted-foreground">{t("logs.partial")}</p>
 								<p className="text-2xl font-bold text-yellow-600">
 									{filteredStats.partial}
 									{filteredStats.total !== totalStats.total && <span className="text-sm text-muted-foreground ml-1">/ {totalStats.partial}</span>}
@@ -440,7 +442,7 @@ const AutomationLogs: React.FC = () => {
 					<CardContent className="p-4">
 						<div className="flex items-center justify-between">
 							<div>
-								<p className="text-sm text-muted-foreground">Success Rate</p>
+								<p className="text-sm text-muted-foreground">{t("logs.successRate")}</p>
 								<p className="text-2xl font-bold">{successRate}%</p>
 							</div>
 							<div className="w-6 h-6 flex items-center justify-center">
@@ -464,10 +466,10 @@ const AutomationLogs: React.FC = () => {
 									<SelectValue />
 								</SelectTrigger>
 								<SelectContent>
-									<SelectItem value="10">10 rows</SelectItem>
-									<SelectItem value="25">25 rows</SelectItem>
-									<SelectItem value="50">50 rows</SelectItem>
-									<SelectItem value="100">100 rows</SelectItem>
+									<SelectItem value="10">10 {t("list.rows")}</SelectItem>
+									<SelectItem value="25">25 {t("list.rows")}</SelectItem>
+									<SelectItem value="50">50 {t("list.rows")}</SelectItem>
+									<SelectItem value="100">100 {t("list.rows")}</SelectItem>
 								</SelectContent>
 							</Select>
 						</div>
@@ -475,7 +477,7 @@ const AutomationLogs: React.FC = () => {
 						<div className="relative flex-1">
 							<Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
 							<Input
-								placeholder="Search logs..."
+								placeholder={t("logs.searchPlaceholder")}
 								value={searchQuery}
 								onChange={(e) => setSearchQuery(e.target.value)}
 								className="pl-10"
@@ -488,42 +490,42 @@ const AutomationLogs: React.FC = () => {
 								size="sm"
 								onClick={() => setStatusFilter("all")}
 							>
-								All
+								{t("logs.filterAll")}
 							</Button>
 							<Button
 								variant={statusFilter === "success" ? "default" : "outline"}
 								size="sm"
 								onClick={() => setStatusFilter("success")}
 							>
-								Success
+								{t("logs.filterSuccess")}
 							</Button>
 							<Button
 								variant={statusFilter === "failed" ? "default" : "outline"}
 								size="sm"
 								onClick={() => setStatusFilter("failed")}
 							>
-								Failed
+								{t("logs.filterFailed")}
 							</Button>
 							<Button
 								variant={statusFilter === "skipped" ? "default" : "outline"}
 								size="sm"
 								onClick={() => setStatusFilter("skipped")}
 							>
-								Skipped
+								{t("logs.filterSkipped")}
 							</Button>
 							<Button
 								variant={statusFilter === "partial" ? "default" : "outline"}
 								size="sm"
 								onClick={() => setStatusFilter("partial")}
 							>
-								Partial
+								{t("logs.filterPartial")}
 							</Button>
 							<Button
 								variant={statusFilter === "warning" ? "default" : "outline"}
 								size="sm"
 								onClick={() => setStatusFilter("warning")}
 							>
-								Warning
+								{t("logs.filterWarning")}
 							</Button>
 						</div>
 
@@ -535,7 +537,7 @@ const AutomationLogs: React.FC = () => {
 							className="gap-2"
 						>
 							<RefreshCw className={`w-4 h-4 ${logsLoading ? "animate-spin" : ""}`} />
-							Refresh
+							{t("logs.refresh")}
 						</Button>
 					</div>
 				</CardContent>
@@ -544,18 +546,18 @@ const AutomationLogs: React.FC = () => {
 			{/* Logs Table */}
 			<Card>
 				<CardHeader>
-					<CardTitle>Execution History</CardTitle>
-					<CardDescription>View detailed execution logs for this automation including status, timestamps, and error details.</CardDescription>
+					<CardTitle>{t("logs.executionHistory")}</CardTitle>
+					<CardDescription>{t("logs.description")}</CardDescription>
 				</CardHeader>
 				<CardContent>
 					<div className="rounded-md border">
 						<Table>
 							<TableHeader>
 								<TableRow>
-									<TableHead className="w-[120px]">Status</TableHead>
-									<TableHead>Executed At</TableHead>
-									<TableHead>Duration</TableHead>
-									<TableHead>Details</TableHead>
+									<TableHead className="w-[120px]">{t("logs.status")}</TableHead>
+									<TableHead>{t("logs.executedAt")}</TableHead>
+									<TableHead>{t("logs.duration")}</TableHead>
+									<TableHead>{t("logs.details")}</TableHead>
 								</TableRow>
 							</TableHeader>
 							<TableBody>
@@ -594,8 +596,8 @@ const AutomationLogs: React.FC = () => {
 										>
 											<div className="flex flex-col items-center gap-2">
 												<Calendar className="w-8 h-8 text-muted-foreground" />
-												<p className="text-muted-foreground">{searchQuery || statusFilter !== "all" ? "No logs match your current filters" : "No execution logs found"}</p>
-												{!searchQuery && statusFilter === "all" && <p className="text-sm text-muted-foreground">This automation hasn't been executed yet.</p>}
+												<p className="text-muted-foreground">{searchQuery || statusFilter !== "all" ? t("logs.noMatches") : t("logs.noLogs")}</p>
+												{!searchQuery && statusFilter === "all" && <p className="text-sm text-muted-foreground">{t("logs.noLogsDescription")}</p>}
 											</div>
 										</TableCell>
 									</TableRow>
@@ -610,7 +612,7 @@ const AutomationLogs: React.FC = () => {
 							<Separator className="my-4" />
 							<div className="flex items-center justify-between max-sm:flex-col max-sm:gap-4">
 								<div className="text-sm text-muted-foreground">
-									Showing {from} to {to} of {totalRecords} results
+									{t("logs.showing")} {from} {t("logs.to")} {to} {t("logs.of")} {totalRecords} {t("logs.results")}
 								</div>
 								<div className="flex items-center gap-2">
 									<Button
@@ -619,10 +621,10 @@ const AutomationLogs: React.FC = () => {
 										onClick={handlePreviousPage}
 										disabled={currentPage <= 1 || logsLoading}
 									>
-										Previous
+										{t("logs.previous")}
 									</Button>
 									<span className="text-sm text-muted-foreground">
-										Page {currentPage} of {totalPages}
+										{t("logs.page")} {currentPage} {t("logs.of")} {totalPages}
 									</span>
 									<Button
 										variant="outline"
@@ -630,7 +632,7 @@ const AutomationLogs: React.FC = () => {
 										onClick={handleNextPage}
 										disabled={currentPage >= totalPages || logsLoading}
 									>
-										Next
+										{t("logs.next")}
 									</Button>
 								</div>
 							</div>

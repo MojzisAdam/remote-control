@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo } from "react";
 import { Node, Edge, Connection, addEdge, applyNodeChanges, applyEdgeChanges, NodeChange, EdgeChange } from "@xyflow/react";
+import { useTranslation } from "react-i18next";
 import {
 	Automation,
 	CreateAutomationRequest,
@@ -39,6 +40,7 @@ const getDefaultPosition = (nodeCount: number, viewportCenter?: { x: number; y: 
 };
 
 export const useAutomationFlow = (initialAutomation?: Automation) => {
+	const { t } = useTranslation("automations");
 	const [nodes, setNodes] = useState<Node<FlowData>[]>(() => {
 		if (initialAutomation) {
 			return convertAutomationToNodes(initialAutomation);
@@ -422,12 +424,12 @@ export const useAutomationFlow = (initialAutomation?: Automation) => {
 
 		// Must have at least one trigger
 		if (triggerNodes.length === 0) {
-			errors.push("Automation must have at least one trigger");
+			errors.push(t("flowValidation.atLeastOneTrigger"));
 		}
 
 		// Must have at least one action
 		if (actionNodes.length === 0) {
-			errors.push("Automation must have at least one action");
+			errors.push(t("flowValidation.atLeastOneAction"));
 		}
 
 		// Validate each node configuration
@@ -436,7 +438,7 @@ export const useAutomationFlow = (initialAutomation?: Automation) => {
 				const config = node.data.config;
 
 				if (!config?.type) {
-					errors.push(`${node.data.type} node is missing type configuration`);
+					errors.push(t("flowValidation.nodeTypeRequired"));
 				}
 
 				// Check device requirement based on node type and specific subtype
@@ -462,7 +464,7 @@ export const useAutomationFlow = (initialAutomation?: Automation) => {
 				})();
 
 				if (requiresDevice && config?.device_id === null) {
-					errors.push(`${node.data.type} node requires a device selection`);
+					errors.push(t("flowValidation.deviceRequired"));
 				}
 			}
 		});
@@ -487,7 +489,7 @@ export const useAutomationFlow = (initialAutomation?: Automation) => {
 		if (startNode) {
 			const startConnections = nodeConnections.get(startNode.id);
 			if (startConnections && startConnections.outgoing.length === 0 && (triggerNodes.length > 0 || actionNodes.length > 0)) {
-				errors.push("Start node must be connected to at least one other node");
+				errors.push(t("flowValidation.startNodeNotConnected"));
 			}
 		}
 
@@ -495,7 +497,7 @@ export const useAutomationFlow = (initialAutomation?: Automation) => {
 		if (endNode) {
 			const endConnections = nodeConnections.get(endNode.id);
 			if (endConnections && endConnections.incoming.length === 0 && (triggerNodes.length > 0 || actionNodes.length > 0)) {
-				errors.push("End node must receive at least one connection");
+				errors.push(t("flowValidation.endNodeNotConnected"));
 			}
 		}
 
@@ -508,27 +510,27 @@ export const useAutomationFlow = (initialAutomation?: Automation) => {
 
 				// Triggers should have outgoing connections (except if it's the only node)
 				if (node.data.type === "trigger" && !hasOutgoing && (conditionNodes.length > 0 || actionNodes.length > 1 || endNode)) {
-					errors.push(`Trigger node "${node.data.label}" is not connected to any other node`);
+					errors.push(t("flowValidation.triggerNotConnected"));
 				}
 
 				// Actions should have incoming connections (except if it's the only node)
 				if (node.data.type === "action" && !hasIncoming && (triggerNodes.length > 0 || conditionNodes.length > 0 || startNode)) {
-					errors.push(`Action node "${node.data.label}" is not receiving any connections`);
+					errors.push(t("flowValidation.actionNotConnected"));
 				}
 
 				// Conditions should have both incoming and outgoing connections
 				if (node.data.type === "condition") {
 					if (!hasIncoming) {
-						errors.push(`Condition node "${node.data.label}" is not receiving any connections`);
+						errors.push(t("flowValidation.conditionNotConnected"));
 					}
 					if (!hasOutgoing) {
-						errors.push(`Condition node "${node.data.label}" is not connected to any other node`);
+						errors.push(t("flowValidation.conditionNotConnected"));
 					}
 				}
 
 				// Check for completely isolated nodes (no connections at all)
 				if (!hasIncoming && !hasOutgoing && triggerNodes.length + conditionNodes.length + actionNodes.length > 1) {
-					errors.push(`Node "${node.data.label}" is completely isolated (no connections)`);
+					errors.push(t("flowValidation.nodeIsolated"));
 				}
 			}
 		});
@@ -548,7 +550,7 @@ export const useAutomationFlow = (initialAutomation?: Automation) => {
 			};
 
 			if (!canReachEnd(startNode.id)) {
-				errors.push("No valid path exists from start to end node");
+				errors.push(t("flowValidation.noPathToEnd"));
 			}
 		}
 
@@ -589,10 +591,12 @@ export const useAutomationFlow = (initialAutomation?: Automation) => {
 					const next = newPath[i + 1];
 
 					// Define invalid transitions
-					if ((current === "action" && next === "trigger") || (current === "action" && next === "condition") || (current === "condition" && next === "trigger")) {
-						const currentNode = nodes.find((n) => n.data.type === current);
-						const nextNode = nodes.find((n) => n.data.type === next);
-						violations.push(`Invalid flow order: ${current} node "${currentNode?.data.label || current}" cannot come before ${next} node "${nextNode?.data.label || next}"`);
+					if (current === "action" && next === "condition") {
+						violations.push(t("flowValidation.conditionAfterAction"));
+					} else if (current === "action" && next === "trigger") {
+						violations.push(t("flowValidation.actionBeforeTrigger"));
+					} else if (current === "condition" && next === "trigger") {
+						violations.push(t("flowValidation.actionBeforeTrigger"));
 					}
 				}
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import { DeviceCapabilitiesProvider, useDeviceCapabilities } from "@/provider/DeviceCapabilitiesProvider";
 import AutomationNotFound from "@/components/automation/AutomationNotFound";
@@ -35,6 +36,7 @@ interface AutomationBuilderParams extends Record<string, string | undefined> {
 }
 
 const AutomationBuilder: React.FC = () => {
+	const { t } = useTranslation("automations");
 	// Mobile detection
 	const isMobile = useIsMobile();
 	const navigate = useNavigate();
@@ -105,7 +107,7 @@ const AutomationBuilder: React.FC = () => {
 		const handleGoBack = () => navigate(routes.automations);
 		return (
 			<MobileWarning
-				content="Automation editing requires a desktop device for the best experience. The visual flow editor is not optimized for mobile screens."
+				content={t("builder.mobileWarning")}
 				onGoBack={handleGoBack}
 			/>
 		);

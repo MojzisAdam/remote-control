@@ -1,11 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, ArrowLeft, Home } from "lucide-react";
 import routes from "@/constants/routes";
 
 const AutomationNotFound: React.FC = () => {
+	const { t } = useTranslation("automations");
 	const navigate = useNavigate();
 
 	const handleGoBack = () => {
@@ -27,8 +29,8 @@ const AutomationNotFound: React.FC = () => {
 					<div className="flex justify-center mb-4">
 						<AlertTriangle className="h-16 w-16 text-muted-foreground" />
 					</div>
-					<CardTitle className="text-xl">Automation Not Found</CardTitle>
-					<CardDescription>The automation you are looking for was not found. It may have been deleted or you may not have permission to access it.</CardDescription>
+					<CardTitle className="text-xl">{t("notFound.title")}</CardTitle>
+					<CardDescription>{t("notFound.description")}</CardDescription>
 				</CardHeader>
 				<CardContent className="space-y-3">
 					<Button
@@ -37,14 +39,14 @@ const AutomationNotFound: React.FC = () => {
 						variant="default"
 					>
 						<ArrowLeft className="w-4 h-4 mr-2" />
-						Back to Automations
+						{t("notFound.backToAutomations")}
 					</Button>
 					<Button
 						onClick={handleGoBack}
 						className="w-full"
 						variant="outline"
 					>
-						Go Back
+						{t("notFound.goBack")}
 					</Button>
 					<Button
 						onClick={handleGoHome}
@@ -52,7 +54,7 @@ const AutomationNotFound: React.FC = () => {
 						variant="ghost"
 					>
 						<Home className="w-4 h-4 mr-2" />
-						Go to Dashboard
+						{t("notFound.goToDashboard")}
 					</Button>
 				</CardContent>
 			</Card>

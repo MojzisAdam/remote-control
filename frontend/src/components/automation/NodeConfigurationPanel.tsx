@@ -10,6 +10,7 @@ import { Device } from "@/api/devices/model";
 import { TriggerConfiguration, ConditionConfiguration, ActionConfiguration } from "./configuration";
 import { useDeviceCapabilityHelper } from "@/hooks/useDeviceCapabilityHelper";
 import { useDeviceCapabilities } from "@/provider/DeviceCapabilitiesProvider";
+import { useTranslation } from "react-i18next";
 
 interface NodeConfigurationPanelProps {
 	node: Node<FlowData> | null;
@@ -20,6 +21,7 @@ interface NodeConfigurationPanelProps {
 }
 
 const NodeConfigurationPanel: React.FC<NodeConfigurationPanelProps> = ({ node, isOpen, onClose, onSave, onNodeDataChange }) => {
+	const { t } = useTranslation("automations");
 	const { devices } = useDeviceCapabilities();
 	const capabilityHelper = useDeviceCapabilityHelper();
 	const [config, setConfig] = useState<any>({});
@@ -75,18 +77,18 @@ const NodeConfigurationPanel: React.FC<NodeConfigurationPanelProps> = ({ node, i
 
 			if (triggerType === "state_change") {
 				if (!config.device_id) {
-					errors.push("Device selection is required for state change triggers");
+					errors.push(t("validation.deviceRequiredStateChange"));
 				}
 				if (!config.field) {
-					errors.push("Field selection is required for state change triggers");
+					errors.push(t("validation.fieldRequiredStateChange"));
 				}
 			} else if (triggerType === "time") {
 				if (!config.time) {
-					errors.push("Time is required for time-based triggers");
+					errors.push(t("validation.timeRequiredTimeTrigger"));
 				}
 			} else if (triggerType === "interval") {
 				if (!config.interval || config.interval <= 0) {
-					errors.push("Valid interval is required for interval triggers");
+					errors.push(t("validation.intervalRequiredIntervalTrigger"));
 				}
 			}
 		} else if (nodeType === "condition") {
@@ -94,26 +96,26 @@ const NodeConfigurationPanel: React.FC<NodeConfigurationPanelProps> = ({ node, i
 			if (conditionType === "simple") {
 				if (config.field || config.operator || config.value) {
 					if (!config.device_id) {
-						errors.push("Device selection is required for simple conditions");
+						errors.push(t("validation.deviceRequiredSimpleCondition"));
 					}
 					if (config.field && !config.operator) {
-						errors.push("Comparison operator is required when field is selected");
+						errors.push(t("validation.operatorRequiredWhenField"));
 					}
 					if (config.operator && (config.value === undefined || config.value === "")) {
-						errors.push("Comparison value is required when operator is selected");
+						errors.push(t("validation.valueRequiredWhenOperator"));
 					}
 				}
 			} else if (conditionType === "time") {
 				if (config.time && !config.time.trim()) {
-					errors.push("Time format is invalid");
+					errors.push(t("validation.timeFormatInvalid"));
 				}
 			} else if (conditionType === "advanced") {
 				if (config.condition_js) {
 					if (!config.device_id) {
-						errors.push("Device selection is required for advanced conditions");
+						errors.push(t("validation.deviceRequiredAdvancedCondition"));
 					}
 					if (!config.condition_js.trim()) {
-						errors.push("JavaScript condition code is required");
+						errors.push(t("validation.jsConditionCodeRequired"));
 					}
 				}
 			}
@@ -121,24 +123,24 @@ const NodeConfigurationPanel: React.FC<NodeConfigurationPanelProps> = ({ node, i
 			const actionType = localNodeData.action_type as string;
 			if (actionType === "device_control") {
 				if (!config.device_id) {
-					errors.push("Device selection is required for device control actions");
+					errors.push(t("validation.deviceRequiredDeviceControl"));
 				}
 				if (!config.field) {
-					errors.push("Field selection is required for device control actions");
+					errors.push(t("validation.fieldRequiredDeviceControl"));
 				}
 				if (config.value === undefined || config.value === "") {
-					errors.push("Value is required for device control");
+					errors.push(t("validation.valueRequiredDeviceControl"));
 				}
 			} else if (actionType === "mqtt_publish") {
 				if (!config.topic) {
-					errors.push("MQTT topic is required");
+					errors.push(t("validation.mqttTopicRequired"));
 				}
 				if (!config.message) {
-					errors.push("MQTT message is required");
+					errors.push(t("validation.mqttMessageRequired"));
 				}
 			} else if (actionType === "notify") {
 				if (!config.message) {
-					errors.push("Notification message is required");
+					errors.push(t("validation.notificationMessageRequired"));
 				}
 			}
 		}
@@ -193,13 +195,13 @@ const NodeConfigurationPanel: React.FC<NodeConfigurationPanelProps> = ({ node, i
 	const getNodeTitle = () => {
 		switch (nodeType) {
 			case "trigger":
-				return "Configure Trigger";
+				return t("configuration.configureTrigger");
 			case "condition":
-				return "Configure Condition";
+				return t("configuration.configureCondition");
 			case "action":
-				return "Configure Action";
+				return t("configuration.configureAction");
 			default:
-				return "Configure Node";
+				return t("configuration.configureNode");
 		}
 	};
 
@@ -269,14 +271,14 @@ const NodeConfigurationPanel: React.FC<NodeConfigurationPanelProps> = ({ node, i
 						{getNodeIcon()}
 						{getNodeTitle()}
 					</DialogTitle>
-					<DialogDescription>Configure the parameters for this {nodeType} node.</DialogDescription>
+					<DialogDescription>{t("configuration.configureDescription", { nodeType })}</DialogDescription>
 				</DialogHeader>
 
 				<div className="space-y-6">
 					{/* Node Info */}
 					<Card>
 						<CardHeader className="pb-3">
-							<CardTitle className="text-sm">Node Information</CardTitle>
+							<CardTitle className="text-sm">{t("configuration.nodeInformation")}</CardTitle>
 						</CardHeader>
 						<CardContent className="space-y-2">
 							<div className="flex items-center gap-2">
@@ -325,13 +327,13 @@ const NodeConfigurationPanel: React.FC<NodeConfigurationPanelProps> = ({ node, i
 							variant="outline"
 							onClick={handleCancel}
 						>
-							Cancel
+							{t("configuration.cancel")}
 						</Button>
 						<Button
 							onClick={handleSave}
 							disabled={validationErrors.length > 0}
 						>
-							Save Configuration
+							{t("configuration.saveConfiguration")}
 						</Button>
 					</div>
 				</div>

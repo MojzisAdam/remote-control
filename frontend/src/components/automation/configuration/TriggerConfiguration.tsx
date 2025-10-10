@@ -3,6 +3,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { HardDrive } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { Device } from "@/api/devices/model";
 import { getTriggerTypes } from "@/constants/automation";
@@ -27,6 +28,7 @@ interface TriggerConfigurationProps {
 }
 
 const TriggerConfiguration: React.FC<TriggerConfigurationProps> = ({ triggerType, config, devices, onConfigChange, onTriggerTypeChange, getCapabilitiesForRole }) => {
+	const { t } = useTranslation("automations");
 	const selectedDeviceId = config.device_id;
 	const fieldOptions = selectedDeviceId ? getCapabilitiesForRole(selectedDeviceId) : [];
 
@@ -34,13 +36,13 @@ const TriggerConfiguration: React.FC<TriggerConfigurationProps> = ({ triggerType
 		<div className="space-y-4">
 			{/* Trigger Type Selector */}
 			<div>
-				<Label htmlFor="trigger-type">Trigger Type</Label>
+				<Label htmlFor="trigger-type">{t("builder.triggerType")}</Label>
 				<Select
 					value={triggerType || ""}
 					onValueChange={(value) => onTriggerTypeChange?.(value)}
 				>
 					<SelectTrigger>
-						<SelectValue placeholder="Select trigger type" />
+						<SelectValue placeholder={t("builder.selectTriggerType")} />
 					</SelectTrigger>
 					<SelectContent>
 						{getTriggerTypes().map((option: any) => (
@@ -48,7 +50,7 @@ const TriggerConfiguration: React.FC<TriggerConfigurationProps> = ({ triggerType
 								key={option.value}
 								value={option.value}
 							>
-								{option.label}
+								{t(option.labelKey)}
 							</SelectItem>
 						))}
 					</SelectContent>
@@ -60,13 +62,13 @@ const TriggerConfiguration: React.FC<TriggerConfigurationProps> = ({ triggerType
 				<>
 					{/* Device */}
 					<div>
-						<Label htmlFor="device">Device</Label>
+						<Label htmlFor="device">{t("builder.device")}</Label>
 						<Select
 							value={config.device_id || ""}
 							onValueChange={(value) => onConfigChange("device_id", value)}
 						>
 							<SelectTrigger>
-								<SelectValue placeholder="Select a device" />
+								<SelectValue placeholder={t("builder.selectDevice")} />
 							</SelectTrigger>
 							<SelectContent>
 								{devices.map((device) => (
@@ -86,14 +88,14 @@ const TriggerConfiguration: React.FC<TriggerConfigurationProps> = ({ triggerType
 
 					{/* Field (dynamic from capabilities) */}
 					<div>
-						<Label htmlFor="field">Field</Label>
+						<Label htmlFor="field">{t("builder.field")}</Label>
 						<Select
 							value={config.field || ""}
 							onValueChange={(value) => onConfigChange("field", value)}
 							disabled={!selectedDeviceId}
 						>
 							<SelectTrigger>
-								<SelectValue placeholder="Select a field" />
+								<SelectValue placeholder={t("builder.selectField")} />
 							</SelectTrigger>
 							<SelectContent>
 								{fieldOptions.length > 0 ? (
@@ -110,7 +112,7 @@ const TriggerConfiguration: React.FC<TriggerConfigurationProps> = ({ triggerType
 										value="__none"
 										disabled
 									>
-										{selectedDeviceId ? "No fields available for this device" : "Select a device first"}
+										{selectedDeviceId ? t("builder.noFieldsAvailable") : t("builder.selectDeviceFirst")}
 									</SelectItem>
 								)}
 							</SelectContent>
@@ -122,7 +124,7 @@ const TriggerConfiguration: React.FC<TriggerConfigurationProps> = ({ triggerType
 			{/* Time Trigger */}
 			{triggerType === "time" && (
 				<div>
-					<Label htmlFor="time">Time</Label>
+					<Label htmlFor="time">{t("builder.time")}</Label>
 					<Input
 						id="time"
 						type="time"
@@ -135,14 +137,14 @@ const TriggerConfiguration: React.FC<TriggerConfigurationProps> = ({ triggerType
 			{/* Interval Trigger */}
 			{triggerType === "interval" && (
 				<div>
-					<Label htmlFor="interval">Interval (minutes)</Label>
+					<Label htmlFor="interval">{t("builder.intervalMinutes")}</Label>
 					<Input
 						id="interval"
 						type="number"
 						min="1"
 						value={config.interval || ""}
 						onChange={(e) => onConfigChange("interval", parseInt(e.target.value, 10))}
-						placeholder="Enter interval in minutes"
+						placeholder={t("builder.enterInterval")}
 					/>
 				</div>
 			)}

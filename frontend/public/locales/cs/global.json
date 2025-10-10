@@ -55,5 +55,8 @@
     },
     "loading": {
         "message": "Načítání..."
+    },
+    "common": {
+        "cancel": "Zrušit"
     }
 }

@@ -1,5 +1,6 @@
 import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
 	ReactFlow,
 	Background,
@@ -26,13 +27,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
 import { Automation } from "@/api/automation/model";
-import { Device } from "@/api/devices/model";
 import routes from "@/constants/routes";
 import { Save, Play, RotateCcw, Plus, AlertCircle, CheckCircle, Zap, GitBranch, Settings, Bug, Trash2, ArrowLeft, FileText, Activity } from "lucide-react";
 
@@ -187,6 +187,7 @@ interface AutomationBuilderContentProps {
 }
 
 const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ automationId, automation }) => {
+	const { t } = useTranslation("automations");
 	// Navigation
 	const navigate = useNavigate(); // Ref to store viewport-aware add functions
 	const addNodeFunctionsRef = React.useRef<{
@@ -203,6 +204,7 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 	const [isTesting, setIsTesting] = React.useState(false);
 	const [configNode, setConfigNode] = React.useState<any>(null);
 	const [isConfigPanelOpen, setIsConfigPanelOpen] = React.useState(false);
+	const [isResetDialogOpen, setIsResetDialogOpen] = React.useState(false);
 
 	const { createNewAutomation, updateExistingAutomation, toggleAutomationStatus, toggleLoading } = useAutomations();
 
@@ -285,7 +287,7 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 		// Users can then delete them with Delete/Backspace key
 		toast({
 			title: "Edge Selected",
-			description: "Press Delete or Backspace to remove this connection",
+			description: t("builder.deleteConnectionInstruction"),
 		});
 	}, []);
 
@@ -304,7 +306,7 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 			updateNodeConfig(nodeId, config);
 			toast({
 				title: "Configuration Updated",
-				description: "Node configuration has been saved successfully.",
+				description: t("builder.nodeConfigSaved"),
 			});
 		},
 		[updateNodeConfig]
@@ -335,8 +337,8 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 		(nodeId: string) => {
 			removeNode(nodeId);
 			toast({
-				title: "Node Deleted",
-				description: "Node has been removed from the automation.",
+				title: t("builder.nodeDeleted"),
+				description: t("builder.nodeRemoved"),
 			});
 		},
 		[removeNode]
@@ -359,8 +361,8 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 			// Only require name for non-draft automations
 			if (!isDraft && !automationName.trim()) {
 				toast({
-					title: "Validation Error",
-					description: "Please enter a name for the automation",
+					title: t("validation.validationError"),
+					description: t("validation.nameRequired"),
 					variant: "destructive",
 				});
 				return;
@@ -371,8 +373,8 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 
 			if (!finalName) {
 				toast({
-					title: "Validation Error",
-					description: "Please enter a name for the automation",
+					title: t("validation.validationError"),
+					description: t("validation.nameRequired"),
 					variant: "destructive",
 				});
 				return;
@@ -383,7 +385,7 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 			if (!automationData) {
 				toast({
 					title: "Validation Error",
-					description: isDraft ? "Failed to save draft" : "Please fix the validation errors before saving",
+					description: isDraft ? t("builder.failedSaveDraft") : t("validation.fixErrorsBeforeSaving"),
 					variant: "destructive",
 				});
 				return;
@@ -399,24 +401,32 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 				}
 				console.log(result);
 				if (result.success) {
+					const messageKey = automationId
+						? isDraft
+							? "messages.automationUpdatedDraft"
+							: "messages.automationUpdated"
+						: isDraft
+						? "messages.automationCreatedDraft"
+						: "messages.automationCreated";
 					toast({
-						title: "Success",
-						description: `Automation ${automationId ? "updated" : "created"} successfully${isDraft ? " as draft" : ""}`,
+						title: t("success"),
+						description: t(messageKey),
 					});
 
 					setAutomationEnabled(result.data.data.enabled);
 					setAutomationIsDraft(result.data.data.is_draft);
 				} else {
+					const messageKey = automationId ? "messages.failedToUpdate" : "messages.failedToCreate";
 					toast({
-						title: "Error",
-						description: result.status || `Failed to ${automationId ? "update" : "create"} automation`,
+						title: t("error"),
+						description: result.status || t(messageKey),
 						variant: "destructive",
 					});
 				}
 			} catch (error) {
 				toast({
-					title: "Error",
-					description: "An unexpected error occurred",
+					title: t("error"),
+					description: t("messages.unexpectedError"),
 					variant: "destructive",
 				});
 			} finally {
@@ -438,8 +448,8 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 	const handleTest = useCallback(async () => {
 		if (!isValidFlow) {
 			toast({
-				title: "Validation Error",
-				description: "Please fix validation errors before testing",
+				title: t("validation.validationError"),
+				description: t("validation.fixErrorsBeforeTest"),
 				variant: "destructive",
 			});
 			return;
@@ -452,13 +462,13 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 			await new Promise((resolve) => setTimeout(resolve, 2000));
 
 			toast({
-				title: "Test Successful",
-				description: "Automation workflow test completed successfully",
+				title: t("messages.testSuccessful"),
+				description: t("messages.testDescription"),
 			});
 		} catch (error) {
 			toast({
-				title: "Test Failed",
-				description: "Automation test encountered errors",
+				title: t("messages.testFailed"),
+				description: t("messages.testErrorDescription"),
 				variant: "destructive",
 			});
 		} finally {
@@ -468,15 +478,18 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 
 	// Handle automation reset/clear
 	const handleReset = useCallback(() => {
-		if (window.confirm("Are you sure you want to clear the workflow? This action cannot be undone.")) {
-			resetFlow();
-			setAutomationName("");
-			setAutomationDescription("");
-			toast({
-				title: "Workflow Cleared",
-				description: "The automation workflow has been reset",
-			});
-		}
+		setIsResetDialogOpen(true);
+	}, []);
+
+	const handleConfirmReset = useCallback(() => {
+		resetFlow();
+		setAutomationName("");
+		setAutomationDescription("");
+		setIsResetDialogOpen(false);
+		toast({
+			title: t("messages.workflowCleared"),
+			description: t("builder.workflowReset"),
+		});
 	}, [resetFlow]);
 
 	// Handle adding new nodes - use ref to get viewport-aware functions when available
@@ -515,7 +528,7 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 		if (result.success) {
 			toast({
 				title: "Success",
-				description: `Automation ${automationEnabled ? "disabled" : "enabled"} successfully`,
+				description: automationEnabled ? t("builder.automationDisabled") : t("builder.automationEnabled"),
 			});
 			// Update local state
 			setAutomationEnabled(!automationEnabled);
@@ -537,7 +550,7 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 		const { isValid, errors } = validateFlow();
 		toast({
 			title: isValid ? "Validation Passed" : "Validation Failed",
-			description: isValid ? "Your automation flow is valid and ready to save" : `Found ${errors.length} validation error(s)`,
+			description: isValid ? t("builder.flowValidReady") : t("builder.validationErrors", { count: errors.length }),
 			variant: isValid ? "default" : "destructive",
 		});
 	}, [validateFlow]);
@@ -551,7 +564,7 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 						{/* Navigation and Status */}
 						<Card className="mx-2 mt-2 mb-1 lg:m-3">
 							<CardHeader className="pb-1 pt-3 px-3">
-								<CardTitle className="text-sm">Navigation & Status</CardTitle>
+								<CardTitle className="text-sm">{t("builder.navigationStatus")}</CardTitle>
 							</CardHeader>
 							<CardContent className="space-y-2 pb-3 px-3">
 								<div className="flex gap-1">
@@ -562,7 +575,7 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 										onClick={handleGoToList}
 									>
 										<ArrowLeft className="w-3 h-3 mr-1" />
-										List
+										{t("builder.list")}
 									</Button>
 									{automationId && (
 										<Button
@@ -572,7 +585,7 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 											onClick={handleGoToLogs}
 										>
 											<FileText className="w-3 h-3 mr-1" />
-											Logs
+											{t("builder.logs")}
 										</Button>
 									)}
 								</div>
@@ -583,14 +596,14 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 											htmlFor="automation-enabled"
 											className="text-xs"
 										>
-											Automation Status
+											{t("builder.automationStatus")}
 										</Label>
 										{automationIsDraft ? (
 											<Badge
 												variant="secondary"
 												className="text-xs ml-2"
 											>
-												Draft
+												{t("builder.draft")}
 											</Badge>
 										) : (
 											<div className="flex items-center gap-2">
@@ -611,17 +624,17 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 						{/* Automation details */}
 						<Card className="mx-2 mt-2 mb-1 lg:m-3">
 							<CardHeader className="pb-1 pt-3 px-3">
-								<CardTitle className="text-sm">Automation Details</CardTitle>
+								<CardTitle className="text-sm">{t("builder.automationDetails")}</CardTitle>
 							</CardHeader>
 							<CardContent className="space-y-2 pb-3 px-3">
 								<Input
-									placeholder="Automation name..."
+									placeholder={t("builder.namePlaceholder")}
 									value={automationName}
 									onChange={(e) => setAutomationName(e.target.value)}
 									className="h-8"
 								/>
 								<Textarea
-									placeholder="Description (optional)..."
+									placeholder={t("builder.descriptionPlaceholder")}
 									value={automationDescription}
 									onChange={(e) => setAutomationDescription(e.target.value)}
 									rows={1}
@@ -633,7 +646,7 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 						{/* Node palette */}
 						<Card className="mx-2 my-1 lg:m-3">
 							<CardHeader className="pb-1 pt-3 px-3">
-								<CardTitle className="text-sm">Add Components</CardTitle>
+								<CardTitle className="text-sm">{t("builder.addComponents")}</CardTitle>
 							</CardHeader>
 							<CardContent className="space-y-1 pb-3 px-3">
 								<Button
@@ -643,7 +656,7 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 									onClick={handleAddTrigger}
 								>
 									<Zap className="w-3 h-3 mr-2" />
-									Add Trigger
+									{t("builder.addTrigger")}
 								</Button>
 								<Button
 									variant="outline"
@@ -652,7 +665,7 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 									onClick={handleAddCondition}
 								>
 									<GitBranch className="w-3 h-3 mr-2" />
-									Add Condition
+									{t("builder.addCondition")}
 								</Button>
 								<Button
 									variant="outline"
@@ -661,7 +674,7 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 									onClick={handleAddAction}
 								>
 									<Settings className="w-3 h-3 mr-2" />
-									Add Action
+									{t("builder.addAction")}
 								</Button>
 							</CardContent>
 						</Card>
@@ -669,12 +682,12 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 						{/* Flow statistics */}
 						<Card className="mx-2 my-1 lg:m-3">
 							<CardHeader className="pb-1 pt-3 px-3">
-								<CardTitle className="text-sm">Flow Statistics</CardTitle>
+								<CardTitle className="text-sm">{t("builder.flowStatistics")}</CardTitle>
 							</CardHeader>
 							<CardContent className="pb-3 px-3">
 								<div className="grid grid-cols-3 gap-2 text-xs">
 									<div className="flex flex-col items-center">
-										<span className="text-muted-foreground text-xs mb-1">Triggers</span>
+										<span className="text-muted-foreground text-xs mb-1">{t("builder.triggers")}</span>
 										<Badge
 											variant="secondary"
 											className="text-xs h-5 min-w-6 justify-center"
@@ -683,7 +696,7 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 										</Badge>
 									</div>
 									<div className="flex flex-col items-center">
-										<span className="text-muted-foreground text-xs mb-1">Conditions</span>
+										<span className="text-muted-foreground text-xs mb-1">{t("builder.conditions")}</span>
 										<Badge
 											variant="secondary"
 											className="text-xs h-5 min-w-6 justify-center"
@@ -692,7 +705,7 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 										</Badge>
 									</div>
 									<div className="flex flex-col items-center">
-										<span className="text-muted-foreground text-xs mb-1">Actions</span>
+										<span className="text-muted-foreground text-xs mb-1">{t("builder.actions")}</span>
 										<Badge
 											variant="secondary"
 											className="text-xs h-5 min-w-6 justify-center"
@@ -709,12 +722,12 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 							<CardHeader className="pb-1 pt-3 px-3">
 								<CardTitle className="text-sm flex items-center">
 									{isValidFlow ? <CheckCircle className="w-3 h-3 mr-2 text-green-500" /> : <AlertCircle className="w-3 h-3 mr-2 text-red-500" />}
-									Status
+									{t("builder.validationStatus")}
 								</CardTitle>
 							</CardHeader>
 							<CardContent className="pb-3 px-3">
 								{isValidFlow ? (
-									<p className="text-xs text-green-600">Flow is valid</p>
+									<p className="text-xs text-green-600">{t("builder.valid")}</p>
 								) : (
 									<ScrollArea className="h-12">
 										<div className="space-y-1">
@@ -737,7 +750,7 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 						{selectedNode && (
 							<Card className="mx-2 my-1 lg:m-3">
 								<CardHeader className="pb-1 pt-3 px-3">
-									<CardTitle className="text-sm">Node Properties</CardTitle>
+									<CardTitle className="text-sm">{t("builder.nodeSettings")}</CardTitle>
 								</CardHeader>
 								<CardContent className="space-y-2 pb-3 px-3">
 									<div>
@@ -775,15 +788,16 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 						{/* Quick Tips */}
 						<Card className="mx-2 my-1 mb-2 lg:m-3">
 							<CardHeader className="pb-1 pt-3 px-3">
-								<CardTitle className="text-sm">Quick Tips</CardTitle>
+								<CardTitle className="text-sm">{t("builder.quickTips")}</CardTitle>
 							</CardHeader>
 							<CardContent className="pb-3 px-3">
 								<div className="text-xs text-muted-foreground space-y-0.5">
-									<p>• Drag to connect nodes</p>
+									<p>• {t("builder.quickTipDragConnect")}</p>
 									<p>
-										• Select connection + <kbd className="px-1 py-0.5 bg-muted rounded text-xs">Del</kbd> to remove
+										• {t("builder.quickTipDeleteConnection")} <kbd className="px-1 py-0.5 bg-muted rounded text-xs">Del</kbd>
 									</p>
-									<p>• Configure • Delete</p>
+									<p>• {t("builder.quickTipConfigureNode")}</p>
+									<p>• {t("builder.quickTipDeleteNode")}</p>
 								</div>
 							</CardContent>
 						</Card>
@@ -800,8 +814,8 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 								size="sm"
 								className="text-xs h-8"
 							>
-								<Bug className="w-3 h-3 mr-1" />
-								Validate
+								<Bug className="w-3 h-3" />
+								{t("builder.validate")}
 							</Button>
 							<Button
 								onClick={handleTest}
@@ -810,8 +824,8 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 								className="text-xs h-8"
 								disabled={isTesting || !isValidFlow}
 							>
-								<Play className="w-3 h-3 mr-1" />
-								{isTesting ? "Testing..." : "Test"}
+								<Play className="w-3 h-3" />
+								{isTesting ? t("builder.testing") : t("builder.test")}
 							</Button>
 						</div>
 
@@ -834,8 +848,8 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 								size="sm"
 								className="text-xs h-8"
 							>
-								<Save className="w-3 h-3 mr-1" />
-								{isSaving ? "Saving..." : "Draft"}
+								<Save className="w-3 h-3" />
+								{isSaving ? t("builder.saving") : t("builder.draft")}
 							</Button>
 							<Button
 								onClick={handleSave}
@@ -843,8 +857,8 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 								size="sm"
 								className="text-xs h-8"
 							>
-								<Save className="w-3 h-3 mr-1" />
-								{isSaving ? "Saving..." : "Save"}
+								<Save className="w-3 h-3" />
+								{isSaving ? t("builder.saving") : t("builder.save")}
 							</Button>
 						</div>
 					</div>
@@ -908,7 +922,7 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 							variant="outline"
 							className="bg-background pointer-events-auto text-xs px-2 py-0.5 h-6"
 						>
-							{automationId ? "Edit" : "New"}
+							{automationId ? t("builder.edit") : t("builder.new")}
 						</Badge>
 
 						{/* Flow status indicator */}
@@ -916,7 +930,7 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 							variant={isValidFlow ? "default" : "destructive"}
 							className="text-xs px-2 py-0.5 h-6"
 						>
-							{isValidFlow ? "Valid" : "Invalid"}
+							{isValidFlow ? t("builder.valid") : t("builder.invalid")}
 						</Badge>
 					</div>
 
@@ -929,7 +943,7 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 							className="text-xs px-2 h-7 hidden sm:flex"
 						>
 							<Play className="w-3 h-3 mr-1" />
-							{isTesting ? "Testing..." : "Test"}
+							{isTesting ? t("builder.testing") : t("builder.test")}
 						</Button>
 
 						<Button
@@ -939,7 +953,7 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 							className="text-xs px-2 h-7 hidden md:flex"
 						>
 							<Bug className="w-3 h-3 mr-1" />
-							Validate
+							{t("builder.validate")}
 						</Button>
 
 						<Button
@@ -950,7 +964,7 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 							className="text-xs px-2 h-7"
 						>
 							<Save className="w-3 h-3 mr-1" />
-							Draft
+							{t("draft")}
 						</Button>
 
 						<Button
@@ -960,7 +974,7 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 							className="text-xs px-2 h-7"
 						>
 							<Save className="w-3 h-3 mr-1" />
-							Save
+							{t("save")}
 						</Button>
 					</div>
 				</div>
@@ -974,6 +988,39 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 				onSave={handleNodeConfigSave}
 				onNodeDataChange={handleNodeDataChange}
 			/>
+
+			{/* Reset Confirmation Dialog */}
+			<Dialog
+				open={isResetDialogOpen}
+				onOpenChange={setIsResetDialogOpen}
+			>
+				<DialogContent className="sm:max-w-md">
+					<DialogHeader>
+						<DialogTitle className="flex items-center gap-2">
+							<AlertCircle className="w-5 h-5 text-destructive" />
+							{t("builder.confirmReset")}
+						</DialogTitle>
+						<DialogDescription>{t("builder.confirmResetDescription")}</DialogDescription>
+					</DialogHeader>
+					<DialogFooter className="flex-col sm:flex-row gap-2">
+						<Button
+							variant="outline"
+							onClick={() => setIsResetDialogOpen(false)}
+							className="w-full sm:w-auto"
+						>
+							{t("cancel")}
+						</Button>
+						<Button
+							variant="destructive"
+							onClick={handleConfirmReset}
+							className="w-full sm:w-auto"
+						>
+							<RotateCcw className="w-4 h-4" />
+							{t("builder.clearWorkflow")}
+						</Button>
+					</DialogFooter>
+				</DialogContent>
+			</Dialog>
 		</div>
 	);
 };

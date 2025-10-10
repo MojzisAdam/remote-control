@@ -5,8 +5,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Settings, Trash2, Smartphone, Clock, Calendar, BarChart3 } from "lucide-react";
 import { FlowData } from "@/api/automation/model";
-import { getConditionIconComponent, getConditionTypeLabel, getOperatorSymbol } from "@/constants/automation";
+import { getConditionIconComponent, getConditionTypeLabel, getOperatorSymbol, getDayShortKey } from "@/constants/automation";
 import { useDeviceCapabilityHelper } from "@/hooks/useDeviceCapabilityHelper";
+import { useTranslation } from "react-i18next";
 import { Device } from "@/api/devices/model";
 
 interface ConditionNodeProps extends NodeProps {
@@ -17,6 +18,7 @@ interface ConditionNodeProps extends NodeProps {
 }
 
 const ConditionNode: React.FC<ConditionNodeProps> = ({ data, selected, id, onDelete, onSettings, devices, capabilityHelper }) => {
+	const { t } = useTranslation("automations");
 	const conditionData = data as FlowData;
 
 	const { getFieldOptionsForDevice } = capabilityHelper;
@@ -43,7 +45,7 @@ const ConditionNode: React.FC<ConditionNodeProps> = ({ data, selected, id, onDel
 
 	const getConfigSummary = () => {
 		const config = conditionData.config;
-		if (!config) return <p className="text-xs text-yellow-600">Not configured</p>;
+		if (!config) return <p className="text-xs text-yellow-600">{t("builder.notConfigured")}</p>;
 
 		const conditionType = conditionData.condition_type;
 		const deviceName = config.device_id ? getDeviceName(config.device_id) : null;
@@ -93,7 +95,7 @@ const ConditionNode: React.FC<ConditionNodeProps> = ({ data, selected, id, onDel
 						{config.time && (
 							<div className="flex items-center gap-1 text-xs">
 								<Clock className="w-3 h-3" />
-								At {config.time}
+								{t("nodes.atTime", { time: config.time })}
 							</div>
 						)}
 					</div>
@@ -112,7 +114,7 @@ const ConditionNode: React.FC<ConditionNodeProps> = ({ data, selected, id, onDel
 								<Calendar className="w-3 h-3" />
 								{config.days_of_week
 									.slice(0, 3)
-									.map((day: string) => day.charAt(0).toUpperCase() + day.slice(1, 3))
+									.map((day: string) => t(getDayShortKey(day)))
 									.join(", ")}
 								{config.days_of_week.length > 3 ? "..." : ""}
 							</div>
@@ -126,7 +128,7 @@ const ConditionNode: React.FC<ConditionNodeProps> = ({ data, selected, id, onDel
 						{deviceName}
 					</div>
 				) : (
-					<p className="text-xs">Configured</p>
+					<p className="text-xs">{t("builder.configured")}</p>
 				);
 		}
 	};
@@ -141,12 +143,12 @@ const ConditionNode: React.FC<ConditionNodeProps> = ({ data, selected, id, onDel
 					<div className="flex items-center space-x-2">
 						<div className="p-1 bg-yellow-100 dark:bg-yellow-700 rounded">{getConditionIcon(conditionType)}</div>
 						<div>
-							<h4 className="text-sm font-medium">Condition</h4>
+							<h4 className="text-sm font-medium">{t("nodes.condition")}</h4>
 							<Badge
 								variant="secondary"
 								className="text-xs"
 							>
-								{getConditionTypeLabel(conditionType)}
+								{t(getConditionTypeLabel(conditionType).labelKey)}
 							</Badge>
 						</div>
 					</div>
