@@ -636,7 +636,7 @@ export const useAutomationFlow = (initialAutomation?: Automation) => {
 
 	// Convert flow to automation request
 	const convertFlowToAutomation = useCallback(
-		(name: string, description?: string, isDraft: boolean = false): CreateAutomationRequest | null => {
+		(name: string, description?: string, isDraft: boolean = false, enabled: boolean = false): CreateAutomationRequest | null => {
 			// Allow saving as draft without validation
 			if (!isDraft && !validateFlow().isValid) {
 				return null;
@@ -755,7 +755,7 @@ export const useAutomationFlow = (initialAutomation?: Automation) => {
 			return {
 				name,
 				description,
-				enabled: !isDraft, // Disable execution for drafts
+				enabled: isDraft ? false : enabled, // Use provided enabled state for non-drafts, always false for drafts
 				is_draft: isDraft,
 				flow_metadata: flowMetadata,
 				triggers,

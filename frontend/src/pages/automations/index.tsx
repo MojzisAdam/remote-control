@@ -148,17 +148,16 @@ const AutomationList: React.FC = () => {
 	return (
 		<div className="space-y-6">
 			{/* Header */}
-			<div className="flex justify-between items-center">
+			<div className="flex justify-between items-center gap-8">
 				<div>
-					<h1 className="text-3xl font-bold">Automations</h1>
-					<p className="text-muted-foreground">Manage your automation workflows and triggers</p>
+					<h1 className="text-2xl font-bold flex flex-wrap items-center gap-2 max-sm:text-xl">Automations</h1>
 				</div>
 				<Button
 					onClick={handleCreateNew}
 					className="gap-2"
 				>
 					<Plus className="w-4 h-4" />
-					Create Automation
+					Create
 				</Button>
 			</div>
 
@@ -297,14 +296,14 @@ const AutomationList: React.FC = () => {
 							className="hover:shadow-md transition-shadow"
 						>
 							<CardContent className="p-6">
-								<div className="flex items-center justify-between">
+								<div className="flex items-center justify-between gap-8 max-lg:flex-col max-lg:gap-12 max-lg:items-start">
 									<div className="flex-1">
 										<div className="flex items-center gap-3 mb-2">
 											<h3 className="text-lg font-medium">{automation.name}</h3>
 											{getStatusBadge(automation)}
 										</div>
 
-										{automation.description && <p className="text-muted-foreground mb-3">{automation.description}</p>}
+										{automation.description && <p className="text-muted-foreground mb-3 text-sm">{automation.description}</p>}
 
 										<div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
 											<div className="flex items-center gap-1">
@@ -320,19 +319,20 @@ const AutomationList: React.FC = () => {
 										</div>
 									</div>
 
-									<div className="flex items-center gap-8">
-										<div className="flex items-center gap-2">
+									<div className="flex items-center gap-4">
+										<div className="flex items-center gap-2 px-3 py-1.5 bg-muted/50 rounded-md">
 											<Switch
 												checked={automation.enabled}
 												onCheckedChange={() => handleToggleAutomation(automation)}
 												disabled={toggleLoading[automation.id] || automation.is_draft}
 											/>
+											<span className="text-xs">{automation.enabled ? "Enabled" : "Disabled"}</span>
 											{toggleLoading[automation.id] && <div className="animate-spin w-4 h-4 border-2 border-primary border-t-transparent rounded-full"></div>}
 										</div>
 
 										<Button
 											onClick={() => handleEditAutomation(automation.id)}
-											variant={"outline"}
+											variant={"secondary"}
 											size="sm"
 										>
 											<Edit className="w-4 h-4 mr-2" />
@@ -342,7 +342,7 @@ const AutomationList: React.FC = () => {
 										<DropdownMenu>
 											<DropdownMenuTrigger asChild>
 												<Button
-													variant="secondary"
+													variant="outline"
 													size="sm"
 												>
 													<MoreHorizontal className="w-4 h-4" />

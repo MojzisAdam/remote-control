@@ -188,9 +188,7 @@ interface AutomationBuilderContentProps {
 
 const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ automationId, automation }) => {
 	// Navigation
-	const navigate = useNavigate();
-
-	// Ref to store viewport-aware add functions
+	const navigate = useNavigate(); // Ref to store viewport-aware add functions
 	const addNodeFunctionsRef = React.useRef<{
 		handleAddTrigger?: () => void;
 		handleAddCondition?: () => void;
@@ -199,7 +197,8 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 
 	const [automationName, setAutomationName] = React.useState("");
 	const [automationDescription, setAutomationDescription] = React.useState("");
-	const [automationEnabled, setAutomationEnabled] = React.useState(true);
+	const [automationEnabled, setAutomationEnabled] = React.useState(automation?.enabled || false);
+	const [automationIsDraft, setAutomationIsDraft] = React.useState(automation?.is_draft || false);
 	const [isSaving, setIsSaving] = React.useState(false);
 	const [isTesting, setIsTesting] = React.useState(false);
 	const [configNode, setConfigNode] = React.useState<any>(null);
@@ -233,7 +232,8 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 			loadAutomation(automation);
 			setAutomationName(automation.name || "");
 			setAutomationDescription(automation.description || "");
-			setAutomationEnabled(automation.enabled);
+			setAutomationEnabled(automation.enabled || false);
+			setAutomationIsDraft(automation.is_draft || false);
 		}
 	}, [automation]);
 
@@ -378,7 +378,7 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 				return;
 			}
 
-			const automationData = convertFlowToAutomation(finalName, automationDescription, isDraft);
+			const automationData = convertFlowToAutomation(finalName, automationDescription, isDraft, automationEnabled);
 
 			if (!automationData) {
 				toast({
@@ -388,7 +388,6 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 				});
 				return;
 			}
-
 			setIsSaving(true);
 
 			try {
@@ -398,12 +397,15 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 				} else {
 					result = await createNewAutomation(automationData);
 				}
-
+				console.log(result);
 				if (result.success) {
 					toast({
 						title: "Success",
 						description: `Automation ${automationId ? "updated" : "created"} successfully${isDraft ? " as draft" : ""}`,
 					});
+
+					setAutomationEnabled(result.data.data.enabled);
+					setAutomationIsDraft(result.data.data.is_draft);
 				} else {
 					toast({
 						title: "Error",
@@ -421,7 +423,7 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 				setIsSaving(false);
 			}
 		},
-		[automationName, automationDescription, automationId, convertFlowToAutomation, createNewAutomation, updateExistingAutomation]
+		[automationName, automationDescription, automationId, automationEnabled, convertFlowToAutomation, createNewAutomation, updateExistingAutomation]
 	);
 
 	const handleSave = useCallback(async () => {
@@ -575,23 +577,32 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 									)}
 								</div>
 
-								{automation && !automation.is_draft && (
-									<div className="flex items-center justify-between">
+								{automation && (
+									<div className="flex items-center justify-between mt-2">
 										<Label
 											htmlFor="automation-enabled"
 											className="text-xs"
 										>
 											Automation Status
 										</Label>
-										<div className="flex items-center gap-2">
-											<Switch
-												id="automation-enabled"
-												checked={automationEnabled}
-												onCheckedChange={handleToggleAutomation}
-												disabled={toggleLoading[automationId || 0]}
-											/>
-											{toggleLoading[automationId || 0] && <div className="animate-spin w-4 h-4 border-2 border-primary border-t-transparent rounded-full"></div>}
-										</div>
+										{automationIsDraft ? (
+											<Badge
+												variant="secondary"
+												className="text-xs ml-2"
+											>
+												Draft
+											</Badge>
+										) : (
+											<div className="flex items-center gap-2">
+												<Switch
+													id="automation-enabled"
+													checked={automationEnabled}
+													onCheckedChange={handleToggleAutomation}
+													disabled={toggleLoading[automationId || 0]}
+												/>
+												{toggleLoading[automationId || 0] && <div className="animate-spin w-4 h-4 border-2 border-primary border-t-transparent rounded-full"></div>}
+											</div>
+										)}
 									</div>
 								)}
 							</CardContent>
@@ -841,7 +852,7 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 			</div>
 
 			{/* Main canvas */}
-			<div className="flex-1 relative overflow-hidden">
+			<div className="flex-1 relative overflow-hidden w-full">
 				<NodeHandlersContext.Provider value={{ handleNodeDelete, handleNodeSettings }}>
 					<ReactFlow
 						nodes={nodes}

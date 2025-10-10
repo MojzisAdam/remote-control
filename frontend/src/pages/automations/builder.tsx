@@ -1,14 +1,17 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import { DeviceCapabilitiesProvider, useDeviceCapabilities } from "@/provider/DeviceCapabilitiesProvider";
 import AutomationNotFound from "@/components/automation/AutomationNotFound";
 import AutomationBuilderSkeleton from "@/components/automation/AutomationBuilderSkeleton";
 import AutomationBuilderContent from "@/components/automation/AutomationBuilderContent";
+import MobileWarning from "@/components/MobileWarning";
 
 import { useAutomations } from "@/hooks/useAutomations";
 import { useDevices } from "@/hooks/useDevices";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { Automation } from "@/api/automation/model";
+import routes from "@/constants/routes";
 
 const AutomationBuilderReadyGate: React.FC<{
 	automationId: number | null;
@@ -32,6 +35,10 @@ interface AutomationBuilderParams extends Record<string, string | undefined> {
 }
 
 const AutomationBuilder: React.FC = () => {
+	// Mobile detection
+	const isMobile = useIsMobile();
+	const navigate = useNavigate();
+
 	// Extract automationId from URL parameters
 	const { automationId: automationIdParam } = useParams<AutomationBuilderParams>();
 	const automationId = automationIdParam ? parseInt(automationIdParam, 10) : null;
@@ -92,6 +99,17 @@ const AutomationBuilder: React.FC = () => {
 
 		loadDevices();
 	}, [fetchUserDevices]);
+
+	// Show mobile warning if on mobile device
+	if (isMobile) {
+		const handleGoBack = () => navigate(routes.automations);
+		return (
+			<MobileWarning
+				content="Automation editing requires a desktop device for the best experience. The visual flow editor is not optimized for mobile screens."
+				onGoBack={handleGoBack}
+			/>
+		);
+	}
 
 	// Show loading skeleton while fetching automation data or devices
 	if (isLoadingAutomation || isLoadingDevices) {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Calendar, CheckCircle, XCircle, AlertTriangle, Clock, Search, RefreshCw } from "lucide-react";
+import { ArrowLeft, Calendar, CheckCircle, XCircle, AlertTriangle, Clock, Search, RefreshCw, Edit } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -326,29 +326,20 @@ const AutomationLogs: React.FC = () => {
 		<div className="space-y-6">
 			{/* Header */}
 			<div className="flex flex-col space-y-4">
-				<div className="flex items-center gap-4">
-					<Button
-						variant="ghost"
-						size="sm"
-						asChild
-					>
-						<Link to={routes.automations}>
-							<ArrowLeft className="w-4 h-4 mr-2" />
-							Back to Automations
-						</Link>
-					</Button>
-				</div>
-
 				<div className="flex items-start justify-between">
 					<div>
 						<div className="flex items-center gap-3 mb-2">
-							<Calendar className="w-8 h-8 text-primary" />
+							<Calendar className="w-6 h-6 text-primary" />
 							<div>
-								<h1 className="text-3xl font-bold">Execution Logs</h1>
-								<p className="text-xl text-muted-foreground">{currentAutomation.name}</p>
+								<h1 className="text-2xl font-bold flex flex-wrap items-center gap-2 max-sm:text-xl">Execution Logs</h1>
 							</div>
 						</div>
-						{currentAutomation.description && <p className="text-muted-foreground mt-2">{currentAutomation.description}</p>}
+						<div className="flex gap-2 items-center flex-row">
+							<Badge variant={currentAutomation.enabled ? "default" : "secondary"}>{currentAutomation.enabled ? "Active" : "Disabled"}</Badge>
+							{currentAutomation.is_draft && <Badge variant="outline">Draft</Badge>}
+						</div>
+						<p className="text-lg text-muted-foreground mt-2">{currentAutomation.name}</p>
+						{currentAutomation.description && <p className="text-muted-foreground mt-2 text-sm">{currentAutomation.description}</p>}
 					</div>
 
 					<div className="flex items-center gap-2">
@@ -357,10 +348,21 @@ const AutomationLogs: React.FC = () => {
 							size="sm"
 							asChild
 						>
-							<Link to={routes.automationBuilderEdit(currentAutomation.id)}>Edit Automation</Link>
+							<Link to={routes.automations}>
+								<ArrowLeft className="w-4 h-4 mr-2" />
+								List
+							</Link>
 						</Button>
-						<Badge variant={currentAutomation.enabled ? "default" : "secondary"}>{currentAutomation.enabled ? "Active" : "Disabled"}</Badge>
-						{currentAutomation.is_draft && <Badge variant="outline">Draft</Badge>}
+						<Button
+							variant="outline"
+							size="sm"
+							asChild
+						>
+							<Link to={routes.automationBuilderEdit(currentAutomation.id)}>
+								<Edit className="w-4 h-4 mr-2" />
+								Edit
+							</Link>
+						</Button>
 					</div>
 				</div>
 			</div>
@@ -452,7 +454,7 @@ const AutomationLogs: React.FC = () => {
 			{/* Filters and Search */}
 			<Card>
 				<CardContent className="p-4">
-					<div className="flex flex-col sm:flex-row gap-4 items-center">
+					<div className="flex flex-col xl:flex-row gap-4 xl:items-center">
 						<div className="flex items-center gap-2">
 							<Select
 								value={pageSize}
@@ -606,7 +608,7 @@ const AutomationLogs: React.FC = () => {
 					{totalRecords > 0 && (
 						<>
 							<Separator className="my-4" />
-							<div className="flex items-center justify-between">
+							<div className="flex items-center justify-between max-sm:flex-col max-sm:gap-4">
 								<div className="text-sm text-muted-foreground">
 									Showing {from} to {to} of {totalRecords} results
 								</div>

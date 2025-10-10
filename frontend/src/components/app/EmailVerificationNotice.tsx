@@ -61,11 +61,26 @@ export default function EmailVerificationNotice() {
 				<AlertDescription>
 					<div className="flex flex-col gap-y-2">
 						<p>{t("email-verification.alert-description")}</p>
-						<div>{status && <AuthSessionStatus className="" status={status} />}</div>
+						<div>
+							{status && (
+								<AuthSessionStatus
+									className="text-xs"
+									status={status}
+								/>
+							)}
+						</div>
 
-						<ButtonWithSpinner onClick={handleSubmit} className="py-3 font-medium max-w-[300px]" isLoading={loading} label={t("email-verification.alert-button")} />
+						<ButtonWithSpinner
+							onClick={handleSubmit}
+							className="font-medium text-xs whitespace-normal h-full w-fit"
+							isLoading={loading}
+							label={t("email-verification.alert-button")}
+						/>
 
-						<InputError messages={errors.message} className="mt-2" />
+						<InputError
+							messages={errors.message}
+							className="mt-2"
+						/>
 					</div>
 				</AlertDescription>
 			</Alert>
