@@ -432,39 +432,95 @@ export const useAutomationFlow = (initialAutomation?: Automation) => {
 			errors.push(t("flowValidation.atLeastOneAction"));
 		}
 
-		// Validate each node configuration
-		nodes.forEach((node) => {
-			if (node.data.type === "trigger" || node.data.type === "condition" || node.data.type === "action") {
-				const config = node.data.config;
+		// Validate triggers - detailed validation matching automationUtils
+		triggerNodes.forEach((node, index) => {
+			const config = node.data.config;
+			const triggerType = node.data.trigger_type || config?.type;
 
-				if (!config?.type) {
-					errors.push(t("flowValidation.nodeTypeRequired"));
+			if (!triggerType) {
+				errors.push(t("flowValidation.nodeTypeRequired"));
+				return;
+			}
+
+			if (triggerType === "time") {
+				if (!config?.time) {
+					errors.push(t("flowValidation.triggerTimeRequired") + ` (Trigger ${index + 1})`);
 				}
+				if (!config?.days_of_week || config.days_of_week.length === 0) {
+					errors.push(t("flowValidation.triggerTimeDaysRequired") + ` (Trigger ${index + 1})`);
+				}
+			}
 
-				// Check device requirement based on node type and specific subtype
-				const requiresDevice = (() => {
-					if (node.data.type === "trigger") {
-						const triggerType = node.data.trigger_type || config?.type;
-						return ["state_change"].includes(triggerType || "");
-					} else if (node.data.type === "condition") {
-						const conditionType = node.data.condition_type || config?.type;
-						// Simple conditions require device only if they have field/operator/value configured
-						if (conditionType === "simple") {
-							return !!(config?.field || config?.operator || config?.value);
-						}
-						// time and day_of_week conditions do not require devices
-						return false;
-					} else if (node.data.type === "action") {
-						// Only device_control actions require a device
-						// notify, log, mqtt_publish actions do not require devices
-						const actionType = node.data.action_type || config?.type;
-						return ["device_control"].includes(actionType || "");
-					}
-					return false;
-				})();
+			if (triggerType === "mqtt") {
+				if (!config?.mqtt_topic) {
+					errors.push(t("flowValidation.triggerMqttTopicRequired") + ` (Trigger ${index + 1})`);
+				}
+			}
 
-				if (requiresDevice && config?.device_id === null) {
-					errors.push(t("flowValidation.deviceRequired"));
+			if (triggerType === "state_change") {
+				if (!config?.device_id) {
+					errors.push(t("flowValidation.triggerStateChangeDeviceRequired") + ` (Trigger ${index + 1})`);
+				}
+				if (!config?.field) {
+					errors.push(t("flowValidation.triggerStateChangeFieldRequired") + ` (Trigger ${index + 1})`);
+				}
+			}
+		});
+
+		// Validate conditions - detailed validation matching automationUtils
+		conditionNodes.forEach((node, index) => {
+			const config = node.data.config;
+			const conditionType = node.data.condition_type || config?.type;
+
+			// Only validate simple conditions thoroughly as they are the main type requiring all fields
+			if (conditionType === "simple") {
+				if (!config?.device_id) {
+					errors.push(t("flowValidation.conditionDeviceRequired") + ` (Condition ${index + 1})`);
+				}
+				if (!config?.field) {
+					errors.push(t("flowValidation.conditionFieldRequired") + ` (Condition ${index + 1})`);
+				}
+				if (!config?.operator) {
+					errors.push(t("flowValidation.conditionOperatorRequired") + ` (Condition ${index + 1})`);
+				}
+				if (!config?.value && config?.value !== 0 && config?.value !== false) {
+					errors.push(t("flowValidation.conditionValueRequired") + ` (Condition ${index + 1})`);
+				}
+			}
+			// Time and day_of_week conditions have different validation requirements and are handled by their specific config checks
+		});
+
+		// Validate actions - detailed validation matching automationUtils
+		actionNodes.forEach((node, index) => {
+			const config = node.data.config;
+			const actionType = node.data.action_type || config?.type;
+
+			if (!actionType) {
+				errors.push(t("flowValidation.nodeTypeRequired"));
+				return;
+			}
+
+			if (actionType === "device_control") {
+				if (!config?.device_id) {
+					errors.push(t("flowValidation.actionDeviceControlDeviceRequired") + ` (Action ${index + 1})`);
+				}
+				if (!config?.field) {
+					errors.push(t("flowValidation.actionDeviceControlFieldRequired") + ` (Action ${index + 1})`);
+				}
+				if (!config?.value && config?.value !== 0 && config?.value !== false) {
+					errors.push(t("flowValidation.actionDeviceControlValueRequired") + ` (Action ${index + 1})`);
+				}
+			}
+
+			if (actionType === "mqtt_publish") {
+				if (!config?.mqtt_topic) {
+					errors.push(t("flowValidation.actionMqttTopicRequired") + ` (Action ${index + 1})`);
+				}
+			}
+
+			if (actionType === "notify") {
+				if (!config?.title) {
+					errors.push(t("flowValidation.actionNotifyTitleRequired") + ` (Action ${index + 1})`);
 				}
 			}
 		});
@@ -636,7 +692,7 @@ export const useAutomationFlow = (initialAutomation?: Automation) => {
 		setIsValidFlow(errors.length === 0);
 
 		return { isValid: errors.length === 0, errors };
-	}, [nodes, edges]);
+	}, [nodes, edges, t]);
 
 	// Convert flow to automation request
 	const convertFlowToAutomation = useCallback(

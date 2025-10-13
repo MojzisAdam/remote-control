@@ -1,6 +1,9 @@
 import { CreateAutomationRequest, Automation } from "@/api/automation/model";
 
 // Validation helpers
+/**
+ * @deprecated Use validateFlow from useAutomationFlow hook instead for consistent validation with localization support
+ */
 export const validateAutomation = (data: CreateAutomationRequest): string[] => {
 	const errors: string[] = [];
 

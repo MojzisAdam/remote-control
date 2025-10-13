@@ -258,9 +258,7 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 	React.useEffect(() => {
 		// Only validate if we have actual functional nodes (not just start/end)
 		const functionalNodes = nodes.filter((n) => n.data.type !== "start" && n.data.type !== "end");
-		if (functionalNodes.length > 0) {
-			validateFlow();
-		}
+		validateFlow();
 	}, [nodes, edges, validateFlow]);
 
 	// Handle node selection and configuration
@@ -358,8 +356,7 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 	// Handle saving automation
 	const saveAutomation = useCallback(
 		async (isDraft: boolean = false) => {
-			// Only require name for non-draft automations
-			if (!isDraft && !automationName.trim()) {
+			if (!automationName.trim()) {
 				toast({
 					title: t("validation.validationError"),
 					description: t("validation.nameRequired"),
@@ -378,6 +375,19 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 					variant: "destructive",
 				});
 				return;
+			}
+
+			// Validate the flow before saving (unless it's a draft)
+			if (!isDraft) {
+				const validation = validateFlow();
+				if (!validation.isValid) {
+					toast({
+						title: t("validation.validationError"),
+						description: t("validation.fixErrorsBeforeSave"),
+						variant: "destructive",
+					});
+					return;
+				}
 			}
 
 			const automationData = convertFlowToAutomation(finalName, automationDescription, isDraft, automationEnabled);
@@ -399,7 +409,7 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 				} else {
 					result = await createNewAutomation(automationData);
 				}
-				console.log(result);
+				console.log("Save Automation Result:", result);
 				if (result.success) {
 					const messageKey = automationId
 						? isDraft
@@ -415,6 +425,13 @@ const AutomationBuilderContent: React.FC<AutomationBuilderContentProps> = ({ aut
 
 					setAutomationEnabled(result.data.data.enabled);
 					setAutomationIsDraft(result.data.data.is_draft);
+
+					// If this was a new automation creation, update the URL to include the ID
+					if (!automationId && result.data.data.id) {
+						const newAutomationId = result.data.data.id;
+						// Update the URL to the edit route with the new automation ID
+						navigate(routes.automationBuilderEdit(newAutomationId), { replace: true });
+					}
 				} else {
 					const messageKey = automationId ? "messages.failedToUpdate" : "messages.failedToCreate";
 					toast({

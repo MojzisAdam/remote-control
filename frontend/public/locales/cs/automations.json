@@ -252,7 +252,21 @@
         "nodeIsolated": "Uzel je izolovaný a není připojen k toku",
         "noPathToEnd": "Neexistuje platná cesta od počátečního k koncovému uzlu",
         "conditionAfterAction": "Podmínky by měly přijít před akcemi v toku",
-        "actionBeforeTrigger": "Akce nemohou přijít před spouštěči v toku"
+        "actionBeforeTrigger": "Akce nemohou přijít před spouštěči v toku",
+        "triggerTimeRequired": "Čas je vyžadován pro časově založené spouštěče",
+        "triggerTimeDaysRequired": "Alespoň jeden den je vyžadován pro časově založené spouštěče",
+        "triggerMqttTopicRequired": "MQTT téma je vyžadováno",
+        "triggerStateChangeDeviceRequired": "Zařízení je vyžadováno pro spouštěče změny stavu",
+        "triggerStateChangeFieldRequired": "Pole je vyžadováno pro spouštěče změny stavu",
+        "conditionDeviceRequired": "Zařízení je vyžadováno",
+        "conditionFieldRequired": "Pole je vyžadováno",
+        "conditionOperatorRequired": "Operátor je vyžadován",
+        "conditionValueRequired": "Hodnota je vyžadována",
+        "actionDeviceControlDeviceRequired": "Zařízení je vyžadováno pro akce řízení zařízení",
+        "actionDeviceControlFieldRequired": "Pole je vyžadováno pro akce řízení zařízení",
+        "actionDeviceControlValueRequired": "Hodnota je vyžadována pro akce řízení zařízení",
+        "actionMqttTopicRequired": "MQTT téma je vyžadováno",
+        "actionNotifyTitleRequired": "Titulek oznámení je vyžadován"
     },
 
     "constants": {

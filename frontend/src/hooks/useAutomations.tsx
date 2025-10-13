@@ -11,7 +11,6 @@ import {
 	getAutomationStats,
 	getAutomationLogsStats,
 } from "@/api/automation/actions";
-import { validateAutomation } from "@/utils/automationUtils";
 import { ApiHandlerResult, handleApiRequest } from "@/utils/apiHandler";
 import { Automation, CreateAutomationRequest, UpdateAutomationRequest, AutomationListResponse, AutomationLogsResponse } from "@/api/automation/model";
 
@@ -125,20 +124,7 @@ export const useAutomations = () => {
 		setLoading(true);
 		clearError();
 
-		// Validate the automation data first
-		const validationErrors = validateAutomation(data);
-		if (validationErrors.length > 0) {
-			setError(validationErrors.join(", "));
-			setLoading(false);
-			return {
-				success: false,
-				status: null,
-				data: null,
-				errors: { validation: validationErrors },
-				statusCode: null,
-			};
-		}
-
+		// Note: Validation is now handled by validateFlow in useAutomationFlow before calling this function
 		const result = await handleApiRequest({
 			apiCall: () => createAutomation(data),
 			successMessage: t("hookMessages.automationCreated"),

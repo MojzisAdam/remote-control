@@ -252,7 +252,21 @@
         "nodeIsolated": "Node is isolated and not connected to the flow",
         "noPathToEnd": "No valid path exists from start to end node",
         "conditionAfterAction": "Conditions should come before actions in the flow",
-        "actionBeforeTrigger": "Actions cannot come before triggers in the flow"
+        "actionBeforeTrigger": "Actions cannot come before triggers in the flow",
+        "triggerTimeRequired": "Time is required for time-based triggers",
+        "triggerTimeDaysRequired": "At least one day is required for time-based triggers",
+        "triggerMqttTopicRequired": "MQTT topic is required",
+        "triggerStateChangeDeviceRequired": "Device is required for state change triggers",
+        "triggerStateChangeFieldRequired": "Field is required for state change triggers",
+        "conditionDeviceRequired": "Device is required",
+        "conditionFieldRequired": "Field is required",
+        "conditionOperatorRequired": "Operator is required",
+        "conditionValueRequired": "Value is required",
+        "actionDeviceControlDeviceRequired": "Device is required for device control actions",
+        "actionDeviceControlFieldRequired": "Field is required for device control actions",
+        "actionDeviceControlValueRequired": "Value is required for device control actions",
+        "actionMqttTopicRequired": "MQTT topic is required",
+        "actionNotifyTitleRequired": "Notification title is required"
     },
 
     "constants": {

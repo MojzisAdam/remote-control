@@ -127,6 +127,22 @@ class UpdateAutomationRequest extends FormRequest
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
+            $isDraft = $this->input('is_draft', false);
+
+            // Only require triggers and actions for non-draft automations
+            if (!$isDraft) {
+                $triggers = $this->input('triggers', []);
+                $actions = $this->input('actions', []);
+
+                if (empty($triggers)) {
+                    $validator->errors()->add('triggers', 'At least one trigger is required for non-draft automations.');
+                }
+
+                if (empty($actions)) {
+                    $validator->errors()->add('actions', 'At least one action is required for non-draft automations.');
+                }
+            }
+
             $conditions = $this->input('conditions', []);
 
             foreach ($conditions as $index => $condition) {

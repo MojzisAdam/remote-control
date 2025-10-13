@@ -41,8 +41,8 @@ class StoreAutomationRequest extends FormRequest
             'flow_metadata.edges.*.source' => 'required|string',
             'flow_metadata.edges.*.target' => 'required|string',
 
-            // Triggers validation
-            'triggers' => 'array|min:0|max:10',
+            // Triggers validation - required for non-draft automations
+            'triggers' => 'array|max:10',
             'triggers.*.type' => ['required', Rule::in(['time', 'interval', 'mqtt', 'state_change'])],
 
             // Time trigger fields
@@ -85,8 +85,8 @@ class StoreAutomationRequest extends FormRequest
             'conditions.*.days_of_week' => 'nullable|array',
             'conditions.*.days_of_week.*' => Rule::in(['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']),
 
-            // Actions validation
-            'actions' => 'required|array|min:1|max:20',
+            // Actions validation - required for non-draft automations
+            'actions' => 'array|max:20',
             'actions.*.type' => ['required', Rule::in(['mqtt_publish', 'notify', 'log', 'device_control'])],
 
             // MQTT publish action fields
@@ -111,14 +111,12 @@ class StoreAutomationRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'triggers.required' => 'At least one trigger is required.',
             'triggers.*.type.required' => 'Trigger type is required.',
             'triggers.*.type.in' => 'Invalid trigger type. Must be time, mqtt, or state_change.',
             'triggers.*.time_at.required_if' => 'Time is required for time-based triggers.',
             'triggers.*.days_of_week.required_if' => 'Days of week are required for time-based triggers.',
             'triggers.*.mqtt_topic.required_if' => 'MQTT topic is required for MQTT triggers.',
             'triggers.*.device_id.required_if' => 'Device ID is required for state change triggers.',
-            'actions.required' => 'At least one action is required.',
             'actions.*.type.required' => 'Action type is required.',
             'actions.*.type.in' => 'Invalid action type.',
             'conditions.*.device_id.exists' => 'Selected device does not exist.',
@@ -133,6 +131,22 @@ class StoreAutomationRequest extends FormRequest
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
+            $isDraft = $this->input('is_draft', false);
+
+            // Only require triggers and actions for non-draft automations
+            if (!$isDraft) {
+                $triggers = $this->input('triggers', []);
+                $actions = $this->input('actions', []);
+
+                if (empty($triggers)) {
+                    $validator->errors()->add('triggers', 'At least one trigger is required for non-draft automations.');
+                }
+
+                if (empty($actions)) {
+                    $validator->errors()->add('actions', 'At least one action is required for non-draft automations.');
+                }
+            }
+
             $conditions = $this->input('conditions', []);
 
             foreach ($conditions as $index => $condition) {
