@@ -1,4 +1,13 @@
-export const allPermissions = ["manage-users", "manage-devices", "view-history", "edit-device-description", "view-notifications", "edit-all-parameters"];
+export const allPermissions = [
+	"manage-users",
+	"manage-devices",
+	"view-history",
+	"edit-device-description",
+	"view-notifications",
+	"edit-all-parameters",
+	"manage-device-types",
+	"manage-automations",
+] as const;
 
 export const readableRoleNames: Record<string, string> = {
 	superadmin: "Super Administrator",
@@ -14,6 +23,8 @@ export const readablePermissionNames: Record<string, string> = {
 	"edit-device-description": "Edit Device Descriptions",
 	"view-notifications": "View Notifications",
 	"edit-all-parameters": "Edit All Parameters",
+	"manage-device-types": "Manage Device Types",
+	"manage-automations": "Manage Automations",
 };
 
 // Convert role/permission names to readable format
@@ -31,7 +42,7 @@ export const formatName = (name: string, dictionary: Record<string, string>): st
 export const getDefaultPermissionsForRole = (role: string): string[] => {
 	switch (role) {
 		case "superadmin":
-			return ["manage-users", "manage-devices", "view-history", "edit-device-description", "view-notifications", "edit-all-parameters"];
+			return ["manage-users", "manage-devices", "view-history", "edit-device-description", "view-notifications", "edit-all-parameters", "manage-device-types", "manage-automations"];
 		case "administrator":
 			return ["view-history", "edit-device-description", "view-notifications", "edit-all-parameters"];
 		case "superuser":

@@ -1,0 +1,221 @@
+{
+	"deviceTypes": {
+		"title": "Správa typů zařízení",
+		"search": "Vyhledat typy zařízení...",
+		"showing": "Zobrazeno {{count}} typ(ů) zařízení",
+		"capability": "schopnost",
+		"capabilities": "schopnosti",
+		"totalCapabilities": "Celkem schopností",
+		"noDescription": "Bez popisu",
+		"noCapabilities": "Žádné schopnosti nedefinovány",
+		"noMqttTopics": "Žádné MQTT témata nekonfigurována",
+		"mqttTopics": "MQTT témata",
+		"columns": {
+			"id": "ID",
+			"name": "Název",
+			"description": "Popis",
+			"capabilities": "Schopnosti",
+			"createdAt": "Vytvořeno",
+			"updatedAt": "Aktualizováno",
+            "actions": "Akce"
+		},
+		"actions": {
+			"title": "Akce",
+			"openMenu": "Otevřít menu",
+			"view": "Zobrazit detaily",
+			"edit": "Upravit",
+			"delete": "Smazat",
+			"create": "Vytvořit typ zařízení",
+			"more": "Více",
+			"expandAll": "Rozbalit vše",
+			"collapseAll": "Sbalit vše"
+		},
+		"viewModal": {
+			"title": "Detaily typu zařízení",
+			"description": "Zobrazit podrobné informace o tomto typu zařízení."
+		},
+		"editModal": {
+			"title": "Upravit typ zařízení",
+			"description": "Upravit vlastnosti tohoto typu zařízení.",
+			"saveChanges": "Uložit změny",
+			"descriptionPlaceholder": "Zadejte popis pro tento typ zařízení...",
+			"capabilitiesPlaceholder": "{\n  \"priklad_schopnosti\": {\n    \"type\": \"number\",\n    \"role\": [\"action\"],\n    \"default_value\": 0,\n    \"description\": \"Příklad schopnosti\"\n  }\n}",
+			"mqttTopicsPlaceholder": "{\n  \"automation\": {\n    \"subscribe\": \"typ_zarizeni/+/data/automation\",\n    \"command\": \"typ_zarizeni/{device_id}/cmd/automation\"\n  }\n}"
+		},
+		"createModal": {
+			"title": "Vytvořit nový typ zařízení",
+			"description": "Vytvořte nový typ zařízení se schopnostmi a MQTT konfigurací.",
+			"create": "Vytvořit typ zařízení",
+			"idPlaceholder": "např. cim, daitsu, vlastni_typ",
+			"namePlaceholder": "např. CIM tepelné čerpadlo, vlastní zařízení",
+			"descriptionPlaceholder": "Zadejte popis pro tento typ zařízení...",
+			"capabilitiesPlaceholder": "{\n  \"priklad_schopnosti\": {\n    \"type\": \"number\",\n    \"role\": [\"action\"],\n    \"default_value\": 0,\n    \"description\": \"Příklad schopnosti\"\n  }\n}",
+			"mqttTopicsPlaceholder": "{\n  \"automation\": {\n    \"subscribe\": \"typ_zarizeni/+/data/automation\",\n    \"command\": \"typ_zarizeni/{device_id}/cmd/automation\"\n  }\n}"
+		},
+		"deleteAlert": {
+			"title": "Smazat typ zařízení",
+			"description": "Opravdu chcete smazat typ zařízení \"{{name}}\"? Tato akce je nevratná a může ovlivnit existující zařízení používající tento typ.",
+			"cancel": "Zrušit",
+			"delete": "Smazat",
+			"unknownName": "Neznámý"
+		},
+		"createDeviceType": "Vytvořit typ zařízení",
+		"editDeviceType": "Upravit typ zařízení",
+		"createDeviceTypeDescription": "Definujte nový typ zařízení se schopnostmi a MQTT konfigurací pro vaše zařízení.",
+		"editDeviceTypeDescription": "Upravte vlastnosti, schopnosti a MQTT nastavení tohoto typu zařízení.",
+		"detailPage": {
+            "title": "Detaily typu zařízení",
+			"subtitle": "ID: {{id}}",
+			"basicInformation": "Základní informace",
+			"basicInformationDescription": "Nakonfigurujte název a popis pro tento typ zařízení ve více jazycích.",
+			"capabilitiesDescription": "Schopnosti zařízení definují, jaké akce, senzory a nastavení tento typ zařízení podporuje.",
+			"mqttTopicsDescription": "Konfigurace MQTT témat pro komunikační vzory zařízení.",
+			"topics": "témat",
+			"tabs": {
+				"view": "Zobrazit detaily",
+				"edit": "Upravit"
+			}
+		},
+		"editors": {
+			"selectLanguage": "Vybrat jazyk",
+			"languageHelper": "Nakonfigurujte názvy a popisy ve více jazycích. Angličtina je povinná a slouží jako záložní jazyk.",
+			"required": "Povinné",
+			"optional": "Volitelné",
+			"register": "Registr",
+			"minValue": "Min hodnota",
+			"maxValue": "Max hodnota",
+			"enumValues": "Enum hodnoty",
+			"labels": "Štítky",
+			"defaultValue": "Výchozí hodnota",
+			"unit": "Jednotka",
+			"incrementValue": "Přírůstek",
+			"types": {
+				"number": "Číslo",
+				"boolean": "Boolean",
+				"enum": "Výčet"
+			},
+			"roleTypes": {
+				"action": "Akce",
+				"trigger": "Spouštěč",
+				"condition": "Podmínka"
+			},
+			"placeholders": {
+				"name": "Zadejte název typu zařízení...",
+				"description": "Zadejte popis pro tento typ zařízení..."
+			},
+			"propertyLabels": {
+				"unit": "Jednotka",
+				"default": "Výchozí",
+				"range": "Rozsah",
+				"step": "Krok"
+			},
+			"capabilities": {
+				"editorHelper": "Definujte schopnosti zařízení, které určují, jaké akce, spouštěče a podmínky tento typ zařízení podporuje.",
+				"addCapability": "Přidat schopnost",
+				"noCapabilities": "Nejsou definovány žádné schopnosti",
+				"noCapabilitiesDescription": "Schopnosti definují, jaké akce, senzory a nastavení tento typ zařízení podporuje. Klikněte na tlačítko níže a přidejte svou první schopnost.",
+				"capability": "Schopnost",
+				"capabilityName": "Název schopnosti",
+				"capabilityType": "Typ",
+				"role": "Role",
+				"register": "Registr",
+				"minValue": "Min hodnota",
+				"maxValue": "Max hodnota",
+				"enumValues": "Enum hodnoty",
+				"labels": "Štítky",
+				"defaultValue": "Výchozí hodnota",
+				"description": "Popis",
+				"removeCapability": "Odebrat schopnost",
+				"types": {
+					"number": "Číslo",
+					"boolean": "Boolean",
+					"enum": "Výčet"
+				},
+				"roles": {
+					"action": "Akce",
+					"sensor": "Senzor",
+					"setting": "Nastavení"
+				},
+				"newCapability": "Nová schopnost",
+				"capabilityId": "ID schopnosti", 
+				"type": "Typ",
+				"unit": "Jednotka",
+				"incrementValue": "Přírůstek",
+				"selectDefault": "Vyberte výchozí hodnotu",
+				"noDefault": "Bez výchozí hodnoty",
+				"true": "Pravda",
+				"false": "Nepravda",
+				"addValue": "Přidat hodnotu",
+				"valueLabel": "Štítek",
+				"valueValue": "Hodnota",
+				"addLabel": "Přidat štítek",
+				"labelKey": "Klíč",
+				"labelValue": "Štítek",
+				"addFirstCapability": "Přidat první schopnost",
+				"enumType": "Hodnoty výčtu",
+				"booleanLabels": "Popisky stavů",
+				"valueLabels": "Zobrazované popisky",
+				"labelTranslations": "Překlady popisků",
+				"noEnumValues": "Nejsou definovány žádné hodnoty výčtu",
+				"noEnumValuesDescription": "Definujte možné hodnoty, které může mít tato schopnost výčtu",
+				"noBooleanLabels": "Nejsou definovány popisky stavů",
+				"noBooleanLabelsDescription": "Přidejte vlastní popisky pro stavy true/false",
+				"rolesLabel": "Role",
+				"roleTypes": {
+					"action": "Akce",
+					"trigger": "Spouštěč", 
+					"condition": "Podmínka"
+				},
+				"placeholders": {
+					"capabilityName": "např. teplota, výkon, režim",
+					"capabilityId": "např. teplota, výkon, režim",
+					"register": "např. 1, 2, 3",
+					"unit": "např. °C, W, %",
+					"minValue": "např. 0",
+					"maxValue": "např. 100",
+					"enumValues": "hodnota1,hodnota2,hodnota3",
+					"labels": "klíč1:Štítek 1,klíč2:Štítek 2",
+					"defaultValue": "např. 0, false, auto",
+					"description": "Popište, k čemu tato schopnost slouží...",
+                    "labelValue": "např. Zapnuto, Vypnuto",
+                    "valueLabel": "např. Nízká, Střední, Vysoká"
+				}
+			},
+			"mqttTopics": {
+				"editorHelper": "Konfigurujte vzory MQTT komunikace, které definují, jak budou zařízení tohoto typu posílat a přijímat zprávy.",
+				"addTopic": "Přidat MQTT téma",
+				"newTopic": "Nové MQTT téma",
+				"noTopics": "Nejsou konfigurována žádná MQTT témata",
+				"noTopicsDescription": "MQTT témata definují komunikační vzory mezi vašimi zařízeními a serverem. Nastavte subscribe vzory pro příjem dat a command vzory pro odesílání instrukcí.",
+				"topicName": "Název tématu",
+				"subscribePattern": "Subscribe vzor",
+				"commandPattern": "Command vzor",
+				"description": "Popis",
+				"removeTopic": "Odebrat téma",
+				"placeholders": {
+					"topicName": "např. automation, sensors, control",
+					"subscribePattern": "např. typ_zarizeni/+/data/automation",
+					"commandPattern": "např. typ_zarizeni/{device_id}/cmd/automation",
+					"description": "Popište, k čemu se toto téma používá...",
+                    "addFirstTopic": "Přidat první MQTT téma"
+				}
+			}
+		},
+		"validation": {
+			"capabilitiesWithoutId": "Před uložením zadejte ID pro všechny schopnosti.",
+			"topicsWithoutName": "Před uložením zadejte název pro všechna MQTT témata."
+		},
+		"notifications": {
+			"created": "Typ zařízení vytvořen",
+			"createdDescription": "Typ zařízení \"{{name}}\" byl úspěšně vytvořen.",
+			"updated": "Typ zařízení aktualizován",
+			"updatedDescription": "Typ zařízení \"{{name}}\" byl úspěšně aktualizován.",
+			"deleted": "Typ zařízení smazán",
+			"deletedDescription": "Typ zařízení \"{{name}}\" byl úspěšně smazán.",
+			"error": "Chyba",
+			"errorDescription": "Při zpracování vašeho požadavku došlo k chybě.",
+			"genericError": "Došlo k neočekávané chybě.",
+			"notFound": "Typ zařízení nebyl nalezen."
+		}
+	}
+}

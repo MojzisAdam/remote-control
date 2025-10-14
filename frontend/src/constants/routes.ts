@@ -11,6 +11,9 @@ const routes = {
 	automationBuilder: "/automations/builder",
 	automationBuilderEdit: (automationId: number) => `/automations/builder/${automationId}`,
 	automationLogs: (automationId: number) => `/automations/logs/${automationId}`,
+	deviceTypesManagement: "/device-types-management",
+	deviceTypeCreate: "/device-types-management/create",
+	deviceTypeDetail: (deviceTypeId: string) => `/device-types-management/${deviceTypeId}`,
 };
 
 export default routes;

@@ -24,6 +24,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'edit-device-description',
             'view-notifications',
             'edit-all-parameters',
+            'manage-device-types',
+            'manage-automations',
         ];
 
         foreach ($permissions as $permission) {

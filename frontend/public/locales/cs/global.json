@@ -20,6 +20,7 @@
         "automations": "Automatizace",
         "manageUsers": "Správa uživatelů",
         "manageDevices": "Správa zařízení",
+        "manageDeviceTypes": "Správa typů zařízení",
         "settings": "Nastavení",
         "apps": "Aplikace",
         "toastDeviceDeletedTitle": "Zařízení bylo odstraněno",
@@ -57,6 +58,16 @@
         "message": "Načítání..."
     },
     "common": {
-        "cancel": "Zrušit"
+        "actions": {
+            "back": "Zpět",
+            "save": "Uložit",
+            "cancel": "Zrušit",
+            "edit": "Upravit",
+            "delete": "Smazat",
+            "view": "Zobrazit",
+            "create": "Vytvořit",
+            "update": "Aktualizovat"
+        },
+        "saving": "Ukládání..."
     }
 }

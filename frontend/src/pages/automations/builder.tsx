@@ -13,6 +13,8 @@ import { useDevices } from "@/hooks/useDevices";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { Automation } from "@/api/automation/model";
 import routes from "@/constants/routes";
+import usePageTitle from "@/hooks/usePageTitle";
+import withAuthorization from "@/middleware/withAuthorization";
 
 const AutomationBuilderReadyGate: React.FC<{
 	automationId: number | null;
@@ -37,6 +39,9 @@ interface AutomationBuilderParams extends Record<string, string | undefined> {
 
 const AutomationBuilder: React.FC = () => {
 	const { t } = useTranslation("automations");
+
+	usePageTitle(t("page-title-builder"));
+
 	// Mobile detection
 	const isMobile = useIsMobile();
 	const navigate = useNavigate();
@@ -133,4 +138,4 @@ const AutomationBuilder: React.FC = () => {
 	);
 };
 
-export default AutomationBuilder;
+export default withAuthorization(AutomationBuilder, "manage-automations");

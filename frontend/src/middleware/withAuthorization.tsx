@@ -50,7 +50,7 @@ function withAuthorization<P extends React.JSX.IntrinsicAttributes>(Component: R
 		const { user, hasPermission, loading } = useAuth();
 		const [checking, setChecking] = useState(true);
 		const [hasAccess, setHasAccess] = useState(false);
-		console.log(requiredPermission);
+
 		useEffect(() => {
 			if (!loading) {
 				setHasAccess(!!user && hasPermission(requiredPermission));

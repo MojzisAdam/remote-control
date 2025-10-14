@@ -1,0 +1,221 @@
+{
+	"deviceTypes": {
+		"title": "Device Types Management",
+		"search": "Search device types...",
+		"showing": "Showing {{count}} device types",
+		"capability": "capability",
+		"capabilities": "capabilities",
+		"totalCapabilities": "Total Capabilities",
+		"noDescription": "No description",
+		"noCapabilities": "No capabilities defined",
+		"noMqttTopics": "No MQTT topics configured",
+		"mqttTopics": "MQTT Topics",
+		"columns": {
+			"id": "ID",
+			"name": "Name",
+			"description": "Description",
+			"capabilities": "Capabilities",
+			"createdAt": "Created At",
+			"updatedAt": "Updated At",
+            "actions": "Actions"
+		},
+		"actions": {
+			"title": "Actions",
+			"openMenu": "Open menu",
+			"view": "View Details",
+			"edit": "Edit",
+			"delete": "Delete",
+			"create": "Create Device Type",
+			"more": "More",
+			"expandAll": "Expand All",
+			"collapseAll": "Collapse All"
+		},
+		"viewModal": {
+			"title": "Device Type Details",
+			"description": "View detailed information about this device type."
+		},
+		"editModal": {
+			"title": "Edit Device Type",
+			"description": "Edit the properties of this device type.",
+			"saveChanges": "Save Changes",
+			"descriptionPlaceholder": "Enter a description for this device type...",
+			"capabilitiesPlaceholder": "{\n  \"example_capability\": {\n    \"type\": \"number\",\n    \"role\": [\"action\"],\n    \"default_value\": 0,\n    \"description\": \"Example capability\"\n  }\n}",
+			"mqttTopicsPlaceholder": "{\n  \"automation\": {\n    \"subscribe\": \"device_type/+/data/automation\",\n    \"command\": \"device_type/{device_id}/cmd/automation\"\n  }\n}"
+		},
+		"createModal": {
+			"title": "Create New Device Type",
+			"description": "Create a new device type with capabilities and MQTT configuration.",
+			"create": "Create Device Type",
+			"idPlaceholder": "e.g. cim, daitsu, custom_type",
+			"namePlaceholder": "e.g. CIM Heat Pump, Custom Device",
+			"descriptionPlaceholder": "Enter a description for this device type...",
+			"capabilitiesPlaceholder": "{\n  \"example_capability\": {\n    \"type\": \"number\",\n    \"role\": [\"action\"],\n    \"default_value\": 0,\n    \"description\": \"Example capability\"\n  }\n}",
+			"mqttTopicsPlaceholder": "{\n  \"automation\": {\n    \"subscribe\": \"device_type/+/data/automation\",\n    \"command\": \"device_type/{device_id}/cmd/automation\"\n  }\n}"
+		},
+		"deleteAlert": {
+			"title": "Delete Device Type",
+			"description": "Are you sure you want to delete the device type \"{{name}}\"? This action cannot be undone and may affect existing devices using this type.",
+			"cancel": "Cancel",
+			"delete": "Delete",
+			"unknownName": "Unknown"
+		},
+		"createDeviceType": "Create Device Type",
+		"editDeviceType": "Edit Device Type",
+		"createDeviceTypeDescription": "Define a new device type with capabilities and MQTT configuration for your devices.",
+		"editDeviceTypeDescription": "Modify the properties, capabilities, and MQTT settings of this device type.",
+		"detailPage": {
+            "title": "Device Type Details",
+			"subtitle": "Device Type ID: {{id}}",
+			"basicInformation": "Basic Information",
+			"basicInformationDescription": "Configure the name and description for this device type in multiple languages.",
+			"capabilitiesDescription": "Device capabilities define what actions, sensors, and settings this device type supports.",
+			"mqttTopicsDescription": "MQTT topic configuration for device communication patterns.",
+			"topics": "topics",
+			"tabs": {
+				"view": "View Details",
+				"edit": "Edit"
+			}
+		},
+		"editors": {
+			"selectLanguage": "Select Language",
+			"languageHelper": "Configure names and descriptions in multiple languages. English is required and serves as the fallback language.",
+			"required": "Required",
+			"optional": "Optional",
+			"register": "Register",
+			"minValue": "Min Value",
+			"maxValue": "Max Value", 
+			"enumValues": "Enum Values",
+			"labels": "Labels",
+			"defaultValue": "Default Value",
+			"unit": "Unit",
+			"incrementValue": "Increment",
+			"types": {
+				"number": "Number",
+				"boolean": "Boolean",
+				"enum": "Enum"
+			},
+			"roleTypes": {
+				"action": "Action",
+				"trigger": "Trigger",
+				"condition": "Condition"
+			},
+			"placeholders": {
+				"name": "Enter device type name...",
+				"description": "Enter a description for this device type..."
+			},
+			"propertyLabels": {
+				"unit": "Unit",
+				"default": "Default",
+				"range": "Range",
+				"step": "Step"
+			},
+			"capabilities": {
+				"editorHelper": "Define device capabilities that specify what actions, triggers, and conditions this device type supports.",
+				"addCapability": "Add Capability",
+				"noCapabilities": "No capabilities defined",
+				"noCapabilitiesDescription": "Capabilities define what actions, sensors, and settings this device type supports. Click the button below to add your first capability.",
+				"capability": "Capability",
+				"capabilityName": "Capability Name",
+				"capabilityType": "Type",
+				"role": "Role",
+				"register": "Register",
+				"minValue": "Min Value",
+				"maxValue": "Max Value",
+				"enumValues": "Enum Values",
+				"labels": "Labels",
+				"defaultValue": "Default Value",
+				"description": "Description",
+				"removeCapability": "Remove Capability",
+				"types": {
+					"number": "Number",
+					"boolean": "Boolean",
+					"enum": "Enum"
+				},
+				"roles": {
+					"action": "Action",
+					"sensor": "Sensor",
+					"setting": "Setting"
+				},
+				"newCapability": "New Capability", 
+				"capabilityId": "Capability ID",
+				"type": "Type",
+				"unit": "Unit",
+				"incrementValue": "Increment",
+				"selectDefault": "Select default value",
+				"noDefault": "No default",
+				"true": "True",
+				"false": "False",
+				"addValue": "Add Value",
+				"valueLabel": "Label",
+				"valueValue": "Value",
+				"addLabel": "Add Label",
+				"labelKey": "Key",
+				"labelValue": "Label",
+								"addFirstCapability": "Add Your First Capability",
+				"enumType": "Enum Values",
+				"booleanLabels": "State Labels",
+				"valueLabels": "Display Labels",
+				"labelTranslations": "Label Translations",
+				"noEnumValues": "No enum values defined",
+				"noEnumValuesDescription": "Define the possible values this enum capability can have",
+				"noBooleanLabels": "No state labels defined", 
+				"noBooleanLabelsDescription": "Add custom labels for true/false states",
+				"rolesLabel": "Roles",
+				"roleTypes": {
+					"action": "Action",
+					"trigger": "Trigger", 
+					"condition": "Condition"
+				},
+				"placeholders": {
+					"capabilityName": "e.g. temperature, power, mode",
+					"capabilityId": "e.g. temperature, power, mode",
+					"register": "e.g. 1, 2, 3",
+					"unit": "e.g. °C, W, %",
+					"minValue": "e.g. 0",
+					"maxValue": "e.g. 100",
+					"enumValues": "value1,value2,value3",
+					"labels": "key1:Label 1,key2:Label 2",
+					"defaultValue": "e.g. 0, false, auto",
+					"description": "Describe what this capability does...",
+                    "labelValue": "e.g. On, Off",
+                    "valueLabel": "e.g. Low, Medium, High"
+				}
+			},
+            "mqttTopics": {
+				"editorHelper": "Configure MQTT communication patterns that define how devices of this type will send and receive messages.",
+				"addTopic": "Add MQTT Topic",
+				"newTopic": "New MQTT Topic",
+				"noTopics": "No MQTT topics configured",
+				"noTopicsDescription": "MQTT topics define the communication patterns between your devices and the server. Set up subscription patterns to receive data and command patterns to send instructions.",
+				"topicName": "Topic Name",
+				"subscribePattern": "Subscribe Pattern",
+				"commandPattern": "Command Pattern",
+				"description": "Description",
+				"removeTopic": "Remove Topic",
+				"placeholders": {
+					"topicName": "e.g. automation, sensors, control",
+					"subscribePattern": "e.g. device_type/+/data/automation",
+					"commandPattern": "e.g. device_type/{device_id}/cmd/automation",
+					"description": "Describe what this topic is used for...",
+                    "addFirstTopic": "Add First MQTT Topic"
+				}
+			}
+		},
+		"validation": {
+			"capabilitiesWithoutId": "Please provide an ID for all capabilities before saving.",
+			"topicsWithoutName": "Please provide a name for all MQTT topics before saving."
+		},
+		"notifications": {
+			"created": "Device Type Created",
+			"createdDescription": "Device type \"{{name}}\" has been created successfully.",
+			"updated": "Device Type Updated", 
+			"updatedDescription": "Device type \"{{name}}\" has been updated successfully.",
+			"deleted": "Device Type Deleted",
+			"deletedDescription": "Device type \"{{name}}\" has been deleted successfully.",
+			"error": "Error",
+			"errorDescription": "An error occurred while processing your request.",
+			"genericError": "An unexpected error occurred.",
+			"notFound": "Device type not found."
+		}
+	}
+}

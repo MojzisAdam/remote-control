@@ -7,6 +7,7 @@ type UpdateDeviceTypePayload = {
 	name?: string;
 	description?: string;
 	capabilities?: string[] | Record<string, any>;
+	mqtt_topics?: Record<string, any>;
 };
 
 export const useDeviceTypes = () => {
@@ -226,6 +227,10 @@ export const useDeviceTypes = () => {
 		removeDeviceType,
 		fetchDevicesByType,
 		fetchDeviceCapabilities,
+
+		// Alias methods
+		getDeviceType: fetchDeviceType,
+		deleteExistingDeviceType: removeDeviceType,
 
 		// Helpers
 		getCapabilitiesFromCache,

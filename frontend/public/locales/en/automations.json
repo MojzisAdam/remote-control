@@ -1,4 +1,7 @@
 {
+    "page-title-list": "Automations",
+    "page-title-logs": "Automation Logs",
+    "page-title-builder": "Automation Builder",
     "title": "Automations",
     "create": "Create",
     "edit": "Edit",

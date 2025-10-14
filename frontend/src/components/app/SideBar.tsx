@@ -1,4 +1,4 @@
-import { Home, Settings, Users, Laptop, History, Computer, Bell, ScrollText, Info, ServerCog } from "lucide-react";
+import { Home, Settings, Users, Laptop, History, Computer, Bell, ScrollText, Info, ServerCog, MonitorCog } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Link } from "react-router-dom";
@@ -179,27 +179,32 @@ export function DashboardSideBar() {
 							</>
 						)}
 
-						<Separator className="my-2" />
+						{/** Temporary under permission */}
+						{hasPermission("manage-automations") && (
+							<>
+								<Separator className="my-2" />
 
-						<SidebarGroupContent title={t("sidebar.automations")}>
-							<SidebarMenu>
-								<SidebarMenuItem key="Settings">
-									<SidebarMenuButton asChild>
-										<Link
-											to={routes.automations}
-											className={isActiveLink(routes.automations)}
-											onClick={() => setOpenMobile(false)}
-										>
-											<ServerCog />
-											<span>{t("sidebar.automations")}</span>
-										</Link>
-									</SidebarMenuButton>
-								</SidebarMenuItem>
-							</SidebarMenu>
-						</SidebarGroupContent>
+								<SidebarGroupContent title={t("sidebar.automations")}>
+									<SidebarMenu>
+										<SidebarMenuItem key="Settings">
+											<SidebarMenuButton asChild>
+												<Link
+													to={routes.automations}
+													className={isActiveLink(routes.automations)}
+													onClick={() => setOpenMobile(false)}
+												>
+													<ServerCog />
+													<span>{t("sidebar.automations")}</span>
+												</Link>
+											</SidebarMenuButton>
+										</SidebarMenuItem>
+									</SidebarMenu>
+								</SidebarGroupContent>
+							</>
+						)}
 
 						{/* Admin Controls Group */}
-						{(hasPermission("manage-users") || hasPermission("manage-devices")) && (
+						{(hasPermission("manage-users") || hasPermission("manage-devices") || hasPermission("manage-device-types")) && (
 							<>
 								<Separator className="my-2" />
 								<SidebarGroupContent title={t("sidebar.system")}>
@@ -228,6 +233,20 @@ export function DashboardSideBar() {
 													>
 														<Computer />
 														<span>{t("sidebar.manageDevices")}</span>
+													</Link>
+												</SidebarMenuButton>
+											</SidebarMenuItem>
+										)}
+										{hasPermission("manage-device-types") && (
+											<SidebarMenuItem key="manageDeviceTypes">
+												<SidebarMenuButton asChild>
+													<Link
+														to={routes.deviceTypesManagement}
+														className={isActiveLink(routes.deviceTypesManagement)}
+														onClick={() => setOpenMobile(false)}
+													>
+														<MonitorCog />
+														<span>{t("sidebar.manageDeviceTypes")}</span>
 													</Link>
 												</SidebarMenuButton>
 											</SidebarMenuItem>

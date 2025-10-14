@@ -17,11 +17,16 @@ import { Plus, Search, MoreHorizontal, Edit, Trash2, Play, Pause, Eye, Activity,
 import { useAutomations } from "@/hooks/useAutomations";
 import { Automation } from "@/api/automation/model";
 import routes from "@/constants/routes";
+import usePageTitle from "@/hooks/usePageTitle";
+import withAuthorization from "@/middleware/withAuthorization";
 
 const AutomationList: React.FC = () => {
 	const { t } = useTranslation("automations");
 	const navigate = useNavigate();
 	const [searchQuery, setSearchQuery] = useState("");
+
+	usePageTitle(t("page-title-list"));
+
 	const [filterEnabled, setFilterEnabled] = useState<boolean | null>(null);
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 	const [automationToDelete, setAutomationToDelete] = useState<Automation | null>(null);
@@ -448,4 +453,4 @@ const AutomationList: React.FC = () => {
 	);
 };
 
-export default AutomationList;
+export default withAuthorization(AutomationList, "manage-automations");

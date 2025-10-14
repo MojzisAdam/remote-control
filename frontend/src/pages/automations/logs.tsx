@@ -14,11 +14,12 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "@/hooks/use-toast";
 import { useDebounce } from "@/hooks/useDebounce";
-
+import withAuthorization from "@/middleware/withAuthorization";
 import { useAutomations } from "@/hooks/useAutomations";
 import { AutomationLog, AutomationLogsResponse } from "@/api/automation/model";
 import routes from "@/constants/routes";
 import { format } from "date-fns";
+import usePageTitle from "@/hooks/usePageTitle";
 
 interface AutomationLogsParams extends Record<string, string | undefined> {
 	automationId?: string;
@@ -26,6 +27,9 @@ interface AutomationLogsParams extends Record<string, string | undefined> {
 
 const AutomationLogs: React.FC = () => {
 	const { t } = useTranslation("automations");
+
+	usePageTitle(t("page-title-logs"));
+
 	// Extract automationId from URL parameters
 	const { automationId: automationIdParam } = useParams<AutomationLogsParams>();
 	const automationId = automationIdParam ? parseInt(automationIdParam, 10) : undefined;
@@ -644,4 +648,4 @@ const AutomationLogs: React.FC = () => {
 	);
 };
 
-export default AutomationLogs;
+export default withAuthorization(AutomationLogs, "manage-automations");

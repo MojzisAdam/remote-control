@@ -20,6 +20,7 @@
         "automations": "Automations",
         "manageUsers": "Manage Users",
         "manageDevices": "Manage Devices",
+        "manageDeviceTypes": "Manage Device Types",
         "settings": "Settings",
         "apps": "Apps",
         "toastDeviceDeletedTitle": "Device Deleted",
@@ -57,6 +58,16 @@
         "message": "Loading..."
     },
     "common": {
-        "cancel": "Cancel"
+        "actions": {
+            "back": "Back",
+            "save": "Save",
+            "cancel": "Cancel",
+            "edit": "Edit",
+            "delete": "Delete",
+            "view": "View",
+            "create": "Create",
+            "update": "Update"
+        },
+        "saving": "Saving..."
     }
 }

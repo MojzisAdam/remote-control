@@ -36,19 +36,20 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/notifications/unseen', [NotificationController::class, 'getUnseenNotifications']);
     Route::put('/notifications/mark-all-seen', [NotificationController::class, 'markAllNotificationsAsSeen']);
 
-    Route::get('/automations/stats', [AutomationController::class, 'stats']);
-    Route::apiResource('automations', AutomationController::class);
-    Route::put('/automations/{automation}/toggle', [AutomationController::class, 'toggle']);
-    Route::get('/automations/{automation}/logs', [AutomationController::class, 'logs']);
-    Route::get('/automations/{automation}/logs/stats', [AutomationController::class, 'logsStats']);
-
-    Route::post('/device-types/validate-mqtt-config', [DeviceTypeController::class, 'validateMqttConfiguration']);
-
     Route::get('/device-types', [DeviceTypeController::class, 'index']);
     Route::get('/device-types/{id}', [DeviceTypeController::class, 'show']);
     Route::get('/device-types/{typeId}/devices', [DeviceTypeController::class, 'getDevices']);
     Route::get('/devices/{deviceId}/capabilities', [DeviceTypeController::class, 'getDeviceCapabilities']);
 });
+
+Route::middleware(['auth:sanctum', 'permission:manage-automations'])->group(function () {
+    Route::get('/automations/stats', [AutomationController::class, 'stats']);
+    Route::apiResource('automations', AutomationController::class);
+    Route::put('/automations/{automation}/toggle', [AutomationController::class, 'toggle']);
+    Route::get('/automations/{automation}/logs', [AutomationController::class, 'logs']);
+    Route::get('/automations/{automation}/logs/stats', [AutomationController::class, 'logsStats']);
+});
+
 
 Route::middleware(['auth:sanctum', 'permission:manage-device-types'])->group(function () {
     Route::post('/device-types', [DeviceTypeController::class, 'store']);
@@ -94,7 +95,6 @@ Route::middleware(['auth:sanctum', 'device.ownership', 'permission:view-history'
     Route::post('/custom-graphs/{deviceId}', [HistoryController::class, 'saveCustomGraph']);
     Route::get('/device-history/{deviceId}/paginated', [HistoryController::class, 'paginated']);
 });
-
 
 Route::middleware(['auth:sanctum', 'permission:manage-devices'])->group(function () {
     Route::get('/manage-devices', [DeviceController::class, 'listDevices']);

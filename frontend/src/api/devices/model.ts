@@ -29,6 +29,7 @@ export interface DeviceType {
 	name: string;
 	description?: string;
 	capabilities: string[] | Record<string, any>;
+	mqtt_topics?: Record<string, any>;
 	created_at: string;
 	updated_at: string;
 }

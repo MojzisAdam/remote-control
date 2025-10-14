@@ -15,6 +15,9 @@ import Profile from "@/pages/profile";
 import RemoteControl from "@/pages/remote-control/[id]";
 import ResetPassword from "@/pages/reset-password/[token]";
 import UserManagement from "@/pages/user-management";
+import DeviceTypesManagement from "@/pages/device-types-management";
+import DeviceTypeDetailPage from "@/pages/device-types-management/[typeId]";
+import CreateDeviceTypePage from "@/pages/device-types-management/create";
 import NotFoundPage from "@/pages/NotFoundPage";
 import Settings from "@/pages/settings";
 import Apps from "@/pages/apps";
@@ -175,6 +178,18 @@ const AppRouter: React.FC = () => {
 					<Route
 						path="/user-management"
 						element={<UserManagement />}
+					/>
+					<Route
+						path={"/device-types-management"}
+						element={<DeviceTypesManagement />}
+					/>
+					<Route
+						path={"/device-types-management/create"}
+						element={<CreateDeviceTypePage />}
+					/>
+					<Route
+						path="/device-types-management/:typeId"
+						element={<DeviceTypeDetailPage />}
 					/>
 					<Route
 						path="/history/:id/graph"

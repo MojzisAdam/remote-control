@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { useDeviceTypes } from "@/hooks/useDeviceTypes";
 import { DeviceType } from "@/api/devices/model";
 
@@ -39,24 +40,83 @@ interface DeviceCapabilitiesContextValue {
 
 const DeviceCapabilitiesContext = createContext<DeviceCapabilitiesContextValue | undefined>(undefined);
 
+// Helper function to extract localized string value
+function getLocalizedString(value: any, currentLanguage: string = "en"): string {
+	if (typeof value === "string") {
+		return value;
+	}
+	if (typeof value === "object" && value !== null) {
+		// Handle localized object: {cs: "text", en: "text"}
+		return value[currentLanguage] || value.en || value.cs || "";
+	}
+	return String(value || "");
+}
+
+// Helper function to extract enum options with localized labels
+function extractEnumOptions(values: any[], currentLanguage: string = "en"): string[] {
+	if (!Array.isArray(values)) return [];
+
+	return values.map((item: any) => {
+		if (typeof item === "object" && item !== null) {
+			return item.value !== undefined ? item.value : item;
+		}
+		return item;
+	});
+}
+
+// Helper function to extract labels for enum/boolean types
+function extractLabels(capability: any, currentLanguage: string = "en"): Record<string, string> {
+	const labels: Record<string, string> = {};
+
+	// Handle enum values
+	if (capability.values && Array.isArray(capability.values)) {
+		capability.values.forEach((item: any) => {
+			if (typeof item === "object" && item !== null && item.value !== undefined) {
+				const key = String(item.value);
+				const label = getLocalizedString(item.label, currentLanguage);
+				if (label) {
+					labels[key] = label;
+				}
+			}
+		});
+	}
+
+	// Handle boolean labels array format
+	if (capability.labels && Array.isArray(capability.labels)) {
+		capability.labels.forEach((item: any, index: number) => {
+			const label = getLocalizedString(item, currentLanguage);
+			if (label) {
+				labels[index.toString()] = label;
+			}
+		});
+	}
+
+	return labels;
+}
+
 // Normalize capabilities from various formats to a consistent structure
-function normalizeCapabilities(rawCapabilities: string[] | Record<string, any>): NormalizedCapability[] {
+function normalizeCapabilities(rawCapabilities: string[] | Record<string, any>, currentLanguage: string = "en"): NormalizedCapability[] {
 	const normalized: NormalizedCapability[] = [];
+
 	// Object with detailed capability definitions
 	Object.entries(rawCapabilities).forEach(([key, value]) => {
 		if (typeof value === "object" && value !== null) {
+			// Extract localized description
+			const description = getLocalizedString(value.description, currentLanguage);
+			const label = getLocalizedString(value.label, currentLanguage) || description || formatCapabilityLabel(key);
+
 			normalized.push({
 				key,
-				label: value.label || value.description || formatCapabilityLabel(key),
+				label,
 				type: value.type || "boolean",
 				unit: value.unit,
 				min: value.min_value || value.min,
 				max: value.max_value || value.max,
-				options: value.values?.map((v: any) => (typeof v === "object" ? v.value : v)),
+				options: extractEnumOptions(value.values, currentLanguage),
 				fields: [key],
 				roles: value.role || ["trigger", "condition", "action"],
-				description: value.description,
-				labels: value.labels || (value.values ? Object.fromEntries(value.values.map((v: any) => [v.value, v.label])) : undefined),
+				description,
+				labels: extractLabels(value, currentLanguage),
 			});
 		} else {
 			normalized.push({
@@ -89,6 +149,7 @@ export const DeviceCapabilitiesProvider: React.FC<{
 	const [error, setError] = useState<string | null>(null);
 
 	const { fetchDeviceTypes } = useDeviceTypes();
+	const { i18n } = useTranslation();
 
 	const loadCapabilities = useCallback(async () => {
 		setLoading(true);
@@ -100,11 +161,12 @@ export const DeviceCapabilitiesProvider: React.FC<{
 			if (result.success && result.data) {
 				const deviceTypes = result.data as DeviceType[];
 				const capabilitiesMap: DeviceCapabilities = {};
+				const currentLanguage = i18n.language;
 
 				deviceTypes.forEach((deviceType) => {
 					capabilitiesMap[deviceType.id] = {
 						deviceType,
-						capabilities: normalizeCapabilities(deviceType.capabilities),
+						capabilities: normalizeCapabilities(deviceType.capabilities, currentLanguage),
 					};
 				});
 				setCapabilities(capabilitiesMap);
@@ -116,7 +178,7 @@ export const DeviceCapabilitiesProvider: React.FC<{
 		} finally {
 			setLoading(false);
 		}
-	}, [fetchDeviceTypes]);
+	}, [fetchDeviceTypes, i18n.language]);
 
 	// Load capabilities on mount
 	useEffect(() => {

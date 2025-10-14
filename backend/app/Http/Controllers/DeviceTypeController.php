@@ -333,21 +333,4 @@ class DeviceTypeController extends Controller
             })
         ]);
     }
-
-    /**
-     * Validate MQTT topic configuration
-     */
-    public function validateMqttConfiguration(Request $request): JsonResponse
-    {
-        $request->validate([
-            'mqtt_topics' => 'required|array'
-        ]);
-
-        $errors = $this->mqttTopicService->validateMqttTopicConfiguration($request->mqtt_topics);
-
-        return response()->json([
-            'success' => empty($errors),
-            'errors' => $errors
-        ]);
-    }
 }

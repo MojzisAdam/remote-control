@@ -152,13 +152,27 @@ export const getDeviceType = async (id: string): Promise<DeviceType> => {
 };
 
 // Create a new device type
-export const createDeviceType = async (data: { id: string; name: string; description?: string; capabilities: Record<string, any> | string[] }): Promise<DeviceType> => {
+export const createDeviceType = async (data: {
+	id: string;
+	name: string;
+	description?: string;
+	capabilities: Record<string, any> | string[];
+	mqtt_topics?: Record<string, any>;
+}): Promise<DeviceType> => {
 	const response = await axios.post("/device-types", data);
 	return response.data.device_type;
 };
 
 // Update a device type
-export const updateDeviceType = async (id: string, data: Partial<{ name: string; description?: string; capabilities: Record<string, any> | string[] }>): Promise<DeviceType> => {
+export const updateDeviceType = async (
+	id: string,
+	data: Partial<{
+		name: string;
+		description?: string;
+		capabilities: Record<string, any> | string[];
+		mqtt_topics?: Record<string, any>;
+	}>
+): Promise<DeviceType> => {
 	const response = await axios.put(`/device-types/${id}`, data);
 	return response.data.device_type;
 };

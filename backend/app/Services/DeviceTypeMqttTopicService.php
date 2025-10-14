@@ -94,33 +94,4 @@ class DeviceTypeMqttTopicService
             })
             ->values();
     }
-
-    /**
-     * Validate MQTT topic configuration for a device type
-     */
-    public function validateMqttTopicConfiguration(array $mqttTopics): array
-    {
-        $errors = [];
-
-        if (!isset($mqttTopics['automation'])) {
-            $errors[] = 'Missing automation configuration';
-            return $errors;
-        }
-
-        $automation = $mqttTopics['automation'];
-
-        if (empty($automation['subscribe'])) {
-            $errors[] = 'Missing automation subscribe topic';
-        } elseif (!str_contains($automation['subscribe'], '+') && !str_contains($automation['subscribe'], '#')) {
-            $errors[] = 'Automation subscribe topic should contain MQTT wildcards (+ or #)';
-        }
-
-        if (empty($automation['command'])) {
-            $errors[] = 'Missing automation command topic';
-        } elseif (!str_contains($automation['command'], '{device_id}')) {
-            $errors[] = 'Automation command topic should contain {device_id} placeholder';
-        }
-
-        return $errors;
-    }
 }
