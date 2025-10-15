@@ -160,6 +160,12 @@ export const CapabilitiesEditor: React.FC<CapabilitiesEditorProps> = ({ capabili
 		updateCapabilities(newCapabilitiesList);
 	};
 
+	const updateLocalizedDescription = (index: number, language: string, value: string) => {
+		const capability = capabilitiesList[index];
+		const newDescription = { ...capability.description, [language]: value };
+		updateCapability(index, "description", newDescription);
+	};
+
 	const updateCapabilityRole = (index: number, role: string, checked: boolean) => {
 		const capability = capabilitiesList[index];
 		const newRoles = checked ? [...capability.role, role as "action" | "trigger" | "condition"] : capability.role.filter((r) => r !== role);
@@ -476,6 +482,53 @@ export const CapabilitiesEditor: React.FC<CapabilitiesEditorProps> = ({ capabili
 												</SelectContent>
 											</Select>
 										</div>
+									</div>
+
+									{/* Localized Description */}
+									<div className="space-y-3">
+										<div className="flex items-center gap-2">
+											<Label className="text-sm font-medium">{t("deviceTypes.editors.capabilities.description")}</Label>
+											<Badge
+												variant="outline"
+												className="text-xs"
+											>
+												{t("deviceTypes.editors.optional")}
+											</Badge>
+										</div>
+										<Tabs
+											value={activeLanguage}
+											onValueChange={setActiveLanguage}
+											className="w-full"
+										>
+											<div className="flex items-center justify-between mb-3">
+												<TabsList className="grid w-auto grid-cols-2">
+													{supportedLanguages.map((lang) => (
+														<TabsTrigger
+															key={lang.code}
+															value={lang.code}
+															className="flex items-center gap-1 text-xs"
+														>
+															<Globe className="h-3 w-3" />
+															{lang.name}
+														</TabsTrigger>
+													))}
+												</TabsList>
+											</div>
+											{supportedLanguages.map((lang) => (
+												<TabsContent
+													key={lang.code}
+													value={lang.code}
+													className="mt-3"
+												>
+													<Textarea
+														value={capability.description[lang.code] || ""}
+														onChange={(e) => updateLocalizedDescription(index, lang.code, e.target.value)}
+														placeholder={t("deviceTypes.editors.capabilities.placeholders.description")}
+														rows={3}
+													/>
+												</TabsContent>
+											))}
+										</Tabs>
 									</div>
 
 									{/* Role Selection */}

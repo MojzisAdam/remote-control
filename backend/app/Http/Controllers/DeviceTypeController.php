@@ -88,9 +88,13 @@ class DeviceTypeController extends Controller
             'id' => 'required|string|unique:device_types,id',
             'name' => 'required|string|unique:device_types,name|max:255',
             'description' => 'nullable|string',
-            'capabilities' => 'required|array',
+            'capabilities' => 'nullable|array',
             'mqtt_topics' => 'nullable|array',
         ]);
+
+        if (!isset($validated['capabilities'])) {
+            $validated['capabilities'] = [];
+        }
 
         try {
             $deviceType = DeviceType::create($validated);

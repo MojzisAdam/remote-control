@@ -23,9 +23,14 @@ export function DeviceTypeView({ deviceType }: DeviceTypeViewProps) {
 		return String(value || "");
 	};
 
-	// Get capability description
+	// Get localized capability description
 	const getCapabilityDescription = (capability: any): string => {
 		if (capability.description) {
+			// Handle localized description object
+			if (typeof capability.description === "object" && capability.description !== null) {
+				return capability.description[i18n.language] || capability.description.en || "";
+			}
+			// Handle simple string description
 			return getStringValue(capability.description);
 		}
 		return "";
@@ -390,8 +395,8 @@ export function DeviceTypeView({ deviceType }: DeviceTypeViewProps) {
 																		key={index}
 																		className="flex items-center justify-between p-3 bg-slate-100 dark:bg-zinc-900 rounded-lg"
 																	>
-																		<span className="font-mono text-sm font-bold text-slate-800 dark:text-slate-200">{enumValue.value}</span>
-																		<span className="text-sm text-slate-600 dark:text-slate-400">{enumValue.label}</span>
+																		<span className="font-mono text-sm font-bold text-white">{enumValue.value}</span>
+																		<span className="text-sm text-muted-foreground">{enumValue.label}</span>
 																	</div>
 																))}
 															</div>
@@ -411,8 +416,8 @@ export function DeviceTypeView({ deviceType }: DeviceTypeViewProps) {
 																		key={key}
 																		className="flex items-center justify-between p-3 bg-slate-100 dark:bg-zinc-900 rounded-lg"
 																	>
-																		<span className="font-mono text-sm font-bold text-slate-800 dark:text-slate-200">{key}</span>
-																		<span className="text-sm text-slate-600 dark:text-slate-400">{label}</span>
+																		<span className="font-mono text-sm font-bold text-white">{key}</span>
+																		<span className="text-sm text-muted-foreground">{label}</span>
 																	</div>
 																))}
 															</div>

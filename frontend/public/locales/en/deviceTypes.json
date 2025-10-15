@@ -101,8 +101,10 @@
 			},
 			"placeholders": {
 				"name": "Enter device type name...",
-				"description": "Enter a description for this device type..."
+				"description": "Enter a description for this device type...",
+				"id": "Unique identifier (auto-generated from name)"
 			},
+			"idDescription": "This ID will be used to uniquely identify the device type. It's automatically generated from the name but can be customized.",
 			"propertyLabels": {
 				"unit": "Unit",
 				"default": "Default",
@@ -203,7 +205,8 @@
 		},
 		"validation": {
 			"capabilitiesWithoutId": "Please provide an ID for all capabilities before saving.",
-			"topicsWithoutName": "Please provide a name for all MQTT topics before saving."
+			"topicsWithoutName": "Please provide a name for all MQTT topics before saving.",
+			"idRequired": "ID is required"
 		},
 		"notifications": {
 			"created": "Device Type Created",

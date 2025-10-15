@@ -22,6 +22,7 @@ interface DeviceTypeEditProps {
 }
 
 export interface EditFormData {
+	id: string;
 	name: string;
 	description: string;
 	capabilities: Record<string, any>;
@@ -36,6 +37,7 @@ export function DeviceTypeEdit({ deviceType, onUpdate, onCancel }: DeviceTypeEdi
 
 	const [errors, setErrors] = useState<Record<string, string[]>>({});
 	const [formData, setFormData] = useState<EditFormData>({
+		id: "",
 		name: "",
 		description: "",
 		capabilities: {},
@@ -46,6 +48,7 @@ export function DeviceTypeEdit({ deviceType, onUpdate, onCancel }: DeviceTypeEdi
 	useEffect(() => {
 		if (deviceType) {
 			setFormData({
+				id: deviceType.id || "",
 				name: deviceType.name || "",
 				description: deviceType.description || "",
 				capabilities: deviceType.capabilities || {},
@@ -57,6 +60,11 @@ export function DeviceTypeEdit({ deviceType, onUpdate, onCancel }: DeviceTypeEdi
 	// Validation function to check for incomplete capabilities and topics
 	const validateFormData = () => {
 		const validationErrors: Record<string, string[]> = {};
+
+		// Check for empty ID when creating new device type
+		if (isNewDeviceType && !formData.id.trim()) {
+			validationErrors.id = [t("deviceTypes.validation.idRequired", "ID is required")];
+		}
 
 		// Check for capabilities with empty IDs
 		if (formData.capabilities && typeof formData.capabilities === "object") {
@@ -91,13 +99,9 @@ export function DeviceTypeEdit({ deviceType, onUpdate, onCancel }: DeviceTypeEdi
 		try {
 			let result;
 			if (isNewDeviceType) {
-				// For new device types, use the name as ID (or create a slug from it)
+				// For new device types, use the ID from form data
 				const createData = {
-					id:
-						formData.name
-							.toLowerCase()
-							.replace(/\s+/g, "-")
-							.replace(/[^a-z0-9-]/g, "") || "",
+					id: formData.id,
 					name: formData.name,
 					description: formData.description,
 					capabilities: formData.capabilities,
@@ -120,18 +124,35 @@ export function DeviceTypeEdit({ deviceType, onUpdate, onCancel }: DeviceTypeEdi
 			} else {
 				setErrors(result.errors || {});
 			}
-		} catch (error) {
+		} catch (error: any) {
 			setErrors({
 				general: [error instanceof Error ? error.message : t("deviceTypes.notifications.genericError")],
 			});
 		}
 	};
 
-	const updateField = (field: "name" | "description", value: string) => {
-		setFormData((prev) => ({
-			...prev,
-			[field]: value,
-		}));
+	// Function to generate ID from name
+	const generateIdFromName = (name: string): string => {
+		return name
+			.toLowerCase()
+			.replace(/\s+/g, "-")
+			.replace(/[^a-z0-9-]/g, "");
+	};
+
+	const updateField = (field: "id" | "name" | "description", value: string) => {
+		setFormData((prev) => {
+			const updated = {
+				...prev,
+				[field]: value,
+			};
+
+			// Auto-generate ID when name changes (only for new device types)
+			if (field === "name" && isNewDeviceType) {
+				updated.id = generateIdFromName(value);
+			}
+
+			return updated;
+		});
 	};
 
 	return (
@@ -143,13 +164,10 @@ export function DeviceTypeEdit({ deviceType, onUpdate, onCancel }: DeviceTypeEdi
 				>
 					{/* Error Alert */}
 					{errors.general && (
-						<Alert
-							variant="destructive"
-							className="animate-in slide-in-from-top-2"
-						>
+						<div className="flex flew-row gap-2 items-center border-2 rounded-lg border-red-700 text-red-700 px-4 py-3">
 							<AlertCircle />
-							<AlertTitle>{errors.general[0]}</AlertTitle>
-						</Alert>
+							<AlertDescription>{errors.general[0]}</AlertDescription>
+						</div>
 					)}
 
 					{/* Basic Information */}
@@ -200,6 +218,47 @@ export function DeviceTypeEdit({ deviceType, onUpdate, onCancel }: DeviceTypeEdi
 										/>
 									)}
 								</div>
+
+								{/* ID Field - only show for new device types */}
+								{isNewDeviceType && (
+									<div className="space-y-2">
+										<div className="flex items-center gap-2">
+											<Label
+												htmlFor="id"
+												className="text-sm font-medium"
+											>
+												{t("deviceTypes.columns.id", "ID")}
+											</Label>
+											<Badge
+												variant="default"
+												className="text-xs"
+											>
+												{t("deviceTypes.editors.required")}
+											</Badge>
+										</div>
+										<Input
+											id="id"
+											type="text"
+											value={formData.id}
+											onChange={(e) => updateField("id", e.target.value)}
+											className={`mt-1 transition-all border-primary/30 focus:border-primary ${errors.id ? "border-red-500" : ""}`}
+											placeholder={t("deviceTypes.editors.placeholders.id", "Unique identifier (auto-generated from name)")}
+											required
+										/>
+										{errors.id && (
+											<InputError
+												messages={errors.id}
+												className="mt-2"
+											/>
+										)}
+										<p className="text-xs text-muted-foreground">
+											{t(
+												"deviceTypes.editors.idDescription",
+												"This ID will be used to uniquely identify the device type. It's automatically generated from the name but can be customized."
+											)}
+										</p>
+									</div>
+								)}
 
 								{/* Description Field */}
 								<div className="space-y-2">

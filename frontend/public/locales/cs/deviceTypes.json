@@ -101,8 +101,10 @@
 			},
 			"placeholders": {
 				"name": "Zadejte název typu zařízení...",
-				"description": "Zadejte popis pro tento typ zařízení..."
+				"description": "Zadejte popis pro tento typ zařízení...",
+				"id": "Jedinečný identifikátor (automaticky generován z názvu)"
 			},
+			"idDescription": "Toto ID bude použito k jedinečné identifikaci typu zařízení. Je automaticky generováno z názvu, ale lze ho přizpůsobit.",
 			"propertyLabels": {
 				"unit": "Jednotka",
 				"default": "Výchozí",
@@ -203,7 +205,8 @@
 		},
 		"validation": {
 			"capabilitiesWithoutId": "Před uložením zadejte ID pro všechny schopnosti.",
-			"topicsWithoutName": "Před uložením zadejte název pro všechna MQTT témata."
+			"topicsWithoutName": "Před uložením zadejte název pro všechna MQTT témata.",
+			"idRequired": "ID je vyžadováno"
 		},
 		"notifications": {
 			"created": "Typ zařízení vytvořen",
