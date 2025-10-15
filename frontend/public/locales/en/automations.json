@@ -204,6 +204,8 @@
         "configureNode": "Configure Node",
         "configureDescription": "Configure the parameters for this {{nodeType}} node.",
         "nodeInformation": "Node Information",
+        "configuration": "Configuration",
+        "configurationErrors": "Configuration Errors",
         "saveConfiguration": "Save Configuration",
         "cancel": "Cancel"
     },
@@ -238,7 +240,7 @@
         "fieldRequiredDeviceControl": "Field selection is required for device control actions",
         "valueRequiredDeviceControl": "Value is required for device control",
         "mqttTopicRequired": "MQTT topic is required",
-        "mqttMessageRequired": "MQTT message is required",
+        "actionLogMessageRequired": "Log message is required",
         "notificationMessageRequired": "Notification message is required"
     },
 
@@ -269,7 +271,8 @@
         "actionDeviceControlFieldRequired": "Field is required for device control actions",
         "actionDeviceControlValueRequired": "Value is required for device control actions",
         "actionMqttTopicRequired": "MQTT topic is required",
-        "actionNotifyTitleRequired": "Notification title is required"
+        "actionNotifyTitleRequired": "Notification title is required",
+        "notificationMessageRequired": "Notification message is required"
     },
 
     "constants": {

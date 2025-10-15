@@ -82,98 +82,7 @@ class Automation extends Model
         return $query->where('user_id', $userId);
     }
 
-    /**
-     * Get the execution order of components based on React Flow edges
-     * Returns an array of node IDs in the order they should be executed
-     */
-    public function getExecutionOrder(): array
-    {
-        if (!$this->flow_metadata || !isset($this->flow_metadata['nodes']) || !isset($this->flow_metadata['edges'])) {
-            // Fallback to database creation order if no flow metadata
-            return [];
-        }
 
-        $nodes = collect($this->flow_metadata['nodes'])->keyBy('id');
-        $edges = $this->flow_metadata['edges'];
-
-        // Build adjacency list (node -> list of connected nodes)
-        $graph = [];
-        $inDegree = [];
-
-        // Initialize graph
-        foreach ($nodes as $nodeId => $node) {
-            $graph[$nodeId] = [];
-            $inDegree[$nodeId] = 0;
-        }
-
-        // Build edges and calculate in-degrees
-        foreach ($edges as $edge) {
-            $source = $edge['source'];
-            $target = $edge['target'];
-
-            if (isset($graph[$source]) && isset($inDegree[$target])) {
-                $graph[$source][] = $target;
-                $inDegree[$target]++;
-            }
-        }
-
-        // Topological sort using Kahn's algorithm
-        $result = [];
-        $queue = [];
-
-        // Find all nodes with no incoming edges (starting points)
-        foreach ($inDegree as $nodeId => $degree) {
-            if ($degree === 0) {
-                $queue[] = $nodeId;
-            }
-        }
-
-        while (!empty($queue)) {
-            $current = array_shift($queue);
-            $result[] = $current;
-
-            // For each neighbor of current node
-            foreach ($graph[$current] as $neighbor) {
-                $inDegree[$neighbor]--;
-                if ($inDegree[$neighbor] === 0) {
-                    $queue[] = $neighbor;
-                }
-            }
-        }
-
-        return $result;
-    }
-
-
-    /**
-     * Get conditions in execution order based on flow metadata
-     */
-    public function getConditionsInOrder()
-    {
-        $executionOrder = $this->getExecutionOrder();
-        $conditions = $this->conditions()->get()->keyBy('id');
-        $nodes = collect($this->flow_metadata['nodes'] ?? [])->keyBy('id');
-
-        $orderedConditions = collect();
-
-        foreach ($executionOrder as $nodeId) {
-            $node = $nodes->get($nodeId);
-            if ($node && isset($node['type']) && str_contains($node['type'], 'condition')) {
-                // Match node ID to condition
-                $conditionFound = $conditions->first(function ($condition) use ($nodeId, $node) {
-                    return str_contains($nodeId, (string) $condition->id) ||
-                        (isset($node['data']['conditionId']) && $node['data']['conditionId'] == $condition->id);
-                });
-
-                if ($conditionFound) {
-                    $orderedConditions->push($conditionFound);
-                }
-            }
-        }
-
-        // Fallback to database order if flow parsing fails
-        return $orderedConditions->isNotEmpty() ? $orderedConditions : $this->conditions;
-    }
 
     /**
      * Validate the flow structure
@@ -281,21 +190,34 @@ class Automation extends Model
     }
 
     /**
-     * Validate a single execution path starting from a trigger
+     * Validate execution branches from a single trigger
      */
     private function validateSingleExecutionPath(string $triggerNodeId, $nodes, $edges, array &$errors): void
     {
-        $visited = [];
-        $path = $this->traversePathFromNode($triggerNodeId, $edges, $nodes, $visited);
+        try {
+            $branches = $this->findExecutionBranchesFromNode($triggerNodeId, $edges, $nodes, []);
 
-        if (empty($path)) {
-            $errors[] = "Trigger {$triggerNodeId} has no execution path";
-            return;
+            if (empty($branches)) {
+                $errors[] = "Trigger {$triggerNodeId} has no execution path";
+                return;
+            }
+
+            // Validate each branch individually
+            foreach ($branches as $branchIndex => $branch) {
+                $this->validateBranchOrder($branch, $nodes, $triggerNodeId, $branchIndex, $errors);
+            }
+        } catch (\Exception $e) {
+            $errors[] = "Failed to analyze execution paths for trigger {$triggerNodeId}: " . $e->getMessage();
         }
+    }
 
-        // Check logical order within this specific path
+    /**
+     * Validate the logical order of nodes within a single branch
+     */
+    private function validateBranchOrder(array $branch, $nodes, string $triggerNodeId, int $branchIndex, array &$errors): void
+    {
         $pathTypes = [];
-        foreach ($path as $nodeId) {
+        foreach ($branch as $nodeId) {
             $node = $nodes->get($nodeId);
             if ($node) {
                 $nodeType = $node['type'] ?? '';
@@ -308,8 +230,7 @@ class Automation extends Model
             }
         }
 
-        // Validate that within this path: triggers come first, then conditions, then actions
-        $lastTriggerIndex = -1;
+        // Validate that within this branch: triggers come first, then conditions, then actions
         $lastConditionIndex = -1;
         $lastActionIndex = -1;
 
@@ -317,16 +238,15 @@ class Automation extends Model
             $nodeType = $nodeInfo['type'];
 
             if (str_contains($nodeType, 'trigger')) {
-                $lastTriggerIndex = $index;
-                // Triggers should not come after conditions or actions in the same path
+                // Triggers should not come after conditions or actions in the same branch
                 if ($lastConditionIndex >= 0 || $lastActionIndex >= 0) {
-                    $errors[] = "Trigger {$nodeInfo['id']} comes after conditions/actions in its execution path";
+                    $errors[] = "Trigger {$nodeInfo['id']} comes after conditions/actions in branch {$branchIndex} of trigger {$triggerNodeId}";
                 }
             } elseif (str_contains($nodeType, 'condition')) {
                 $lastConditionIndex = $index;
-                // Conditions should not come after actions in the same path
+                // Conditions should not come after actions in the same branch
                 if ($lastActionIndex >= 0) {
-                    $errors[] = "Condition {$nodeInfo['id']} comes after actions in its execution path";
+                    $errors[] = "Condition {$nodeInfo['id']} comes after actions in branch {$branchIndex} of trigger {$triggerNodeId}";
                 }
             } elseif (str_contains($nodeType, 'action')) {
                 $lastActionIndex = $index;
@@ -335,18 +255,13 @@ class Automation extends Model
     }
 
     /**
-     * Get the execution path starting from a specific trigger node
-     * Returns conditions and actions reachable from the trigger
+     * Get all separate execution branches starting from a specific trigger node
+     * Returns multiple execution paths, each representing an independent branch
      */
-    public function getExecutionPathFromTrigger($triggerNodeId): array
+    public function getExecutionBranchesFromTrigger($triggerNodeId): array
     {
         if (!$this->flow_metadata || !isset($this->flow_metadata['nodes']) || !isset($this->flow_metadata['edges'])) {
-            return [
-                'trigger' => null,
-                'conditions' => collect(),
-                'actions' => collect(),
-                'path' => []
-            ];
+            return [];
         }
 
         $nodes = collect($this->flow_metadata['nodes'])->keyBy('id');
@@ -358,64 +273,76 @@ class Automation extends Model
             throw new \InvalidArgumentException("Invalid trigger node ID: {$triggerNodeId}");
         }
 
-        // Traverse the path from trigger
-        $visitedNodes = [];
-        $path = $this->traversePathFromNode($triggerNodeId, $edges, $nodes, $visitedNodes);
+        // Get all execution branches from trigger
+        $branches = $this->findExecutionBranchesFromNode($triggerNodeId, $edges, $nodes, []);
 
-        // Get database entities for nodes in path
+        // Convert branches to structured format with database entities
         $triggers = $this->triggers()->get()->keyBy('id');
         $conditions = $this->conditions()->get()->keyBy('id');
         $actions = $this->actions()->get()->keyBy('id');
 
-        $pathTrigger = null;
-        $pathConditions = collect();
-        $pathActions = collect();
+        $formattedBranches = [];
 
-        foreach ($path as $nodeId) {
-            $node = $nodes->get($nodeId);
-            if (!$node)
-                continue;
+        foreach ($branches as $branchIndex => $branch) {
+            $pathTrigger = null;
+            $pathConditions = collect();
+            $pathActions = collect();
 
-            $nodeType = $node['type'] ?? '';
+            foreach ($branch as $nodeId) {
+                $node = $nodes->get($nodeId);
+                if (!$node)
+                    continue;
 
-            if (str_contains($nodeType, 'trigger')) {
-                $trigger = $this->findEntityForNode($node, $triggers);
-                if ($trigger)
-                    $pathTrigger = $trigger;
-            } elseif (str_contains($nodeType, 'condition')) {
-                $condition = $this->findEntityForNode($node, $conditions);
-                if ($condition)
-                    $pathConditions->push($condition);
-            } elseif (str_contains($nodeType, 'action')) {
-                $action = $this->findEntityForNode($node, $actions);
-                if ($action)
-                    $pathActions->push($action);
+                $nodeType = $node['type'] ?? '';
+
+                if (str_contains($nodeType, 'trigger')) {
+                    $trigger = $this->findEntityForNode($node, $triggers);
+                    if ($trigger)
+                        $pathTrigger = $trigger;
+                } elseif (str_contains($nodeType, 'condition')) {
+                    $condition = $this->findEntityForNode($node, $conditions);
+                    if ($condition)
+                        $pathConditions->push($condition);
+                } elseif (str_contains($nodeType, 'action')) {
+                    $action = $this->findEntityForNode($node, $actions);
+                    if ($action)
+                        $pathActions->push($action);
+                }
             }
+
+            $formattedBranches[] = [
+                'trigger' => $pathTrigger,
+                'conditions' => $pathConditions,
+                'actions' => $pathActions,
+                'path' => $branch
+            ];
         }
 
-        return [
-            'trigger' => $pathTrigger,
-            'conditions' => $pathConditions,
-            'actions' => $pathActions,
-            'path' => $path
-        ];
+        return $formattedBranches;
     }
 
-    /**
-     * Traverse the execution path from a given node using DFS
-     */
-    private function traversePathFromNode(string $startNodeId, $edges, $nodes, array &$visited): array
-    {
-        if (in_array($startNodeId, $visited)) {
-            return []; // Cycle detection
-        }
 
-        $visited[] = $startNodeId;
-        $path = [$startNodeId];
+
+    /**
+     * Find all separate execution branches from a given node
+     * Each branch represents an independent path that should be evaluated separately
+     * Follows graph edges to determine the correct execution flow
+     */
+    private function findExecutionBranchesFromNode(string $startNodeId, $edges, $nodes, array $currentPath): array
+    {
+        $currentPath[] = $startNodeId;
 
         // Find all outgoing edges from current node
         $outgoingEdges = $edges->where('source', $startNodeId);
 
+        // If this is a leaf node (no outgoing edges), return the current path as a complete branch
+        if ($outgoingEdges->isEmpty()) {
+            return [$currentPath];
+        }
+
+        $branches = [];
+
+        // For each outgoing edge, create a separate branch following the graph structure
         foreach ($outgoingEdges as $edge) {
             $targetNodeId = $edge['target'];
             $targetNode = $nodes->get($targetNodeId);
@@ -423,13 +350,22 @@ class Automation extends Model
             if (!$targetNode)
                 continue;
 
-            // Recursively traverse connected nodes
-            $subPath = $this->traversePathFromNode($targetNodeId, $edges, $nodes, $visited);
-            $path = array_merge($path, $subPath);
+            // Prevent infinite loops by checking if we've already visited this node in current path
+            if (in_array($targetNodeId, $currentPath)) {
+                continue;
+            }
+
+            // Recursively find branches from the target node
+            $subBranches = $this->findExecutionBranchesFromNode($targetNodeId, $edges, $nodes, $currentPath);
+
+            // Add all sub-branches to our result
+            $branches = array_merge($branches, $subBranches);
         }
 
-        return array_unique($path);
+        return $branches;
     }
+
+
 
     /**
      * Find database entity that corresponds to a flow node
@@ -471,25 +407,11 @@ class Automation extends Model
         return null;
     }
 
-    /**
-     * Execute a specific trigger path
-     */
-    public function executePathFromTrigger($triggerNodeId)
-    {
-        $path = $this->getExecutionPathFromTrigger($triggerNodeId);
 
-        return [
-            'trigger_node_id' => $triggerNodeId,
-            'trigger' => $path['trigger'],
-            'conditions' => $path['conditions'],
-            'actions' => $path['actions'],
-            'execution_path' => $path['path'],
-            'path_valid' => !empty($path['trigger'])
-        ];
-    }
 
     /**
      * Get all possible execution paths from all triggers
+     * Returns separate execution branches for proper conditional handling
      */
     public function getAllExecutionPaths(): array
     {
@@ -502,16 +424,23 @@ class Automation extends Model
             return str_contains($node['type'] ?? '', 'trigger');
         });
 
-        $paths = [];
+        $allPaths = [];
+
         foreach ($triggerNodes as $triggerNode) {
             try {
-                $paths[$triggerNode['id']] = $this->getExecutionPathFromTrigger($triggerNode['id']);
+                $branches = $this->getExecutionBranchesFromTrigger($triggerNode['id']);
+
+                // Create unique identifiers for each branch
+                foreach ($branches as $branchIndex => $branch) {
+                    $pathId = $triggerNode['id'] . '_branch_' . $branchIndex;
+                    $allPaths[$pathId] = $branch;
+                }
             } catch (\Exception $e) {
                 // Skip invalid trigger nodes
                 continue;
             }
         }
 
-        return $paths;
+        return $allPaths;
     }
 }

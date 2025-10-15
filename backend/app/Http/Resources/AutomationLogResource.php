@@ -42,12 +42,6 @@ class AutomationLogResource extends JsonResource
 
             // Status description
             'status_description' => $this->getStatusDescription(),
-
-            // Execution duration from creation if available
-            'execution_time' => $this->when(
-                $this->created_at && $this->executed_at,
-                fn() => $this->executed_at->diffInSeconds($this->created_at) . 's'
-            ),
         ];
     }
 }

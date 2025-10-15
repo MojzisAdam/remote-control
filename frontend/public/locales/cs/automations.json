@@ -204,6 +204,8 @@
         "configureNode": "Konfigurovat uzel",
         "configureDescription": "Nakonfigurujte parametry pro tento uzel typu {{nodeType}}.",
         "nodeInformation": "Informace o uzlu",
+        "configuration": "Konfigurace",
+        "configurationErrors": "Chyby konfigurace",
         "saveConfiguration": "Uložit konfiguraci",
         "cancel": "Zrušit"
     },
@@ -238,7 +240,7 @@
         "fieldRequiredDeviceControl": "Výběr pole je vyžadován pro akce ovládání zařízení",
         "valueRequiredDeviceControl": "Hodnota je vyžadována pro ovládání zařízení",
         "mqttTopicRequired": "MQTT téma je vyžadováno",
-        "mqttMessageRequired": "MQTT zpráva je vyžadována",
+        "actionLogMessageRequired": "Zpráva protokolu je vyžadována",
         "notificationMessageRequired": "Zpráva notifikace je vyžadována"
     },
 
@@ -269,7 +271,8 @@
         "actionDeviceControlFieldRequired": "Pole je vyžadováno pro akce řízení zařízení",
         "actionDeviceControlValueRequired": "Hodnota je vyžadována pro akce řízení zařízení",
         "actionMqttTopicRequired": "MQTT téma je vyžadováno",
-        "actionNotifyTitleRequired": "Titulek oznámení je vyžadován"
+        "actionNotifyTitleRequired": "Titulek oznámení je vyžadován",
+        "notificationMessageRequired": "Zpráva notifikace je vyžadována"
     },
 
     "constants": {

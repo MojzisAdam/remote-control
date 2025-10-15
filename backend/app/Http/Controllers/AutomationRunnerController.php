@@ -32,8 +32,8 @@ class AutomationRunnerController extends Controller
 
                     if ($flowValid) {
                         $allPaths = $automation->getAllExecutionPaths();
-                        foreach ($allPaths as $triggerNodeId => $pathData) {
-                            $executionPaths[$triggerNodeId] = [
+                        foreach ($allPaths as $pathId => $pathData) {
+                            $executionPaths[$pathId] = [
                                 'trigger' => $pathData['trigger'] ? [
                                     'id' => $pathData['trigger']->id,
                                     'type' => $pathData['trigger']->type,
@@ -73,6 +73,7 @@ class AutomationRunnerController extends Controller
                                     ];
                                 })->toArray(),
                                 'path_nodes' => $pathData['path'],
+                                'is_independent_branch' => true,
                             ];
                         }
                     }

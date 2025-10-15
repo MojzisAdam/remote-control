@@ -512,15 +512,15 @@ export const useAutomationFlow = (initialAutomation?: Automation) => {
 				}
 			}
 
-			if (actionType === "mqtt_publish") {
-				if (!config?.mqtt_topic) {
-					errors.push(t("flowValidation.actionMqttTopicRequired") + ` (Action ${index + 1})`);
+			if (actionType === "log") {
+				if (!config?.message) {
+					errors.push(t("flowValidation.actionLogMessageRequired") + ` (Action ${index + 1})`);
 				}
 			}
 
 			if (actionType === "notify") {
-				if (!config?.title) {
-					errors.push(t("flowValidation.actionNotifyTitleRequired") + ` (Action ${index + 1})`);
+				if (!config?.message) {
+					errors.push(t("flowValidation.notificationMessageRequired") + ` (Action ${index + 1})`);
 				}
 			}
 		});

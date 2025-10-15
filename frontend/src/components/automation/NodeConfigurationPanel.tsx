@@ -6,7 +6,6 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Badge } from "@/components/ui/badge";
 import { Settings, Zap, Filter, Target, AlertTriangle } from "lucide-react";
 import { FlowData } from "@/api/automation/model";
-import { Device } from "@/api/devices/model";
 import { TriggerConfiguration, ConditionConfiguration, ActionConfiguration } from "./configuration";
 import { useDeviceCapabilityHelper } from "@/hooks/useDeviceCapabilityHelper";
 import { useDeviceCapabilities } from "@/provider/DeviceCapabilitiesProvider";
@@ -43,6 +42,86 @@ const NodeConfigurationPanel: React.FC<NodeConfigurationPanelProps> = ({ node, i
 		}
 	}, [node]);
 
+	// Re-validate when config or local node data changes
+	useEffect(() => {
+		if (node) {
+			const currentNodeType = node.data.type;
+			const errors: string[] = [];
+
+			if (currentNodeType === "trigger") {
+				const triggerType = localNodeData.trigger_type as string;
+
+				if (triggerType === "state_change") {
+					if (!config.device_id) {
+						errors.push(t("validation.deviceRequiredStateChange"));
+					}
+					if (!config.field) {
+						errors.push(t("validation.fieldRequiredStateChange"));
+					}
+				} else if (triggerType === "time") {
+					if (!config.time) {
+						errors.push(t("validation.timeRequiredTimeTrigger"));
+					}
+				} else if (triggerType === "interval") {
+					if (!config.interval || config.interval <= 0) {
+						errors.push(t("validation.intervalRequiredIntervalTrigger"));
+					}
+				}
+			} else if (currentNodeType === "condition") {
+				const conditionType = localNodeData.condition_type as string;
+				if (conditionType === "simple") {
+					if (config.field || config.operator || config.value) {
+						if (!config.device_id) {
+							errors.push(t("validation.deviceRequiredSimpleCondition"));
+						}
+						if (config.field && !config.operator) {
+							errors.push(t("validation.operatorRequiredWhenField"));
+						}
+						if (config.operator && (config.value === undefined || config.value === "")) {
+							errors.push(t("validation.valueRequiredWhenOperator"));
+						}
+					}
+				} else if (conditionType === "time") {
+					if (config.time && !config.time.trim()) {
+						errors.push(t("validation.timeFormatInvalid"));
+					}
+				} else if (conditionType === "advanced") {
+					if (config.condition_js) {
+						if (!config.device_id) {
+							errors.push(t("validation.deviceRequiredAdvancedCondition"));
+						}
+						if (!config.condition_js.trim()) {
+							errors.push(t("validation.jsConditionCodeRequired"));
+						}
+					}
+				}
+			} else if (currentNodeType === "action") {
+				const actionType = localNodeData.action_type as string;
+				if (actionType === "device_control") {
+					if (!config.device_id) {
+						errors.push(t("validation.deviceRequiredDeviceControl"));
+					}
+					if (!config.field) {
+						errors.push(t("validation.fieldRequiredDeviceControl"));
+					}
+					if (config.value === undefined || config.value === "") {
+						errors.push(t("validation.valueRequiredDeviceControl"));
+					}
+				} else if (actionType === "log") {
+					if (!config.message) {
+						errors.push(t("validation.actionLogMessageRequired"));
+					}
+				} else if (actionType === "notify") {
+					if (!config.message) {
+						errors.push(t("validation.notificationMessageRequired"));
+					}
+				}
+			}
+
+			setValidationErrors(errors);
+		}
+	}, [config, localNodeData, node, t]);
+
 	if (!node) return null;
 
 	const nodeType = node.data.type;
@@ -70,83 +149,8 @@ const NodeConfigurationPanel: React.FC<NodeConfigurationPanelProps> = ({ node, i
 	};
 
 	const validateConfiguration = (): boolean => {
-		const errors: string[] = [];
-
-		if (nodeType === "trigger") {
-			const triggerType = localNodeData.trigger_type as string;
-
-			if (triggerType === "state_change") {
-				if (!config.device_id) {
-					errors.push(t("validation.deviceRequiredStateChange"));
-				}
-				if (!config.field) {
-					errors.push(t("validation.fieldRequiredStateChange"));
-				}
-			} else if (triggerType === "time") {
-				if (!config.time) {
-					errors.push(t("validation.timeRequiredTimeTrigger"));
-				}
-			} else if (triggerType === "interval") {
-				if (!config.interval || config.interval <= 0) {
-					errors.push(t("validation.intervalRequiredIntervalTrigger"));
-				}
-			}
-		} else if (nodeType === "condition") {
-			const conditionType = localNodeData.condition_type as string;
-			if (conditionType === "simple") {
-				if (config.field || config.operator || config.value) {
-					if (!config.device_id) {
-						errors.push(t("validation.deviceRequiredSimpleCondition"));
-					}
-					if (config.field && !config.operator) {
-						errors.push(t("validation.operatorRequiredWhenField"));
-					}
-					if (config.operator && (config.value === undefined || config.value === "")) {
-						errors.push(t("validation.valueRequiredWhenOperator"));
-					}
-				}
-			} else if (conditionType === "time") {
-				if (config.time && !config.time.trim()) {
-					errors.push(t("validation.timeFormatInvalid"));
-				}
-			} else if (conditionType === "advanced") {
-				if (config.condition_js) {
-					if (!config.device_id) {
-						errors.push(t("validation.deviceRequiredAdvancedCondition"));
-					}
-					if (!config.condition_js.trim()) {
-						errors.push(t("validation.jsConditionCodeRequired"));
-					}
-				}
-			}
-		} else if (nodeType === "action") {
-			const actionType = localNodeData.action_type as string;
-			if (actionType === "device_control") {
-				if (!config.device_id) {
-					errors.push(t("validation.deviceRequiredDeviceControl"));
-				}
-				if (!config.field) {
-					errors.push(t("validation.fieldRequiredDeviceControl"));
-				}
-				if (config.value === undefined || config.value === "") {
-					errors.push(t("validation.valueRequiredDeviceControl"));
-				}
-			} else if (actionType === "mqtt_publish") {
-				if (!config.topic) {
-					errors.push(t("validation.mqttTopicRequired"));
-				}
-				if (!config.message) {
-					errors.push(t("validation.mqttMessageRequired"));
-				}
-			} else if (actionType === "notify") {
-				if (!config.message) {
-					errors.push(t("validation.notificationMessageRequired"));
-				}
-			}
-		}
-
-		setValidationErrors(errors);
-		return errors.length === 0;
+		// Return current validation state
+		return validationErrors.length === 0;
 	};
 
 	const handleSave = () => {
@@ -291,7 +295,7 @@ const NodeConfigurationPanel: React.FC<NodeConfigurationPanelProps> = ({ node, i
 					{/* Configuration Form */}
 					<Card>
 						<CardHeader className="pb-3">
-							<CardTitle className="text-sm">Configuration</CardTitle>
+							<CardTitle className="text-sm">{t("configuration.configuration")}</CardTitle>
 						</CardHeader>
 						<CardContent>{renderConfigurationContent()}</CardContent>
 					</Card>
@@ -302,7 +306,7 @@ const NodeConfigurationPanel: React.FC<NodeConfigurationPanelProps> = ({ node, i
 							<CardHeader className="pb-3">
 								<CardTitle className="text-sm flex items-center gap-2 text-destructive">
 									<AlertTriangle className="h-4 w-4" />
-									Configuration Errors
+									{t("configuration.configurationErrors")}
 								</CardTitle>
 							</CardHeader>
 							<CardContent>
