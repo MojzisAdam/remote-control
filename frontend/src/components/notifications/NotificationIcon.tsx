@@ -10,6 +10,10 @@ import routes from "@/constants/routes";
 import { useTranslation } from "react-i18next";
 import { format, isToday, isYesterday, differenceInMinutes } from "date-fns";
 import { cs, enUS } from "date-fns/locale";
+import { isDeviceNotification, isAutomationNotification } from "@/constants/notificationTypes";
+import DeviceNotificationItem from "./DeviceNotificationItem";
+import AutomationNotificationItem from "./AutomationNotificationItem";
+import GenericNotificationItem from "./GenericNotificationItem";
 
 const NotificationIcon: React.FC = () => {
 	const { getUnseenNotifications, markAsSeen, markAllAsSeen } = useNotifications();
@@ -62,15 +66,25 @@ const NotificationIcon: React.FC = () => {
 
 	const unseenNotifications = notifications?.filter((n: Notification) => !n.seen) || [];
 	const unseenCount = unseenNotifications.length;
-	const handleNotificationClick = async (notificationId: number, deviceId: string) => {
-		await markAsSeen(notificationId);
+
+	const handleNotificationClick = async (notification: Notification) => {
+		await markAsSeen(notification.id);
 		refetch();
-		// Invalidate device-specific notifications query if it exists
-		queryClient.invalidateQueries({ queryKey: ["device-notifications", deviceId] });
-		// Store the highlighted notification ID in React Query cache
-		queryClient.setQueryData(["highlighted-notification"], notificationId);
 		setOpen(false);
-		navigate(routes.notifications(deviceId));
+
+		// Handle different notification types
+		if (isDeviceNotification(notification.type?.id) && notification.device_id) {
+			// Device notification - navigate to device notifications
+			queryClient.invalidateQueries({ queryKey: ["device-notifications", notification.device_id] });
+			queryClient.setQueryData(["highlighted-notification"], notification.id);
+			navigate(routes.notifications(notification.device_id));
+		} else if (isAutomationNotification(notification.type?.id)) {
+			// Automation notification - navigate to automations page
+			navigate(routes.automations);
+		} else {
+			// Other notifications - for now just log, could navigate to a general notifications page
+			console.log("Unhandled notification type:", notification.type);
+		}
 	};
 	const handleMarkAllAsSeen = async () => {
 		if (notifications) {
@@ -144,55 +158,25 @@ const NotificationIcon: React.FC = () => {
 						unseenNotifications.map((notification, index) => (
 							<React.Fragment key={notification.id}>
 								{index > 0 && <DropdownMenuSeparator className="my-2 bg-gray-200 dark:bg-gray-800" />}
-								<div
-									className="px-2"
-									onClick={(e) => {
-										e.preventDefault();
-										handleNotificationClick(notification.id, notification.device_id);
-									}}
-								>
-									<div className="flex flex-col w-full p-3 space-y-2.5 hover:bg-gray-50 dark:hover:bg-zinc-900 rounded-md cursor-pointer border border-transparent hover:border-gray-100 dark:hover:border-zinc-800">
-										<div className="flex flex-col gap-2">
-											<div className="flex flex-row justify-between items-center w-full">
-												{" "}
-												<span className="text-xs text-muted-foreground">{formatTimestamp(notification.created_at)}</span>
-												<div className="flex items-center gap-1">
-													<span
-														className={`text-xs px-2 py-0.5 rounded-full ${
-															notification.error_code > 0
-																? "bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300"
-																: notification.error_code === 0
-																? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300"
-																: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
-														}`}
-													>
-														{t("notifications.error")}: {notification.error_code}
-													</span>
-												</div>
-											</div>
-											<div className="flex flex-col w-full">
-												{notification.own_name ? (
-													<>
-														<span
-															className="font-medium text-sm truncate"
-															title={`${notification.own_name} (${notification.device_id})`}
-														>
-															{notification.own_name}
-														</span>
-														<span className="text-xs text-muted-foreground">ID: {notification.device_id}</span>
-													</>
-												) : (
-													<span className="font-medium text-sm">ID: {notification.device_id}</span>
-												)}
-											</div>
-										</div>
-										{notification.message && (
-											<div className="pt-1 border-t border-gray-200 dark:border-gray-700">
-												<p className="text-sm text-muted-foreground line-clamp-2">{notification.message}</p>
-											</div>
-										)}
-									</div>
-								</div>
+								{isDeviceNotification(notification.type?.id) ? (
+									<DeviceNotificationItem
+										notification={notification}
+										onNotificationClick={handleNotificationClick}
+										formatTimestamp={formatTimestamp}
+									/>
+								) : isAutomationNotification(notification.type?.id) ? (
+									<AutomationNotificationItem
+										notification={notification}
+										onNotificationClick={handleNotificationClick}
+										formatTimestamp={formatTimestamp}
+									/>
+								) : (
+									<GenericNotificationItem
+										notification={notification}
+										onNotificationClick={handleNotificationClick}
+										formatTimestamp={formatTimestamp}
+									/>
+								)}
 							</React.Fragment>
 						))
 					)}
@@ -206,23 +190,5 @@ const NotificationIcon: React.FC = () => {
 		</DropdownMenu>
 	);
 };
-
-// Helper functions
-function getErrorVariant(errorCode: number): "destructive" | "outline" | "secondary" | "default" {
-	if (errorCode > 0) return "destructive";
-	if (errorCode == 0) return "default";
-	return "secondary";
-}
-
-// Returns CSS classes for error status indicators
-function getErrorStatusClasses(errorCode: number): string {
-	if (errorCode > 0) {
-		return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300";
-	}
-	if (errorCode == 0) {
-		return "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300";
-	}
-	return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300";
-}
 
 export default NotificationIcon;

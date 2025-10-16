@@ -25,5 +25,7 @@
 	"success": "Success",
 	"errorTitle": "Error",
 	"notificationNotFound": "Notification not found",
-	"notificationNotFoundDescription": "The notification could not be found in the available history."
+	"notificationNotFoundDescription": "The notification could not be found in the available history.",
+	"automation": "Automation",
+    "automationNotificationTitle": "Automation"
 }

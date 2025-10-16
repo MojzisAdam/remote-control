@@ -1,13 +1,22 @@
+export interface NotificationType {
+	id: number;
+	name: string;
+	description: string;
+}
+
 export interface Notification {
 	id: number;
-	device_id: string;
-	error_code: number;
-	message?: string;
+	title: string;
+	message: string;
+	seen: boolean;
 	created_at: string;
 	updated_at: string;
-	seen: boolean;
-	additional_data?: string;
+	type?: NotificationType;
+	// Device notification specific fields (only present for device notifications)
+	device_id?: string;
+	error_code?: number;
 	own_name?: string;
+	additional_data?: string;
 }
 
 export interface PaginationInfo {

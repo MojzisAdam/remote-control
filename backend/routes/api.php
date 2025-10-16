@@ -134,6 +134,7 @@ Route::middleware('api_key:automation_runner')->group(function () {
     Route::post('/automation-runner/log-batch-execution', [AutomationRunnerController::class, 'logBatchExecution']);
     Route::post('/automation-runner/devices/data', [AutomationRunnerController::class, 'getDevicesData']);
     Route::get('/automation-runner/health', [AutomationRunnerController::class, 'health']);
+    Route::post('/automation-runner/notify', [NotificationController::class, 'notifyAutomation']);
 
     Route::get('/automation-runner/device-types', [DeviceTypeController::class, 'index']);
 

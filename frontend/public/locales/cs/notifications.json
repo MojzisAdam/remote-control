@@ -25,5 +25,7 @@
 	"success": "Úspěch",
 	"errorTitle": "Chyba",
 	"notificationNotFound": "Upozornění nenalezeno",
-	"notificationNotFoundDescription": "Upozornění nebylo nalezeno v dostupné historii."
+	"notificationNotFoundDescription": "Upozornění nebylo nalezeno v dostupné historii.",
+	"automation": "Automatizace",
+    "automationNotificationTitle": "Automatizace"
 }

@@ -78,9 +78,22 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function notifications()
     {
-        return $this->belongsToMany(DeviceNotification::class, 'notification_user', 'user_id', 'notification_id')
+        return $this->belongsToMany(Notification::class, 'notification_user', 'user_id', 'notification_id')
             ->withPivot('seen')
             ->withTimestamps();
+    }
+
+    /**
+     * Get device notifications specifically for the user (through the base notifications).
+     */
+    public function deviceNotifications()
+    {
+        return $this->notifications()
+            ->whereHas('deviceNotification') // Only notifications that have device_notifications record
+            ->with([
+                'deviceNotification.device', // Eager load: DeviceNotification -> Device
+                'notificationType'           // Eager load: Notification -> NotificationType (1 or 2)
+            ]);
     }
 
     /**

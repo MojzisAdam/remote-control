@@ -4,11 +4,12 @@ namespace App\Services;
 
 use App\Models\DeviceErrorState;
 use App\Models\DeviceNotification;
+use App\Models\Notification;
+use App\Models\NotificationType;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NewErrorOccurredMail;
 use App\Mail\ErrorResolvedMail;
 use App\Models\Device;
-use Illuminate\Support\Facades\Log;
 
 class ErrorNotificationService
 {
@@ -34,31 +35,57 @@ class ErrorNotificationService
         $state->save();
 
         if ($newErrorCode > 0 && $newErrorCode != $lastErrorCode) {
-            $notification = DeviceNotification::create([
-                'device_id' => $deviceId,
-                'error_code' => $newErrorCode,
-                'message' => 'An error occurred with code ' . $newErrorCode,
-                'message_key' => 'notifications.error_occurred',
-                'message_data' => json_encode(['error_code' => $newErrorCode]),
-                'notification_type_id' => 1
-            ]);
-
-            $this->attachNotificationToUsers($notification, $deviceId);
+            $this->createErrorNotification($deviceId, $newErrorCode, NotificationType::ERROR_OCCURRED);
         }
 
         if ($newErrorCode === 0 && $lastErrorCode > 0) {
-            $notification = DeviceNotification::create([
-                'device_id' => $deviceId,
-                'error_code' => 0,
-                'message' => 'Error resolved: all issues have been resolved.',
-                'message_key' => 'notifications.error_resolved',
-                'message_data' => json_encode([]),
-                'notification_type_id' => 2
-            ]);
-
-            $this->attachNotificationToUsers($notification, $deviceId);
+            $this->createErrorResolvedNotification($deviceId, NotificationType::ERROR_RESOLVED);
         }
     }
+    private function createErrorNotification($deviceId, $errorCode, $notificationTypeId)
+    {
+        // Create the base notification first
+        $baseNotification = Notification::create([
+            'title' => 'Device Error',
+            'body' => 'An error occurred with code ' . $errorCode,
+            'notification_type_id' => $notificationTypeId
+        ]);
+
+        // Create the device-specific notification
+        $deviceNotification = DeviceNotification::create([
+            'notification_id' => $baseNotification->id,
+            'device_id' => $deviceId,
+            'error_code' => $errorCode,
+            'message' => 'An error occurred with code ' . $errorCode,
+            'message_key' => 'notifications.error_occurred',
+            'message_data' => json_encode(['error_code' => $errorCode])
+        ]);
+
+        $this->attachNotificationToUsers($baseNotification, $deviceId);
+    }
+
+    private function createErrorResolvedNotification($deviceId, $notificationTypeId)
+    {
+        // Create the base notification first
+        $baseNotification = Notification::create([
+            'title' => 'Error Resolved',
+            'body' => 'Error resolved: all issues have been resolved.',
+            'notification_type_id' => $notificationTypeId
+        ]);
+
+        // Create the device-specific notification
+        $deviceNotification = DeviceNotification::create([
+            'notification_id' => $baseNotification->id,
+            'device_id' => $deviceId,
+            'error_code' => 0,
+            'message' => 'Error resolved: all issues have been resolved.',
+            'message_key' => 'notifications.error_resolved',
+            'message_data' => json_encode([])
+        ]);
+
+        $this->attachNotificationToUsers($baseNotification, $deviceId);
+    }
+
     private function attachNotificationToUsers($notification, $deviceId)
     {
         // Get device with its users who have web notifications enabled

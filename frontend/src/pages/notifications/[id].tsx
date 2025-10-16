@@ -266,18 +266,22 @@ const DeviceNotificationsPage: React.FC = () => {
 	const isExpanded = (notificationId: number) => {
 		return expandedNotifications.includes(notificationId);
 	};
-	const getErrorVariant = (errorCode: number): "destructive" | "outline" | "secondary" | "default" => {
+	const getErrorVariant = (errorCode: number | undefined): "destructive" | "outline" | "secondary" | "default" => {
+		if (errorCode === undefined) return "secondary";
 		if (errorCode > 0) return "destructive";
-		if (errorCode == 0) return "default";
+		if (errorCode === 0) return "default";
 		return "secondary";
 	};
 
 	// Returns CSS classes for error status indicators
-	const getErrorStatusClasses = (errorCode: number): string => {
-		if (errorCode > 0) {
-			return "bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300";
+	const getErrorStatusClasses = (errorCode: number | undefined): string => {
+		if (errorCode === undefined) {
+			return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300";
 		}
-		if (errorCode == 0) {
+		if (errorCode > 0) {
+			return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300";
+		}
+		if (errorCode === 0) {
 			return "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300";
 		}
 		return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300";
@@ -371,7 +375,7 @@ const DeviceNotificationsPage: React.FC = () => {
 									<div className="flex flex-wrap justify-between items-center gap-2">
 										<div className="flex items-center gap-2">
 											<span className={`text-xs px-2 py-0.5 rounded-full ${getErrorStatusClasses(notification.error_code)}`}>
-												{t("error")}: {notification.error_code}
+												{t("error")}: {notification.error_code ?? 0}
 											</span>
 											{!notification.seen && (
 												<span className="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">{t("new")}</span>
@@ -404,7 +408,9 @@ const DeviceNotificationsPage: React.FC = () => {
 														<div>
 															<span className="font-medium">{t("errorCode")}:</span>{" "}
 															{currentDevice && (
-																<span className="text-muted-foreground">{deviceErrors.getDisplayErrorCode(notification.error_code, currentDevice.display_type)}</span>
+																<span className="text-muted-foreground">
+																	{deviceErrors.getDisplayErrorCode(notification.error_code ?? 0, currentDevice.display_type)}
+																</span>
 															)}
 														</div>
 													</div>
@@ -415,7 +421,7 @@ const DeviceNotificationsPage: React.FC = () => {
 															<div>
 																<span className="font-medium">{t("errorExplanation")}:</span>{" "}
 																<span className="text-muted-foreground">
-																	{deviceErrors.error(notification.error_code, parseInt(currentDevice.fw_version || "0"), currentDevice.display_type)}
+																	{deviceErrors.error(notification.error_code ?? 0, parseInt(currentDevice.fw_version || "0"), currentDevice.display_type)}
 																</span>
 															</div>
 														</div>

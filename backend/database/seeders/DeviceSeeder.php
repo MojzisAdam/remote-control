@@ -15,14 +15,14 @@ class DeviceSeeder extends Seeder
     {
         $devices = [
             [
-                'id' => "123456", 
+                'id' => "123456",
                 'password' => bcrypt('device123'),
                 'ip' => '192.168.1.10',
                 'display_type' => '1',
                 'script_version' => '1.2.3',
                 'fw_version' => '2.1.0',
                 'last_activity' => now(),
-                'history__writing_interval' => 60,
+                'history_writing_interval' => 60,
                 'send_data' => true,
                 'send_data_until' => now()->addDays(7),
                 'error_code' => 0
@@ -35,7 +35,7 @@ class DeviceSeeder extends Seeder
                 'script_version' => '1.2.5',
                 'fw_version' => '2.2.0',
                 'last_activity' => now()->subHours(5),
-                'history__writing_interval' => 120,
+                'history_writing_interval' => 120,
                 'send_data' => false,
                 'send_data_until' => null,
                 'error_code' => 1
@@ -48,7 +48,7 @@ class DeviceSeeder extends Seeder
                 'script_version' => '1.3.0',
                 'fw_version' => '2.3.1',
                 'last_activity' => now()->subDays(2),
-                'history__writing_interval' => 30,
+                'history_writing_interval' => 30,
                 'send_data' => true,
                 'send_data_until' => now()->addDays(3),
                 'error_code' => 0
@@ -58,4 +58,3 @@ class DeviceSeeder extends Seeder
         DB::table('devices')->insert($devices);
     }
 }
-

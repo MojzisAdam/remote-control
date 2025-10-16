@@ -3,20 +3,57 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class DeviceNotification extends Model
 {
-    protected $fillable = ['device_id', 'error_code', 'message', 'message_key', 'message_data', 'notification_type_id'];
+    protected $fillable = [
+        'device_id',
+        'error_code',
+        'message',
+        'message_key',
+        'message_data',
+        'notification_id'
+    ];
 
-    public function notificationType()
+    /**
+     * Get the base notification that this device notification belongs to.
+     */
+    public function notification(): BelongsTo
     {
-        return $this->belongsTo(NotificationType::class, 'notification_type_id');
+        return $this->belongsTo(Notification::class);
     }
 
-    public function users()
+    /**
+     * Get the notification type (through the base notification).
+     */
+    public function notificationType(): BelongsTo
     {
-        return $this->belongsToMany(User::class, 'notification_user', 'notification_id', 'user_id')
-            ->withPivot('seen')
-            ->withTimestamps();
+        return $this->notification?->notificationType() ?? $this->belongsTo(NotificationType::class)->whereRaw('0 = 1');
+    }
+
+    /**
+     * Get the device associated with this notification.
+     */
+    public function device(): BelongsTo
+    {
+        return $this->belongsTo(Device::class, 'device_id', 'id');
+    }
+
+    /**
+     * Get the users that belong to this notification (through the base notification).
+     */
+    public function users(): BelongsToMany
+    {
+        return $this->notification?->users() ?? collect();
+    }
+
+    /**
+     * Helper method to get users directly if notification exists.
+     */
+    public function getUsersAttribute()
+    {
+        return $this->notification?->users;
     }
 }

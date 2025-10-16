@@ -27,6 +27,13 @@ class NotificationTypesSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'id' => 3,
+                'name' => 'automation',
+                'description' => 'Automation-related notification',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ];
 
         DB::table('notification_types')->insert($types);
