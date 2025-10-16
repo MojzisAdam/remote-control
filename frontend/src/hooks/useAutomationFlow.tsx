@@ -446,9 +446,6 @@ export const useAutomationFlow = (initialAutomation?: Automation) => {
 				if (!config?.time) {
 					errors.push(t("flowValidation.triggerTimeRequired") + ` (Trigger ${index + 1})`);
 				}
-				if (!config?.days_of_week || config.days_of_week.length === 0) {
-					errors.push(t("flowValidation.triggerTimeDaysRequired") + ` (Trigger ${index + 1})`);
-				}
 			}
 
 			if (triggerType === "mqtt") {

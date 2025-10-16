@@ -30,7 +30,7 @@ class AutomationResource extends JsonResource
                     return [
                         'id' => $trigger->id,
                         'type' => $trigger->type,
-                        'time_at' => $trigger->time_at,
+                        'time_at' => $trigger->time_at ? substr($trigger->time_at, 0, 5) : null, // Format as HH:MM
                         'days_of_week' => $trigger->days_of_week,
                         'interval_seconds' => $trigger->interval_seconds,
                         'mqtt_topic' => $trigger->mqtt_topic,
@@ -53,7 +53,7 @@ class AutomationResource extends JsonResource
                         'operator' => $condition->operator,
                         'operator_text' => $condition->operator_text,
                         'value' => $condition->value,
-                        'time_at' => $condition->time_at,
+                        'time_at' => $condition->time_at ? substr($condition->time_at, 0, 5) : null, // Format as HH:MM
                         'days_of_week' => $condition->days_of_week,
                     ];
                 });

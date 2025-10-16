@@ -43,6 +43,7 @@ class StoreAutomationRequest extends FormRequest
 
             // Triggers validation - required for non-draft automations
             'triggers' => 'array|max:10',
+            'triggers.*.id' => 'nullable|integer|exists:automation_triggers,id',
             'triggers.*.type' => ['required', Rule::in(['time', 'interval', 'mqtt', 'state_change'])],
 
             // Time trigger fields
@@ -70,6 +71,7 @@ class StoreAutomationRequest extends FormRequest
 
             // Conditions validation (optional)
             'conditions' => 'array|max:20',
+            'conditions.*.id' => 'nullable|integer|exists:automation_conditions,id',
             'conditions.*.type' => ['required', Rule::in(['simple', 'time', 'day_of_week'])],
 
             // Simple condition fields (conditional)
@@ -87,6 +89,7 @@ class StoreAutomationRequest extends FormRequest
 
             // Actions validation - required for non-draft automations
             'actions' => 'array|max:20',
+            'actions.*.id' => 'nullable|integer|exists:automation_actions,id',
             'actions.*.type' => ['required', Rule::in(['mqtt_publish', 'notify', 'log', 'device_control'])],
 
             // MQTT publish action fields

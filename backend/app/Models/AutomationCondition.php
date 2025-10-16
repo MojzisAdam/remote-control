@@ -22,8 +22,12 @@ class AutomationCondition extends Model
     ];
 
     protected $casts = [
-        'time_at' => 'datetime:H:i',
         'days_of_week' => 'array',
+    ];
+
+    protected $dates = [
+        'created_at',
+        'updated_at',
     ];
 
     // Constants for condition types

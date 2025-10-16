@@ -91,8 +91,6 @@ class AutomationController extends Controller
      */
     public function store(StoreAutomationRequest $request)
     {
-        \Log::info('Automation store request data:', $request->all());
-
         $user = $request->user();
         $validated = $request->validated();
 
@@ -218,43 +216,42 @@ class AutomationController extends Controller
             ]));
 
             // Update triggers with proper entity management
+            $triggerIds = [];
             if (isset($validated['triggers'])) {
-                $this->syncAutomationEntities(
+                $triggerIds = $this->syncAutomationEntities(
                     $automation->triggers(),
                     $validated['triggers']
                 );
             }
 
             // Update conditions with proper entity management
+            $conditionIds = [];
             if (isset($validated['conditions'])) {
-                $this->syncAutomationEntities(
+                $conditionIds = $this->syncAutomationEntities(
                     $automation->conditions(),
                     $validated['conditions']
                 );
             }
 
             // Update actions with proper entity management  
+            $actionIds = [];
             if (isset($validated['actions'])) {
-                $this->syncAutomationEntities(
+                $actionIds = $this->syncAutomationEntities(
                     $automation->actions(),
                     $validated['actions']
                 );
             }
 
-            // Reload to get current entity IDs
+            // Reload to get current entities
             $automation->load(['triggers', 'conditions', 'actions']);
 
             // Update flow metadata with actual entity IDs if provided
             if (isset($validated['flow_metadata'])) {
-                $triggerIds = $automation->triggers->pluck('id')->toArray();
-                $conditionIds = $automation->conditions->pluck('id')->toArray();
-                $actionIds = $automation->actions->pluck('id')->toArray();
-
                 $updatedFlowMetadata = $this->updateFlowMetadataWithEntityIds(
                     $validated['flow_metadata'],
-                    $triggerIds,
-                    $conditionIds,
-                    $actionIds
+                    $triggerIds ?: $automation->triggers->pluck('id')->toArray(),
+                    $conditionIds ?: $automation->conditions->pluck('id')->toArray(),
+                    $actionIds ?: $automation->actions->pluck('id')->toArray()
                 );
 
                 $automation->update(['flow_metadata' => $updatedFlowMetadata]);
@@ -279,27 +276,46 @@ class AutomationController extends Controller
 
         // Track which entities we've processed
         $processedIds = collect();
+        $entityIndex = 0;
 
         foreach ($newEntityData as $entityData) {
-            if (isset($entityData['id']) && $existingEntities->has($entityData['id'])) {
-                // Update existing entity
-                $existingEntity = $existingEntities->get($entityData['id']);
+            $entityId = $entityData['id'] ?? null;
+
+            if ($entityId && $existingEntities->has($entityId)) {
+                // Update existing entity by ID
+                $existingEntity = $existingEntities->get($entityId);
                 $updateData = collect($entityData)->except(['id'])->toArray();
                 $existingEntity->update($updateData);
-                $processedIds->push($entityData['id']);
+                $processedIds->push($entityId);
             } else {
-                // Create new entity (no ID or ID doesn't exist)
-                $createData = collect($entityData)->except(['id'])->toArray();
-                $newEntity = $relation->create($createData);
-                $processedIds->push($newEntity->id);
+                // Try to match by position if no ID or ID doesn't exist
+                $existingEntityKeys = $existingEntities->keys()->values();
+
+                if (isset($existingEntityKeys[$entityIndex]) && !$processedIds->contains($existingEntityKeys[$entityIndex])) {
+                    // Update existing entity by position
+                    $existingId = $existingEntityKeys[$entityIndex];
+                    $existingEntity = $existingEntities->get($existingId);
+                    $updateData = collect($entityData)->except(['id'])->toArray();
+                    $existingEntity->update($updateData);
+                    $processedIds->push($existingId);
+                } else {
+                    // Create new entity only if we don't have existing entities to update
+                    $createData = collect($entityData)->except(['id'])->toArray();
+                    $newEntity = $relation->create($createData);
+                    $processedIds->push($newEntity->id);
+                }
             }
+
+            $entityIndex++;
         }
 
-        // Delete entities that weren't in the submitted data
+        // Delete entities that weren't processed
         $idsToDelete = $existingEntities->keys()->diff($processedIds);
         if ($idsToDelete->isNotEmpty()) {
             $relation->whereIn('id', $idsToDelete)->delete();
         }
+
+        return $processedIds->toArray();
     }
 
     /**
@@ -313,9 +329,9 @@ class AutomationController extends Controller
         }
 
         $updatedNodes = [];
-        $triggerIndex = 0;
-        $conditionIndex = 0;
-        $actionIndex = 0;
+        $availableTriggerIds = collect($triggerIds);
+        $availableConditionIds = collect($conditionIds);
+        $availableActionIds = collect($actionIds);
 
         // Track old to new node ID mappings for edge updates
         $nodeIdMappings = [];
@@ -325,24 +341,57 @@ class AutomationController extends Controller
             $oldNodeId = $node['id'];
             $newNode = $node;
 
-            if (str_contains($nodeType, 'trigger') && isset($triggerIds[$triggerIndex])) {
-                $newNodeId = "trigger-{$triggerIds[$triggerIndex]}";
-                $newNode['id'] = $newNodeId;
-                $newNode['data']['entityId'] = $triggerIds[$triggerIndex];
-                $nodeIdMappings[$oldNodeId] = $newNodeId;
-                $triggerIndex++;
-            } elseif (str_contains($nodeType, 'condition') && isset($conditionIds[$conditionIndex])) {
-                $newNodeId = "condition-{$conditionIds[$conditionIndex]}";
-                $newNode['id'] = $newNodeId;
-                $newNode['data']['entityId'] = $conditionIds[$conditionIndex];
-                $nodeIdMappings[$oldNodeId] = $newNodeId;
-                $conditionIndex++;
-            } elseif (str_contains($nodeType, 'action') && isset($actionIds[$actionIndex])) {
-                $newNodeId = "action-{$actionIds[$actionIndex]}";
-                $newNode['id'] = $newNodeId;
-                $newNode['data']['entityId'] = $actionIds[$actionIndex];
-                $nodeIdMappings[$oldNodeId] = $newNodeId;
-                $actionIndex++;
+            // Get existing entityId from node data if available
+            $existingEntityId = $node['data']['entityId'] ?? null;
+
+            if (str_contains($nodeType, 'trigger')) {
+                // If node has existing entityId and it's still valid, keep it
+                if ($existingEntityId && $availableTriggerIds->contains($existingEntityId)) {
+                    $entityId = $existingEntityId;
+                    $availableTriggerIds = $availableTriggerIds->reject(fn($id) => $id === $entityId);
+                } else {
+                    // Assign next available trigger ID
+                    $entityId = $availableTriggerIds->shift();
+                }
+
+                if ($entityId) {
+                    $newNodeId = "trigger-{$entityId}";
+                    $newNode['id'] = $newNodeId;
+                    $newNode['data']['entityId'] = $entityId;
+                    $nodeIdMappings[$oldNodeId] = $newNodeId;
+                }
+            } elseif (str_contains($nodeType, 'condition')) {
+                // If node has existing entityId and it's still valid, keep it
+                if ($existingEntityId && $availableConditionIds->contains($existingEntityId)) {
+                    $entityId = $existingEntityId;
+                    $availableConditionIds = $availableConditionIds->reject(fn($id) => $id === $entityId);
+                } else {
+                    // Assign next available condition ID
+                    $entityId = $availableConditionIds->shift();
+                }
+
+                if ($entityId) {
+                    $newNodeId = "condition-{$entityId}";
+                    $newNode['id'] = $newNodeId;
+                    $newNode['data']['entityId'] = $entityId;
+                    $nodeIdMappings[$oldNodeId] = $newNodeId;
+                }
+            } elseif (str_contains($nodeType, 'action')) {
+                // If node has existing entityId and it's still valid, keep it
+                if ($existingEntityId && $availableActionIds->contains($existingEntityId)) {
+                    $entityId = $existingEntityId;
+                    $availableActionIds = $availableActionIds->reject(fn($id) => $id === $entityId);
+                } else {
+                    // Assign next available action ID
+                    $entityId = $availableActionIds->shift();
+                }
+
+                if ($entityId) {
+                    $newNodeId = "action-{$entityId}";
+                    $newNode['id'] = $newNodeId;
+                    $newNode['data']['entityId'] = $entityId;
+                    $nodeIdMappings[$oldNodeId] = $newNodeId;
+                }
             }
 
             $updatedNodes[] = $newNode;

@@ -25,9 +25,13 @@ class AutomationTrigger extends Model
     ];
 
     protected $casts = [
-        'time_at' => 'datetime:H:i',
         'mqtt_payload' => 'array',
         'days_of_week' => 'array',
+    ];
+
+    protected $dates = [
+        'created_at',
+        'updated_at',
     ];
 
     // Constants for trigger types
