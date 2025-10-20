@@ -762,7 +762,7 @@ export const useAutomationFlow = (initialAutomation?: Automation) => {
 					// Transform condition config based on type
 					if (node.data.condition_type === "simple") {
 						// Only add if we have required fields for simple conditions
-						if (config.device_id && config.field && config.operator && config.value) {
+						if (config.device_id && config.field && config.operator && config.value !== null && config.value !== undefined && config.value !== "") {
 							condition.device_id = config.device_id;
 							condition.field = config.field;
 							condition.operator = config.operator;

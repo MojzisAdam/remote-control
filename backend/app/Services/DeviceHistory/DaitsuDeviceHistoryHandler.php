@@ -6,6 +6,7 @@ use App\Models\DeviceHistoryDaitsu;
 use App\Http\Resources\DataTransformationResourceDaitsu;
 use App\Http\Resources\DynamicDataTransformationResourceDaitsu;
 use App\Http\Resources\HistoryTableResourceDaitsu;
+use App\Rules\MySqlFloat;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
@@ -96,33 +97,33 @@ class DaitsuDeviceHistoryHandler implements DeviceHistoryHandlerInterface
     {
         return [
             'device_id' => 'required|string|exists:devices,id',
-            'reg_2' => 'nullable|numeric',
-            'reg_4' => 'nullable|numeric',
-            'reg_100' => 'nullable|numeric',
-            'reg_101' => 'nullable|numeric',
-            'reg_104' => 'nullable|numeric',
-            'reg_105' => 'nullable|numeric',
-            'reg_106' => 'nullable|numeric',
-            'reg_107' => 'nullable|numeric',
-            'reg_108' => 'nullable|numeric',
-            'reg_109' => 'nullable|numeric',
-            'reg_110' => 'nullable|numeric',
-            'reg_111' => 'nullable|numeric',
-            'reg_112' => 'nullable|numeric',
-            'reg_113' => 'nullable|numeric',
-            'reg_115' => 'nullable|numeric',
-            'reg_124' => 'nullable|numeric',
-            'reg_128_1' => 'nullable|numeric',
-            'reg_128_4' => 'nullable|numeric',
-            'reg_128_6' => 'nullable|numeric',
-            'reg_129_0' => 'nullable|numeric',
-            'reg_129_2' => 'nullable|numeric',
-            'reg_129_13' => 'nullable|numeric',
-            'reg_129_14' => 'nullable|numeric',
-            'reg_136' => 'nullable|numeric',
-            'reg_137' => 'nullable|numeric',
-            'reg_138' => 'nullable|numeric',
-            'reg_140' => 'nullable|numeric',
+            'reg_2' => ['nullable', new MySqlFloat()],
+            'reg_4' => ['nullable', new MySqlFloat()],
+            'reg_100' => ['nullable', new MySqlFloat()],
+            'reg_101' => ['nullable', new MySqlFloat()],
+            'reg_104' => ['nullable', new MySqlFloat()],
+            'reg_105' => ['nullable', new MySqlFloat()],
+            'reg_106' => ['nullable', new MySqlFloat()],
+            'reg_107' => ['nullable', new MySqlFloat()],
+            'reg_108' => ['nullable', new MySqlFloat()],
+            'reg_109' => ['nullable', new MySqlFloat()],
+            'reg_110' => ['nullable', new MySqlFloat()],
+            'reg_111' => ['nullable', new MySqlFloat()],
+            'reg_112' => ['nullable', new MySqlFloat()],
+            'reg_113' => ['nullable', new MySqlFloat()],
+            'reg_115' => ['nullable', new MySqlFloat()],
+            'reg_124' => ['nullable', new MySqlFloat()],
+            'reg_128_1' => ['nullable', new MySqlFloat()],
+            'reg_128_4' => ['nullable', new MySqlFloat()],
+            'reg_128_6' => ['nullable', new MySqlFloat()],
+            'reg_129_0' => ['nullable', new MySqlFloat()],
+            'reg_129_2' => ['nullable', new MySqlFloat()],
+            'reg_129_13' => ['nullable', new MySqlFloat()],
+            'reg_129_14' => ['nullable', new MySqlFloat()],
+            'reg_136' => ['nullable', new MySqlFloat()],
+            'reg_137' => ['nullable', new MySqlFloat()],
+            'reg_138' => ['nullable', new MySqlFloat()],
+            'reg_140' => ['nullable', new MySqlFloat()],
         ];
     }
 
@@ -130,12 +131,10 @@ class DaitsuDeviceHistoryHandler implements DeviceHistoryHandlerInterface
     {
         $validated['cas'] = Carbon::now();
 
-        DeviceHistoryDaitsu::updateOrCreate(
-            [
-                'device_id' => $validated['device_id'],
-                'cas' => $validated['cas'],
-            ],
-            $validated
+        DeviceHistoryDaitsu::upsert(
+            [$validated], // array of records to upsert
+            ['device_id', 'cas'], // unique columns (composite key)
+            array_keys($validated) // columns to update if duplicate exists
         );
     }
 

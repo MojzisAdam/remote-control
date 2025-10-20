@@ -62,14 +62,18 @@ const ConditionConfiguration: React.FC<ConditionConfigurationProps> = ({ conditi
 
 	const renderValueInput = () => {
 		if (!selectedField) return null;
-
 		switch (selectedField.type) {
 			case "boolean":
+				const getBooleanSelectValue = () => {
+					if (config.value === null || config.value === undefined) return "";
+					const boolValue = config.value === "1" || config.value === true || config.value === "true";
+					return boolValue ? "true" : "false";
+				};
 				return (
 					<div>
 						<Label htmlFor="value">{t("builder.value")}</Label>
 						<Select
-							value={config.value?.toString() || ""}
+							value={getBooleanSelectValue()}
 							onValueChange={(value) => onConfigChange("value", value === "true")}
 						>
 							<SelectTrigger>

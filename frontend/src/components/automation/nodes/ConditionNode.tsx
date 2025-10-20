@@ -40,7 +40,28 @@ const ConditionNode: React.FC<ConditionNodeProps> = ({ data, selected, id, onDel
 			label: field?.label || fieldKey,
 			unit: field?.unit,
 			type: field?.type,
+			labels: field?.labels,
+			values: field?.values,
 		};
+	};
+
+	const formatValueForDisplay = (value: any, fieldInfo: ReturnType<typeof getFieldDisplayInfo>) => {
+		if (value === null || value === undefined) return "";
+
+		if (fieldInfo.type === "boolean") {
+			// For boolean types, use labels if available
+			const boolValue = String(value) === "true" || value === true;
+			return fieldInfo.labels?.[boolValue ? "1" : "0"] || (boolValue ? "True" : "False");
+		}
+
+		if (fieldInfo.type === "enum" && fieldInfo.values) {
+			// For enum types, find the matching option and return its label
+			const enumOption = fieldInfo.values.find((v) => String(v.value) === String(value));
+			return enumOption?.label || String(value);
+		}
+
+		// For other types, return as string
+		return String(value);
 	};
 
 	const getConfigSummary = () => {
@@ -66,9 +87,10 @@ const ConditionNode: React.FC<ConditionNodeProps> = ({ data, selected, id, onDel
 								{(() => {
 									const fieldInfo = getFieldDisplayInfo(config.device_id, config.field);
 									const operatorSymbol = config.operator ? getOperatorSymbol(config.operator) : "";
+									const displayValue = formatValueForDisplay(config.value, fieldInfo);
 									return (
 										<span>
-											{fieldInfo.label} {operatorSymbol} {config.value}
+											{fieldInfo.label} {operatorSymbol} {displayValue}
 											{fieldInfo.unit && <span className="text-muted-foreground ml-1">({fieldInfo.unit})</span>}
 										</span>
 									);

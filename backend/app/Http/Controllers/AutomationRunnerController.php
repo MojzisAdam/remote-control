@@ -37,7 +37,7 @@ class AutomationRunnerController extends Controller
                                 'trigger' => $pathData['trigger'] ? [
                                     'id' => $pathData['trigger']->id,
                                     'type' => $pathData['trigger']->type,
-                                    'time_at' => $pathData['trigger']->time_at?->format('H:i'),
+                                    'time_at' => $pathData['trigger']->time_at ? (is_string($pathData['trigger']->time_at) ? substr($pathData['trigger']->time_at, 0, 5) : $pathData['trigger']->time_at->format('H:i')) : null,
                                     'days_of_week' => $pathData['trigger']->days_of_week,
                                     'interval_seconds' => $pathData['trigger']->interval_seconds,
                                     'mqtt_topic' => $pathData['trigger']->mqtt_topic,
@@ -55,7 +55,7 @@ class AutomationRunnerController extends Controller
                                         'field' => $condition->field,
                                         'operator' => $condition->operator,
                                         'value' => $condition->value,
-                                        'time_at' => $condition->time_at?->format('H:i'),
+                                        'time_at' => $condition->time_at ? (is_string($condition->time_at) ? substr($condition->time_at, 0, 5) : $condition->time_at->format('H:i')) : null,
                                         'days_of_week' => $condition->days_of_week,
                                     ];
                                 })->toArray(),

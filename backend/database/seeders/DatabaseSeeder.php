@@ -14,8 +14,6 @@ class DatabaseSeeder extends Seeder
         $this->call([
             NotificationTypesSeeder::class,
             RolesAndPermissionsSeeder::class,
-            DeviceSeeder::class,
-            DeviceDataSeeder::class,
             // Add other seeders here as needed
         ]);
     }

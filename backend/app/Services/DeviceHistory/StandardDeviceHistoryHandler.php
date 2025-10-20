@@ -6,6 +6,8 @@ use App\Models\DeviceHistory;
 use App\Http\Resources\DataTransformationResource;
 use App\Http\Resources\DynamicDataTransformationResource;
 use App\Http\Resources\HistoryTableResource;
+use App\Rules\MySqlFloat;
+use App\Rules\MySqlTinyInteger;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
@@ -102,34 +104,34 @@ class StandardDeviceHistoryHandler implements DeviceHistoryHandlerInterface
     {
         return [
             'device_id' => 'required|string|exists:devices,id',
-            'TS1' => 'required|numeric',
-            'TS2' => 'required|numeric',
-            'TS3' => 'required|numeric',
-            'TS4' => 'required|numeric',
-            'TS5' => 'required|numeric',
-            'TS6' => 'numeric',
-            'TS7' => 'numeric',
-            'TS8' => 'numeric',
-            'TS9' => 'numeric',
-            'PTO' => 'numeric',
-            'PTUV' => 'required|numeric',
-            'PTO2' => 'numeric',
-            'komp' => 'required|numeric',
-            'kvyk' => 'required|numeric',
-            'run' => 'required|numeric',
-            'reg' => 'required|numeric',
-            'vjedn' => 'required|numeric',
-            'dzto' => 'required|numeric',
-            'dztuv' => 'required|numeric',
-            'tstat' => 'required|numeric',
-            'hdo' => 'required|numeric',
-            'obd' => 'required|numeric',
-            'chyba' => 'required|numeric',
-            'PT' => 'nullable|numeric',
-            'PPT' => 'nullable|numeric',
-            'RPT' => 'nullable|numeric',
-            'Prtk' => 'nullable|numeric',
-            'TpnVk' => 'nullable|numeric',
+            'TS1' => ['required', new MySqlFloat()],
+            'TS2' => ['required', new MySqlFloat()],
+            'TS3' => ['required', new MySqlFloat()],
+            'TS4' => ['required', new MySqlFloat()],
+            'TS5' => ['required', new MySqlFloat()],
+            'TS6' => ['nullable', new MySqlFloat()],
+            'TS7' => ['nullable', new MySqlFloat()],
+            'TS8' => ['nullable', new MySqlFloat()],
+            'TS9' => ['nullable', new MySqlFloat()],
+            'PTO' => ['nullable', new MySqlFloat()],
+            'PTUV' => ['required', new MySqlFloat()],
+            'PTO2' => ['nullable', new MySqlFloat()],
+            'komp' => ['required', new MySqlTinyInteger()],
+            'kvyk' => ['required', new MySqlFloat()],
+            'run' => ['required', new MySqlTinyInteger()],
+            'reg' => ['required', new MySqlTinyInteger()],
+            'vjedn' => ['required', new MySqlTinyInteger()],
+            'dzto' => ['required', new MySqlTinyInteger()],
+            'dztuv' => ['required', new MySqlTinyInteger()],
+            'tstat' => ['required', new MySqlTinyInteger()],
+            'hdo' => ['required', new MySqlTinyInteger()],
+            'obd' => ['required', new MySqlTinyInteger()],
+            'chyba' => ['required', new MySqlTinyInteger()],
+            'PT' => ['nullable', new MySqlFloat()],
+            'PPT' => ['nullable', new MySqlFloat()],
+            'RPT' => ['nullable', new MySqlFloat()],
+            'Prtk' => ['nullable', new MySqlFloat()],
+            'TpnVk' => ['nullable', new MySqlFloat()],
         ];
     }
 
@@ -137,12 +139,10 @@ class StandardDeviceHistoryHandler implements DeviceHistoryHandlerInterface
     {
         $validated['cas'] = Carbon::now();
 
-        DeviceHistory::updateOrCreate(
-            [
-                'device_id' => $validated['device_id'],
-                'cas' => $validated['cas'],
-            ],
-            $validated
+        DeviceHistory::upsert(
+            [$validated], // array of records to upsert
+            ['device_id', 'cas'], // unique columns (composite key)
+            array_keys($validated) // columns to update if duplicate exists
         );
     }
 }
