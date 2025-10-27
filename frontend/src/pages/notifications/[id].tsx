@@ -40,6 +40,7 @@ const DeviceNotificationsPage: React.FC = () => {
 		initialData: null,
 	});
 	const [highlightedNotification, setHighlightedNotification] = useState<number | null>(null);
+	const [isHighlighting, setIsHighlighting] = useState(false);
 	const processedHighlightRef = useRef<number | null>(null);
 
 	const { toast } = useToast();
@@ -86,11 +87,11 @@ const DeviceNotificationsPage: React.FC = () => {
 	const handleObserver = useCallback(
 		(entries: IntersectionObserverEntry[]) => {
 			const [entry] = entries;
-			if (entry.isIntersecting && hasNextPage && !loadingNotifications && !loadingMore) {
+			if (entry.isIntersecting && hasNextPage && !loadingNotifications && !loadingMore && !isHighlighting) {
 				loadMore();
 			}
 		},
-		[loadingMore, hasNextPage, loadingNotifications, fetchNextPage]
+		[loadingMore, hasNextPage, loadingNotifications, fetchNextPage, isHighlighting]
 	);
 	useEffect(() => {
 		const observer = new IntersectionObserver(handleObserver, {
@@ -124,13 +125,21 @@ const DeviceNotificationsPage: React.FC = () => {
 	useEffect(() => {
 		processedHighlightRef.current = null;
 		setHighlightedNotification(null);
+		setIsHighlighting(false);
 	}, [deviceId]);
 
 	// Find and highlight a specific notification, loading more pages if necessary
 	const findAndHighlightNotification = useCallback(
-		async (notificationId: number) => {
-			if (!notificationsData || loadingNotifications) {
-				setTimeout(() => findAndHighlightNotification(notificationId), 500);
+		async (notificationId: number, retryCount = 0) => {
+			setIsHighlighting(true);
+
+			if (!notificationsData || loadingNotifications || notifications.length === 0) {
+				if (retryCount < 10) {
+					setTimeout(() => findAndHighlightNotification(notificationId, retryCount + 1), 500);
+				} else {
+					console.log("Failed to load notifications after retries");
+					setIsHighlighting(false);
+				}
 				return;
 			}
 
@@ -140,18 +149,26 @@ const DeviceNotificationsPage: React.FC = () => {
 
 				setTimeout(() => {
 					const element = document.getElementById(`notification-${notificationId}`);
+
 					if (element) {
 						element.scrollIntoView({ behavior: "smooth", block: "center" });
 					}
-				}, 100);
+					setTimeout(() => setIsHighlighting(false), 500);
+				}, 500);
 				return;
 			}
 
 			let currentPage = notificationsData.pages.length || 1;
 			let found = false;
+			let attempts = 0;
+			const maxAttempts = 20; // Prevent infinite loops
 
-			while (!found && hasNextPage) {
+			while (!found && hasNextPage && attempts < maxAttempts) {
 				await fetchNextPage();
+				attempts++;
+
+				await new Promise((resolve) => setTimeout(resolve, 200));
+
 				const updatedNotifications = queryClient.getQueryData<any>(["device-notifications", deviceId])?.pages.flatMap((page: any) => page.notifications || []) || [];
 
 				if (updatedNotifications.some((n: NotificationType) => n.id === notificationId)) {
@@ -164,13 +181,16 @@ const DeviceNotificationsPage: React.FC = () => {
 						if (element) {
 							element.scrollIntoView({ behavior: "smooth", block: "center" });
 						}
-					}, 300);
+						setTimeout(() => setIsHighlighting(false), 500);
+					}, 500);
+					break;
 				}
 
 				currentPage++;
 			}
 
 			if (!found) {
+				setIsHighlighting(false);
 				toast({
 					title: t("notificationNotFound", "Notification not found"),
 					description: t("notificationNotFoundDescription", "The notification could not be found in the available history."),
@@ -178,19 +198,19 @@ const DeviceNotificationsPage: React.FC = () => {
 				});
 			}
 		},
-		[notifications, notificationsData, fetchNextPage, hasNextPage, queryClient, deviceId, t, setExpandedNotifications]
+		[notifications, notificationsData, fetchNextPage, hasNextPage, queryClient, deviceId, t, setExpandedNotifications, loadingNotifications]
 	);
-	const fetchNotifications = async () => {
-		// React Query will handle fetching
-	};
 
 	// Handle highlighted notification from React Query cache
 	useEffect(() => {
-		if (highlightedId && processedHighlightRef.current !== highlightedId && notificationsData && !loadingNotifications) {
+		if (highlightedId && processedHighlightRef.current !== highlightedId && notificationsData && !loadingNotifications && currentDevice && notifications.length > 0) {
 			processedHighlightRef.current = highlightedId;
-			findAndHighlightNotification(highlightedId);
+			queryClient.setQueryData(["highlighted-notification"], null);
+			setTimeout(() => {
+				findAndHighlightNotification(highlightedId);
+			}, 100);
 		}
-	}, [highlightedId, findAndHighlightNotification, notificationsData, loadingNotifications]);
+	}, [highlightedId, findAndHighlightNotification, notificationsData, loadingNotifications, currentDevice, notifications.length]);
 
 	// Separate effect for the timeout to ensure it works correctly
 	useEffect(() => {
@@ -203,6 +223,7 @@ const DeviceNotificationsPage: React.FC = () => {
 			return () => clearTimeout(timer);
 		}
 	}, [highlightedNotification]);
+
 	const handleMarkAllAsSeen = async () => {
 		const unseenNotifications = notifications.filter((n) => !n.seen);
 		if (unseenNotifications.length > 0) {
