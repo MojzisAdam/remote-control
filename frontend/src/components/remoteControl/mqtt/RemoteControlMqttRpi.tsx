@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next";
 import { useDevices } from "@/hooks/useDevices";
 import { useAuth } from "@/hooks/useAuth";
 import { Device } from "@/api/devices/model";
+import { DisplayType } from "@/utils/displayTypeUtils";
 
 interface DeviceData {
 	[key: string]: number | string | undefined;
@@ -667,6 +668,7 @@ const RemoteControlMqttRpi: React.FC<RemoteControlMqttRpiProps> = ({ device, onD
 								deviceData={parametersData}
 								onUpdateParameter={showExtendedParams ? publishMqttExtended : publishMqtt}
 								isExtendedMode={showExtendedParams}
+								displayType={device.display_type as DisplayType}
 							/>
 						</>
 					)}

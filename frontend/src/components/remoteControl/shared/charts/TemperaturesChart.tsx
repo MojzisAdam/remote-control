@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { useTranslation } from "react-i18next";
 import { Device } from "@/api/devices/model";
-import { isDaitsuDevice } from "@/utils/deviceTypeUtils";
+import { isDaitsuDisplay } from "@/utils/displayTypeUtils";
 
 const SimpleChart = lazy(() => import("@/components/remoteControl/shared/charts/SimpleChart").then((mod) => ({ default: mod.SimpleChart })));
 
@@ -20,7 +20,7 @@ const TemperaturesChartContainer: React.FC<TemperaturesChartContainerProps> = ({
 	const { t } = useTranslation("remote-control");
 	const { loadCustomGraphData } = useDeviceHistory();
 
-	const selectedMetrics = isDaitsuDevice(device) ? ["reg_107", "reg_110", "reg_115"] : ["TS1", "TS2", "TS4"];
+	const selectedMetrics = isDaitsuDisplay(device) ? ["reg_107", "reg_110", "reg_115"] : ["TS1", "TS2", "TS4"];
 
 	const {
 		data: customGraphData,

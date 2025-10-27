@@ -51,7 +51,7 @@ class HistoryController extends Controller
         $query = $handler->getQuery($deviceId);
         $query = $handler->applyDateRange($query, $request);
 
-        // Get available columns for this device type
+        // Get available columns for this device display type
         $availableColumns = $handler->getAvailableColumns();
 
         // Filter selected metrics to only include existing columns
@@ -194,11 +194,11 @@ class HistoryController extends Controller
         $handler = DeviceHistoryHandlerFactory::make($device);
         $startDate = Carbon::now()->subYear()->startOfDay();
 
-        // Get appropriate temperature columns based on device type
+        // Get appropriate temperature columns based on device dsiplay type
         $temperatureColumns = $handler->getTemperatureColumns();
 
         if (empty($temperatureColumns)) {
-            return response()->json(['error' => 'No temperature columns available for this device type'], 400);
+            return response()->json(['error' => 'No temperature columns available for this device display type'], 400);
         }
 
         $selectArray = [

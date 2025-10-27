@@ -4,7 +4,7 @@ import { DeviceHistory, StandardDeviceHistory, DaitsuDeviceHistory } from "@/api
 import { HoverClickPopover } from "@/components/ui/hover-popover";
 import { Device } from "@/api/devices/model";
 import { ChartConstantsFactory } from "@/constants/chartConstants/factory";
-import { isDaitsuDevice, DeviceType } from "@/utils/deviceTypeUtils";
+import { isDaitsuDisplay, DisplayType } from "@/utils/displayTypeUtils";
 
 // Common formatting functions
 const formatTemperature = (value: number | undefined) => {
@@ -145,7 +145,7 @@ const getTimeColumn = (): ColumnDef<DeviceHistory> => ({
 
 // Standard device columns
 const getStandardDeviceColumns = (): ColumnDef<StandardDeviceHistory>[] => {
-	const tableColumns = ChartConstantsFactory.getTableColumns(DeviceType.RPI);
+	const tableColumns = ChartConstantsFactory.getTableColumns(DisplayType.RPI);
 	const getHeaderLabel = (key: string) => tableColumns.find((col) => col.key === key)?.label || key;
 
 	return [
@@ -339,7 +339,7 @@ const getStandardDeviceColumns = (): ColumnDef<StandardDeviceHistory>[] => {
 
 // Daitsu device columns
 const getDaitsuDeviceColumns = (): ColumnDef<DaitsuDeviceHistory>[] => {
-	const tableColumns = ChartConstantsFactory.getTableColumns(DeviceType.DAITSU);
+	const tableColumns = ChartConstantsFactory.getTableColumns(DisplayType.DAITSU);
 	const getHeaderLabel = (key: string) => tableColumns.find((col) => col.key === key)?.label || key;
 
 	return [
@@ -520,7 +520,7 @@ export class TableColumnsFactory {
 	static getColumns(device: Device): ColumnDef<DeviceHistory>[] {
 		const timeColumn = getTimeColumn();
 
-		if (isDaitsuDevice(device)) {
+		if (isDaitsuDisplay(device)) {
 			return [timeColumn, ...getDaitsuDeviceColumns()] as ColumnDef<DeviceHistory>[];
 		}
 

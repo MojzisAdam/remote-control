@@ -1,4 +1,4 @@
-import { DeviceType } from "../../utils/deviceTypeUtils";
+import { DisplayType } from "../../utils/displayTypeUtils";
 import { standardGraphColumns, standardTableColumns } from "./standard";
 import { daitsuGraphColumns, daitsuTableColumns } from "./daitsu";
 import { Device } from "../../api/devices/model";
@@ -17,15 +17,15 @@ export interface TableColumn {
 }
 
 export class ChartConstantsFactory {
-	private static isDaitsuType(deviceType: DeviceType): boolean {
-		return deviceType === DeviceType.DAITSU;
+	private static isDaitsuType(displayType: DisplayType): boolean {
+		return displayType === DisplayType.DAITSU;
 	}
 
-	private static getTypeFromDeviceOrType(deviceOrType: DeviceType | Device): DeviceType {
-		return typeof deviceOrType === "string" ? deviceOrType : (deviceOrType.display_type as DeviceType);
+	private static getTypeFromDeviceOrType(deviceOrType: DisplayType | Device): DisplayType {
+		return typeof deviceOrType === "string" ? deviceOrType : (deviceOrType.display_type as DisplayType);
 	}
 
-	static getGraphColumns(deviceOrType: DeviceType | Device): ChartColumn[] {
+	static getGraphColumns(deviceOrType: DisplayType | Device): ChartColumn[] {
 		const type = this.getTypeFromDeviceOrType(deviceOrType);
 		if (this.isDaitsuType(type)) {
 			return daitsuGraphColumns;
@@ -33,7 +33,7 @@ export class ChartConstantsFactory {
 		return standardGraphColumns;
 	}
 
-	static getTableColumns(deviceOrType: DeviceType | Device): TableColumn[] {
+	static getTableColumns(deviceOrType: DisplayType | Device): TableColumn[] {
 		const type = this.getTypeFromDeviceOrType(deviceOrType);
 		if (this.isDaitsuType(type)) {
 			return daitsuTableColumns;
@@ -41,35 +41,35 @@ export class ChartConstantsFactory {
 		return standardTableColumns;
 	}
 
-	static getAvailableColumns(deviceOrType: DeviceType | Device): string[] {
+	static getAvailableColumns(deviceOrType: DisplayType | Device): string[] {
 		return this.getGraphColumns(deviceOrType).map((col) => col.value);
 	}
 
-	static getColumnColor(deviceOrType: DeviceType | Device, columnName: string): string {
+	static getColumnColor(deviceOrType: DisplayType | Device, columnName: string): string {
 		const columns = this.getGraphColumns(deviceOrType);
 		const column = columns.find((col) => col.value === columnName);
 		return column?.color || "#000000";
 	}
 
-	static getColumnLabel(deviceOrType: DeviceType | Device, columnName: string): string {
+	static getColumnLabel(deviceOrType: DisplayType | Device, columnName: string): string {
 		const columns = this.getGraphColumns(deviceOrType);
 		const column = columns.find((col) => col.value === columnName);
 		return column?.label || columnName;
 	}
 
-	static getColumnUnit(deviceOrType: DeviceType | Device, columnName: string): string {
+	static getColumnUnit(deviceOrType: DisplayType | Device, columnName: string): string {
 		const columns = this.getGraphColumns(deviceOrType);
 		const column = columns.find((col) => col.value === columnName);
 		return column?.unit || "";
 	}
 
-	static getColumnValueMap(deviceOrType: DeviceType | Device, columnName: string): Record<string, string> | undefined {
+	static getColumnValueMap(deviceOrType: DisplayType | Device, columnName: string): Record<string, string> | undefined {
 		const columns = this.getGraphColumns(deviceOrType);
 		const column = columns.find((col) => col.value === columnName);
 		return column?.valueMap;
 	}
 
-	static formatColumnValue(deviceOrType: DeviceType | Device, columnName: string, value: number | undefined): string {
+	static formatColumnValue(deviceOrType: DisplayType | Device, columnName: string, value: number | undefined): string {
 		if (value === undefined || value === null) return "---";
 
 		const valueMap = this.getColumnValueMap(deviceOrType, columnName);

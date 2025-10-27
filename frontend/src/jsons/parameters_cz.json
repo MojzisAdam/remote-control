@@ -1753,7 +1753,7 @@
 		"unit": "s",
         "description": "TO2 směšovací ventil MIN trvání řídícího signálu"
     },
-    "fhi": {
+    "fhi_1": {
         "type": "int",
         "register": "fhi",
         "description": "Frekvence záznamu historie",
@@ -1763,5 +1763,16 @@
         "increment_value": 1,
         "user_access": false,
 		"unit": "s"
+    },
+    "fhi_2": {
+        "type": "options",
+        "default_value": 0,
+        "register": "fhi",
+        "user_access": false,
+        "description": "Frekvence záznamu historie",
+        "options": {
+            "0": "3 minuty",
+            "1": "1 hodina"
+        }
     }
 }

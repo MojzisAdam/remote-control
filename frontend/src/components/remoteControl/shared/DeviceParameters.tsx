@@ -13,6 +13,7 @@ import { useTranslation } from "react-i18next";
 import parametersDataEN from "@/jsons/parameters.json";
 import parametersDataCZ from "@/jsons/parameters_cz.json";
 import { isCzech } from "@/utils/syncLang";
+import { DisplayType } from "@/utils/displayTypeUtils";
 
 import { useDeviceParameterLogs } from "@/hooks/useDeviceParameterLogs";
 
@@ -66,6 +67,7 @@ interface DeviceParametersProps {
 	deviceData: DeviceData;
 	onUpdateParameter: (register: number, value: number) => void;
 	isExtendedMode?: boolean;
+	displayType?: DisplayType;
 }
 
 interface PendingUpdate {
@@ -103,11 +105,26 @@ const parameterGroups = {
 	extendedParameters: ["fhi"],
 };
 
-export const DeviceParameters: React.FC<DeviceParametersProps> = ({ deviceId, deviceData, onUpdateParameter, isExtendedMode = false }) => {
+export const DeviceParameters: React.FC<DeviceParametersProps> = ({ deviceId, deviceData, onUpdateParameter, isExtendedMode = false, displayType = DisplayType.AMIT }) => {
 	const { logChange } = useDeviceParameterLogs();
 	const { i18n, t } = useTranslation("remote-control");
 
-	const parametersData = isCzech(i18n.language) ? parametersDataCZ : parametersDataEN;
+	const baseParametersData = isCzech(i18n.language) ? parametersDataCZ : parametersDataEN;
+
+	// Filter fhi parameters based on device type
+	const parametersData = useMemo(() => {
+		if (displayType === DisplayType.AMIT) {
+			// exclude fhi_1
+			const { fhi_1, ...filtered } = baseParametersData;
+			return filtered;
+		} else if (displayType === DisplayType.RPI) {
+			// exclude fhi_2
+			const { fhi_2, ...filtered } = baseParametersData;
+			return filtered;
+		}
+
+		return baseParametersData;
+	}, [baseParametersData, displayType]);
 
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 	const [selectedParameter, setSelectedParameter] = useState<{
@@ -220,7 +237,7 @@ export const DeviceParameters: React.FC<DeviceParametersProps> = ({ deviceId, de
 		}
 
 		return result;
-	}, [deviceData, isExtendedMode]);
+	}, [deviceData, isExtendedMode, parametersData]);
 
 	const availableGroups = useMemo(() => {
 		// Return groups in the order they are defined in parameterGroups

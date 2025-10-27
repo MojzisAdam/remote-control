@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { useTranslation } from "react-i18next";
 import { Device } from "@/api/devices/model";
-import { getChartDeviceType } from "@/utils/deviceTypeUtils";
+import { getChartDisplayType } from "@/utils/displayTypeUtils";
 
 const SimpleChart = lazy(() => import("./MonthlyTemperatureChart").then((mod) => ({ default: mod.SimpleChart })));
 
@@ -20,7 +20,7 @@ const MonthlyTemperaturesContainer: React.FC<MonthlyTemperaturesContainerProps> 
 	const { t } = useTranslation("remote-control");
 	const { loadMonthlyTemperatures } = useDeviceHistory();
 
-	const deviceType = getChartDeviceType(device);
+	const displayType = getChartDisplayType(device);
 
 	const {
 		data: temperatureResponse,
@@ -89,7 +89,7 @@ const MonthlyTemperaturesContainer: React.FC<MonthlyTemperaturesContainerProps> 
 								<SimpleChart
 									data={temperatureData}
 									sensors={sensors}
-									deviceType={deviceType}
+									displayType={displayType}
 								/>
 							</Suspense>
 						</ErrorBoundary>

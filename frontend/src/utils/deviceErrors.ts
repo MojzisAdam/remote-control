@@ -1,5 +1,5 @@
 import i18next from "i18next";
-import { DeviceType } from "./deviceTypeUtils";
+import { DisplayType } from "./displayTypeUtils";
 
 // Abstract base class for device error handling
 abstract class BaseDeviceErrors {
@@ -165,25 +165,25 @@ export class DeviceErrors {
 	private daitsuHandler = new DaitsuErrors();
 	private cimHandler = new CimErrors();
 
-	private getHandler(deviceType: string): BaseDeviceErrors {
-		return deviceType === DeviceType.DAITSU ? this.daitsuHandler : this.cimHandler;
+	private getHandler(displayType: string): BaseDeviceErrors {
+		return displayType === DisplayType.DAITSU ? this.daitsuHandler : this.cimHandler;
 	}
 
-	error(errorCode: number, firmwareVersion = 813, deviceType: string = DeviceType.RPI): string {
+	error(errorCode: number, firmwareVersion = 813, displayType: string = DisplayType.RPI): string {
 		if (typeof errorCode !== "number") {
 			return "";
 		}
 
-		const handler = this.getHandler(deviceType);
+		const handler = this.getHandler(displayType);
 		return handler.getErrorMessage(errorCode, firmwareVersion);
 	}
 
-	errorDescribe(errorCode: number, firmwareVersion = 813, deviceType: string = DeviceType.RPI): string {
+	errorDescribe(errorCode: number, firmwareVersion = 813, displayType: string = DisplayType.RPI): string {
 		if (typeof errorCode !== "number") {
 			return "";
 		}
 
-		const handler = this.getHandler(deviceType);
+		const handler = this.getHandler(displayType);
 		return handler.getErrorDescription(errorCode, firmwareVersion);
 	}
 
@@ -191,8 +191,8 @@ export class DeviceErrors {
 		return this.daitsuHandler.getDisplayErrorCode(errorCode);
 	}
 
-	getDisplayErrorCode(errorCode: number, deviceType: string): string | number {
-		const handler = this.getHandler(deviceType);
+	getDisplayErrorCode(errorCode: number, displayType: string): string | number {
+		const handler = this.getHandler(displayType);
 		return handler.getDisplayErrorCode(errorCode);
 	}
 }

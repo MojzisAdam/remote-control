@@ -241,7 +241,7 @@ const DeviceStates: React.FC<DeviceStatesProps> = ({ data }) => {
 							<ErrorHint
 								errorCode={value ? value : 0}
 								firmwareVersion={data.reg_834}
-								deviceType="1"
+								displayType="1"
 							/>
 						) : (
 							getStateDescription(key, value)

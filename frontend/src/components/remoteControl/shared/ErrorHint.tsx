@@ -2,22 +2,22 @@ import React from "react";
 import { Search } from "lucide-react";
 import deviceErrors from "@/utils/deviceErrors";
 import { HoverClickPopover } from "@/components/ui/hover-popover";
-import { DeviceType } from "@/utils/deviceTypeUtils";
+import { DisplayType } from "@/utils/displayTypeUtils";
 
 interface ErrorHintProps {
 	errorCode: string | number;
 	firmwareVersion?: number;
-	deviceType?: string;
+	displayType?: string;
 }
 
-const ErrorHint: React.FC<ErrorHintProps> = ({ errorCode, firmwareVersion = 813, deviceType = DeviceType.RPI }) => {
+const ErrorHint: React.FC<ErrorHintProps> = ({ errorCode, firmwareVersion = 813, displayType = DisplayType.RPI }) => {
 	const errorCodeInt = parseInt(errorCode.toString(), 10);
 	const firmwareVersionInt = parseInt(firmwareVersion.toString(), 10);
 
-	const errorMessage = deviceErrors.error(errorCodeInt, firmwareVersionInt, deviceType);
-	const errorDescription = deviceErrors.errorDescribe(errorCodeInt, firmwareVersionInt, deviceType);
+	const errorMessage = deviceErrors.error(errorCodeInt, firmwareVersionInt, displayType);
+	const errorDescription = deviceErrors.errorDescribe(errorCodeInt, firmwareVersionInt, displayType);
 
-	const displayErrorCode = deviceErrors.getDisplayErrorCode(errorCodeInt, deviceType);
+	const displayErrorCode = deviceErrors.getDisplayErrorCode(errorCodeInt, displayType);
 
 	return (
 		<div className="flex items-center">

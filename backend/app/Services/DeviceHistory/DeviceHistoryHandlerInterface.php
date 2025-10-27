@@ -48,17 +48,17 @@ interface DeviceHistoryHandlerInterface
     public function insertHistory(array $validated): void;
 
     /**
-     * Get the error column name for this device type
+     * Get the error column name for this device display type
      */
     public function getErrorColumn(): string;
 
     /**
-     * Get available columns for this device type
+     * Get available columns for this device display type
      */
     public function getAvailableColumns(): array;
 
     /**
-     * Get temperature columns for this device type (used for monthly averages)
+     * Get temperature columns for this device display type (used for monthly averages)
      */
     public function getTemperatureColumns(): array;
 }

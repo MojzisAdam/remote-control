@@ -1753,7 +1753,7 @@
 		"unit": "s",
         "description": "HC2 Mixing Valve MIN Control Signal Duration"
     },
-    "fhi": {
+    "fhi_1": {
         "type": "int",
         "register": "fhi",
         "description": "History recording frequency",
@@ -1763,5 +1763,16 @@
         "increment_value": 1,
         "user_access": false,
 		"unit": "s"
+    },
+    "fhi_2": {
+        "type": "options",
+        "default_value": 0,
+        "register": "fhi",
+        "user_access": false,
+        "description": "History recording frequency",
+        "options": {
+            "0": "3 minutes",
+            "1": "1 hour"
+        }
     }
 }

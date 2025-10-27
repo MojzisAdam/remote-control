@@ -243,7 +243,7 @@ const DeviceStates: React.FC<DeviceStatesProps> = ({ data, hasExtendedView }) =>
 						{key === "reg_124" ? (
 							<ErrorHint
 								errorCode={value ? (value as number) : 0}
-								deviceType="3"
+								displayType="3"
 							/>
 						) : key === "script_version" ? (
 							value || t("daitsu.deviceStates.values.unknown")

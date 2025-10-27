@@ -18,7 +18,7 @@ import { useUserManagement } from "@/hooks/useUserManagement";
 import { useDeviceContext } from "@/provider/DeviceProvider";
 import { cs, enUS } from "date-fns/locale";
 import { format } from "date-fns";
-import { isDaitsuDevice } from "@/utils/deviceTypeUtils";
+import { isDaitsuDisplay } from "@/utils/displayTypeUtils";
 import { isCzech, isEnglish } from "@/utils/syncLang";
 
 interface ParameterOption {
@@ -112,7 +112,7 @@ const DeviceParameterLog = () => {
 			try {
 				let parameterModule;
 
-				if (isDaitsuDevice(currentDevice)) {
+				if (isDaitsuDisplay(currentDevice)) {
 					if (isCzech(i18n.language)) {
 						parameterModule = await import("@/jsons/parameters_daitsu_cz.json");
 					} else {

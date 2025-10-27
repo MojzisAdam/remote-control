@@ -9,7 +9,7 @@ import { cs, enUS } from "date-fns/locale";
 interface MonthlyTemperatureChartProps {
 	data: MonthlyTemperatureData[];
 	sensors: string[];
-	deviceType?: "standard" | "daitsu";
+	displayType?: "standard" | "daitsu";
 }
 
 interface TooltipPayload {
@@ -24,7 +24,7 @@ interface CustomTooltipProps {
 	label?: string;
 }
 
-const MonthlyTemperatureChart: React.FC<MonthlyTemperatureChartProps> = ({ data, sensors, deviceType = "standard" }) => {
+const MonthlyTemperatureChart: React.FC<MonthlyTemperatureChartProps> = ({ data, sensors, displayType = "standard" }) => {
 	const { t, i18n } = useTranslation("remote-control");
 	const selectedLocale = i18n.language === "en" ? enUS : cs;
 	const [containerWidth, setContainerWidth] = useState<number>(0);
@@ -52,7 +52,7 @@ const MonthlyTemperatureChart: React.FC<MonthlyTemperatureChartProps> = ({ data,
 
 			// Get label from translations based on device type
 			let labelKey: string;
-			if (deviceType === "daitsu") {
+			if (displayType === "daitsu") {
 				labelKey = `daitsu.charts.config.${avgKey}`;
 			} else {
 				labelKey = `charts.config.${avgKey}`;
@@ -66,7 +66,7 @@ const MonthlyTemperatureChart: React.FC<MonthlyTemperatureChartProps> = ({ data,
 		});
 
 		return config;
-	}, [sensors, deviceType, t]);
+	}, [sensors, displayType, t]);
 
 	const formattedData = useMemo(() => {
 		if (!data || data.length === 0) return [];
@@ -263,5 +263,5 @@ const MonthlyTemperatureChart: React.FC<MonthlyTemperatureChartProps> = ({ data,
 };
 
 export const SimpleChart = React.memo(MonthlyTemperatureChart, (prevProps, nextProps) => {
-	return prevProps.data === nextProps.data && prevProps.sensors === nextProps.sensors && prevProps.deviceType === nextProps.deviceType;
+	return prevProps.data === nextProps.data && prevProps.sensors === nextProps.sensors && prevProps.displayType === nextProps.displayType;
 });
