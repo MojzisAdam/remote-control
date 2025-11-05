@@ -26,7 +26,8 @@
     "password-confirmation": "Confirm Password",
     "button": "Change password",
     "login": "Log in",
-    "register": "Register"
+    "register": "Register",
+    "go-to-login": "Go to Login"
   },
   "register": {
     "title": "Register",

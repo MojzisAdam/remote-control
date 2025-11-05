@@ -59,41 +59,39 @@ const VerifyEmail: React.FC = () => {
 	}, [id, hash, expires, signature]);
 
 	return (
-		<div>
-			<>
-				<Card className="max-w-[400px]">
-					<CardHeader>
-						<CardTitle>{t("email-verification.page-title")}</CardTitle>
-						{loading ? (
-							<CardDescription>{t("email-verification.page-description")}</CardDescription>
-						) : verificationStatus === "success" ? (
-							<CardDescription>{t("email-verification.page-description-success")}</CardDescription>
-						) : verificationStatus === "error" ? (
-							<CardDescription>{t("email-verification.page-description-failed")}</CardDescription>
-						) : null}
-					</CardHeader>
-					<CardContent>
-						<div>
-							{status && (
-								<AuthSessionStatus
-									className="mb-4"
-									status={status}
-								/>
-							)}
-						</div>
-						<div>
-							{errors.message && (
-								<InputError
-									messages={errors.message}
-									className="mt-2"
-								/>
-							)}
-						</div>
-						<div>{loading && <Loader2 className="animate-spin" />}</div>
-					</CardContent>
-				</Card>
-			</>
-		</div>
+		<>
+			<Card className="w-full max-w-[440px]">
+				<CardHeader>
+					<CardTitle>{t("email-verification.page-title")}</CardTitle>
+					{loading ? (
+						<CardDescription>{t("email-verification.page-description")}</CardDescription>
+					) : verificationStatus === "success" ? (
+						<CardDescription>{t("email-verification.page-description-success")}</CardDescription>
+					) : verificationStatus === "error" ? (
+						<CardDescription>{t("email-verification.page-description-failed")}</CardDescription>
+					) : null}
+				</CardHeader>
+				<CardContent>
+					<div>
+						{status && (
+							<AuthSessionStatus
+								className="mb-4"
+								status={status}
+							/>
+						)}
+					</div>
+					<div>
+						{errors.message && (
+							<InputError
+								messages={errors.message}
+								className="mt-2"
+							/>
+						)}
+					</div>
+					<div>{loading && <Loader2 className="animate-spin" />}</div>
+				</CardContent>
+			</Card>
+		</>
 	);
 };
 

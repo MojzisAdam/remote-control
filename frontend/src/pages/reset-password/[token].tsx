@@ -13,6 +13,7 @@ import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
 import ButtonWithSpinner from "@/components/ButtonWithSpinner";
 import usePageTitle from "@/hooks/usePageTitle";
+import { Button } from "@/components/ui/button";
 
 const PasswordReset: React.FC = () => {
 	const location = useLocation();
@@ -29,6 +30,7 @@ const PasswordReset: React.FC = () => {
 	const [passwordConfirmation, setPasswordConfirmation] = useState<string>("");
 	const [errors, setErrors] = useState<{ [key: string]: string[] }>({});
 	const [status, setStatus] = useState<string | null>(null);
+	const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
 	usePageTitle(t("password-reset.title"));
 
@@ -44,6 +46,10 @@ const PasswordReset: React.FC = () => {
 
 		setErrors(result.errors || {});
 		setStatus(result.status || null);
+
+		if (result.success) {
+			setIsSuccess(true);
+		}
 	};
 
 	useEffect(() => {
@@ -55,7 +61,7 @@ const PasswordReset: React.FC = () => {
 
 	return (
 		<>
-			<Card className="max-w-[380px]">
+			<Card className="w-full max-w-[440px]">
 				<CardHeader>
 					<CardTitle>{t("password-reset.title")}</CardTitle>
 					<CardDescription>{t("password-reset.description")}</CardDescription>
@@ -66,69 +72,85 @@ const PasswordReset: React.FC = () => {
 						status={status}
 					/>
 
-					<form onSubmit={submitForm}>
-						{/* Email Address */}
-						<div>
-							<Label htmlFor="email">{t("password-reset.email")}</Label>
-
-							<Input
-								id="email"
-								type="email"
-								value={email}
-								className="block mt-1 w-full"
-								onChange={(event) => setEmail(event.target.value)}
-								required
-							/>
-
-							<InputError
-								messages={errors.email}
-								className="mt-2"
-							/>
+					{isSuccess ? (
+						<div className="text-center">
+							<Button
+								size="sm"
+								variant="secondary"
+								className="w-full mt-6"
+							>
+								<Link to="/login">{t("password-reset.go-to-login")}</Link>
+							</Button>
 						</div>
+					) : (
+						<form onSubmit={submitForm}>
+							{/* Email Address */}
+							<div>
+								<Label htmlFor="email">{t("password-reset.email")}</Label>
 
-						{/* Password */}
-						<div className="mt-4">
-							<Label htmlFor="password">{t("password-reset.password")}</Label>
-							<PasswordInput
-								id="password"
-								value={password}
-								className="block mt-1 w-full"
-								onChange={(event) => setPassword(event.target.value)}
-								required
-							/>
+								<Input
+									id="email"
+									type="email"
+									value={email}
+									className="block mt-1 w-full"
+									onChange={(event) => setEmail(event.target.value)}
+									required
+									disabled={isSuccess}
+								/>
 
-							<InputError
-								messages={errors.password}
-								className="mt-2"
-							/>
-						</div>
+								<InputError
+									messages={errors.email}
+									className="mt-2"
+								/>
+							</div>
 
-						{/* Confirm Password */}
-						<div className="mt-4">
-							<Label htmlFor="passwordConfirmation">{t("password-reset.password-confirmation")}</Label>
+							{/* Password */}
+							<div className="mt-4">
+								<Label htmlFor="password">{t("password-reset.password")}</Label>
+								<PasswordInput
+									id="password"
+									value={password}
+									className="block mt-1 w-full"
+									onChange={(event) => setPassword(event.target.value)}
+									required
+									disabled={isSuccess}
+								/>
 
-							<PasswordInput
-								id="passwordConfirmation"
-								value={passwordConfirmation}
-								className="block mt-1 w-full"
-								onChange={(event) => setPasswordConfirmation(event.target.value)}
-								required
-							/>
+								<InputError
+									messages={errors.password}
+									className="mt-2"
+								/>
+							</div>
 
-							<InputError
-								messages={errors.password_confirmation}
-								className="mt-2"
-							/>
-						</div>
+							{/* Confirm Password */}
+							<div className="mt-4">
+								<Label htmlFor="passwordConfirmation">{t("password-reset.password-confirmation")}</Label>
 
-						<div className="flex items-center justify-end mt-8">
-							<ButtonWithSpinner
-								className="w-full py-3 font-medium"
-								isLoading={loading}
-								label={t("password-reset.button")}
-							/>
-						</div>
-					</form>
+								<PasswordInput
+									id="passwordConfirmation"
+									value={passwordConfirmation}
+									className="block mt-1 w-full"
+									onChange={(event) => setPasswordConfirmation(event.target.value)}
+									required
+									disabled={isSuccess}
+								/>
+
+								<InputError
+									messages={errors.password_confirmation}
+									className="mt-2"
+								/>
+							</div>
+
+							<div className="flex items-center justify-end mt-8">
+								<ButtonWithSpinner
+									className="w-full py-3 font-medium"
+									isLoading={loading}
+									label={t("password-reset.button")}
+									disabled={isSuccess}
+								/>
+							</div>
+						</form>
+					)}
 				</CardContent>
 			</Card>
 		</>

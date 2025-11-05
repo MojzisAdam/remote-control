@@ -26,7 +26,8 @@
     "password-confirmation": "Potvrďte heslo",
     "button": "Změnit heslo",
     "login": "Přihlásit",
-    "register": "Registrovat"
+    "register": "Registrovat",
+    "go-to-login": "Přejít na přihlášení"
   },
   "register": {
     "title": "Registrovat",
