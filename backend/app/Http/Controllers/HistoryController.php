@@ -89,7 +89,7 @@ class HistoryController extends Controller
             ->where('device_id', $deviceId)
             ->first();
 
-        return response()->json($preference ? json_decode($preference->hidden_lines, true) : []);
+        return response()->json($preference->hidden_lines ?? []);
     }
 
     /**
@@ -184,9 +184,11 @@ class HistoryController extends Controller
         $graph->delete();
         return response()->json(['message' => 'Graph deleted']);
     }
+
     public function getMonthlyAverageTemperatures(Request $request, $deviceId)
     {
-        $device = Device::where('id', $deviceId)->first();
+        $device = Device::find($deviceId);
+
         if (!$device) {
             return response()->json(['error' => 'Device not found'], 404);
         }
@@ -201,10 +203,7 @@ class HistoryController extends Controller
             return response()->json(['error' => 'No temperature columns available for this device display type'], 400);
         }
 
-        $selectArray = [
-            DB::raw('YEAR(cas) as year'),
-            DB::raw('MONTH(cas) as month'),
-        ];
+        $selectArray = [DB::raw("DATE_FORMAT(cas, '%Y-%m-01') as month_start")];
 
         foreach ($temperatureColumns as $column) {
             $selectArray[] = DB::raw("AVG({$column}) as avg_{$column}");
@@ -213,32 +212,22 @@ class HistoryController extends Controller
         $query = $handler->getQuery($deviceId)
             ->select($selectArray)
             ->where('cas', '>=', $startDate)
-            ->groupBy(DB::raw('YEAR(cas)'), DB::raw('MONTH(cas)'))
-            ->orderBy(DB::raw('YEAR(cas)'))
-            ->orderBy(DB::raw('MONTH(cas)'));
-
-        // Apply not null conditions for temperature columns
-        foreach ($temperatureColumns as $column) {
-            $query->whereNotNull($column);
-        }
+            ->groupBy('month_start')
+            ->orderBy('month_start');
 
         $monthlyAverages = $query->get();
 
         $formattedResponse = $monthlyAverages->map(function ($item) use ($temperatureColumns) {
-            $monthName = Carbon::createFromDate($item->year, $item->month, 1)->format('F');
+            $monthName = date('F', strtotime($item->month_start));
+            $year = date('Y', strtotime($item->month_start));
+            $month = date('n', strtotime($item->month_start));
 
-            $result = [
-                'year' => $item->year,
-                'month' => $item->month,
-                'month_name' => $monthName,
-            ];
-
-            foreach ($temperatureColumns as $column) {
-                $avgKey = "avg_{$column}";
-                $result[$avgKey] = round($item->$avgKey, 2);
+            $row = ['year' => $year, 'month' => $month, 'month_name' => $monthName];
+            foreach ($temperatureColumns as $col) {
+                $avgKey = "avg_{$col}";
+                $row[$avgKey] = round($item->$avgKey, 2);
             }
-
-            return $result;
+            return $row;
         });
 
         return response()->json([
@@ -252,6 +241,7 @@ class HistoryController extends Controller
             ]
         ]);
     }
+
     public function paginated(Request $request, $deviceId)
     {
         $device = Device::where('id', $deviceId)->first();

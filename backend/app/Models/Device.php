@@ -61,6 +61,15 @@ class Device extends Model
             $device->description()->create([
                 'device_id' => $device->id,
             ]);
+
+            if ($device->display_type != '3') {
+                DeviceData::create([
+                    'device_id' => $device->id,
+                ]);
+                DeviceParameterChange::create([
+                    'device_id' => $device->id,
+                ]);
+            }
         });
     }
 

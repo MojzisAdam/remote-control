@@ -117,6 +117,14 @@ return [
     'limiters' => [
         'login' => 'login',
         'two-factor' => 'two-factor',
+        'register' => 'register',
+        'forgot-password' => 'forgot-password',
+        'verification' => 'verification',
+        'password-confirm' => 'password-confirm',
+        'two-factor-management' => 'two-factor-management',
+        'logout' => 'logout',
+        'profile-update' => 'profile-update',
+        'password-update' => 'password-update',
     ],
 
     /*

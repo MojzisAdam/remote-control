@@ -368,7 +368,9 @@ class DeviceController extends Controller
                 $device = Device::where('id', $validated['id'])->first();
 
                 if (!empty($validated['password'])) {
-                    $updateData['password'] = Hash::make($validated['password']);
+                    if (!$device || !Hash::check($validated['password'], $device->password)) {
+                        $updateData['password'] = Hash::make($validated['password']);
+                    }
                 }
 
                 $wasCreated = false;
@@ -388,19 +390,6 @@ class DeviceController extends Controller
                 } else {
                     $device = Device::create(array_merge(['id' => $validated['id']], $updateData));
                     $wasCreated = true;
-                }
-
-                if ($wasCreated) {
-                    $deviceId = $device->id;
-
-                    // Batch insert related records
-                    DeviceDescription::insert(['device_id' => $deviceId]);
-
-                    // Only insert DeviceData and DeviceParameterChange for device display types 1 and 2
-                    if ($validated['display_type'] != '3') {
-                        DeviceData::insert(['device_id' => $deviceId]);
-                        DeviceParameterChange::insert(['device_id' => $deviceId]);
-                    }
                 }
 
                 return response()->json([
