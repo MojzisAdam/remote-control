@@ -89,7 +89,13 @@ class HistoryController extends Controller
             ->where('device_id', $deviceId)
             ->first();
 
-        return response()->json($preference->hidden_lines ?? []);
+        $hiddenLines = $preference->hidden_lines ?? [];
+
+        if (is_string($hiddenLines)) {
+            $hiddenLines = json_decode($hiddenLines, true) ?? [];
+        }
+
+        return response()->json(array_values($hiddenLines));
     }
 
     /**
