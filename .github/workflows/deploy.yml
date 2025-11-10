@@ -1,0 +1,168 @@
+name: deploy
+
+on:
+    push:
+        tags:
+            - "v*"
+    workflow_dispatch:
+        inputs:
+            version:
+                description: "Release version (e.g. 1.2.3)"
+                required: false
+
+permissions:
+    contents: read
+
+concurrency:
+    group: deploy-${{ github.ref }}
+    cancel-in-progress: true
+
+env:
+    SSH_HOST: ${{ secrets.SSH_HOST }}
+    SSH_USER: ${{ secrets.SSH_USER }}
+    SSH_PORT: ${{ secrets.SSH_PORT }}
+    SSH_KEY: ${{ secrets.SSH_KEY }}
+    BACKEND_PATH: ${{ secrets.BACKEND_PATH }}
+
+jobs:
+    check-version:
+        runs-on: ubuntu-latest
+        outputs:
+            deploy: ${{ steps.check.outputs.deploy }}
+            version: ${{ steps.extract.outputs.version }}
+        steps:
+            - name: Extract version
+              id: extract
+              run: |
+                  set +x
+                  if [ -n "${{ github.event.inputs.version }}" ]; then
+                    echo "version=${{ github.event.inputs.version }}" >> "$GITHUB_OUTPUT"
+                  else
+                    echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+                  fi
+
+            - name: Compare with deployed version on server
+              id: check
+              run: |
+                  set +x
+                  echo "$SSH_KEY" > private_key && chmod 600 private_key
+                  version="${{ steps.extract.outputs.version }}"
+                  if [ -z "$version" ]; then
+                    echo "No version specified. Skipping deploy."
+                    echo "deploy=false" >> "$GITHUB_OUTPUT"
+                    exit 0
+                  fi
+                  DEPLOYED_VERSION=$(ssh -i private_key -o StrictHostKeyChecking=accept-new -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" \
+                    "cat \"${BACKEND_PATH}/.deploy-version\" 2>/dev/null || echo '0.0.0'")
+                  echo "Currently deployed version: $DEPLOYED_VERSION"
+                  echo "Incoming version: $version"
+                  NEWER=$(printf "%s\n%s" "$DEPLOYED_VERSION" "$version" | sort -V | tail -n1)
+                  if [ "$NEWER" = "$version" ]; then
+                    echo "deploy=true" >> "$GITHUB_OUTPUT"
+                  else
+                    echo "Version is not newer. Skipping deploy."
+                    echo "deploy=false" >> "$GITHUB_OUTPUT"
+                  fi
+                  rm -f private_key
+
+    deploy-backend:
+        needs: check-version
+        if: needs.check-version.outputs.deploy == 'true'
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Upload backend source to staging directory
+              run: |
+                  set +x
+                  echo "$SSH_KEY" > private_key && chmod 600 private_key
+                  ssh -i private_key -o StrictHostKeyChecking=accept-new -p $SSH_PORT $SSH_USER@$SSH_HOST "
+                    mkdir -p '${{ secrets.STAGING_BACKEND_PATH }}'
+                  "
+                  rsync -avz \
+                    --exclude vendor \
+                    --exclude node_modules \
+                    --exclude .env \
+                    -e "ssh -i private_key -o StrictHostKeyChecking=accept-new -p $SSH_PORT" \
+                    backend/ $SSH_USER@$SSH_HOST:${{ secrets.STAGING_BACKEND_PATH }}/
+                  rm -f private_key
+
+            - name: Upload .env file to staging
+              run: |
+                  set +x
+                  echo "${{ secrets.ENV_BACKEND }}" > .env
+                  echo "$SSH_KEY" > private_key && chmod 600 private_key
+                  scp -i private_key -o StrictHostKeyChecking=accept-new .env -P $SSH_PORT $SSH_USER@$SSH_HOST:${{ secrets.STAGING_BACKEND_PATH }}/.env
+                  rm -f private_key
+
+            - name: Install backend dependencies and migrate
+              run: |
+                  set +x
+                  echo "$SSH_KEY" > private_key && chmod 600 private_key
+                  ssh -i private_key -o StrictHostKeyChecking=accept-new -p $SSH_PORT $SSH_USER@$SSH_HOST "
+                    cd '${{ secrets.STAGING_BACKEND_PATH }}' && \
+                    composer install --no-dev --optimize-autoloader && \
+                    php artisan migrate --force && \
+                    php artisan db:seed-if-empty && \
+                    php artisan config:cache && \
+                    php artisan route:cache
+                  "
+                  rm -f private_key
+
+            - name: Promote release to production (with backup)
+              run: |
+                  set +x
+                  echo "$SSH_KEY" > private_key && chmod 600 private_key
+                  ssh -i private_key -o StrictHostKeyChecking=accept-new -p $SSH_PORT $SSH_USER@$SSH_HOST "
+                    if [ -d '${{ secrets.BACKEND_PATH }}' ]; then
+                      rm -rf '${{ secrets.BACKEND_PREVIOUS }}' && \
+                      mv '${{ secrets.BACKEND_PATH }}' '${{ secrets.BACKEND_PREVIOUS }}';
+                    fi && \
+                    mv '${{ secrets.STAGING_BACKEND_PATH }}' '${{ secrets.BACKEND_PATH }}' && \
+                    echo '${{ needs.check-version.outputs.version }}' > '${{ secrets.BACKEND_PATH }}/.deploy-version'
+                  "
+                  rm -f private_key
+
+    deploy-frontend:
+        needs: deploy-backend
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22.x
+                  cache: npm
+
+            - name: Cache Node modules
+              uses: actions/cache@v4
+              with:
+                  path: frontend/node_modules
+                  key: node-modules-${{ hashFiles('frontend/package-lock.json') }}
+                  restore-keys: node-modules-
+
+            - name: Install dependencies
+              working-directory: frontend
+              run: npm ci
+
+            - name: Create frontend .env file from secret
+              working-directory: frontend
+              run: |
+                  set +x
+                  echo "${{ secrets.ENV_FRONTEND }}" > .env
+
+            - name: Build frontend
+              working-directory: frontend
+              run: npm run build
+
+            - name: Upload frontend build to server
+              run: |
+                  set +x
+                  echo "$SSH_KEY" > private_key && chmod 600 private_key
+                  rsync -avz --delete \
+                    -e "ssh -i private_key -o StrictHostKeyChecking=accept-new -p $SSH_PORT" \
+                    frontend/dist/ $SSH_USER@$SSH_HOST:${{ secrets.FRONTEND_PATH }}
+                  rm -f private_key
