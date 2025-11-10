@@ -130,7 +130,7 @@ return [
         'default' => env('API_TOKEN_DEFAULT', 'default_token'),
         'notify' => env('API_TOKEN_1', 'default_notify_token'),
         'history' => env('API_TOKEN_2', 'default_history_token'),
-        'device' => env('API_TOKEN_3', default: 'default_history_token'),
+        'device' => env('API_TOKEN_3', 'default_device_token'),
         'automation_runner' => env('API_TOKEN_AUTOMATION_RUNNER', 'default_automation_runner_token'),
     ],
 ];

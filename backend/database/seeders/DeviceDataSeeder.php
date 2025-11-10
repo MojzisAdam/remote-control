@@ -10,12 +10,15 @@ class DeviceDataSeeder extends Seeder
 {
     public function run()
     {
-        $deviceId = '41A3456C';
-        $startDate = Carbon::now()->subDay();
-        $endDate = Carbon::now(); 
-        $interval = 10; 
+        // First ensure devices exist
+        $this->call(DeviceSeeder::class);
 
-        $batchSize = 1000; 
+        $deviceId = '78ddef9';
+        $startDate = Carbon::now()->subDay();
+        $endDate = Carbon::now();
+        $interval = 10;
+
+        $batchSize = 1000;
         $data = [];
 
         while ($startDate->lessThan($endDate)) {
@@ -31,11 +34,11 @@ class DeviceDataSeeder extends Seeder
                 'TS7' => -128,
                 'TS8' => -128,
                 'TS9' => -128,
-                'PTO' => rand(100, 200) + (rand(0, 99) / 100),
-                'PTUV' => rand(50, 150) + (rand(0, 99) / 100),
-                'PTO2' => rand(50, 150) + (rand(0, 99) / 100),
+                'PTO' => rand(30, 50) + (rand(0, 99) / 100),
+                'PTUV' => rand(30, 70) + (rand(0, 99) / 100),
+                'PTO2' => rand(30, 50) + (rand(0, 99) / 100),
                 'komp' => rand(0, 1),
-                'kvyk' => rand(0, 100) / 10,
+                'kvyk' => rand(0, 1000) / 10,
                 'run' => rand(0, 1),
                 'reg' => rand(0, 1),
                 'vjedn' => rand(0, 1),
@@ -44,7 +47,7 @@ class DeviceDataSeeder extends Seeder
                 'tstat' => rand(0, 1),
                 'hdo' => rand(0, 1),
                 'obd' => rand(0, 1),
-                'chyba' => rand(0, 5),
+                'chyba' => rand(0, 80),
                 'PT' => rand(1, 10) + (rand(0, 99) / 100),
                 'PPT' => rand(1, 10) + (rand(0, 99) / 100),
                 'RPT' => rand(1, 10) + (rand(0, 99) / 100),
@@ -53,15 +56,15 @@ class DeviceDataSeeder extends Seeder
             ];
 
             if (count($data) >= $batchSize) {
-                DB::table('device_history')->insert($data);
-                $data = []; 
+                DB::table('device_history')->insertOrIgnore($data);
+                $data = [];
             }
 
             $startDate->addMinutes($interval);
         }
 
         if (!empty($data)) {
-            DB::table('device_history')->insert($data);
+            DB::table('device_history')->insertOrIgnore($data);
         }
     }
 }

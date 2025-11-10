@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Models\DeviceType;
 
 class DeviceTypesSeeder extends Seeder
 {
@@ -14,12 +15,30 @@ class DeviceTypesSeeder extends Seeder
     public function run(): void
     {
 
-        DB::table('device_types')->updateOrInsert(
+        DeviceType::firstOrCreate(
             ['id' => 'cim'], // Primary key
             [
                 'name' => 'CIM Heat Pump',
                 'description' => 'CIM heat pump with all standard sensors and controls',
                 'capabilities' => json_encode([
+                    'reg_99' => [
+                        'type' => 'enum',
+                        'role' => ['condition', 'trigger', 'action'],
+                        'description' => ['en' => 'Summer/Winter', 'cs' => 'Léto/zima'],
+                        'values' => [
+                            ['label' => ['en' => 'Summer', 'cs' => 'Léto'], 'value' => 0],
+                            ['label' => ['en' => 'Winter', 'cs' => 'Zima'], 'value' => 2]
+                        ]
+                    ],
+                    'reg_35' => [
+                        'type' => 'boolean',
+                        'role' => ['trigger', 'condition', 'action'],
+                        'description' => ['en' => 'DHW', 'cs' => 'TUV'],
+                        'labels' => [
+                            ['en' => 'On', 'cs' => 'Vypnuto'],
+                            ['en' => 'Off', 'cs' => 'Zapnuto']
+                        ]
+                    ]
                 ]),
                 'mqtt_topics' => json_encode([
                     'automation' => [

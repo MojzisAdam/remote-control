@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Models\NotificationType;
 
 class NotificationTypesSeeder extends Seeder
 {
@@ -36,6 +37,8 @@ class NotificationTypesSeeder extends Seeder
             ],
         ];
 
-        DB::table('notification_types')->insert($types);
+        foreach ($types as $type) {
+            NotificationType::firstOrCreate(['id' => $type['id']], $type);
+        }
     }
 }
