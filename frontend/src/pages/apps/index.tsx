@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Download, ExternalLink, Smartphone, Wifi, HardDrive, Monitor, Bell, History, Settings } from "lucide-react";
+import { Download, ExternalLink, Smartphone, HardDrive } from "lucide-react";
 import usePageTitle from "@/hooks/usePageTitle";
 
 const Apps: React.FC = () => {

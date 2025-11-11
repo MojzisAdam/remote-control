@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { ColumnDef, SortingState, flexRender, getCoreRowModel, getSortedRowModel, useReactTable, VisibilityState } from "@tanstack/react-table";
+import { ColumnDef, SortingState, flexRender, getCoreRowModel, getSortedRowModel, useReactTable, VisibilityState, Column } from "@tanstack/react-table";
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
@@ -101,8 +101,8 @@ export function DataTable<TData>({ columns, data, sorting, pageSize, onSortingCh
 						<DropdownMenuContent align="end">
 							{table
 								.getAllColumns()
-								.filter((col: any) => col.getCanHide())
-								.map((col: any) => (
+								.filter((col: Column<TData, unknown>) => col.getCanHide())
+								.map((col: Column<TData, unknown>) => (
 									<DropdownMenuCheckboxItem
 										key={col.id}
 										className="capitalize"
@@ -167,8 +167,8 @@ export function DataTable<TData>({ columns, data, sorting, pageSize, onSortingCh
 								<DropdownMenuContent align="end">
 									{table
 										.getAllColumns()
-										.filter((col: any) => col.getCanHide())
-										.map((col: any) => (
+										.filter((col: Column<TData, unknown>) => col.getCanHide())
+										.map((col: Column<TData, unknown>) => (
 											<DropdownMenuCheckboxItem
 												key={col.id}
 												className="capitalize"

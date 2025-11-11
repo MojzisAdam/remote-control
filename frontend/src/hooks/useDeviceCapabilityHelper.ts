@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { useDeviceCapabilities } from "@/provider/DeviceCapabilitiesProvider";
-import { Device } from "@/api/devices/model";
 
 export const useDeviceCapabilityHelper = () => {
 	const { getCapabilitiesForDeviceId, capabilities, getCapabilitiesForRole, devices } = useDeviceCapabilities();
@@ -42,7 +41,7 @@ export const useDeviceCapabilityHelper = () => {
 				min_value: cap.min,
 				max_value: cap.max,
 				increment_value: 1, // Default increment
-				values: cap.options ? cap.options.map((opt, index) => ({ label: cap.labels?.[opt] || opt, value: opt })) : undefined,
+				values: cap.options ? cap.options.map((opt, _index) => ({ label: cap.labels?.[opt] || opt, value: opt })) : undefined,
 				labels: cap.labels,
 			}));
 

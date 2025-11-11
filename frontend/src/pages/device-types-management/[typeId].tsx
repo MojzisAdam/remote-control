@@ -3,9 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, Eye, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import { useTranslation } from "react-i18next";
 import { useDeviceTypes } from "@/hooks/useDeviceTypes";
 import { DeviceType } from "@/api/devices/model";
@@ -21,7 +18,7 @@ const DeviceTypeDetailPage = () => {
 	const { typeId } = useParams<{ typeId: string }>();
 	const navigate = useNavigate();
 	const { toast } = useToast();
-	const { t, i18n } = useTranslation(["deviceTypes", "global"]);
+	const { t } = useTranslation(["deviceTypes", "global"]);
 	const { loading, getDeviceType, deleteExistingDeviceType } = useDeviceTypes();
 
 	usePageTitle(t("deviceTypes.detailPage.title"));
@@ -83,7 +80,7 @@ const DeviceTypeDetailPage = () => {
 					variant: "destructive",
 				});
 			}
-		} catch (error) {
+		} catch {
 			toast({
 				title: t("deviceTypes.notifications.error"),
 				description: t("deviceTypes.notifications.genericError"),

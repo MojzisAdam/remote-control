@@ -15,7 +15,7 @@ import { ConfirmTwoFAModal } from "@/components/login/ConfirmTwoFAModal";
 
 const Login: React.FC = () => {
 	const { t } = useTranslation("user");
-	const { login, loadUser, user, loading } = useAuth();
+	const { login, loadUser, loading } = useAuth();
 
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
@@ -23,7 +23,6 @@ const Login: React.FC = () => {
 	const [errors, setErrors] = useState<Record<string, string[]>>({});
 	const [status, setStatus] = useState<string | null>(null);
 
-	const [twoFA, setTwoFA] = useState(false);
 	const [open, setOpen] = useState(false);
 
 	usePageTitle(t("login.login"));
@@ -37,7 +36,6 @@ const Login: React.FC = () => {
 			if (result.data.two_factor === true) {
 				result.status = "";
 				setOpen(true);
-				setTwoFA(true);
 			} else {
 				await loadUser();
 			}
@@ -47,7 +45,6 @@ const Login: React.FC = () => {
 		setStatus(result.status || null);
 	};
 	const twoFASuccess = async () => {
-		setTwoFA(false);
 		await loadUser();
 	};
 

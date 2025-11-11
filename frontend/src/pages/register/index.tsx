@@ -3,7 +3,6 @@ import ButtonWithSpinner from "@/components/ButtonWithSpinner";
 import InputError from "@/components/InputError";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
@@ -11,7 +10,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import usePageTitle from "@/hooks/usePageTitle";
 import AuthSessionStatus from "@/components/AuthSessionStatus";
-import { syncLang } from "@/utils/syncLang";
 
 export type RegisterFormData = {
 	first_name: string;
@@ -22,9 +20,7 @@ export type RegisterFormData = {
 };
 
 const Register: React.FC = () => {
-	const { user, register, loading } = useAuth();
-	const navigate = useNavigate();
-	const location = useLocation();
+	const { register, loading } = useAuth();
 	const { t } = useTranslation("user");
 
 	const [formData, setFormData] = useState<RegisterFormData>({

@@ -21,12 +21,8 @@ export const getAutomation = async (id: number): Promise<Automation> => {
 
 // Create a new automation
 export const createAutomation = async (data: CreateAutomationRequest): Promise<Automation> => {
-	try {
-		const response = await axios.post("/automations", data);
-		return response.data;
-	} catch (error: any) {
-		throw error;
-	}
+	const response = await axios.post("/automations", data);
+	return response.data;
 };
 
 // Update an existing automation

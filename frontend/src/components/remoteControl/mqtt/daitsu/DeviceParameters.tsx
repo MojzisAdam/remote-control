@@ -325,7 +325,6 @@ export const DeviceParameters: React.FC<DeviceParametersProps> = ({ deviceId, de
 					if (update.parameterKey) {
 						// For bitfield parameters, find the specific parameter item
 						let currentParameterValue: number | undefined = undefined;
-						let prevParameterValue: number | undefined = undefined;
 
 						Object.entries(groupedParameters).forEach(([, params]) => {
 							params.forEach(({ key, value }) => {

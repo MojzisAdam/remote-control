@@ -84,7 +84,7 @@ export const getColumns = (t: (key: string) => string): ColumnDef<DeviceType, Co
 		meta: t("deviceTypes.columns.capabilities"),
 		header: t("deviceTypes.columns.capabilities"),
 		cell: ({ row }) => {
-			const capabilities = row.getValue("capabilities") as Record<string, any> | string[];
+			const capabilities = row.getValue("capabilities") as Record<string, unknown> | string[];
 			let count = 0;
 
 			if (Array.isArray(capabilities)) {

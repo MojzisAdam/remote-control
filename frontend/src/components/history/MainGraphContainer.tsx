@@ -9,7 +9,7 @@ import ErrorAlert from "@/components/history/ErrorAlert";
 import NoDataMessage from "@/components/history/NoDataMessage";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
-import { MonitorDown, MonitorX, Info, Maximize2, Activity } from "lucide-react";
+import { Info, Maximize2, Activity } from "lucide-react";
 import { useMqttLogger } from "@/hooks/useMqttLogger";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";

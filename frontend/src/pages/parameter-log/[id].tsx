@@ -19,7 +19,7 @@ import { useDeviceContext } from "@/provider/DeviceProvider";
 import { cs, enUS } from "date-fns/locale";
 import { format } from "date-fns";
 import { isDaitsuDisplay } from "@/utils/displayTypeUtils";
-import { isCzech, isEnglish } from "@/utils/syncLang";
+import { isCzech } from "@/utils/syncLang";
 
 interface ParameterOption {
 	[key: string]: string;
@@ -302,7 +302,7 @@ const DeviceParameterLog = () => {
 						{paramInfo.unit ? ` ${paramInfo.unit}` : ""}
 					</span>
 				);
-			case "float":
+			case "float": {
 				let numValue = Number(value);
 				if (paramInfo.multiplied !== undefined) {
 					numValue = numValue / paramInfo.multiplied;
@@ -313,6 +313,7 @@ const DeviceParameterLog = () => {
 						{paramInfo.unit ? ` ${paramInfo.unit}` : ""}
 					</span>
 				);
+			}
 			case "options":
 			case "switch":
 				return <span>{paramInfo.options?.[value] || value}</span>;

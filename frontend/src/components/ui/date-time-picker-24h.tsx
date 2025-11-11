@@ -18,7 +18,7 @@ interface DateTimePicker24hProps {
 }
 
 export function DateTimePicker24h({ value, onChange }: DateTimePicker24hProps) {
-	const { i18n, t } = useTranslation("components");
+	const { i18n } = useTranslation("components");
 	const selectedLocale = i18n.language === "en" ? enUS : cs;
 	const [isOpen, setIsOpen] = React.useState(false);
 

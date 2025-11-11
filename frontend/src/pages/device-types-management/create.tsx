@@ -2,7 +2,6 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTranslation } from "react-i18next";
 import { DeviceType } from "@/api/devices/model";
 import { DeviceTypeEdit } from "@/components/device-types-management/device-type-edit";
@@ -14,7 +13,7 @@ import routes from "@/constants/routes";
 const CreateDeviceTypePage = () => {
 	const navigate = useNavigate();
 	const { toast } = useToast();
-	const { t, i18n } = useTranslation(["deviceTypes", "global"]);
+	const { t } = useTranslation(["deviceTypes", "global"]);
 
 	usePageTitle(t("deviceTypes.actions.create"));
 

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useDeviceTypes } from "@/hooks/useDeviceTypes";
-import { DeviceType } from "@/api/devices/model";
+import { DeviceType, Device } from "@/api/devices/model";
 
 // Normalized capability structure
 export interface NormalizedCapability {
@@ -27,7 +27,7 @@ export interface DeviceCapabilities {
 
 interface DeviceCapabilitiesContextValue {
 	capabilities: DeviceCapabilities;
-	devices: any[];
+	devices: Device[];
 	loading: boolean;
 	error: string | null;
 	getCapabilitiesForDevice: (deviceTypeId: string) => NormalizedCapability[];
@@ -53,7 +53,7 @@ function getLocalizedString(value: any, currentLanguage: string = "en"): string 
 }
 
 // Helper function to extract enum options with localized labels
-function extractEnumOptions(values: any[], currentLanguage: string = "en"): string[] {
+function extractEnumOptions(values: any[], _currentLanguage: string = "en"): string[] {
 	if (!Array.isArray(values)) return [];
 
 	return values.map((item: any) => {
@@ -142,7 +142,7 @@ function formatCapabilityLabel(key: string): string {
 
 export const DeviceCapabilitiesProvider: React.FC<{
 	children: React.ReactNode;
-	devices?: any[];
+	devices?: Device[];
 }> = ({ children, devices = [] }) => {
 	const [capabilities, setCapabilities] = useState<DeviceCapabilities>({});
 	const [loading, setLoading] = useState(true);

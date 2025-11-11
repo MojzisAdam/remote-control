@@ -2,10 +2,9 @@ import React from "react";
 import { Handle, Position, NodeProps } from "@xyflow/react";
 import { Card } from "@/components/ui/card";
 import { Play } from "lucide-react";
-import { FlowData } from "@/api/automation/model";
 import { useTranslation } from "react-i18next";
 
-const StartNode: React.FC<NodeProps> = ({ data, selected }) => {
+const StartNode: React.FC<NodeProps> = ({ data: _data, selected }) => {
 	const { t } = useTranslation("automations");
 
 	return (

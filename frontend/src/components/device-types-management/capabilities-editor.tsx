@@ -63,7 +63,7 @@ export const CapabilitiesEditor: React.FC<CapabilitiesEditorProps> = ({ capabili
 				}
 
 				// Handle labels localization
-				let labels: Record<string, Record<string, string>> = {};
+				const labels: Record<string, Record<string, string>> = {};
 				if (config.labels && typeof config.labels === "object") {
 					for (const [key, value] of Object.entries(config.labels)) {
 						labels[key] = typeof value === "object" && value !== null ? (value as Record<string, string>) : { [i18n.language]: String(value), en: String(value) };

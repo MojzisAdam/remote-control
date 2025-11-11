@@ -58,7 +58,7 @@ const ActionConfiguration: React.FC<ActionConfigurationProps> = ({ actionType, c
 					</div>
 				);
 
-			case "number":
+			case "number": {
 				const min = selectedField.min_value;
 				const max = selectedField.max_value;
 				const step = selectedField.increment_value || 1;
@@ -85,7 +85,7 @@ const ActionConfiguration: React.FC<ActionConfigurationProps> = ({ actionType, c
 						/>
 					</div>
 				);
-
+			}
 			case "enum":
 				return (
 					<div>

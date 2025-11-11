@@ -100,33 +100,6 @@ const BaseHistoryGraph: React.FC<BaseGraphProps> = ({ data = [], selectedMetrics
 		};
 	}, []);
 
-	const formatDate = (dateString: string) => {
-		const date = new Date(dateString);
-
-		if (isMobile) {
-			return new Intl.DateTimeFormat("en-GB", {
-				day: "2-digit",
-				month: "2-digit",
-				hour: "2-digit",
-				minute: "2-digit",
-				hour12: false,
-			})
-				.format(date)
-				.replace(",", "");
-		} else {
-			return new Intl.DateTimeFormat("en-GB", {
-				day: "2-digit",
-				month: "2-digit",
-				year: "numeric",
-				hour: "2-digit",
-				minute: "2-digit",
-				hour12: false,
-			})
-				.format(date)
-				.replace(",", "");
-		}
-	};
-
 	const chartData = useMemo(() => {
 		return {
 			labels: data.map((item) => new Date(item.cas)),
@@ -186,7 +159,7 @@ const BaseHistoryGraph: React.FC<BaseGraphProps> = ({ data = [], selectedMetrics
 			tooltip: {
 				caretPadding: 25,
 				mode: "nearest" as const,
-				itemSort: (a, b) => 0,
+				itemSort: (_a, _b) => 0,
 				callbacks: {
 					label: function (tooltipItem: TooltipItem<"line">) {
 						const dataset = tooltipItem.dataset;

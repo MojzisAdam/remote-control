@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import InputError from "@/components/InputError";
 import AuthSessionStatus from "@/components/AuthSessionStatus";
@@ -44,7 +43,7 @@ export function ForcePasswordChangeModal({ open, onOpenChange, onSuccess }: Forc
 		setLoading(true);
 
 		try {
-			const response = await updateUserPassword(passwordFormData.password, passwordFormData.password_confirmation);
+			await updateUserPassword(passwordFormData.password, passwordFormData.password_confirmation);
 
 			setStatus(t("userManagement.forcePasswordChange.success"));
 			setErrors({});
@@ -61,9 +60,14 @@ export function ForcePasswordChangeModal({ open, onOpenChange, onSuccess }: Forc
 				onOpenChange(false);
 				onSuccess();
 			}, 2000);
-		} catch (error: any) {
-			if (error.response?.status === 422) {
-				setErrors(error.response.data.errors);
+		} catch (error: unknown) {
+			if (error && typeof error === "object" && "response" in error) {
+				const axiosError = error as { response?: { status?: number; data?: { errors?: Record<string, string[]> } } };
+				if (axiosError.response?.status === 422) {
+					setErrors(axiosError.response.data?.errors || {});
+				} else {
+					setStatus(t("userManagement.forcePasswordChange.error"));
+				}
 			} else {
 				setStatus(t("userManagement.forcePasswordChange.error"));
 			}

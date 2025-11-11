@@ -6,8 +6,8 @@ import { DeviceType, Device } from "@/api/devices/model";
 type UpdateDeviceTypePayload = {
 	name?: string;
 	description?: string;
-	capabilities?: string[] | Record<string, any>;
-	mqtt_topics?: Record<string, any>;
+	capabilities?: string[] | Record<string, unknown>;
+	mqtt_topics?: Record<string, unknown>;
 };
 
 export const useDeviceTypes = () => {
@@ -66,7 +66,7 @@ export const useDeviceTypes = () => {
 
 	// Create a new device type
 	const createNewDeviceType = useCallback(
-		async (data: { id: string; name: string; description?: string; capabilities: string[] | Record<string, any> }): Promise<ApiHandlerResult> => {
+		async (data: { id: string; name: string; description?: string; capabilities: string[] | Record<string, unknown> }): Promise<ApiHandlerResult> => {
 			clearError();
 			setLoading(true);
 			const result = await handleApiRequest({
@@ -184,7 +184,7 @@ export const useDeviceTypes = () => {
 
 	// Helper function to get capabilities for a device from cached device types
 	const getCapabilitiesFromCache = useCallback(
-		(deviceTypeId: string): string[] | Record<string, any> | null => {
+		(deviceTypeId: string): string[] | Record<string, unknown> | null => {
 			const deviceType = deviceTypes.find((dt) => dt.id === deviceTypeId);
 			return deviceType?.capabilities || null;
 		},

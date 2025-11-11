@@ -12,7 +12,7 @@ const HomePage: React.FC<HomePageProps> = ({ deviceData }) => {
 	const { t } = useTranslation("remote-control");
 	const getTemperatureDisplay = (temp?: number) => (temp === 255 || temp === undefined ? "---" : `${temp} °C`);
 
-	let stateBarParts: string[] = [];
+	const stateBarParts: string[] = [];
 
 	if (getBit(deviceData.reg_128 ?? 0, 10) === 0 && (getBit(deviceData.reg_128 ?? 0, 7) === 1 || getBit(deviceData.reg_128 ?? 0, 6) === 1)) {
 		stateBarParts.push(t("home.blocked.pt_hod"));

@@ -88,7 +88,7 @@ const EnhancedTableContainer: React.FC<EnhancedTableContainerProps> = ({ device 
 					variant: "destructive",
 				});
 			}
-		} catch (error) {
+		} catch {
 			toast({
 				title: t("history:paginationErrorTitle"),
 				description: t("history:unexpectedErrorDescription"),

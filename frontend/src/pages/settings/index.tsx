@@ -15,7 +15,6 @@ import { useAccentColor } from "@/hooks/useAccentColor";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import usePageTitle from "@/hooks/usePageTitle";
 import { isCzech, isEnglish } from "@/utils/syncLang";
-import { is } from "date-fns/locale";
 
 const Settings: React.FC = () => {
 	const [settings, setSettings] = useState<AppSettings>(getSettings());

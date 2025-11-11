@@ -114,7 +114,7 @@ export const useAutomationFlow = (initialAutomation?: Automation) => {
 				device_id: trigger.device_id,
 			};
 
-			let triggerType = trigger.type;
+			const triggerType = trigger.type;
 
 			if (trigger.type === "time") {
 				triggerConfig.time = trigger.time_at;
@@ -166,7 +166,7 @@ export const useAutomationFlow = (initialAutomation?: Automation) => {
 		automation.conditions?.forEach((condition, index) => {
 			// Convert backend condition format to frontend node config format
 			const conditionConfig: any = {};
-			let conditionType = condition.type || "simple";
+			const conditionType = condition.type || "simple";
 			let label = "Unknown";
 
 			if (conditionType === "simple") {
@@ -224,7 +224,7 @@ export const useAutomationFlow = (initialAutomation?: Automation) => {
 				device_id: action.device_id,
 			};
 
-			let actionType = action.type;
+			const actionType = action.type;
 
 			if (action.type === "device_control") {
 				actionConfig.control_type = "set_value";

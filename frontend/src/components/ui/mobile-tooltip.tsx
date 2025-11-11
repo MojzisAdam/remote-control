@@ -18,7 +18,9 @@ const TooltipMobile = ({ content, children, className }: React.PropsWithChildren
 						onTouchStart={() => setOpen(!open)}
 						onKeyDown={(e) => {
 							e.preventDefault();
-							e.key === "Enter" && setOpen(!open);
+							if (e.key === "Enter") {
+								setOpen(!open);
+							}
 						}}
 					>
 						{children}

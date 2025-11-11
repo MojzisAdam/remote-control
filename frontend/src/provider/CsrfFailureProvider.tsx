@@ -161,11 +161,11 @@ export const ErrorAlertProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 			}
 		});
 
-		registerCsrfFailureCallback((message) => {
+		registerCsrfFailureCallback((_message) => {
 			setShowCsrfModal(true);
 		});
 
-		registerSessionExpiredCallback((message) => {
+		registerSessionExpiredCallback((_message) => {
 			setShowSessionExpiredModal(true);
 		});
 	}, [toast]);

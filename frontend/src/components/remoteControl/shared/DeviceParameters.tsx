@@ -115,10 +115,12 @@ export const DeviceParameters: React.FC<DeviceParametersProps> = ({ deviceId, de
 	const parametersData = useMemo(() => {
 		if (displayType === DisplayType.AMIT) {
 			// exclude fhi_1
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			const { fhi_1, ...filtered } = baseParametersData;
 			return filtered;
 		} else if (displayType === DisplayType.RPI) {
 			// exclude fhi_2
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			const { fhi_2, ...filtered } = baseParametersData;
 			return filtered;
 		}

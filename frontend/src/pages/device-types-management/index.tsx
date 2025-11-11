@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next";
 import routes from "@/constants/routes";
 
 const DeviceTypesManagement = () => {
-	const { t, i18n } = useTranslation("deviceTypes");
+	const { t } = useTranslation("deviceTypes");
 	const navigate = useNavigate();
 
 	const getStringValue = (value: any): string => {

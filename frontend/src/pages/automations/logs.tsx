@@ -10,7 +10,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "@/hooks/use-toast";
 import { useDebounce } from "@/hooks/useDebounce";
@@ -38,7 +37,6 @@ const AutomationLogs: React.FC = () => {
 
 	const [logs, setLogs] = useState<AutomationLog[]>([]);
 	const [logsLoading, setLogsLoading] = useState(false);
-	const [statsLoading, setStatsLoading] = useState(false);
 	const [automationNotFound, setAutomationNotFound] = useState(false);
 	const [searchQuery, setSearchQuery] = useState("");
 	const [statusFilter, setStatusFilter] = useState<"all" | "success" | "failed" | "skipped" | "partial" | "warning">("all");
@@ -159,8 +157,6 @@ const AutomationLogs: React.FC = () => {
 	const loadLogsStats = async () => {
 		if (!automationId) return;
 
-		setStatsLoading(true);
-
 		try {
 			const params = {
 				...(statusFilter !== "all" && { status: statusFilter }),
@@ -190,8 +186,6 @@ const AutomationLogs: React.FC = () => {
 				description: t("logs.unexpectedError"),
 				variant: "destructive",
 			});
-		} finally {
-			setStatsLoading(false);
 		}
 	};
 
@@ -220,7 +214,7 @@ const AutomationLogs: React.FC = () => {
 	const formatDate = (dateString: string) => {
 		try {
 			return format(new Date(dateString), "dd/MM/yyyy HH:mm:ss");
-		} catch (error) {
+		} catch {
 			return dateString;
 		}
 	};

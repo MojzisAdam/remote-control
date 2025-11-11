@@ -19,8 +19,6 @@ interface DeviceContextType {
 
 const CACHE_EXPIRATION = 5 * 60 * 1000;
 
-const AUTO_REFRESH_INTERVAL = 30 * 60 * 1000;
-
 const DeviceContext = createContext<DeviceContextType | undefined>(undefined);
 
 export const DeviceProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -112,27 +110,10 @@ export const DeviceProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
 			currentDeviceIdRef.current = deviceId;
 
-			// setupAutoRefresh(deviceId);
-
 			await fetchAndCacheDevice(deviceId);
 		},
 		[fetchAndCacheDevice]
 	);
-
-	const setupAutoRefresh = (deviceId: string): void => {
-		if (refreshIntervalRef.current) {
-			clearInterval(refreshIntervalRef.current);
-			refreshIntervalRef.current = null;
-		}
-
-		refreshIntervalRef.current = setInterval(() => {
-			if (currentDeviceIdRef.current === deviceId) {
-				fetchAndCacheDevice(deviceId).catch((error) => {
-					console.error("Error during auto-refresh:", error);
-				});
-			}
-		}, AUTO_REFRESH_INTERVAL);
-	};
 
 	const updateDevice = useCallback((device: Device): void => {
 		setCurrentDevice(device);

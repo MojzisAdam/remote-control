@@ -1,4 +1,4 @@
-import React, { Component, ErrorInfo, ReactNode, useState, useEffect } from "react";
+import React, { Component, ErrorInfo, ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { withTranslation, WithTranslation } from "react-i18next";
 
@@ -16,7 +16,7 @@ class ErrorBoundaryClass extends Component<ErrorBoundaryProps, ErrorBoundaryStat
 		this.state = { hasError: false };
 	}
 
-	static getDerivedStateFromError(_: Error): ErrorBoundaryState {
+	static getDerivedStateFromError(__: Error): ErrorBoundaryState {
 		return { hasError: true };
 	}
 

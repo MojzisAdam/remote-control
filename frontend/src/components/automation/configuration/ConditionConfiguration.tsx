@@ -63,7 +63,7 @@ const ConditionConfiguration: React.FC<ConditionConfigurationProps> = ({ conditi
 	const renderValueInput = () => {
 		if (!selectedField) return null;
 		switch (selectedField.type) {
-			case "boolean":
+			case "boolean": {
 				const getBooleanSelectValue = () => {
 					if (config.value === null || config.value === undefined) return "";
 					const boolValue = config.value === "1" || config.value === true || config.value === "true";
@@ -86,7 +86,7 @@ const ConditionConfiguration: React.FC<ConditionConfigurationProps> = ({ conditi
 						</Select>
 					</div>
 				);
-
+			}
 			case "number":
 				return (
 					<div>

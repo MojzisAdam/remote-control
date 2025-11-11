@@ -27,7 +27,7 @@ const DeviceNotificationsPage: React.FC = () => {
 	const { markAsSeen, markDeviceAllAsSeen } = useNotifications();
 
 	// Use React Query to get the highlighted notification ID from cache
-	const { data: highlightedId, isFetched: highlightFetched } = useQuery<number | null>({
+	const { data: highlightedId } = useQuery<number | null>({
 		queryKey: ["highlighted-notification"],
 		queryFn: () => {
 			// Return the current value from the cache or null if not present
@@ -158,7 +158,6 @@ const DeviceNotificationsPage: React.FC = () => {
 				return;
 			}
 
-			let currentPage = notificationsData.pages.length || 1;
 			let found = false;
 			let attempts = 0;
 			const maxAttempts = 20; // Prevent infinite loops
@@ -185,8 +184,6 @@ const DeviceNotificationsPage: React.FC = () => {
 					}, 500);
 					break;
 				}
-
-				currentPage++;
 			}
 
 			if (!found) {
@@ -286,12 +283,6 @@ const DeviceNotificationsPage: React.FC = () => {
 
 	const isExpanded = (notificationId: number) => {
 		return expandedNotifications.includes(notificationId);
-	};
-	const getErrorVariant = (errorCode: number | undefined): "destructive" | "outline" | "secondary" | "default" => {
-		if (errorCode === undefined) return "secondary";
-		if (errorCode > 0) return "destructive";
-		if (errorCode === 0) return "default";
-		return "secondary";
 	};
 
 	// Returns CSS classes for error status indicators

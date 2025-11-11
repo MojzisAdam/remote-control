@@ -71,7 +71,7 @@ const HomePage: React.FC<HomePageProps> = ({ deviceData }) => {
 	const { t } = useTranslation("remote-control");
 	const getTemperatureDisplay = (temp?: number) => (temp === -128 || temp === undefined ? "---" : `${temp} °C`);
 
-	let stateBarParts: string[] = [];
+	const stateBarParts: string[] = [];
 
 	if (deviceData.reg_741 === 0) {
 		stateBarParts.push(t("home.season.winter"));

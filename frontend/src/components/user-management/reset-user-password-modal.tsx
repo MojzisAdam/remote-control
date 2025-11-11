@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { User } from "@/api/user/model";
 import { useUserManagement } from "@/hooks/useUserManagement";
@@ -59,7 +58,7 @@ export function ResetUserPasswordModal({ open, onOpenChange, onSuccess, data }: 
 				setErrors(result.errors || {});
 				setStatus(result.status || null);
 			}
-		} catch (error) {
+		} catch {
 			setStatus(t("userManagement.resetPassword.error"));
 		}
 	};

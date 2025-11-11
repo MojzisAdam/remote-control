@@ -91,8 +91,8 @@ export const validateAutomation = (data: CreateAutomationRequest): string[] => {
 
 // Convert automation to React Flow format
 export const automationToFlow = (automation: Automation) => {
-	const nodes: any[] = [];
-	const edges: any[] = [];
+	const nodes: Array<{ id: string; type: string; position: { x: number; y: number }; data: unknown }> = [];
+	const edges: Array<{ id: string; source: string; target: string; type: string }> = [];
 	let yOffset = 0;
 
 	// Add trigger nodes
