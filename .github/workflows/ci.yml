@@ -58,7 +58,11 @@ jobs:
             - name: PHP Syntax Check
               working-directory: backend
               run: |
-                  find . -type f -name '*.php' -print0 | xargs -0 -n1 php -l
+                  find . -type f -name '*.php' \
+                    -not -path "./vendor/*" \
+                    -not -path "./storage/*" \
+                    -not -path "./bootstrap/cache/*" \
+                    -print0 | xargs -0 -n1 -I{} sh -c 'php -l "{}" || exit 255'
 
             - name: Wait for MySQL
               run: |
