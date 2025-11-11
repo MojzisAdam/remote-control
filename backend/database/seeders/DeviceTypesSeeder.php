@@ -20,7 +20,7 @@ class DeviceTypesSeeder extends Seeder
             [
                 'name' => 'CIM Heat Pump',
                 'description' => 'CIM heat pump with all standard sensors and controls',
-                'capabilities' => json_encode([
+                'capabilities' => [
                     'reg_99' => [
                         'type' => 'enum',
                         'role' => ['condition', 'trigger', 'action'],
@@ -39,14 +39,14 @@ class DeviceTypesSeeder extends Seeder
                             ['en' => 'Off', 'cs' => 'Zapnuto']
                         ]
                     ]
-                ]),
-                'mqtt_topics' => json_encode([
+                ],
+                'mqtt_topics' => [
                     'automation' => [
                         'subscribe' => 'cim/v1/+/data/automation',
                         'command' => 'cim/v1/{device_id}/cmd/automation',
                         'description' => 'MQTT topics for automation triggers and commands'
                     ],
-                ]),
+                ],
                 'created_at' => now(),
                 'updated_at' => now()
             ]
