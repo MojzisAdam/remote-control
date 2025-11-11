@@ -11,9 +11,6 @@ permissions:
 jobs:
     backend:
         runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                php: [8.4]
         services:
             mysql:
                 image: mysql:8.0
@@ -30,18 +27,18 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            - name: Set up PHP ${{ matrix.php }}
+            - name: Set up PHP 8.4
               uses: shivammathur/setup-php@v2
               with:
-                  php-version: ${{ matrix.php }}
+                  php-version: 8.4
                   extensions: mbstring, bcmath, intl, pdo_mysql, xml, ctype, json, tokenizer, dom, fileinfo, openssl, gd
 
             - name: Cache Composer dependencies
               uses: actions/cache@v4
               with:
                   path: ~/.composer/cache
-                  key: composer-cache-${{ runner.os }}-${{ matrix.php }}-${{ hashFiles('backend/composer.lock') }}
-                  restore-keys: composer-cache-${{ runner.os }}-${{ matrix.php }}-
+                  key: composer-cache-${{ runner.os }}-8.4-${{ hashFiles('backend/composer.lock') }}
+                  restore-keys: composer-cache-${{ runner.os }}-8.4-
 
             - name: Install PHP dependencies
               working-directory: backend
