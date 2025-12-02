@@ -1,14 +1,16 @@
 name: deploy
 
 on:
-    push:
-        tags:
-            - "v*"
+    workflow_run:
+        workflows: ["CI"]
+        types:
+            - completed
+
     workflow_dispatch:
         inputs:
             version:
-                description: "Release version (e.g. 1.2.3)"
-                required: false
+                description: "Release version (např. 1.2.3)"
+                required: true
 
 permissions:
     contents: read
@@ -25,7 +27,20 @@ env:
     BACKEND_PATH: ${{ secrets.BACKEND_PATH }}
 
 jobs:
+    deploy:
+        if: >
+            (github.event_name == 'workflow_run' &&
+            github.event.workflow_run.conclusion == 'success' &&
+            startsWith(github.event.workflow_run.head_branch, 'v'))
+            ||
+            (github.event_name == 'workflow_dispatch')
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
     check-version:
+        needs: deploy
         runs-on: ubuntu-latest
         outputs:
             deploy: ${{ steps.check.outputs.deploy }}
@@ -35,10 +50,12 @@ jobs:
               id: extract
               run: |
                   set +x
-                  if [ -n "${{ github.event.inputs.version }}" ]; then
+                  if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
                     echo "version=${{ github.event.inputs.version }}" >> "$GITHUB_OUTPUT"
                   else
-                    echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+                    RAW="${{ github.event.workflow_run.head_branch }}"
+                    CLEAN="${RAW#v}"   # odstraní začínající "v"
+                    echo "version=$CLEAN" >> "$GITHUB_OUTPUT"
                   fi
 
             - name: Compare with deployed version on server
@@ -74,56 +91,66 @@ jobs:
               with:
                   fetch-depth: 0
 
-            - name: Upload backend source to staging directory
+            - name: Prepare SSH key and multiplexing
               run: |
-                  set +x
-                  echo "$SSH_KEY" > private_key && chmod 600 private_key
-                  ssh -i private_key -o StrictHostKeyChecking=accept-new -p $SSH_PORT $SSH_USER@$SSH_HOST "
-                    mkdir -p '${{ secrets.STAGING_BACKEND_PATH }}'
-                  "
-                  rsync -avz \
-                    --exclude vendor \
-                    --exclude node_modules \
-                    --exclude .env \
-                    -e "ssh -i private_key -o StrictHostKeyChecking=accept-new -p $SSH_PORT" \
-                    backend/ $SSH_USER@$SSH_HOST:${{ secrets.STAGING_BACKEND_PATH }}/
-                  rm -f private_key
+                  echo "$SSH_KEY" > private_key
+                  chmod 600 private_key
 
-            - name: Upload .env file to staging
+
+                  mkdir -p ~/.ssh
+
+
+                  echo "Host server
+                  HostName $SSH_HOST
+                  User $SSH_USER
+                  Port $SSH_PORT
+                  IdentityFile private_key
+                  StrictHostKeyChecking accept-new
+                  ControlMaster auto
+                  ControlPersist 60s
+                  ControlPath ~/.ssh/cm-%r@%h:%p
+                  " > ~/.ssh/config
+
+            - name: Create staging directory
               run: |
-                  set +x
+                  ssh server "mkdir -p '${{ secrets.STAGING_BACKEND_PATH }}'"
+
+            - name: Upload backend via rsync
+              run: |
+                  rsync -avz \
+                  --exclude vendor \
+                  --exclude node_modules \
+                  --exclude .env \
+                  -e "ssh" \
+                  backend/ server:${{ secrets.STAGING_BACKEND_PATH }}/
+
+            - name: Upload .env file
+              run: |
                   echo "${{ secrets.ENV_BACKEND }}" > .env
-                  echo "$SSH_KEY" > private_key && chmod 600 private_key
-                  scp -i private_key -o StrictHostKeyChecking=accept-new .env -P $SSH_PORT $SSH_USER@$SSH_HOST:${{ secrets.STAGING_BACKEND_PATH }}/.env
-                  rm -f private_key
+                  scp .env server:${{ secrets.STAGING_BACKEND_PATH }}/.env
 
             - name: Install backend dependencies and migrate
               run: |
-                  set +x
-                  echo "$SSH_KEY" > private_key && chmod 600 private_key
-                  ssh -i private_key -o StrictHostKeyChecking=accept-new -p $SSH_PORT $SSH_USER@$SSH_HOST "
-                    cd '${{ secrets.STAGING_BACKEND_PATH }}' && \
-                    composer install --no-dev --optimize-autoloader && \
-                    php artisan migrate --force && \
-                    php artisan db:seed-if-empty && \
-                    php artisan config:cache && \
-                    php artisan route:cache
-                  "
-                  rm -f private_key
+                  ssh server "cd '${{ secrets.STAGING_BACKEND_PATH }}' && \
+                  composer install --no-dev --optimize-autoloader && \
+                  php artisan migrate --force && \
+                  php artisan db:seed-if-empty && \
+                  php artisan config:cache && \
+                  php artisan route:cache"
 
             - name: Promote release to production (with backup)
               run: |
-                  set +x
-                  echo "$SSH_KEY" > private_key && chmod 600 private_key
-                  ssh -i private_key -o StrictHostKeyChecking=accept-new -p $SSH_PORT $SSH_USER@$SSH_HOST "
-                    if [ -d '${{ secrets.BACKEND_PATH }}' ]; then
-                      rm -rf '${{ secrets.BACKEND_PREVIOUS }}' && \
-                      mv '${{ secrets.BACKEND_PATH }}' '${{ secrets.BACKEND_PREVIOUS }}';
-                    fi && \
-                    mv '${{ secrets.STAGING_BACKEND_PATH }}' '${{ secrets.BACKEND_PATH }}' && \
-                    echo '${{ needs.check-version.outputs.version }}' > '${{ secrets.BACKEND_PATH }}/.deploy-version'
+                  ssh server "
+                  if [ -d '${{ secrets.BACKEND_PATH }}' ]; then
+                  rm -rf '${{ secrets.BACKEND_PREVIOUS }}' && \
+                  mv '${{ secrets.BACKEND_PATH }}' '${{ secrets.BACKEND_PREVIOUS }}';
+                  fi && \
+                  mv '${{ secrets.STAGING_BACKEND_PATH }}' '${{ secrets.BACKEND_PATH }}' && \
+                  echo '${{ needs.check-version.outputs.version }}' > '${{ secrets.BACKEND_PATH }}/.deploy-version'
                   "
-                  rm -f private_key
+
+            - name: Cleanup SSH key
+              run: rm -f private_key ~/.ssh/cm-*
 
     deploy-frontend:
         needs: deploy-backend
@@ -136,13 +163,7 @@ jobs:
               with:
                   node-version: 22.x
                   cache: npm
-
-            - name: Cache Node modules
-              uses: actions/cache@v4
-              with:
-                  path: frontend/node_modules
-                  key: node-modules-${{ hashFiles('frontend/package-lock.json') }}
-                  restore-keys: node-modules-
+                  cache-dependency-path: frontend/package-lock.json
 
             - name: Install dependencies
               working-directory: frontend
