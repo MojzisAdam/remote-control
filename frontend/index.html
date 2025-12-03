@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <!-- CSP_META -->
     <meta charset="UTF-8" />
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
     <link rel="icon" type="image/png" sizes="32x32" href="/flavi32.png" />
@@ -17,16 +18,7 @@
     <link rel="stylesheet" href="/public/index.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Kaiteki</title>
-    <script>
-        (function () {
-            const storedTheme = localStorage.getItem('theme');
-            if (storedTheme === 'dark' || (!storedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
-        })();
-    </script>
+    <script src="/js/preload-theme.js"></script>
   </head>
   <body class="bg-white dark:bg-black">
     <div id="initial-loading"
@@ -35,27 +27,7 @@
         <div class="min-h-screen flex justify-center flex-col items-center gap-8">
             <div class="basicSpinner"></div>
             <h1 id="loader-text" class="text-xl font-semibold text-gray-800 dark:text-gray-300">Loading...</h1>
-            <script>
-                (function () {
-                    const translations = {
-                        en: 'Loading...',
-                        cs: 'Načítání...',
-                    };
-
-                    function getLang() {
-                        return localStorage.getItem('i18nextLng') ||
-                            document.cookie.match(/(?:^|; )i18next=([^;]*)/)?.[1] ||
-                            navigator.language.split('-')[0] ||
-                            'en';
-                    }
-
-                    const lang = getLang();
-                    const text = translations[lang] || translations['en'];
-
-                    const el = document.getElementById('loader-text');
-                    if (el) el.textContent = text;
-                })();
-            </script>
+            <script src="/js/loader-text.js"></script>
         </div>
     </div>
     <div id="root">

@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->statefulApi();
         $middleware->prepend(\App\Http\Middleware\SetLanguageMiddleware::class);
+        $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
         $middleware->append(\App\Http\Middleware\TrafficAnalyticsMiddleware::class);
         $middleware->alias([
             'role' => \App\Http\Middleware\RoleMiddleware::class,
