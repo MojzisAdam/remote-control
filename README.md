@@ -4,7 +4,7 @@ Heat Pump Remote Control is a modern web application for remote monitoring and m
 
 ## Project Overview
 
-This system consists of two main components: a Laravel 11 backend (PHP 8.2) and a React 19 single-page frontend. The backend exposes a RESTful API for connected devices, managing data storage, authentication, and business logic. The frontend is a rich TypeScript application built with React and Vite, providing dashboards, control panels, and data visualizations for heat pump devices. The application supports multi-user access with role-based permissions, historical data logging with interactive charts, and a workflow engine for automating device behavior. Internationalization is built-in, allowing the interface to be used in multiple languages (e.g. English and Czech). In summary, Heat Pump Remote Control offers a comprehensive solution for IoT-based heat pump management, combining real-time control, analytics, and automation.
+This system consists of two main components: a Laravel 11 backend (PHP 8.4) and a React 19 single-page frontend. The backend exposes a RESTful API for connected devices, managing data storage, authentication, and business logic. The frontend is a rich TypeScript application built with React and Vite, providing dashboards, control panels, and data visualizations for heat pump devices. The application supports multi-user access with role-based permissions, historical data logging with interactive charts, and a workflow engine for automating device behavior. Internationalization is built-in, allowing the interface to be used in multiple languages (e.g. English and Czech). In summary, Heat Pump Remote Control offers a comprehensive solution for IoT-based heat pump management, combining real-time control, analytics, and automation.
 
 ## Features
 
@@ -16,7 +16,7 @@ This system consists of two main components: a Laravel 11 backend (PHP 8.2) and 
 -   **Automation Workflows**: Advanced automation allows users to create custom rules for their devices. Through a visual drag-and-drop workflow builder (built with React Flow), users can define triggers (time schedules, sensor thresholds, device state changes, etc.), conditions, and actions (e.g. adjust a setting, send a notification). These automations are validated in real-time on the frontend and stored via the API with all their components. An external script then fetches these automations via the RESTful API and manages their execution on connected devices.
 -   **Internationalization**: The application supports multiple languages in its user interface. The frontend uses i18next (with react-i18next) for managing translations, while the Laravel backend uses standard PHP-based localization files (e.g., mail.php returning associative arrays of translation strings). By default, English and Czech are available (with Czech as the primary locale), and additional languages can be added easily. All dates and numbers are formatted according to the active locale, leveraging libraries such as date-fns for date localization.
 -   **Responsive Modern UI**: Built as a single-page application with React 19 and Tailwind CSS, the frontend provides a responsive and snappy user interface. Users can access the system from desktops, tablets, or smartphones with a consistent experience. The UI includes dashboards for at-a-glance status, detailed device control panels and real-time charts. It also supports dark mode and theme customization (via Tailwind and utility libraries).
--   **Reliability & Security**: The modernization to Laravel 11 and React ensures a secure foundation. The backend follows Laravel’s security best practices (protection against SQL injection, XSS, CSRF, etc. out of the box) and uses modern password hashing and optional 2FA (through Fortify). API requests require authentication via Sanctum tokens. The system also uses queues for processing expensive tasks (like sending emails or evaluating automation rules) asynchronously, ensuring the app remains fast.
+-   **Reliability & Security**: The application is built on a modern stack (Laravel 11 and React), providing a robust and secure foundation. The backend leverages Laravel’s built-in security mechanisms, including protection against SQL injection, XSS, and CSRF. Authentication is managed through Laravel Sanctum, using strong password hashing algorithms and optional 2FA support. All API interactions require either an authenticated session or an access token, ensuring strict access control and maintaining the integrity of all client–server communication.
 
 ## Tech Stack
 
@@ -24,7 +24,7 @@ This project is split into two main components:
 
 ### Backend (Laravel)
 
-Laravel 11 (PHP 8.2) application, using Laravel Sanctum for API authentication and Laravel Fortify for user auth flows. Role-based access control is implemented via Spatie Laravel Permission. The backend uses a MySQL database by default (Laravel’s database agnosticism allows swapping to others if needed). The backend organizes its API following REST principles (controllers for devices, users, etc.) and includes migration files for database schema and seeders for initial data (like default roles or an admin user).
+Laravel 11 (PHP 8.4) application, using Laravel Sanctum for API authentication and Laravel Fortify for user auth flows. Role-based access control is implemented via Spatie Laravel Permission. The backend uses a MySQL database by default (Laravel’s database agnosticism allows swapping to others if needed). The backend organizes its API following REST principles (controllers for devices, users, etc.) and includes migration files for database schema and seeders for initial data (like default roles or an admin user).
 
 ### Frontend (React + TypeScript)
 
@@ -40,11 +40,11 @@ The backend itself does not connect directly to the MQTT broker — it interacts
 
 ### Prerequisites
 
--   PHP 8.2+
+-   PHP 8.4+
 -   Composer
--   Node.js 18+
--   npm or yarn
--   MySQL (or MariaDB) database
+-   Node.js 22+
+-   npm
+-   MySQL database
 
 ### Installation
 
@@ -103,6 +103,16 @@ php artisan serve
 cd frontend
 npm run dev
 ```
+
+#### Default Development User
+
+When the backend is running **without `APP_ENV=production`** (for example with `APP_ENV=local`), the application creates a default administrator account when executing `php artisan db:seed`:
+
+-   **Email:** `admin@example.com`
+-   **Password:** `password`
+-   **Role:** Full administrative privileges
+
+This user is created **only in non-production environments** and must **never be enabled or used in production**.
 
 ## Deployment
 
