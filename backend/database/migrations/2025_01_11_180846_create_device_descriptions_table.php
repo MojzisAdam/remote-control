@@ -11,8 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('device_descriptions', function (Blueprint $table) {
-            $table->id();
-            $table->string('device_id');
+            $table->string('device_id')->primary();
             $table->string(column: 'name')->nullable();
             $table->string('owner')->nullable();
             $table->string('zip_code')->nullable();

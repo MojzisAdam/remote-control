@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\DeviceErrorState;
 use App\Models\DeviceNotification;
 use App\Models\Notification;
 use App\Models\NotificationType;
@@ -17,8 +16,8 @@ class ErrorNotificationService
     {
         $newErrorCode = (int) $newErrorCode;
 
-        $state = DeviceErrorState::firstOrNew(['device_id' => $deviceId]);
-        $lastErrorCode = (int) ($state->current_error_code ?? 0);
+        $device = Device::findOrFail($deviceId);
+        $lastErrorCode = (int) ($device->error_code ?? 0);
 
         if ($newErrorCode === $lastErrorCode) {
             return;
@@ -31,8 +30,9 @@ class ErrorNotificationService
         } elseif ($lastErrorCode > 0 && $newErrorCode === 0) {
             $this->sendErrorResolvedEmail($deviceId);
         }
-        $state->current_error_code = $newErrorCode;
-        $state->save();
+
+        $device->error_code = $newErrorCode;
+        $device->save();
 
         if ($newErrorCode > 0 && $newErrorCode != $lastErrorCode) {
             $this->createErrorNotification($deviceId, $newErrorCode, NotificationType::ERROR_OCCURRED);

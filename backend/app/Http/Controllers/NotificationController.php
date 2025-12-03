@@ -31,9 +31,15 @@ class NotificationController extends Controller
         $deviceId = $validated['device_id'];
         $newErrorCode = $validated['error_code'];
 
-        $this->errorNotificationService->processErrorTransition($deviceId, $newErrorCode);
-
-        return response()->json(['message' => 'Notification processed.']);
+        try {
+            $this->errorNotificationService->processErrorTransition($deviceId, $newErrorCode);
+            return response()->json(['message' => 'Notification processed successfully.']);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Failed to process notification.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function notifyAutomation(Request $request)

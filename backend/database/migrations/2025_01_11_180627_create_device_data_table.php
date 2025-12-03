@@ -11,8 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('device_data', function (Blueprint $table) {
-            $table->id();
-            $table->string('device_id');
+            $table->string('device_id')->primary();
 
             $table->float('TS1')->nullable();
             $table->float('TS2')->nullable();

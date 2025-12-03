@@ -10,6 +10,10 @@ class DeviceData extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'device_id';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = [
         'device_id',
         'TS1',
