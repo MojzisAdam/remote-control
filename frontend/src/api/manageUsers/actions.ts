@@ -1,5 +1,5 @@
 import { User } from "@/api/user/model";
-import axios from "@/utils/axios";
+import axios from "@/lib/api/axios";
 import { Device } from "../devices/model";
 import { SortingState } from "@tanstack/react-table";
 

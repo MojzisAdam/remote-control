@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import { MoreInfoSheet } from "@/components/dashboard/MoreInfoSheet";
 import routes from "@/constants/routes";
 import { useSidebar } from "@/components/ui/sidebar";
-import { useDeviceContext } from "@/provider/DeviceProvider";
+import { useDeviceContext } from "@/providers/DeviceProvider";
 import { useDevices } from "@/hooks/useDevices";
 import { useToast } from "@/hooks/use-toast";
 import { Device } from "@/api/devices/model";

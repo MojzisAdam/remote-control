@@ -8,18 +8,18 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
-import DeviceNotFound from "@/components/deviceNotFound";
+import DeviceNotFound from "@/components/device-management/deviceNotFound";
 import { useDebounce } from "@/hooks/useDebounce";
-import PageHeading from "@/components/PageHeading";
+import PageHeading from "@/components/common/PageHeading";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
 import usePageTitle from "@/hooks/usePageTitle";
 import { useUserManagement } from "@/hooks/useUserManagement";
-import { useDeviceContext } from "@/provider/DeviceProvider";
+import { useDeviceContext } from "@/providers/DeviceProvider";
 import { cs, enUS } from "date-fns/locale";
 import { format } from "date-fns";
 import { isDaitsuDisplay } from "@/utils/displayTypeUtils";
-import { isCzech } from "@/utils/syncLang";
+import { isCzech } from "@/utils/langUtils";
 
 interface ParameterOption {
 	[key: string]: string;

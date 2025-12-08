@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import AuthSessionStatus from "@/components/AuthSessionStatus";
-import ButtonWithSpinner from "@/components/ButtonWithSpinner";
-import InputError from "@/components/InputError";
+import StatusMessage from "@/components/ui/StatusMessage";
+import ButtonWithSpinner from "@/components/ui/ButtonWithSpinner";
+import InputError from "@/components/ui/InputError";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -37,7 +37,7 @@ const ForgotPassword: React.FC = () => {
 					<CardDescription>{t("forgot-password.description")}</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<AuthSessionStatus
+					<StatusMessage
 						className="mb-4"
 						status={status}
 					/>

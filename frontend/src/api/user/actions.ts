@@ -1,5 +1,5 @@
 import { User, CodeData } from "./model";
-import axios from "@/utils/axios";
+import axios from "@/lib/api/axios";
 
 // Register a new user
 export const registerUser = async (userData: Partial<User>): Promise<User> => {

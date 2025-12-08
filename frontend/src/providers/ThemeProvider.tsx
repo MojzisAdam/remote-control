@@ -1,7 +1,7 @@
 "use client";
 
 import { ThemeProvider as NextThemeProvider } from "next-themes";
-import { AccentColorProvider } from "@/components/AccentColorProvider";
+import { AccentColorProvider } from "@/providers/AccentColorProvider";
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
 	return (

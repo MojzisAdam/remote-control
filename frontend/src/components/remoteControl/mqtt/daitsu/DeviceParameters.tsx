@@ -12,7 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { useTranslation } from "react-i18next";
 import parametersDataEN from "@/jsons/parameters_daitsu.json";
 import parametersDataCZ from "@/jsons/parameters_daitsu_cz.json";
-import { isCzech } from "@/utils/syncLang";
+import { isCzech } from "@/utils/langUtils";
 
 import { useDeviceParameterLogs } from "@/hooks/useDeviceParameterLogs";
 

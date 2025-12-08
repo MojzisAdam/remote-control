@@ -39,7 +39,7 @@ import { Save, Play, RotateCcw, Plus, AlertCircle, CheckCircle, Zap, GitBranch, 
 import { useAutomationFlow } from "@/hooks/useAutomationFlow";
 import { useAutomations } from "@/hooks/useAutomations";
 import { useDeviceCapabilityHelper } from "@/hooks/useDeviceCapabilityHelper";
-import { useDeviceCapabilities } from "@/provider/DeviceCapabilitiesProvider";
+import { useDeviceCapabilities } from "@/providers/DeviceCapabilitiesProvider";
 import { FlowData } from "@/api/automation/model";
 import NodeConfigurationPanel from "@/components/automation/NodeConfigurationPanel";
 

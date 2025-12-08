@@ -2,10 +2,10 @@ import React, { createContext, useContext, useState, useEffect, useRef } from "r
 import { useLocation, useNavigate } from "react-router-dom";
 import { User } from "@/api/user/model";
 import { fetchUser } from "@/api/user/actions";
-import { syncLang } from "@/utils/syncLang";
+import { syncLang } from "@/lib/i18n/sync";
 import { useToast } from "@/hooks/use-toast";
-import { registerSessionExpiredCallback } from "@/utils/errorHandler";
-import { ApiHandlerResult, handleApiRequest } from "@/utils/apiHandler";
+import { registerSessionExpiredCallback } from "@/lib/api/errorHandler";
+import { ApiHandlerResult, handleApiRequest } from "@/lib/api/apiHandler";
 
 type AuthContextType = {
 	user: User | null;

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { AppSettings, getSettings, updateSettings, resetSettings } from "@/utils/settingsStorage";
+import { AppSettings, getSettings, updateSettings, resetSettings } from "@/lib/storage/settingsStorage";
 import { Save, RotateCcw, Layout, Palette, Moon, Sun, Languages, Globe } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
@@ -14,7 +14,7 @@ import { useTheme } from "next-themes";
 import { useAccentColor } from "@/hooks/useAccentColor";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import usePageTitle from "@/hooks/usePageTitle";
-import { isCzech, isEnglish } from "@/utils/syncLang";
+import { isCzech, isEnglish } from "@/utils/langUtils";
 
 const Settings: React.FC = () => {
 	const [settings, setSettings] = useState<AppSettings>(getSettings());

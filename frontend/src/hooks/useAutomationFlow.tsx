@@ -432,7 +432,7 @@ export const useAutomationFlow = (initialAutomation?: Automation) => {
 			errors.push(t("flowValidation.atLeastOneAction"));
 		}
 
-		// Validate triggers - detailed validation matching automationUtils
+		// Validate triggers - detailed validation matching automationProcessing
 		triggerNodes.forEach((node, index) => {
 			const config = node.data.config;
 			const triggerType = node.data.trigger_type || config?.type;
@@ -464,7 +464,7 @@ export const useAutomationFlow = (initialAutomation?: Automation) => {
 			}
 		});
 
-		// Validate conditions - detailed validation matching automationUtils
+		// Validate conditions - detailed validation matching automationProcessing
 		conditionNodes.forEach((node, index) => {
 			const config = node.data.config;
 			const conditionType = node.data.condition_type || config?.type;
@@ -487,7 +487,7 @@ export const useAutomationFlow = (initialAutomation?: Automation) => {
 			// Time and day_of_week conditions have different validation requirements and are handled by their specific config checks
 		});
 
-		// Validate actions - detailed validation matching automationUtils
+		// Validate actions - detailed validation matching automationProcessing
 		actionNodes.forEach((node, index) => {
 			const config = node.data.config;
 			const actionType = node.data.action_type || config?.type;

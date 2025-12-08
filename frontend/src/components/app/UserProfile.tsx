@@ -18,7 +18,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "next-themes";
 import { useToast } from "@/hooks/use-toast";
-import { isCzech, isEnglish } from "@/utils/syncLang";
+import { isCzech, isEnglish } from "@/utils/langUtils";
 
 export function UserProfile() {
 	const { toast } = useToast();

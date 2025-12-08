@@ -3,9 +3,9 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { User } from "@/api/user/model";
-import AuthSessionStatus from "@/components/AuthSessionStatus";
-import ButtonWithSpinner from "@/components/ButtonWithSpinner";
-import InputError from "@/components/InputError";
+import StatusMessage from "@/components/ui/StatusMessage";
+import ButtonWithSpinner from "@/components/ui/ButtonWithSpinner";
+import InputError from "@/components/ui/InputError";
 import { Separator } from "@/components/ui/separator";
 import { useTranslation } from "react-i18next";
 
@@ -148,7 +148,7 @@ export function EditUserModal({ onSuccess, open, onOpenChange, data }: EditUserM
 				</DialogHeader>
 				<div>
 					{statusInf && (
-						<AuthSessionStatus
+						<StatusMessage
 							className="mb-4"
 							status={statusInf}
 						/>

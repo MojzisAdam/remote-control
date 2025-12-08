@@ -1,4 +1,4 @@
-import axios from "@/utils/axios";
+import axios from "@/lib/api/axios";
 import { Device, DeviceDescription, DeviceUser, DeviceParameterLog, DeviceType } from "@/api/devices/model";
 import { AxiosResponse } from "axios";
 import { User } from "@/api/user/model";

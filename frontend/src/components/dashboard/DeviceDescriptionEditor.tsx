@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import InputError from "@/components/InputError";
+import InputError from "@/components/ui/InputError";
 import { Pencil, X, Check, Loader2 } from "lucide-react";
 import { useDevices } from "@/hooks/useDevices";
-import AuthSessionStatus from "@/components/AuthSessionStatus";
+import StatusMessage from "@/components/ui/StatusMessage";
 import { Device, DeviceDescription } from "@/api/devices/model";
 import { InfoItem } from "@/components/dashboard/DeviceBasicInfo";
-import { DatePicker } from "@/components/DatePicker";
+import { DatePicker } from "@/components/ui/DatePicker";
 import { useTranslation } from "react-i18next";
 
 interface DeviceDescriptionEditorProps {
@@ -135,7 +135,7 @@ const DeviceDescriptionEditor: React.FC<DeviceDescriptionEditorProps> = ({ devic
 				<div className="space-y-3">
 					<div>
 						{statusInf && (
-							<AuthSessionStatus
+							<StatusMessage
 								className="mb-4"
 								status={statusInf}
 							/>

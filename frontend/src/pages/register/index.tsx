@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import ButtonWithSpinner from "@/components/ButtonWithSpinner";
-import InputError from "@/components/InputError";
+import ButtonWithSpinner from "@/components/ui/ButtonWithSpinner";
+import InputError from "@/components/ui/InputError";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useTranslation } from "react-i18next";
@@ -9,7 +9,7 @@ import { PasswordInput } from "@/components/ui/password-input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import usePageTitle from "@/hooks/usePageTitle";
-import AuthSessionStatus from "@/components/AuthSessionStatus";
+import StatusMessage from "@/components/ui/StatusMessage";
 
 export type RegisterFormData = {
 	first_name: string;
@@ -62,7 +62,7 @@ const Register: React.FC = () => {
 				<CardContent>
 					<div>
 						{status && (
-							<AuthSessionStatus
+							<StatusMessage
 								className="mb-4"
 								status={status}
 							/>

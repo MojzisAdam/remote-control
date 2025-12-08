@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { handleApiRequest, ApiHandlerResult } from "@/utils/apiHandler";
+import { handleApiRequest, ApiHandlerResult } from "@/lib/api/apiHandler";
 import {
 	fetchDeviceHistory,
 	fetchUserGraphPreferences,

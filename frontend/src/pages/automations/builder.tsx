@@ -2,11 +2,11 @@ import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import { DeviceCapabilitiesProvider, useDeviceCapabilities } from "@/provider/DeviceCapabilitiesProvider";
+import { DeviceCapabilitiesProvider, useDeviceCapabilities } from "@/providers/DeviceCapabilitiesProvider";
 import AutomationNotFound from "@/components/automation/AutomationNotFound";
 import AutomationBuilderSkeleton from "@/components/automation/AutomationBuilderSkeleton";
 import AutomationBuilderContent from "@/components/automation/AutomationBuilderContent";
-import MobileWarning from "@/components/MobileWarning";
+import MobileWarning from "@/components/common/MobileWarning";
 
 import { useAutomations } from "@/hooks/useAutomations";
 import { useDevices } from "@/hooks/useDevices";

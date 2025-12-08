@@ -5,7 +5,7 @@ import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { BarChart3 } from "lucide-react";
 import { useDeviceHistory } from "@/hooks/useDeviceHistory";
 import { useQuery } from "@tanstack/react-query";
-import ErrorBoundary from "@/components/ErrorBoundary";
+import ErrorBoundary from "@/lib/error-boundary/ErrorBoundary";
 import { useTranslation } from "react-i18next";
 import { Device } from "@/api/devices/model";
 import { getChartDisplayType } from "@/utils/displayTypeUtils";

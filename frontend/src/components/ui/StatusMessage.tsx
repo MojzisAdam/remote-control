@@ -1,15 +1,11 @@
 import React, { HTMLAttributes } from "react";
 
-interface AuthSessionStatusProps extends HTMLAttributes<HTMLDivElement> {
+interface StatusMessageProps extends HTMLAttributes<HTMLDivElement> {
 	status?: string | null;
 	className?: string;
 }
 
-const AuthSessionStatus: React.FC<AuthSessionStatusProps> = ({
-	status,
-	className = "",
-	...props
-}) => {
+const StatusMessage: React.FC<StatusMessageProps> = ({ status, className = "", ...props }) => {
 	return (
 		<>
 			{status && (
@@ -24,4 +20,4 @@ const AuthSessionStatus: React.FC<AuthSessionStatusProps> = ({
 	);
 };
 
-export default AuthSessionStatus;
+export default StatusMessage;

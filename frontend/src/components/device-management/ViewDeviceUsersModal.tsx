@@ -4,7 +4,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatDateTime } from "@/utils/utils";
 import { useDevices } from "@/hooks/useDevices";
-import AuthSessionStatus from "@/components/AuthSessionStatus";
+import StatusMessage from "@/components/ui/StatusMessage";
 import { User } from "@/api/user/model";
 import { useTranslation } from "react-i18next";
 
@@ -51,7 +51,7 @@ export function ViewDeviceUsersModal({ open, onOpenChange, deviceId }: ViewDevic
 					<DialogDescription>{t("viewUsers.description")}</DialogDescription>
 				</DialogHeader>
 				{statusInf && (
-					<AuthSessionStatus
+					<StatusMessage
 						className="mb-4"
 						status={statusInf}
 					/>

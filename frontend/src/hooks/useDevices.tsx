@@ -17,7 +17,7 @@ import {
 	updateDeviceVersions as updateDeviceVersionsApi,
 	addDeviceToUser as addDeviceToUserApi,
 } from "@/api/devices/actions";
-import { ApiHandlerResult, handleApiRequest } from "@/utils/apiHandler";
+import { ApiHandlerResult, handleApiRequest } from "@/lib/api/apiHandler";
 import { Device, DeviceDescription, DeviceStatusSummary } from "@/api/devices/model";
 
 export const useDevices = () => {

@@ -3,7 +3,7 @@
 import PageSettingsNavigation from "@/components/guest/Navigation";
 import { Outlet } from "react-router-dom";
 
-const GuestLayout: React.FC = () => {
+const ErrorLayout: React.FC = () => {
 	return (
 		<div className="min-h-screen relative antialiased bg-white dark:bg-black h-full w-full overflow-hidden">
 			<div className="w-full">
@@ -18,4 +18,4 @@ const GuestLayout: React.FC = () => {
 	);
 };
 
-export default GuestLayout;
+export default ErrorLayout;

@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import { useDevices } from "@/hooks/useDevices";
-import AuthSessionStatus from "@/components/AuthSessionStatus";
+import StatusMessage from "@/components/ui/StatusMessage";
 import { useTranslation } from "react-i18next";
 
 interface WebNotificationToggleProps {
@@ -59,7 +59,7 @@ export function WebNotificationToggle({ enabled: initialEnabled, deviceId, onCha
 			</CardContent>
 			<div className="px-4">
 				{statusInf && (
-					<AuthSessionStatus
+					<StatusMessage
 						status={statusInf}
 						className="mb-4"
 					/>

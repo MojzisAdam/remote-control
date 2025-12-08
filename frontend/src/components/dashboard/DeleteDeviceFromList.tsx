@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Loader2, Trash } from "lucide-react";
 import { useDevices } from "@/hooks/useDevices";
-import AuthSessionStatus from "@/components/AuthSessionStatus";
+import StatusMessage from "@/components/ui/StatusMessage";
 import { Label } from "@/components/ui/label";
 import { DeleteDeviceAlert } from "@/components/dashboard/DeleteDeviceAlert";
 import { useTranslation } from "react-i18next";
@@ -66,7 +66,7 @@ export function DeleteDeviceFromList({ deviceId, onDelete }: DeleteDeviceProps) 
 				</CardContent>
 				<div className="flex items-center justify-between px-4">
 					{statusInf && (
-						<AuthSessionStatus
+						<StatusMessage
 							className="mb-4"
 							status={statusInf}
 						/>

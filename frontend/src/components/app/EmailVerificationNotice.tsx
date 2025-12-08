@@ -1,11 +1,11 @@
 import { useAuth } from "@/hooks/useAuth";
-import ButtonWithSpinner from "@/components/ButtonWithSpinner";
+import ButtonWithSpinner from "@/components/ui/ButtonWithSpinner";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import AuthSessionStatus from "@/components/AuthSessionStatus";
+import StatusMessage from "@/components/ui/StatusMessage";
 import { Terminal } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import InputError from "../InputError";
+import InputError from "@/components/ui/InputError";
 
 export default function EmailVerificationNotice() {
 	const { t } = useTranslation("user");
@@ -63,7 +63,7 @@ export default function EmailVerificationNotice() {
 						<p>{t("email-verification.alert-description")}</p>
 						<div>
 							{status && (
-								<AuthSessionStatus
+								<StatusMessage
 									className="text-xs"
 									status={status}
 								/>

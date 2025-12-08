@@ -4,8 +4,8 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { User } from "@/api/user/model";
 import { useUserManagement } from "@/hooks/useUserManagement";
-import InputError from "@/components/InputError";
-import AuthSessionStatus from "@/components/AuthSessionStatus";
+import InputError from "@/components/ui/InputError";
+import StatusMessage from "@/components/ui/StatusMessage";
 import { useTranslation } from "react-i18next";
 import { PasswordInput } from "@/components/ui/password-input";
 
@@ -82,7 +82,7 @@ export function ResetUserPasswordModal({ open, onOpenChange, onSuccess, data }: 
 				</DialogHeader>
 				<div>
 					{status && (
-						<AuthSessionStatus
+						<StatusMessage
 							className="mb-4"
 							status={status}
 						/>

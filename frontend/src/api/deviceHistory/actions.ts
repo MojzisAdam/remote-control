@@ -1,4 +1,4 @@
-import axios from "@/utils/axios";
+import axios from "@/lib/api/axios";
 import { DeviceHistory, UserGraphPreference, UserCustomGraph, MonthlyTemperatureResponse } from "@/api/deviceHistory/model";
 
 /** Fetch device history data */

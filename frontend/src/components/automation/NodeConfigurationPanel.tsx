@@ -8,7 +8,7 @@ import { Settings, Zap, Filter, Target, AlertTriangle } from "lucide-react";
 import { FlowData } from "@/api/automation/model";
 import { TriggerConfiguration, ConditionConfiguration, ActionConfiguration } from "./configuration";
 import { useDeviceCapabilityHelper } from "@/hooks/useDeviceCapabilityHelper";
-import { useDeviceCapabilities } from "@/provider/DeviceCapabilitiesProvider";
+import { useDeviceCapabilities } from "@/providers/DeviceCapabilitiesProvider";
 import { useTranslation } from "react-i18next";
 
 interface NodeConfigurationPanelProps {

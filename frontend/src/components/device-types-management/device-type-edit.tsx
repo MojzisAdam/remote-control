@@ -13,7 +13,7 @@ import { useDeviceTypes } from "@/hooks/useDeviceTypes";
 import { createDeviceType } from "@/api/devices/actions";
 import { CapabilitiesEditor } from "@/components/device-types-management/capabilities-editor";
 import { MqttTopicsEditor } from "@/components/device-types-management/mqtt-topics-editor";
-import InputError from "@/components/InputError";
+import InputError from "@/components/ui/InputError";
 
 interface DeviceTypeEditProps {
 	deviceType: DeviceType | null;

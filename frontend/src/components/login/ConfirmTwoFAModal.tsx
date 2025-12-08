@@ -4,11 +4,11 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
-import InputError from "@/components/InputError";
-import ButtonWithSpinner from "@/components/ButtonWithSpinner";
+import InputError from "@/components/ui/InputError";
+import ButtonWithSpinner from "@/components/ui/ButtonWithSpinner";
 import { CodeData } from "@/api/user/model";
 import { Checkbox } from "@/components/ui/checkbox";
-import AuthSessionStatus from "../AuthSessionStatus";
+import StatusMessage from "@/components/ui/StatusMessage";
 import { useTranslation } from "react-i18next";
 
 type ConfirmTwoFAModalProps = {
@@ -68,7 +68,7 @@ export function ConfirmTwoFAModal({ onSuccess, open, onOpenChange }: ConfirmTwoF
 				</DialogHeader>
 				<div>
 					{status && (
-						<AuthSessionStatus
+						<StatusMessage
 							className=""
 							status={status}
 						/>

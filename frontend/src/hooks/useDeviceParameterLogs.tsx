@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { handleApiRequest } from "@/utils/apiHandler";
+import { handleApiRequest } from "@/lib/api/apiHandler";
 import { logParameterChange, fetchParameterLogs } from "@/api/devices/actions";
 import { DeviceParameterLog } from "@/api/devices/model";
 

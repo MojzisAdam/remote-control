@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useRef, useCallback } from "react";
 import { Device } from "@/api/devices/model";
 import { fetchDevice } from "@/api/devices/actions";
-import { handleApiRequest } from "@/utils/apiHandler";
+import { handleApiRequest } from "@/lib/api/apiHandler";
 
 interface CachedDevice {
 	device: Device;

@@ -1,4 +1,4 @@
-import axios from "@/utils/axios";
+import axios from "@/lib/api/axios";
 import { Notification, PaginatedResponse } from "@/api/notifications/model";
 import { AxiosResponse } from "axios";
 

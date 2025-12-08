@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ApiHandlerResult, handleApiRequest } from "@/utils/apiHandler";
+import { ApiHandlerResult, handleApiRequest } from "@/lib/api/apiHandler";
 import {
 	fetchUsers as fetchUsersApi,
 	deleteUser as deleteUserApi,
@@ -14,7 +14,7 @@ import {
 import { SortingState } from "@tanstack/react-table";
 import { InformationFormData } from "@/components/user-management/edit-user-modal";
 import { InformationRegisterFormData } from "@/components/user-management/create-user-modal";
-import { useAuthContext } from "@/provider/AuthContextProvider";
+import { useAuthContext } from "@/providers/AuthContextProvider";
 
 export const useUserManagement = () => {
 	const [loading, setLoading] = useState(false);

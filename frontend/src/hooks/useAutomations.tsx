@@ -11,7 +11,7 @@ import {
 	getAutomationStats,
 	getAutomationLogsStats,
 } from "@/api/automation/actions";
-import { ApiHandlerResult, handleApiRequest } from "@/utils/apiHandler";
+import { ApiHandlerResult, handleApiRequest } from "@/lib/api/apiHandler";
 import { Automation, CreateAutomationRequest, UpdateAutomationRequest, AutomationListResponse, AutomationLogsResponse } from "@/api/automation/model";
 
 export const useAutomations = () => {

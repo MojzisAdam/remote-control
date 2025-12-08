@@ -4,13 +4,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import { useUserManagement } from "@/hooks/useUserManagement";
 import EnhancedTableContainer from "@/components/history/table/EnhancedTableContainer";
-import DeviceNotFound from "@/components/deviceNotFound";
+import DeviceNotFound from "@/components/device-management/deviceNotFound";
 import { ChartLine, History } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import routes from "@/constants/routes";
-import PageHeading from "@/components/PageHeading";
+import PageHeading from "@/components/common/PageHeading";
 import usePageTitle from "@/hooks/usePageTitle";
-import { useDeviceContext } from "@/provider/DeviceProvider";
+import { useDeviceContext } from "@/providers/DeviceProvider";
 import { useTranslation } from "react-i18next";
 import withAuthorization from "@/middleware/withAuthorization";
 

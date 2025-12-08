@@ -14,7 +14,7 @@ import { useMqttLogger } from "@/hooks/useMqttLogger";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogTitle, DialogHeader, DialogDescription } from "@/components/ui/dialog";
-import ErrorBoundary from "@/components/ErrorBoundary";
+import ErrorBoundary from "@/lib/error-boundary/ErrorBoundary";
 import { useTranslation } from "react-i18next";
 import { Device } from "@/api/devices/model";
 import { ChartConstantsFactory } from "@/constants/chartConstants/factory";

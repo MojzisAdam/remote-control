@@ -7,8 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Device } from "@/api/devices/model";
 import { useDevices } from "@/hooks/useDevices";
 import { useToast } from "@/hooks/use-toast";
-import AuthSessionStatus from "@/components/AuthSessionStatus";
-import ButtonWithSpinner from "@/components/ButtonWithSpinner";
+import StatusMessage from "@/components/ui/StatusMessage";
+import ButtonWithSpinner from "@/components/ui/ButtonWithSpinner";
 import { useTranslation } from "react-i18next";
 
 interface AddDeviceModalProps {
@@ -70,7 +70,7 @@ export function AddDeviceModal({ open, onOpenChange, device }: AddDeviceModalPro
 					<DialogDescription>{t("addDevice.description", { deviceId: device.id })}</DialogDescription>
 				</DialogHeader>
 				{statusInf && (
-					<AuthSessionStatus
+					<StatusMessage
 						className=""
 						status={statusInf}
 					/>

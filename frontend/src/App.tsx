@@ -1,10 +1,10 @@
 import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { I18nextProvider } from "react-i18next";
-import { ThemeProvider } from "@/provider/ThemeProvider";
-import { AuthContextProvider } from "@/provider/AuthContextProvider";
-import { ErrorAlertProvider } from "@/provider/CsrfFailureProvider";
-import { DeviceProvider } from "@/provider/DeviceProvider";
+import { ThemeProvider } from "@/providers/ThemeProvider";
+import { AuthContextProvider } from "@/providers/AuthContextProvider";
+import { ErrorAlertProvider } from "@/providers/CsrfFailureProvider";
+import { DeviceProvider } from "@/providers/DeviceProvider";
 import { Toaster } from "@/components/ui/toaster";
 import i18next from "@/locales/i18n";
 import AppRouter from "@/AppRouter";

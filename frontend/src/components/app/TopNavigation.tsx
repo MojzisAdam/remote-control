@@ -1,4 +1,4 @@
-import { UserProfile } from "../UserProfile";
+import { UserProfile } from "@/components/app/UserProfile";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import NotificationIcon from "@/components/notifications/NotificationIcon";
 

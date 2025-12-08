@@ -1,4 +1,4 @@
-import axios from "@/utils/axios";
+import axios from "@/lib/api/axios";
 import { DeviceData } from "@/api/remoteControlApi/model";
 
 export const startSession = async (deviceId: string): Promise<string> => {

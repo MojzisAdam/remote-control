@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { startSession, checkConnection, getDeviceData, updateParameter as updateParameterAction, endSession } from "@/api/remoteControlApi/actions";
 import { DeviceData } from "@/api/remoteControlApi/model";
-import { handleApiRequest } from "@/utils/apiHandler";
+import { handleApiRequest } from "@/lib/api/apiHandler";
 
 const OFFLINE_THRESHOLD_SEC = 15;
 const INITIAL_CHECK_MAX_ITER = 20;

@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Button } from "@/components/ui/button";
 import { AlertCircle, RefreshCcw, Wifi, WifiOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { registerNetworkErrorCallback, registerCsrfFailureCallback, registerSessionExpiredCallback } from "@/utils/errorHandler";
+import { registerNetworkErrorCallback, registerCsrfFailureCallback, registerSessionExpiredCallback } from "@/lib/api/errorHandler";
 
 interface ErrorAlertContextProps {
 	showCsrfModal: boolean;

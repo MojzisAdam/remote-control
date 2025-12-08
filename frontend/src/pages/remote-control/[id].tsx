@@ -3,15 +3,15 @@ import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useUserManagement } from "@/hooks/useUserManagement";
 import { useDevices } from "@/hooks/useDevices";
-import DeviceNotFound from "@/components/deviceNotFound";
+import DeviceNotFound from "@/components/device-management/deviceNotFound";
 import RemoteControl from "@/components/remoteControl/mqtt/daitsu/RemoteControl";
 import RemoteControlMqtt from "@/components/remoteControl/mqtt/RemoteControlMqtt";
 import RemoteControlMqttRpi from "@/components/remoteControl/mqtt/RemoteControlMqttRpi";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Laptop } from "lucide-react";
-import PageHeading from "@/components/PageHeading";
+import PageHeading from "@/components/common/PageHeading";
 import usePageTitle from "@/hooks/usePageTitle";
-import { useDeviceContext } from "@/provider/DeviceProvider";
+import { useDeviceContext } from "@/providers/DeviceProvider";
 
 const RemoteControlPage: React.FC = () => {
 	const { id: deviceId } = useParams<{ id: string }>();

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useDeviceCapabilities } from "@/provider/DeviceCapabilitiesProvider";
+import { useDeviceCapabilities } from "@/providers/DeviceCapabilitiesProvider";
 
 export const useDeviceCapabilityHelper = () => {
 	const { getCapabilitiesForDeviceId, capabilities, getCapabilitiesForRole, devices } = useDeviceCapabilities();

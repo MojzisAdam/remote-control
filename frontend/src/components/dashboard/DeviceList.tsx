@@ -7,7 +7,7 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/componen
 import { List, Grid3X3, LaptopMinimal, History, CircleChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import routes from "@/constants/routes";
-import { getSetting } from "@/utils/settingsStorage";
+import { getSetting } from "@/lib/storage/settingsStorage";
 import { useAuth } from "@/hooks/useAuth";
 
 interface DeviceListProps {

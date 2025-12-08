@@ -1,5 +1,5 @@
 import i18next from "i18next";
-import { DisplayType } from "./displayTypeUtils";
+import { DisplayType } from "@/utils/displayTypeUtils";
 
 // Abstract base class for device error handling
 abstract class BaseDeviceErrors {

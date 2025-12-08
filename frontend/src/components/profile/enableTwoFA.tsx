@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { ConfirmPasswordModal } from "@/components/profile/ConfirmPasswordModal";
 import { useAuth } from "@/hooks/useAuth";
-import ButtonWithSpinner from "@/components/ButtonWithSpinner";
+import ButtonWithSpinner from "@/components/ui/ButtonWithSpinner";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import InputError from "@/components/InputError";
+import InputError from "@/components/ui/InputError";
 import { useTranslation } from "react-i18next";
 
 type EnableTwoFAProps = {

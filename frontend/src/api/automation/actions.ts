@@ -1,5 +1,5 @@
 import { Automation, CreateAutomationRequest, UpdateAutomationRequest, AutomationListResponse, AutomationLogsResponse } from "./model";
-import axios from "@/utils/axios";
+import axios from "@/lib/api/axios";
 
 // Get all automations for the authenticated user
 export const getAutomations = async (params?: { enabled?: boolean; page?: number; per_page?: number; search?: string }): Promise<AutomationListResponse> => {

@@ -6,7 +6,7 @@ import { ArrowLeftRight, Check, Eye, EyeClosed, LaptopMinimal, History, CircleCh
 import { useDevices } from "@/hooks/useDevices";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserManagement } from "@/hooks/useUserManagement";
-import AuthSessionStatus from "@/components/AuthSessionStatus";
+import StatusMessage from "@/components/ui/StatusMessage";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { getStatusColor } from "./DeviceCard";
 import { useNavigate } from "react-router-dom";
@@ -165,7 +165,7 @@ const FavouriteDevices: React.FC<FavouriteDevicesProps> = ({ moreInfo, devices }
 			</div>
 			<div className="flex justify-end">
 				{statusInf && (
-					<AuthSessionStatus
+					<StatusMessage
 						className="mb-4"
 						status={statusInf}
 					/>

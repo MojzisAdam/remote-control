@@ -6,7 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import ErrorAlert from "@/components/history/ErrorAlert";
 import DateRangeFilter from "@/components/history/DateRangeFilter";
 import NoDataMessage from "@/components/history/NoDataMessage";
-import ErrorBoundary from "@/components/ErrorBoundary";
+import ErrorBoundary from "@/lib/error-boundary/ErrorBoundary";
 import { useTranslation } from "react-i18next";
 import { Device } from "@/api/devices/model";
 import { ChartConstantsFactory } from "@/constants/chartConstants/factory";

@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Pencil, X, Check, Loader2 } from "lucide-react";
 import { useDevices } from "@/hooks/useDevices";
-import AuthSessionStatus from "@/components/AuthSessionStatus";
+import StatusMessage from "@/components/ui/StatusMessage";
 import { Device } from "@/api/devices/model";
 
 interface DeviceNameEditorProps {
@@ -97,7 +97,7 @@ const DeviceNameEditor: React.FC<DeviceNameEditorProps> = ({ device, updateDevic
 				)}
 			</div>
 			{statusInfName && (
-				<AuthSessionStatus
+				<StatusMessage
 					className="mt-0"
 					status={statusInfName}
 				/>

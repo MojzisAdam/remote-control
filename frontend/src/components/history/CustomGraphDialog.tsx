@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { MultiSelect } from "@/components/ui/multi-select";
-import ButtonWithSpinner from "@/components/ButtonWithSpinner";
+import ButtonWithSpinner from "@/components/ui/ButtonWithSpinner";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";

@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { listDeviceTypes, getDeviceType, createDeviceType, updateDeviceType, deleteDeviceType, getDevicesByType, getDeviceCapabilities } from "@/api/devices/actions";
-import { ApiHandlerResult, handleApiRequest } from "@/utils/apiHandler";
+import { ApiHandlerResult, handleApiRequest } from "@/lib/api/apiHandler";
 import { DeviceType, Device } from "@/api/devices/model";
 
 type UpdateDeviceTypePayload = {

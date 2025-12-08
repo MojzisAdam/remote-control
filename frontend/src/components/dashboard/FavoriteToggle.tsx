@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Loader2, Star } from "lucide-react";
 import { useDevices } from "@/hooks/useDevices";
-import AuthSessionStatus from "@/components/AuthSessionStatus";
+import StatusMessage from "@/components/ui/StatusMessage";
 import { useTranslation } from "react-i18next";
 
 interface FavoriteToggleProps {
@@ -63,7 +63,7 @@ export function FavoriteToggle({ isFavorite: initialFavorite, deviceId, onChange
 			</CardContent>
 			<div className="flex items-center justify-between px-4">
 				{statusInf && (
-					<AuthSessionStatus
+					<StatusMessage
 						className="mb-4"
 						status={statusInf}
 					/>

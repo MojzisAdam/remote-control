@@ -1,6 +1,6 @@
 import React from "react";
 import { Search } from "lucide-react";
-import deviceErrors from "@/utils/deviceErrors";
+import deviceErrors from "@/features/device-management/deviceErrors";
 import { HoverClickPopover } from "@/components/ui/hover-popover";
 import { DisplayType } from "@/utils/displayTypeUtils";
 

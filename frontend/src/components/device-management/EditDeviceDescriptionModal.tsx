@@ -7,10 +7,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Device, DeviceDescription } from "@/api/devices/model";
 import { format } from "date-fns";
 import { useDevices } from "@/hooks/useDevices";
-import AuthSessionStatus from "@/components/AuthSessionStatus";
-import ButtonWithSpinner from "@/components/ButtonWithSpinner";
+import StatusMessage from "@/components/ui/StatusMessage";
+import ButtonWithSpinner from "@/components/ui/ButtonWithSpinner";
 import { useTranslation } from "react-i18next";
-import { DatePicker } from "@/components/DatePicker";
+import { DatePicker } from "@/components/ui/DatePicker";
 
 interface EditDeviceDescriptionModalProps {
 	open: boolean;
@@ -94,7 +94,7 @@ export function EditDeviceDescriptionModal({ open, onOpenChange, device, onSave 
 					<DialogDescription>{t("editDevice.dialogDescription", { deviceId: device.id })}</DialogDescription>
 				</DialogHeader>
 				{statusInf && (
-					<AuthSessionStatus
+					<StatusMessage
 						className="mb-4"
 						status={statusInf}
 					/>

@@ -1,6 +1,6 @@
 import Axios from "axios";
 import Cookies from "js-cookie";
-import { handleNetworkError, handleCsrfFailure, handleSessionExpired } from "./errorHandler";
+import { handleNetworkError, handleCsrfFailure, handleSessionExpired } from "@/lib/api/errorHandler";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
 const API_RAW_BASE = import.meta.env.VITE_API_URL_BASE || "http://localhost:8000";

@@ -7,8 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Device } from "@/api/devices/model";
 import { useDevices } from "@/hooks/useDevices";
 import { useToast } from "@/hooks/use-toast";
-import AuthSessionStatus from "@/components/AuthSessionStatus";
-import ButtonWithSpinner from "@/components/ButtonWithSpinner";
+import StatusMessage from "@/components/ui/StatusMessage";
+import ButtonWithSpinner from "@/components/ui/ButtonWithSpinner";
 import { useTranslation } from "react-i18next";
 
 interface AddDeviceToUserModalProps {
@@ -87,7 +87,7 @@ export function AddDeviceToUserModal({ open, onOpenChange, device }: AddDeviceTo
 						className="space-y-6"
 					>
 						{statusInf && (
-							<AuthSessionStatus
+							<StatusMessage
 								className=""
 								status={statusInf}
 							/>

@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Languages } from "lucide-react";
-import { isCzech, isEnglish } from "@/utils/syncLang";
+import { isCzech, isEnglish } from "@/utils/langUtils";
 
 const LanguaguesSwitcher = () => {
 	const { i18n } = useTranslation("global");

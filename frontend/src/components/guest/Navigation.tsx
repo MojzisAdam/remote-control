@@ -1,5 +1,5 @@
-import ThemeSwitcher from "@/components/ThemeSwitcher";
-import LanguaguesSwitcher from "@/components/LanguaguesSwitcher";
+import ThemeSwitcher from "@/components/common/ThemeSwitcher";
+import LanguaguesSwitcher from "@/components/common/LanguaguesSwitcher";
 
 const PageSettingsNavigation: React.FC = () => {
 	return (

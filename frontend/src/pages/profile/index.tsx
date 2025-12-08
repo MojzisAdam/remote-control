@@ -3,9 +3,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
-import AuthSessionStatus from "@/components/AuthSessionStatus";
-import ButtonWithSpinner from "@/components/ButtonWithSpinner";
-import InputError from "@/components/InputError";
+import StatusMessage from "@/components/ui/StatusMessage";
+import ButtonWithSpinner from "@/components/ui/ButtonWithSpinner";
+import InputError from "@/components/ui/InputError";
 import { useAuth } from "@/hooks/useAuth";
 import { Separator } from "@/components/ui/separator";
 import TwoFactor from "@/components/profile/two-factor";
@@ -130,7 +130,7 @@ const Profile: React.FC = () => {
 							<CardContent>
 								<div>
 									{statusInf && (
-										<AuthSessionStatus
+										<StatusMessage
 											className="mb-4"
 											status={statusInf}
 										/>
@@ -218,7 +218,7 @@ const Profile: React.FC = () => {
 						<CardContent>
 							<div>
 								{passwordStatus && (
-									<AuthSessionStatus
+									<StatusMessage
 										className="mb-4"
 										status={passwordStatus}
 									/>

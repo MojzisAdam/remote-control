@@ -8,7 +8,7 @@ import {
 	markDeviceNotificationsAsSeen,
 } from "@/api/notifications/actions";
 import { Notification, PaginationInfo } from "@/api/notifications/model";
-import { ApiHandlerResult, handleApiRequest } from "@/utils/apiHandler";
+import { ApiHandlerResult, handleApiRequest } from "@/lib/api/apiHandler";
 
 export const useNotifications = () => {
 	const [loading, setLoading] = useState<boolean>(false);

@@ -3,7 +3,7 @@ import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import HttpBackend from "i18next-http-backend";
 
-import { setLanguageHeader } from "@/utils/axios";
+import { setLanguageHeader } from "@/lib/api/axios";
 
 i18next
 	.use(HttpBackend)

@@ -1,7 +1,7 @@
 "use client";
 
-import AuthSessionStatus from "@/components/AuthSessionStatus";
-import InputError from "@/components/InputError";
+import StatusMessage from "@/components/ui/StatusMessage";
+import InputError from "@/components/ui/InputError";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState } from "react";
@@ -11,7 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
-import ButtonWithSpinner from "@/components/ButtonWithSpinner";
+import ButtonWithSpinner from "@/components/ui/ButtonWithSpinner";
 import usePageTitle from "@/hooks/usePageTitle";
 import { Button } from "@/components/ui/button";
 
@@ -67,7 +67,7 @@ const PasswordReset: React.FC = () => {
 					<CardDescription>{t("password-reset.description")}</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<AuthSessionStatus
+					<StatusMessage
 						className="mb-4"
 						status={status}
 					/>

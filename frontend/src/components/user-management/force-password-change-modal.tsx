@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import InputError from "@/components/InputError";
-import AuthSessionStatus from "@/components/AuthSessionStatus";
+import InputError from "@/components/ui/InputError";
+import StatusMessage from "@/components/ui/StatusMessage";
 import { useTranslation } from "react-i18next";
 import { updateUserPassword, fetchUser } from "@/api/user/actions";
-import { useAuthContext } from "@/provider/AuthContextProvider";
+import { useAuthContext } from "@/providers/AuthContextProvider";
 import { PasswordInput } from "@/components/ui/password-input";
 
 interface ForcePasswordChangeModalProps {
@@ -97,7 +97,7 @@ export function ForcePasswordChangeModal({ open, onOpenChange, onSuccess }: Forc
 				</DialogHeader>
 				<div>
 					{status && (
-						<AuthSessionStatus
+						<StatusMessage
 							className="mb-4"
 							status={status}
 						/>

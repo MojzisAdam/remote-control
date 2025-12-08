@@ -2,9 +2,9 @@ import React, { useState, KeyboardEvent } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import AuthSessionStatus from "@/components/AuthSessionStatus";
-import ButtonWithSpinner from "@/components/ButtonWithSpinner";
-import InputError from "@/components/InputError";
+import StatusMessage from "@/components/ui/StatusMessage";
+import ButtonWithSpinner from "@/components/ui/ButtonWithSpinner";
+import InputError from "@/components/ui/InputError";
 import { Separator } from "@/components/ui/separator";
 import { useDevices } from "@/hooks/useDevices";
 import { useTranslation } from "react-i18next";
@@ -75,7 +75,7 @@ export function AddDeviceModal({ onSuccess, open, onOpenChange }: AddDeviceModal
 					<DialogDescription>{t("add-device-modal.modal-description")}</DialogDescription>
 				</DialogHeader>
 				{statusInf && (
-					<AuthSessionStatus
+					<StatusMessage
 						className="mt-2"
 						status={statusInf}
 					/>

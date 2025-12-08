@@ -1,4 +1,4 @@
-import { useAuthContext } from "@/provider/AuthContextProvider";
+import { useAuthContext } from "@/providers/AuthContextProvider";
 import {
 	registerUser,
 	loginUser,
@@ -25,7 +25,7 @@ import {
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { RegisterFormData } from "@/pages/register";
-import { ApiHandlerResult, handleApiRequest } from "@/utils/apiHandler";
+import { ApiHandlerResult, handleApiRequest } from "@/lib/api/apiHandler";
 import { CodeData } from "@/api/user/model";
 import { useTranslation } from "react-i18next";
 

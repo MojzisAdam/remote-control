@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import AuthSessionStatus from "@/components/AuthSessionStatus";
-import ButtonWithSpinner from "@/components/ButtonWithSpinner";
-import InputError from "@/components/InputError";
+import StatusMessage from "@/components/ui/StatusMessage";
+import ButtonWithSpinner from "@/components/ui/ButtonWithSpinner";
+import InputError from "@/components/ui/InputError";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useTranslation } from "react-i18next";
@@ -59,7 +59,7 @@ const Login: React.FC = () => {
 					<CardContent>
 						<div>
 							{status && (
-								<AuthSessionStatus
+								<StatusMessage
 									className="mb-4"
 									status={status}
 								/>

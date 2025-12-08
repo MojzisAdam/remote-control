@@ -3,9 +3,9 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
-import InputError from "@/components/InputError";
-import ButtonWithSpinner from "@/components/ButtonWithSpinner";
-import AuthSessionStatus from "@/components/AuthSessionStatus";
+import InputError from "@/components/ui/InputError";
+import ButtonWithSpinner from "@/components/ui/ButtonWithSpinner";
+import StatusMessage from "@/components/ui/StatusMessage";
 import { useTranslation } from "react-i18next";
 
 type ConfirmPasswordModalProps = {
@@ -55,7 +55,7 @@ export function ConfirmPasswordModal({ onSuccess, open, onOpenChange }: ConfirmP
 				</DialogHeader>
 				<div>
 					{status && (
-						<AuthSessionStatus
+						<StatusMessage
 							className="mb-4"
 							status={status}
 						/>

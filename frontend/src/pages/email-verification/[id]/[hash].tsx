@@ -1,10 +1,10 @@
-import InputError from "@/components/InputError";
+import InputError from "@/components/ui/InputError";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState, useRef } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import AuthSessionStatus from "@/components/AuthSessionStatus";
+import StatusMessage from "@/components/ui/StatusMessage";
 import { Loader2 } from "lucide-react";
 import usePageTitle from "@/hooks/usePageTitle";
 
@@ -74,7 +74,7 @@ const VerifyEmail: React.FC = () => {
 				<CardContent>
 					<div>
 						{status && (
-							<AuthSessionStatus
+							<StatusMessage
 								className="mb-4"
 								status={status}
 							/>

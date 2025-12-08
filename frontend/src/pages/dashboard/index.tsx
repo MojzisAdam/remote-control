@@ -15,8 +15,8 @@ import BottomPagination from "@/components/dashboard/BottomPagination";
 import EmptyDeviceState from "@/components/dashboard/EmptyDeviceState";
 import usePageTitle from "@/hooks/usePageTitle";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getSetting } from "@/utils/settingsStorage";
-import { useDeviceContext } from "@/provider/DeviceProvider";
+import { getSetting } from "@/lib/storage/settingsStorage";
+import { useDeviceContext } from "@/providers/DeviceProvider";
 
 const Dashboard: React.FC = () => {
 	const { t } = useTranslation("dashboard");
