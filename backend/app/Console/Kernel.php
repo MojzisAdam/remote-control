@@ -12,11 +12,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // Prune old traffic logs daily
-        $schedule->command('traffic:prune')->daily();
-
         // Clean up old update versions weekly
         $schedule->command('updates:cleanup')->weekly();
+
+        // Run daily cleanup of old log records based on retention rules.
+        $schedule->command('logs:prune')->daily();
     }
 
     /**

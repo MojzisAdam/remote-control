@@ -69,6 +69,11 @@ class CleanupOldUpdateVersions extends Command
                 ->orderByDesc('release_date')
                 ->get();
 
+            if ($versions->isEmpty()) {
+                $this->warn("  No versions found for branch {$branch->name}");
+                continue;
+            }
+
             if ($versions->count() <= $keep) {
                 $this->info("  Branch has {$versions->count()} versions, no cleanup needed (keeping {$keep})");
                 continue;
