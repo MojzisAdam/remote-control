@@ -4,18 +4,18 @@ Heat Pump Remote Control is a modern web application for remote monitoring and m
 
 ## Project Overview
 
-This system consists of two main components: a Laravel 11 backend (PHP 8.4) and a React 19 single-page frontend. The backend exposes a RESTful API for connected devices, managing data storage, authentication, and business logic. The frontend is a rich TypeScript application built with React and Vite, providing dashboards, control panels, and data visualizations for heat pump devices. The application supports multi-user access with role-based permissions, historical data logging with interactive charts, and a workflow engine for automating device behavior. Internationalization is built-in, allowing the interface to be used in multiple languages (e.g. English and Czech). In summary, Heat Pump Remote Control offers a comprehensive solution for IoT-based heat pump management, combining real-time control, analytics, and automation.
+This system consists of two main components: a Laravel 11 backend (PHP 8.2+) and a React 19 single-page frontend. The backend exposes a REST-like API for connected devices, managing data storage, authentication, and business logic. The frontend is a TypeScript application built with React and Vite, providing dashboards, control panels, and data visualizations for heat pump devices. The application supports multi-user access with role-based permissions, historical data logging with interactive charts, and configuration of automation rules that drive device behavior through the external workflow engine. Internationalization is built-in, allowing the interface to be used in multiple languages (e.g. English and Czech). In summary, Heat Pump Remote Control offers a comprehensive solution for IoT-based heat pump management, combining real-time control, analytics, and automation.
 
-## Features
+## Key Features
 
 -   **Remote Device Management**: Control heat pump parameters (temperature, modes, etc.) remotely through the web UI. The system supports multiple device types, each with appropriate controls.
--   **Real-Time Data**: Live status updates and sensor readings via MQTT for supported devices (instant feedback on online/offline status, temperatures, error codes). Devices publish and receive messages over MQTT topics for immediate control actions, with a fallback to REST API for devices that don’t support MQTT. This ensures that even without real-time connectivity, devices can be polled and controlled through standard HTTP endpoints.
+-   **Real-Time Data**: Live status updates and sensor readings via MQTT for supported devices. Devices publish and receive messages over MQTT topics for immediate control actions, with a fallback to REST API for devices that don’t support MQTT. This ensures that even without real-time connectivity, devices can be polled and controlled through standard HTTP endpoints.
 -   **Historical Data & Analytics**: All device telemetry is stored for analysis. Users can visualize historical performance data with interactive charts.
--   **User Management & RBAC**: e platform supports multiple users with granular permissions. Laravel Sanctum secures API access, and Laravel Fortify provides user authentication features (registration, two-factor, etc.). Spatie Permission is used to define roles and capabilities (e.g. admin, standard user).
--   **Notifications & Alerts**: Users receive notifications for important events, such as device errors or status changes. The system can send email alerts (powered by Laravel’s notification system and Symfony Mailer) as well as in-app (web) notifications for configured events. This helps in proactive maintenance – for example, notifying owners or technicians immediately when a fault or outage occurs in a heat pump.
--   **Automation Workflows**: Advanced automation allows users to create custom rules for their devices. Through a visual drag-and-drop workflow builder (built with React Flow), users can define triggers (time schedules, sensor thresholds, device state changes, etc.), conditions, and actions (e.g. adjust a setting, send a notification). These automations are validated in real-time on the frontend and stored via the API with all their components. An external script then fetches these automations via the RESTful API and manages their execution on connected devices.
+-   **User Management & RBAC**: The platform supports multiple users with granular permissions. Laravel Sanctum secures API access, and Laravel Fortify provides user authentication features (registration, two-factor, etc.). Spatie Permission is used to define roles and capabilities (e.g. admin, standard user).
+-   **Notifications & Alerts**: Users receive notifications for important events, such as device errors. The system can send email alerts as well as in-app (web) notifications for configured events. This helps in proactive maintenance – for example, notifying owners or technicians immediately when a fault occurs in a heat pump.
+-   **Automation Workflows**: Advanced automation allows users to create custom rules for their devices. Through a visual drag-and-drop workflow builder (built with React Flow), users can define triggers (time schedules, sensor thresholds, device state changes, etc.), conditions, and actions (e.g. adjust a setting, send a notification). These automations are validated in real-time on the frontend and stored via the API with all their components. An external script then fetches these automations via the REST API and manages their execution on connected devices.
 -   **Internationalization**: The application supports multiple languages in its user interface. The frontend uses i18next (with react-i18next) for managing translations, while the Laravel backend uses standard PHP-based localization files (e.g., mail.php returning associative arrays of translation strings). By default, English and Czech are available (with Czech as the primary locale), and additional languages can be added easily. All dates and numbers are formatted according to the active locale, leveraging libraries such as date-fns for date localization.
--   **Responsive Modern UI**: Built as a single-page application with React 19 and Tailwind CSS, the frontend provides a responsive and snappy user interface. Users can access the system from desktops, tablets, or smartphones with a consistent experience. The UI includes dashboards for at-a-glance status, detailed device control panels and real-time charts. It also supports dark mode and theme customization (via Tailwind and utility libraries).
+-   **Responsive Modern UI**: Built as a single-page application with React 19 and Tailwind CSS, the frontend provides a responsive and snappy user interface. Users can access the system from desktops, tablets, or smartphones with a consistent experience. The UI includes dashboards for at-a-glance status, detailed device control panels and charts. It also supports dark mode and theme customization (via Tailwind and utility libraries).
 -   **Reliability & Security**: The application is built on a modern stack (Laravel 11 and React), providing a robust and secure foundation. The backend leverages Laravel’s built-in security mechanisms, including protection against SQL injection, XSS, and CSRF. Authentication is managed through Laravel Sanctum, using strong password hashing algorithms and optional 2FA support. All API interactions require either an authenticated session or an access token, ensuring strict access control and maintaining the integrity of all client–server communication.
 
 ## Tech Stack
@@ -24,27 +24,27 @@ This project is split into two main components:
 
 ### Backend (Laravel)
 
-Laravel 11 (PHP 8.4) application, using Laravel Sanctum for API authentication and Laravel Fortify for user auth flows. Role-based access control is implemented via Spatie Laravel Permission. The backend uses a MySQL database by default (Laravel’s database agnosticism allows swapping to others if needed). The backend organizes its API following REST principles (controllers for devices, users, etc.) and includes migration files for database schema and seeders for initial data (like default roles or an admin user).
+Laravel 11 (PHP 8.2+) application, using Laravel Sanctum for API authentication and Laravel Fortify for user auth flows. Role-based access control is implemented via Spatie Laravel Permission. The backend uses a MySQL database by default (Laravel’s database agnosticism allows swapping to others if needed). The backend organizes its API following REST principles (controllers for devices, users, etc.) and includes migration files for database schema and seeders for initial data (like default roles or an admin user).
 
 ### Frontend (React + TypeScript)
 
-React 19 with TypeScript, built using the Vite toolchain. The UI is styled with Tailwind CSS and uses React Router (v7) for client-side routing between views. For charts and graphs, it incorporates Chart.js (with a date-fns adapter for time axes) and Recharts for complex visualizations. Real-time device updates are handled via the mqtt.js library on the frontend, which subscribes to topics for live data. The automation editor uses React Flow (v12) under the hood, enabling a node-based diagramming interface for workflows. Internationalization is supported by react-i18next, loading translation JSON files for different locales. The frontend code is written in modern React style (functional components with hooks) and is organized into features (e.g., device management, history charts, automation builder). Build and development tooling is provided by Vite for fast hot-module reloading and optimized production builds.
+React 19 with TypeScript, built using the Vite toolchain. The UI is styled with Tailwind CSS and uses React Router (v7) for client-side routing between views. For charts and graphs, it incorporates Chart.js (with a date-fns adapter for time axes) and Recharts for complex visualizations. Real-time device updates are handled via the mqtt.js library on the frontend, which subscribes to topics for live data. The automation editor uses React Flow (v12) under the hood, enabling a node-based diagramming interface for workflows. Internationalization is supported by react-i18next, loading translation JSON files for different locales. The frontend code is written in modern React style (functional components with hooks) and is organized into features (e.g., device management, history charts, automation builder).
 
 ### Communication
 
-Devices primarily communicate via MQTT for real-time telemetry and control. Each device publishes and subscribes to specific MQTT topics based on its ID and type. An external integration service, running on a VPS, is subscribed to these topics and acts as a bridge between the MQTT broker and the backend. It relays device data and executes commands through the backend’s RESTful API, ensuring a clean separation between the application logic and the messaging layer.
+The frontend, backend, and optional integration layer communicate through a REST-like API.
 
-The backend itself does not connect directly to the MQTT broker — it interacts with devices only through the REST API, typically in response to user actions from the frontend. For devices that cannot maintain a persistent MQTT connection, direct HTTP communication with the REST API is available as a fallback. This hybrid approach provides flexibility and reliable communication across various deployment environments.
+Devices that support MQTT communicate in real time directly with the frontend via the MQTT broker. All telemetry that needs to be stored is simultaneously processed by an external integration service, which subscribes to the same topics and forwards data to the backend through its REST API. Devices without native MQTT support communicate solely through the backend, which acts as a bridge for command execution and data processing.
 
 ## Getting Started
 
 ### Prerequisites
 
--   PHP 8.4+
--   Composer
+-   PHP 8.2+
+-   Composer 2.x
 -   Node.js 22+
--   npm
--   MySQL database
+-   npm 10+
+-   MySQL 8.0+ (recommended) or MariaDB 10.4+
 
 ### Installation
 
@@ -60,7 +60,7 @@ cd backend
 composer install
 
 # Copy environment file
-cp .env.example .env
+copy .env.example .env
 
 # Generate application key
 php artisan key:generate
@@ -82,7 +82,7 @@ cd frontend
 npm install
 
 # Copy environment file
-cp .env.example .env
+copy .env.example .env
 
 ```
 
@@ -176,7 +176,7 @@ Add the following secrets to your GitHub repository:
     Runs on every push to `main` or `develop`. Performs linting, testing, and builds for both backend and frontend.
 
 -   **`.github/workflows/deploy.yml`**  
-    Triggers on version tag (`v*`) or manually via workflow dispatch, but only from the `main` branch.  
+    Triggers on version tag (`v*`) or manually via workflow dispatch.  
     Handles deployment, staging, rollback, and version verification logic.
 
 ---
