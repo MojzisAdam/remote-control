@@ -1,7 +1,6 @@
 import axios from "@/lib/api/axios";
-import { Device, DeviceDescription, DeviceUser, DeviceParameterLog, DeviceType } from "@/api/devices/model";
+import { Device, DeviceDescription, DeviceUser, DeviceParameterLog, DeviceType, UserDeviceDetails } from "@/api/devices/model";
 import { AxiosResponse } from "axios";
-import { User } from "@/api/user/model";
 
 // List all devices added by the user
 export const listUserDevices = async (): Promise<Device[]> => {
@@ -16,7 +15,7 @@ export const fetchDevices = async (
 		status?: string;
 		page?: number;
 		pageSize?: number;
-	} = {}
+	} = {},
 ): Promise<Device[]> => {
 	const response = await axios.get("/manage-devices", { params: filters });
 	return response.data;
@@ -83,7 +82,7 @@ export const deleteDevice = async (deviceId: string): Promise<void> => {
 	await axios.delete(`/devices/${deviceId}`);
 };
 
-export const getDeviceUsers = async (deviceId: string): Promise<User[]> => {
+export const getDeviceUsers = async (deviceId: string): Promise<UserDeviceDetails[]> => {
 	const response = await axios.get(`/devices/${deviceId}/users`);
 	return response.data.users;
 };
@@ -99,7 +98,7 @@ export const logParameterChange = async (
 		parameter: string;
 		old_value: string;
 		new_value: string;
-	}
+	},
 ): Promise<DeviceParameterLog> => {
 	const response = await axios.post(`/device/${deviceId}/log-parameter-change`, data);
 	return response.data;
@@ -112,7 +111,7 @@ export const fetchParameterLogs = async (
 		page?: number;
 		pageSize?: number;
 		sorting?: string;
-	} = {}
+	} = {},
 ): Promise<DeviceParameterLog[]> => {
 	const response = await axios.get(`/device/${deviceId}/parameter-logs`, {
 		params: filters,
@@ -125,7 +124,7 @@ export const updateDeviceVersions = async (
 	data: {
 		fw_version: string;
 		script_version: string;
-	}
+	},
 ): Promise<void> => {
 	await axios.put(`/devices/${deviceId}/versions`, data);
 };
@@ -171,7 +170,7 @@ export const updateDeviceType = async (
 		description?: string;
 		capabilities: Record<string, any> | string[];
 		mqtt_topics?: Record<string, any>;
-	}>
+	}>,
 ): Promise<DeviceType> => {
 	const response = await axios.put(`/device-types/${id}`, data);
 	return response.data.device_type;

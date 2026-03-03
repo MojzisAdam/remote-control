@@ -199,49 +199,44 @@ class HistoryController extends Controller
             return response()->json(['error' => 'Device not found'], 404);
         }
 
+        $now = Carbon::now();
         $handler = DeviceHistoryHandlerFactory::make($device);
-        $startDate = Carbon::now()->subYear()->startOfDay();
+        $startDate = $now->copy()->subMonths(11)->startOfMonth();
+        $endDate = $now->copy()->endOfMonth();
 
-        // Get appropriate temperature columns based on device dsiplay type
+        // Get appropriate temperature columns based on device display type
         $temperatureColumns = $handler->getTemperatureColumns();
 
         if (empty($temperatureColumns)) {
             return response()->json(['error' => 'No temperature columns available for this device display type'], 400);
         }
 
-        $selectArray = [DB::raw("DATE_FORMAT(cas, '%Y-%m-01') as month_start")];
+        $selectArray = [
+            DB::raw("YEAR(cas) as year"),
+            DB::raw("MONTH(cas) as month"),
+            DB::raw("DATE_FORMAT(cas, '%M') as month_name"),
+        ];
 
         foreach ($temperatureColumns as $column) {
-            $selectArray[] = DB::raw("AVG({$column}) as avg_{$column}");
+            $selectArray[] = DB::raw("ROUND(AVG({$column}), 2) as avg_{$column}");
         }
 
-        $query = $handler->getQuery($deviceId)
+        $monthlyAverages = $handler->getQuery($deviceId)
             ->select($selectArray)
             ->where('cas', '>=', $startDate)
-            ->groupBy('month_start')
-            ->orderBy('month_start');
-
-        $monthlyAverages = $query->get();
-
-        $formattedResponse = $monthlyAverages->map(function ($item) use ($temperatureColumns) {
-            $monthName = date('F', strtotime($item->month_start));
-            $year = date('Y', strtotime($item->month_start));
-            $month = date('n', strtotime($item->month_start));
-
-            $row = ['year' => $year, 'month' => $month, 'month_name' => $monthName];
-            foreach ($temperatureColumns as $col) {
-                $avgKey = "avg_{$col}";
-                $row[$avgKey] = round($item->$avgKey, 2);
-            }
-            return $row;
-        });
+            ->where('cas', '<=', $endDate)
+            ->groupBy('year', 'month', 'month_name')
+            ->orderBy('year')
+            ->orderBy('month')
+            ->limit(12)
+            ->get();
 
         return response()->json([
-            'data' => $formattedResponse,
+            'data' => $monthlyAverages,
             'meta' => [
                 'period' => 'Past 12 months',
                 'start_date' => $startDate->format('Y-m-d'),
-                'end_date' => Carbon::now()->format('Y-m-d'),
+                'end_date' => $endDate->format('Y-m-d'),
                 'sensors' => $temperatureColumns,
                 'device_id' => $deviceId
             ]

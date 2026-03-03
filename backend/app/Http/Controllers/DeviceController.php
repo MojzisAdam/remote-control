@@ -98,7 +98,12 @@ class DeviceController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'users' => UserResource::collection($users),
+            'users' => $users->map(function ($user) {
+                return array_merge(
+                    (new UserResource($user))->toArray(request()),
+                    ['device_added_at' => $user->pivot->created_at]
+                );
+            }),
         ]);
     }
 

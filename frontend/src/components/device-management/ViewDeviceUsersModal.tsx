@@ -5,7 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { formatDateTime } from "@/utils/utils";
 import { useDevices } from "@/hooks/useDevices";
 import StatusMessage from "@/components/ui/StatusMessage";
-import { User } from "@/api/user/model";
+import { UserDeviceDetails } from "@/api/devices/model";
 import { useTranslation } from "react-i18next";
 
 interface ViewDeviceUsersModalProps {
@@ -18,7 +18,7 @@ export function ViewDeviceUsersModal({ open, onOpenChange, deviceId }: ViewDevic
 	const { t } = useTranslation("deviceManagement");
 	const { fetchDeviceUsers, loading, error } = useDevices();
 	const [statusInf, setStatusInf] = useState<string | null>(null);
-	const [users, setUsers] = useState<User[]>([]);
+	const [users, setUsers] = useState<UserDeviceDetails[]>([]);
 
 	useEffect(() => {
 		if (open) {
@@ -78,7 +78,7 @@ export function ViewDeviceUsersModal({ open, onOpenChange, deviceId }: ViewDevic
 										<TableRow key={user.id}>
 											<TableCell>{`${user.first_name} ${user.last_name}`}</TableCell>
 											<TableCell>{user.email}</TableCell>
-											<TableCell>{formatDateTime(user.created_at)}</TableCell>
+											<TableCell>{user.device_added_at ? formatDateTime(user.device_added_at) : "-"}</TableCell>
 										</TableRow>
 									))
 								) : (

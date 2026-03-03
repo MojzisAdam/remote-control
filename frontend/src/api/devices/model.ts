@@ -1,3 +1,5 @@
+import { User } from "@/api/user/model";
+
 export interface Device {
 	id: string;
 	ip: string;
@@ -59,6 +61,10 @@ export type DeviceUser = {
 	favouriteOrder: number;
 	created_at?: string;
 	updated_at?: string;
+};
+
+export type UserDeviceDetails = User & {
+	device_added_at: string | null;
 };
 
 export interface DeviceStatusSummary {

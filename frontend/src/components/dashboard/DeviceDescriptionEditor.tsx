@@ -10,6 +10,7 @@ import { Device, DeviceDescription } from "@/api/devices/model";
 import { InfoItem } from "@/components/dashboard/DeviceBasicInfo";
 import { DatePicker } from "@/components/ui/DatePicker";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "@/hooks/useAuth";
 
 interface DeviceDescriptionEditorProps {
 	device: Device;
@@ -17,6 +18,8 @@ interface DeviceDescriptionEditorProps {
 }
 
 const DeviceDescriptionEditor: React.FC<DeviceDescriptionEditorProps> = ({ device, updateDeviceSheet }) => {
+	const { hasPermission } = useAuth();
+
 	const { t } = useTranslation("dashboard");
 	const { t: global } = useTranslation("global");
 	const { editDeviceDescription, loading, error } = useDevices();
@@ -216,13 +219,17 @@ const DeviceDescriptionEditor: React.FC<DeviceDescriptionEditorProps> = ({ devic
 							</>
 						)
 					) : (
-						<Button
-							variant="ghost"
-							size="icon"
-							onClick={() => setIsEditing(true)}
-						>
-							<Pencil />
-						</Button>
+						<>
+							{hasPermission("edit-device-description") && (
+								<Button
+									variant="ghost"
+									size="icon"
+									onClick={() => setIsEditing(true)}
+								>
+									<Pencil />
+								</Button>
+							)}
+						</>
 					)}
 				</div>
 			</div>
