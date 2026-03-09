@@ -7,6 +7,7 @@ import { DashboardSideBar } from "@/components/app/SideBar";
 import DashboardTopNav from "@/components/app/TopNavigation";
 import EmailVerificationNotice from "@/components/app/EmailVerificationNotice";
 import { Outlet } from "react-router-dom";
+import NoticesBanner from "@/components/common/Notice";
 
 const AppLayout: React.FC = () => {
 	const { user } = useAuth();
@@ -18,6 +19,7 @@ const AppLayout: React.FC = () => {
 				<main className="w-full bg-white dark:bg-zinc-950 overflow-hidden">
 					<DashboardTopNav />
 					<div className="p-8 max-sm:px-4">
+						<NoticesBanner />
 						{!user?.email_verified_at && <EmailVerificationNotice />}
 						<Outlet />
 					</div>

@@ -1,0 +1,17 @@
+[
+    {
+        "id": "maintenance-2026-03",
+        "enabled": true,
+        "severity": "warning",
+        "validFrom": "2026-03-05T17:30:00",
+        "validUntil": "2026-03-07T06:00:00",
+        "title": {
+            "en": "Scheduled Maintenance",
+            "cs": "Plánovaná údržba"
+        },
+        "message": {
+            "en": "Scheduled maintenance is planned for March 5-6, 2026 (18:00-06:00 each night). Some devices may be temporarily unreachable during this period.",
+            "cs": "V období 5.-6. března 2026 (vždy od 18:00 do 06:00 následujícího dne) probíhá plánovaná údržba. Některá zařízení mohou být v tomto období dočasně nedostupná."
+        }
+    }
+]
