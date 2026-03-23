@@ -265,7 +265,7 @@
         "reg_110": "T1 - Water outlet temperature",
         "reg_111": "Tw2 - Water flow temperature in zone 2",
         "reg_112": "T2 - Refrigerant temperature",
-        "reg_113": "T2B - Cooling gas temperature",
+        "reg_113": "T2B - Gas temperature",
         "reg_114": "Ta - Ambient temperature",
         "reg_115": "T5 - DHW temperature (boiler)",
         "reg_120": "Tbt1",

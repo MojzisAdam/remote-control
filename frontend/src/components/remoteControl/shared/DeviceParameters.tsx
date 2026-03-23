@@ -136,7 +136,7 @@ export const DeviceParameters: React.FC<DeviceParametersProps> = ({ deviceId, de
 	} | null>(null);
 	const [editValue, setEditValue] = useState<string>("");
 	const [editSwitchValue, setEditSwitchValue] = useState<boolean>(false);
-	const [activeTab, setActiveTab] = useState<string>();
+	const [activeTab, setActiveTab] = useState<string>("");
 	const [pendingUpdates, setPendingUpdates] = useState<PendingUpdate[]>([]);
 	const [prevDeviceData, setPrevDeviceData] = useState<DeviceData>(deviceData);
 
@@ -296,7 +296,7 @@ export const DeviceParameters: React.FC<DeviceParametersProps> = ({ deviceId, de
 
 					return update;
 				})
-				.filter((update) => !update.remove)
+				.filter((update) => !update.remove),
 		);
 
 		setPrevDeviceData(deviceData);

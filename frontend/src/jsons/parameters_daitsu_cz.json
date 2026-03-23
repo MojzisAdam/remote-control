@@ -102,8 +102,8 @@
     "user_access": true,
     "description": "Nastavení funkcí",
     "bits": {
-      "13": { "description": "Platná křivka vytápění/chlazení (zóna 2)", "options": { "0": "Neplatná", "1": "Platná" }},
-      "12": { "description": "Platná křivka vytápění/chlazení (zóna 1)", "options": { "0": "Neplatná", "1": "Platná" }},
+      "13": { "description": "Platná křivka vytápění/chlazení (zóna 2)", "options": { "0": "Neaktivní", "1": "Aktivní" }},
+      "12": { "description": "Platná křivka vytápění/chlazení (zóna 1)", "options": { "0": "Neaktivní", "1": "Aktivní" }},
       "11": { "description": "Trvalý chod recirkulačního čerpadla TUV", "options": { "0": "Vypnuto", "1": "Zapnuto" }},
       "10": { "description": "ECO režim", "options": { "0": "Zakázáno", "1": "Povoleno" }},
       "8":  { "description": "Rekreační dům", "options": { "0": "Normální", "1": "Rekreace" }},

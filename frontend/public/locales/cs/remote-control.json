@@ -265,7 +265,7 @@
         "reg_110": "T1 - Teplota výstupu vody",
         "reg_111": "Tw2 - Teplota průtoku vody v zóně 2",
         "reg_112": "T2 - Teplota chladiva",
-        "reg_113": "T2B - Tepleta chladícího plynu",
+        "reg_113": "T2B - Teplota plynu",
         "reg_114": "Ta - Teplota prostoru",
         "reg_115": "T5 - Teplota TUV (bojler)",
         "reg_120": "Tbt1",

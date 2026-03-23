@@ -2,6 +2,7 @@ import React from "react";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Thermometer } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { getLowerByte, getUpperByte } from "@/utils/utils";
 
 interface TemperatureDisplayProps {
 	data: {
@@ -88,18 +89,18 @@ const TemperatureDisplay: React.FC<TemperatureDisplayProps> = ({ data }) => {
 
 	const getDesiredTempSensorOne = (curve: number | undefined, setpoint: number | undefined, zone: number): number | undefined => {
 		if (zone === 1) {
-			// T1s_z1 logic: use reg_136 if not 255, otherwise use upper 8 bits of reg_2
+			// T1s_z1 logic: use reg_136 if not 255, otherwise use lower 8 bits of reg_2
 			if (setpoint !== undefined && setpoint !== 255) {
 				return setpoint;
 			} else if (curve !== undefined) {
-				return (curve >> 8) & 0xff;
+				return getLowerByte(curve);
 			}
 		} else if (zone === 2) {
-			// T1s_z2 logic: use reg_137 if not 255, otherwise use lower 8 bits of reg_2
+			// T1s_z2 logic: use reg_137 if not 255, otherwise use upper 8 bits of reg_2
 			if (setpoint !== undefined && setpoint !== 255) {
 				return setpoint;
 			} else if (curve !== undefined) {
-				return curve & 0xff;
+				return getUpperByte(curve);
 			}
 		}
 		return undefined;

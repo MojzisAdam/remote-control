@@ -18,8 +18,8 @@ class DynamicDataTransformationResourceDaitsu extends JsonResource
         $filteredData = ['cas' => $this->cas];
 
         $transformations = [
-            'T1s_z1' => fn() => ($this->reg_136 != 255) ? $this->reg_136 : (($this->reg_2 >> 8) & 0xFF),
-            'T1s_z2' => fn() => ($this->reg_137 != 255) ? $this->reg_137 : ($this->reg_2 & 0xFF),
+            'T1s_z1' => fn() => ($this->reg_136 != 255) ? $this->reg_136 : ($this->reg_2 & 0xFF),
+            'T1s_z2' => fn() => ($this->reg_137 != 255) ? $this->reg_137 : (($this->reg_2 >> 8) & 0xFF),
             'reg_4' => fn() => $this->reg_4,
             'reg_100' => fn() => $this->reg_100,
             'reg_101' => fn() => $this->transformVjedn($this->reg_101),

@@ -119,8 +119,8 @@ const parameterGroups = {
 	commonRegulatorParameters: [
 		215, 216, 217, 221, 222, 223, 224, 225, 228, 229, 230, 235, 238, 240, 241, 242, 245, 246, 247, 248, 249, 250, 251, 252, 254, 255, 256, 257, 258, 259, 260, 269, 270, 271,
 	],
-	heatingCircuitParameters: [2, 6, 201, 202, 203, 204, 205, 206, 218, 220, 261, 262, 263, 264, 265, 266, 267, 268],
-	domesticHotWaterParameters: [4, 207, 208, 212, 213, 214, 219, 226, 227, 231, 232, 233, 234, 237, 243, 244],
+	heatingCircuitParameters: ["0_bit_0", "0_bit_1", "0_bit_3", "5_bit_12", "5_bit_13", 2, 6, 201, 202, 203, 204, 205, 206, 218, 220, 261, 262, 263, 264, 265, 266, 267, 268],
+	domesticHotWaterParameters: ["0_bit_2", 4, "5_bit_4", 207, 208, 212, 213, 214, 219, 226, 227, 231, 232, 233, 234, 237, 243, 244],
 	bivalentSourceParameters: [],
 	photovoltaicParameters: [],
 	roomThermostatParameters: [3],
@@ -172,7 +172,7 @@ export const DeviceParameters: React.FC<DeviceParametersProps> = ({ deviceId, de
 	const [editValue, setEditValue] = useState<string>("");
 	const [editSwitchValue, setEditSwitchValue] = useState<boolean>(false);
 	const [editBitfieldValue, setEditBitfieldValue] = useState<number>(0);
-	const [activeTab, setActiveTab] = useState<string>();
+	const [activeTab, setActiveTab] = useState<string>("");
 	const [pendingUpdates, setPendingUpdates] = useState<PendingUpdate[]>([]);
 	const [prevDeviceData, setPrevDeviceData] = useState<DeviceData>(deviceData);
 
@@ -246,9 +246,13 @@ export const DeviceParameters: React.FC<DeviceParametersProps> = ({ deviceId, de
 							Object.entries(param.bits).forEach(([bitNumber, bitConfig]) => {
 								const bitNum = parseInt(bitNumber);
 								const isSet = getBitValue(numericValue || 0, bitNum);
+								const subKey = `${register}_bit_${bitNumber}`;
 
-								addParameterToGroup(groupName, {
-									key: `${key}_bit_${bitNumber}`,
+								const subGroupEntry = Object.entries(parameterGroups).find(([, registers]) => registers.some((reg) => typeof reg === "string" && reg === subKey));
+								const targetGroupName = subGroupEntry ? subGroupEntry[0] : groupName;
+
+								addParameterToGroup(targetGroupName, {
+									key: subKey,
 									param: {
 										...param,
 										type: "switch",
@@ -266,9 +270,13 @@ export const DeviceParameters: React.FC<DeviceParametersProps> = ({ deviceId, de
 						if (param.ranges) {
 							Object.entries(param.ranges).forEach(([rangeName, rangeConfig]) => {
 								const currentRangeValue = getRangeValue(numericValue || 0, rangeConfig.start_bit, rangeConfig.end_bit);
+								const subKey = `${register}_range_${rangeName}`;
 
-								addParameterToGroup(groupName, {
-									key: `${key}_range_${rangeName}`,
+								const subGroupEntry = Object.entries(parameterGroups).find(([, registers]) => registers.some((reg) => typeof reg === "string" && reg === subKey));
+								const targetGroupName = subGroupEntry ? subGroupEntry[0] : groupName;
+
+								addParameterToGroup(targetGroupName, {
+									key: subKey,
 									param: {
 										...param,
 										type: "int",
@@ -377,7 +385,7 @@ export const DeviceParameters: React.FC<DeviceParametersProps> = ({ deviceId, de
 						return update;
 					}
 				})
-				.filter((update) => !update.remove)
+				.filter((update) => !update.remove),
 		);
 
 		setPrevDeviceData(deviceData);
@@ -573,7 +581,7 @@ export const DeviceParameters: React.FC<DeviceParametersProps> = ({ deviceId, de
 				}
 				// For regular parameters, match by register
 				return update.register === register && !update.parameterKey ? { ...update, error: false, timestamp: Date.now() } : update;
-			})
+			}),
 		);
 
 		onUpdateParameter(register, newValue);
@@ -730,7 +738,7 @@ export const DeviceParameters: React.FC<DeviceParametersProps> = ({ deviceId, de
 																					currentBitfieldValue,
 																					item.rangeConfig.start_bit,
 																					item.rangeConfig.end_bit,
-																					pendingUpdate.newValue
+																					pendingUpdate.newValue,
 																				);
 																			}
 
