@@ -132,5 +132,6 @@ return [
         'history' => env('API_TOKEN_2', 'default_history_token'),
         'device' => env('API_TOKEN_3', 'default_device_token'),
         'automation_runner' => env('API_TOKEN_AUTOMATION_RUNNER', 'default_automation_runner_token'),
+        'log_prune' => env('LOG_PRUNE_API_KEY', 'default_log_prune_token'),
     ],
 ];

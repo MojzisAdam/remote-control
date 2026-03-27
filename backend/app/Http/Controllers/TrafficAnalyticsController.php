@@ -4,10 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\TrafficLog;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Helpers\LogRetentionHelper;
+use App\Traits\BatchDeletes;
 
 class TrafficAnalyticsController extends Controller
 {
+    use BatchDeletes;
+
     /**
      * Display the traffic analytics dashboard
      */
@@ -139,31 +144,42 @@ class TrafficAnalyticsController extends Controller
     public function deleteOldLogs(Request $request)
     {
         $request->validate([
-            'period' => 'required|in:week,month,3months,6months,year',
+            'period' => ['required', 'in:' . implode(',', LogRetentionHelper::VALID_PERIODS)],
         ]);
 
-        $period = $request->get('period');
-        $deletedCount = 0;
+        $cutoffDate = LogRetentionHelper::cutoffDate($request->input('period'));
+
+        $pendingCount = DB::table('traffic_logs')
+            ->where('created_at', '<', $cutoffDate)
+            ->count();
+
+        if ($pendingCount === 0) {
+            return response()->json([
+                'success' => true,
+                'message' => 'No log entries found older than the cutoff date.',
+                'deleted_count' => 0,
+                'cutoff_date' => $cutoffDate->toDateTimeString(),
+            ]);
+        }
+
+        // Disable PHP's execution time limit for this request
+        set_time_limit(0);
 
         try {
-            // Calculate the cutoff date based on the period
-            $cutoffDate = match ($period) {
-                'week' => now()->subWeek(),
-                'month' => now()->subMonth(),
-                '3months' => now()->subMonths(3),
-                '6months' => now()->subMonths(6),
-                'year' => now()->subYear(),
-            };
-
-            // Delete logs older than the cutoff date
-            $deletedCount = TrafficLog::where('created_at', '<', $cutoffDate)->delete();
+            $deletedCount = $this->batchDelete(
+                table: 'traffic_logs',
+                dateColumn: 'created_at',
+                cutoff: $cutoffDate,
+                cursorColumn: 'id',
+            );
 
             return response()->json([
                 'success' => true,
-                'message' => "Successfully deleted {$deletedCount} log entries older than " . $cutoffDate->format('Y-m-d H:i:s'),
+                'message' => "Successfully deleted {$deletedCount} log entries older than {$cutoffDate->toDateTimeString()}.",
                 'deleted_count' => $deletedCount,
-                'cutoff_date' => $cutoffDate->format('Y-m-d H:i:s'),
+                'cutoff_date' => $cutoffDate->toDateTimeString(),
             ]);
+
         } catch (\Exception $e) {
             \Log::error('Error deleting traffic logs: ' . $e->getMessage());
 
@@ -179,30 +195,41 @@ class TrafficAnalyticsController extends Controller
      */
     public function getLogStats(Request $request)
     {
-        $totalLogs = TrafficLog::count();
-        $logsLastWeek = TrafficLog::where('created_at', '>=', now()->subWeek())->count();
-        $logsLastMonth = TrafficLog::where('created_at', '>=', now()->subMonth())->count();
-        $logsLast3Months = TrafficLog::where('created_at', '>=', now()->subMonths(3))->count();
-        $logsLast6Months = TrafficLog::where('created_at', '>=', now()->subMonths(6))->count();
-        $logsLastYear = TrafficLog::where('created_at', '>=', now()->subYear())->count();
+        $now = now();
 
-        $oldestLog = TrafficLog::oldest()->first();
-        $newestLog = TrafficLog::latest()->first();
+        $stats = \DB::table('traffic_logs')
+            ->selectRaw('COUNT(*) as total')
+            ->selectRaw('SUM(created_at >= ?) as last_week', [$now->copy()->subWeek()])
+            ->selectRaw('SUM(created_at >= ?) as last_month', [$now->copy()->subMonth()])
+            ->selectRaw('SUM(created_at >= ?) as last_3_months', [$now->copy()->subMonths(3)])
+            ->selectRaw('SUM(created_at >= ?) as last_6_months', [$now->copy()->subMonths(6)])
+            ->selectRaw('SUM(created_at >= ?) as last_year', [$now->copy()->subYear()])
+            ->selectRaw('MIN(created_at) as oldest_log_date')
+            ->selectRaw('MAX(created_at) as newest_log_date')
+            ->first();
 
         return response()->json([
-            'total_logs' => $totalLogs,
-            'logs_last_week' => $logsLastWeek,
-            'logs_last_month' => $logsLastMonth,
-            'logs_last_3_months' => $logsLast3Months,
-            'logs_last_6_months' => $logsLast6Months,
-            'logs_last_year' => $logsLastYear,
-            'oldest_log_date' => $oldestLog ? $oldestLog->created_at->format('Y-m-d H:i:s') : null,
-            'newest_log_date' => $newestLog ? $newestLog->created_at->format('Y-m-d H:i:s') : null,
-            'logs_older_than_week' => $totalLogs - $logsLastWeek,
-            'logs_older_than_month' => $totalLogs - $logsLastMonth,
-            'logs_older_than_3_months' => $totalLogs - $logsLast3Months,
-            'logs_older_than_6_months' => $totalLogs - $logsLast6Months,
-            'logs_older_than_year' => $totalLogs - $logsLastYear,
+            'total_logs' => (int) $stats->total,
+
+            'logs_last_week' => (int) $stats->last_week,
+            'logs_last_month' => (int) $stats->last_month,
+            'logs_last_3_months' => (int) $stats->last_3_months,
+            'logs_last_6_months' => (int) $stats->last_6_months,
+            'logs_last_year' => (int) $stats->last_year,
+
+            'oldest_log_date' => $stats->oldest_log_date
+                ? Carbon::parse($stats->oldest_log_date)->format('Y-m-d H:i:s')
+                : null,
+
+            'newest_log_date' => $stats->newest_log_date
+                ? Carbon::parse($stats->newest_log_date)->format('Y-m-d H:i:s')
+                : null,
+
+            'logs_older_than_week' => max(0, $stats->total - $stats->last_week),
+            'logs_older_than_month' => max(0, $stats->total - $stats->last_month),
+            'logs_older_than_3_months' => max(0, $stats->total - $stats->last_3_months),
+            'logs_older_than_6_months' => max(0, $stats->total - $stats->last_6_months),
+            'logs_older_than_year' => max(0, $stats->total - $stats->last_year),
         ]);
     }
 }

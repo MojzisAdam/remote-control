@@ -67,6 +67,12 @@ class AppServiceProvider extends ServiceProvider
             return Limit::perMinute(600)->by($identifier);
         });
 
+        // Log pruning
+        RateLimiter::for('log-prune', function (Request $request) {
+            $identifier = $request->header('X-API-Key', 'log-prune');
+            return Limit::perMinute(1)->perHour(2)->by($identifier);
+        });
+
         // Notifications - moderate limit
         RateLimiter::for('notifications', function (Request $request) {
             return Limit::perMinute(50)->by($request->user()->id);

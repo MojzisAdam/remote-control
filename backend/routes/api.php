@@ -12,6 +12,7 @@ use App\Http\Controllers\RpiController;
 use App\Http\Controllers\AutomationController;
 use App\Http\Controllers\AutomationRunnerController;
 use App\Http\Controllers\DeviceTypeController;
+use App\Http\Controllers\LogPruneController;
 
 
 Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
@@ -120,6 +121,7 @@ Route::middleware(['auth:sanctum', 'throttle:admin', 'permission:manage-users'])
 Route::post('/devices', [DeviceController::class, 'updateOrCreateDevice'])->middleware(['api_key:device', 'throttle:external-api']);
 Route::post('/device-history', [HistoryController::class, 'insertHistory'])->middleware(['api_key:history', 'throttle:external-api']);
 Route::post('/device/notify', [NotificationController::class, 'notifyDeviceError'])->middleware(['api_key:notify', 'throttle:external-api']);
+Route::post('/logs/prune', LogPruneController::class)->middleware(['api_key:log_prune', 'throttle:log-prune']);
 
 // Automation runner routes
 Route::middleware(['api_key:automation_runner', 'throttle:automation-runner'])->group(function () {
