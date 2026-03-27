@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Device;
 use App\Models\DeviceDescription;
-use App\Models\DeviceParameterChange;
+use App\Services\ErrorNotificationService;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -23,6 +23,13 @@ use Exception;
 
 class DeviceController extends Controller
 {
+    protected $errorNotificationService;
+
+    public function __construct(ErrorNotificationService $errorNotificationService)
+    {
+        $this->errorNotificationService = $errorNotificationService;
+    }
+
     /**
      * List all devices added by the authenticated user.
      */
@@ -359,7 +366,7 @@ class DeviceController extends Controller
         ]);
 
         try {
-            return DB::transaction(function () use ($validated) {
+            [$device, $wasCreated, $oldErrorCode] = DB::transaction(function () use ($validated) {
                 $updateData = [
                     'display_type' => $validated['display_type'],
                     'device_type_id' => $validated['device_type_id'] ?? null,
@@ -371,10 +378,22 @@ class DeviceController extends Controller
                 ];
 
                 $device = Device::where('id', $validated['id'])->first();
+                $oldErrorCode = (int) ($device?->error_code ?? 0);
 
                 if (!empty($validated['password'])) {
-                    if (!$device || !Hash::check($validated['password'], $device->password)) {
-                        $updateData['password'] = Hash::make($validated['password']);
+
+                    $needsHash = true;
+
+                    if ($device && $device->password) {
+                        try {
+                            $needsHash = !Hash::check($validated['password'], $device->password);
+                        } catch (\Exception $e) {
+                            $needsHash = true;
+                        }
+                    }
+
+                    if ($needsHash) {
+                        $updateData['password'] = Hash::make($validated['password'], ['rounds' => 8]);
                     }
                 }
 
@@ -397,10 +416,14 @@ class DeviceController extends Controller
                     $wasCreated = true;
                 }
 
-                return response()->json([
-                    'status' => 'success',
-                ], $wasCreated ? 201 : 200);
+                return [$device, $wasCreated, $oldErrorCode];
             });
+
+            $newErrorCode = (int) ($validated['error_code'] ?? 0);
+            $this->errorNotificationService->notifyOnErrorCodeChange($device->id, $oldErrorCode, $newErrorCode);
+
+            return response()->json(['status' => 'success'], $wasCreated ? 201 : 200);
+
         } catch (\Exception $e) {
             Log::error('Device update failed: ' . $e->getMessage());
 

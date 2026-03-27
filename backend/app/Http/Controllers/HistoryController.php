@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Resources\UserGraphPreferenceResource;
 use App\Services\DeviceHistory\DeviceHistoryHandlerFactory;
 use App\Services\DeviceHistory\DeviceHistoryResourceFactory;
+use Illuminate\Support\Facades\Cache;
 
 class HistoryController extends Controller
 {
@@ -193,23 +194,56 @@ class HistoryController extends Controller
 
     public function getMonthlyAverageTemperatures(Request $request, $deviceId)
     {
-        $device = Device::find($deviceId);
+        $device = Device::findOrFail($deviceId);
+        $handler = DeviceHistoryHandlerFactory::make($device);
 
-        if (!$device) {
-            return response()->json(['error' => 'Device not found'], 404);
+        $temperatureColumns = $handler->getTemperatureColumns();
+        if (empty($temperatureColumns)) {
+            return response()->json([
+                'error' => 'No temperature columns available for this device display type'
+            ], 400);
         }
 
         $now = Carbon::now();
-        $handler = DeviceHistoryHandlerFactory::make($device);
-        $startDate = $now->copy()->subMonths(11)->startOfMonth();
-        $endDate = $now->copy()->endOfMonth();
+        $results = collect();
 
-        // Get appropriate temperature columns based on device display type
-        $temperatureColumns = $handler->getTemperatureColumns();
+        // Build 12 months: 11 completed + current
+        for ($i = 11; $i >= 0; $i--) {
+            $month = $now->copy()->subMonths($i);
+            $isCurrentMonth = $i === 0;
 
-        if (empty($temperatureColumns)) {
-            return response()->json(['error' => 'No temperature columns available for this device display type'], 400);
+            $cacheKey = "monthly_avg_{$deviceId}_{$month->format('Y_m')}";
+
+            $ttl = $isCurrentMonth ? now()->addHour() : now()->addYear();
+
+            $monthData = Cache::remember($cacheKey, $ttl, fn() => $this->computeMonthAverage(
+                $handler,
+                $deviceId,
+                $month,
+                $temperatureColumns
+            ));
+
+            if ($monthData) {
+                $results->push($monthData);
+            }
         }
+
+        return response()->json([
+            'data' => $results,
+            'meta' => [
+                'period' => 'Past 12 months',
+                'start_date' => $now->copy()->subMonths(11)->startOfMonth()->format('Y-m-d'),
+                'end_date' => $now->copy()->endOfMonth()->format('Y-m-d'),
+                'sensors' => $temperatureColumns,
+                'device_id' => $deviceId,
+            ]
+        ]);
+    }
+
+    private function computeMonthAverage($handler, $deviceId, Carbon $month, array $temperatureColumns): ?array
+    {
+        $startOfMonth = $month->copy()->startOfMonth();
+        $endOfMonth = $month->copy()->endOfMonth();
 
         $selectArray = [
             DB::raw("YEAR(cas) as year"),
@@ -221,26 +255,14 @@ class HistoryController extends Controller
             $selectArray[] = DB::raw("ROUND(AVG({$column}), 2) as avg_{$column}");
         }
 
-        $monthlyAverages = $handler->getQuery($deviceId)
+        $result = $handler->getQuery($deviceId)
             ->select($selectArray)
-            ->where('cas', '>=', $startDate)
-            ->where('cas', '<=', $endDate)
+            ->where('cas', '>=', $startOfMonth)
+            ->where('cas', '<=', $endOfMonth)
             ->groupBy('year', 'month', 'month_name')
-            ->orderBy('year')
-            ->orderBy('month')
-            ->limit(12)
-            ->get();
+            ->first();
 
-        return response()->json([
-            'data' => $monthlyAverages,
-            'meta' => [
-                'period' => 'Past 12 months',
-                'start_date' => $startDate->format('Y-m-d'),
-                'end_date' => $endDate->format('Y-m-d'),
-                'sensors' => $temperatureColumns,
-                'device_id' => $deviceId
-            ]
-        ]);
+        return $result ? $result->toArray() : null;
     }
 
     public function paginated(Request $request, $deviceId)

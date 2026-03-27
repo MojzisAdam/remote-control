@@ -14,7 +14,8 @@
     </style>
 </head>
 
-<body style="margin:0; padding:0; background-color:#edf2f7;">
+<body
+    style="margin:0; padding:0; background-color:#edf2f7; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
     <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#edf2f7;">
         <tr>
             <td align="center" style="padding: 40px 0;">
@@ -30,7 +31,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="padding:40px; font-family: sans-serif; color:#718096;">
+                        <td style="padding:40px; color:#718096;">
                             <h1
                                 style="color:#3d4852; font-size:18px; font-weight:bold; margin:0 0 20px 0; text-align:left;">
                                 {{ __('mail.new_error_occurred.heading', ['device' => $deviceId]) }}
@@ -48,7 +49,7 @@
                                 <tr>
                                     <td align="center" bgcolor="#2d3748" style="border-radius:6px;">
                                         <a href="{{ $dashboardUrl }}"
-                                            style="display:block; padding:12px 22px; color:#ffffff; text-decoration:none; font-family: sans-serif; font-size:16px;">
+                                            style="display:block; padding:12px 22px; color:#ffffff; text-decoration:none; font-size:16px;">
                                             {{ __('mail.new_error_occurred.button_text') }}
                                         </a>
                                     </td>
@@ -58,7 +59,7 @@
                     </tr>
                     <tr>
                         <td align="center"
-                            style="padding:20px; border-top:1px solid #e8e5ef; font-family: sans-serif; font-size:12px; color:#b0adc5;">
+                            style="padding:20px; border-top:1px solid #e8e5ef; font-size:12px; color:#b0adc5;">
                             {{ __('mail.footer') }}
                         </td>
                     </tr>

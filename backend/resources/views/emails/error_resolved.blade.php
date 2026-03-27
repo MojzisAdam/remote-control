@@ -14,7 +14,8 @@
     </style>
 </head>
 
-<body style="margin:0; padding:0; background-color:#edf2f7;">
+<body
+    style="margin:0; padding:0; background-color:#edf2f7; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
     <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#edf2f7;">
         <tr>
             <td align="center" style="padding:40px 0;">
@@ -30,8 +31,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td
-                            style="padding:40px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color:#718096;">
+                        <td style="padding:40px; color:#718096;">
                             <h1
                                 style="color:#3d4852; font-size:20px; font-weight:bold; margin:0 0 20px 0; text-align:left;">
                                 {{ __('mail.error_resolved.heading', ['device' => $deviceId]) }}

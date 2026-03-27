@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\NewErrorOccurredMail;
 use App\Mail\ErrorResolvedMail;
 use App\Models\Device;
+use Illuminate\Support\Facades\DB;
 
 class ErrorNotificationService
 {
@@ -16,32 +17,44 @@ class ErrorNotificationService
     {
         $newErrorCode = (int) $newErrorCode;
 
-        $device = Device::findOrFail($deviceId);
-        $lastErrorCode = (int) ($device->error_code ?? 0);
+        DB::transaction(function () use ($deviceId, $newErrorCode) {
+            $device = Device::lockForUpdate()->findOrFail($deviceId);
+            $lastErrorCode = (int) ($device->error_code ?? 0);
 
+            $this->dispatchErrorNotifications($deviceId, $lastErrorCode, $newErrorCode);
+
+            $device->error_code = $newErrorCode;
+            $device->save();
+        });
+    }
+
+    // Called when the caller already owns the error_code update (e.g. updateOrCreateDevice)
+    public function notifyOnErrorCodeChange($deviceId, int $oldErrorCode, int $newErrorCode): void
+    {
+        $this->dispatchErrorNotifications($deviceId, $oldErrorCode, $newErrorCode);
+    }
+
+    private function dispatchErrorNotifications($deviceId, int $lastErrorCode, int $newErrorCode): void
+    {
         if ($newErrorCode === $lastErrorCode) {
             return;
         }
 
+        if ($newErrorCode > 0) {
+            $this->createErrorNotification($deviceId, $newErrorCode, NotificationType::ERROR_OCCURRED);
+        } elseif ($newErrorCode === 0 && $lastErrorCode > 0) {
+            $this->createErrorResolvedNotification($deviceId, NotificationType::ERROR_RESOLVED);
+        }
+
         if ($lastErrorCode === 0 && $newErrorCode > 0) {
             $this->sendNewErrorEmail($deviceId, $newErrorCode);
-        } elseif ($lastErrorCode > 0 && $newErrorCode > 0 && $lastErrorCode !== $newErrorCode) {
+        } elseif ($lastErrorCode > 0 && $newErrorCode > 0) {
             $this->sendNewErrorEmail($deviceId, $newErrorCode);
         } elseif ($lastErrorCode > 0 && $newErrorCode === 0) {
             $this->sendErrorResolvedEmail($deviceId);
         }
-
-        $device->error_code = $newErrorCode;
-        $device->save();
-
-        if ($newErrorCode > 0 && $newErrorCode != $lastErrorCode) {
-            $this->createErrorNotification($deviceId, $newErrorCode, NotificationType::ERROR_OCCURRED);
-        }
-
-        if ($newErrorCode === 0 && $lastErrorCode > 0) {
-            $this->createErrorResolvedNotification($deviceId, NotificationType::ERROR_RESOLVED);
-        }
     }
+
     private function createErrorNotification($deviceId, $errorCode, $notificationTypeId)
     {
         // Create the base notification first
