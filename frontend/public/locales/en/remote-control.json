@@ -61,7 +61,8 @@
     },
     "blocked": {
       "thermostat": "Blocked: by thermostat",
-      "hdo": "Blocked: by HDO"
+      "hdo": "Blocked: by HDO",
+      "thermostatAndHdo": "Blocked: by thermostat and HDO"
     },
     "temperatureFallback": "---"
   },

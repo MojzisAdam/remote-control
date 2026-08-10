@@ -78,11 +78,14 @@ const HomePage: React.FC<HomePageProps> = ({ deviceData }) => {
 	} else {
 		stateBarParts.push(t("home.season.summer"));
 	}
-	if (deviceData.reg_739 === 1) {
-		stateBarParts.push(t("home.blocked.thermostat"));
-	}
-	if (deviceData.reg_740 === 1) {
-		stateBarParts.push(t("home.blocked.hdo"));
+	if (deviceData.reg_739 === 1 && deviceData.reg_740 === 1) {
+		stateBarParts.push(t("home.blocked.thermostatAndHdo"));
+	} else {
+		if (deviceData.reg_739 === 1) {
+			stateBarParts.push(t("home.blocked.thermostat"));
+		} else if (deviceData.reg_740 === 1) {
+			stateBarParts.push(t("home.blocked.hdo"));
+		}
 	}
 
 	const stateBar = stateBarParts.join(", ");

@@ -209,7 +209,7 @@ class HistoryController extends Controller
 
         // Build 12 months: 11 completed + current
         for ($i = 11; $i >= 0; $i--) {
-            $month = $now->copy()->subMonths($i);
+            $month = $now->copy()->startOfMonth()->subMonths($i);
             $isCurrentMonth = $i === 0;
 
             $cacheKey = "monthly_avg_{$deviceId}_{$month->format('Y_m')}";

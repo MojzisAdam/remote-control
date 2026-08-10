@@ -15,11 +15,11 @@ const HomePage: React.FC<HomePageProps> = ({ deviceData }) => {
 	const stateBarParts: string[] = [];
 
 	if (getBit(deviceData.reg_128 ?? 0, 10) === 0 && (getBit(deviceData.reg_128 ?? 0, 7) === 1 || getBit(deviceData.reg_128 ?? 0, 6) === 1)) {
-		stateBarParts.push(t("home.blocked.pt_hod"));
-	} else if (getBit(deviceData.reg_128 ?? 0, 10) === 0 && (getBit(deviceData.reg_128 ?? 0, 7) === 0 || getBit(deviceData.reg_128 ?? 0, 6) === 0)) {
+		stateBarParts.push(t("home.blocked.thermostatAndHdo"));
+	} else if (getBit(deviceData.reg_128 ?? 0, 10) === 0 && getBit(deviceData.reg_128 ?? 0, 7) === 0 && getBit(deviceData.reg_128 ?? 0, 6) === 0) {
 		stateBarParts.push(t("home.blocked.hdo"));
 	} else if (getBit(deviceData.reg_128 ?? 0, 10) === 1 && (getBit(deviceData.reg_128 ?? 0, 7) === 1 || getBit(deviceData.reg_128 ?? 0, 6) === 1)) {
-		stateBarParts.push(t("home.blocked.pt"));
+		stateBarParts.push(t("home.blocked.thermostat"));
 	}
 
 	const stateBar = stateBarParts.join(", ");

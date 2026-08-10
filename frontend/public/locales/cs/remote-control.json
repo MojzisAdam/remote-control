@@ -61,7 +61,8 @@
     },
     "blocked": {
       "thermostat": "Blokováno: termostatem",
-      "hdo": "Blokováno: HDO"
+      "hdo": "Blokováno: HDO",
+      "thermostatAndHdo": "Blokováno: termostatem a HDO"
     },
     "temperatureFallback": "---"
   },
