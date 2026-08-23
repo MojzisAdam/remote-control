@@ -42,8 +42,8 @@ export const addDevice = async (deviceId: string, password: string): Promise<voi
 };
 
 // Update a device's own_name and favourite status
-export const updateUserDevice = async (deviceId: string, data: Partial<Pick<DeviceUser, "own_name" | "favourite" | "notifications" | "web_notifications">>): Promise<AxiosResponse<string, string>> => {
-	const result = await axios.put(`/devices/${deviceId}`, data);
+export const updateUserDevice = async (deviceId: string, data: Partial<Pick<DeviceUser, "own_name" | "favourite" | "notifications" | "web_notifications">>): Promise<AxiosResponse<string>> => {
+	const result = await axios.put<string>(`/devices/${deviceId}`, data);
 	return result;
 };
 

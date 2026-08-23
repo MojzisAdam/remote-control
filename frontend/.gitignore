@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# TypeScript incremental build cache. Must not be committed: a stale cache
+# makes `tsc -b` skip typechecking locally while CI still fails.
+*.tsbuildinfo
+
 # Ignore all env files except the example
 .env*
 !.env.example
