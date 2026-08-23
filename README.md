@@ -1,10 +1,10 @@
 # Heat Pump Remote Control System
 
-Heat Pump Remote Control is a modern web application for remote monitoring and management of heat pumps. It provides a robust Laravel 11 backend and a responsive React 19 frontend, enabling users to monitor device performance, adjust settings in real-time, and automate heat pump operations from anywhere.
+Heat Pump Remote Control is a modern web application for remote monitoring and management of heat pumps. It provides a robust Laravel 13 backend and a responsive React 19 frontend, enabling users to monitor device performance, adjust settings in real-time, and automate heat pump operations from anywhere.
 
 ## Project Overview
 
-This system consists of two main components: a Laravel 11 backend (PHP 8.2+) and a React 19 single-page frontend. The backend exposes a REST-like API for connected devices, managing data storage, authentication, and business logic. The frontend is a TypeScript application built with React and Vite, providing dashboards, control panels, and data visualizations for heat pump devices. The application supports multi-user access with role-based permissions, historical data logging with interactive charts, and configuration of automation rules that drive device behavior through the external workflow engine. Internationalization is built-in, allowing the interface to be used in multiple languages (e.g. English and Czech). In summary, Heat Pump Remote Control offers a comprehensive solution for IoT-based heat pump management, combining real-time control, analytics, and automation.
+This system consists of two main components: a Laravel 13 backend (PHP 8.3+) and a React 19 single-page frontend. The backend exposes a REST-like API for connected devices, managing data storage, authentication, and business logic. The frontend is a TypeScript application built with React and Vite, providing dashboards, control panels, and data visualizations for heat pump devices. The application supports multi-user access with role-based permissions, historical data logging with interactive charts, and configuration of automation rules that drive device behavior through the external workflow engine. Internationalization is built-in, allowing the interface to be used in multiple languages (e.g. English and Czech). In summary, Heat Pump Remote Control offers a comprehensive solution for IoT-based heat pump management, combining real-time control, analytics, and automation.
 
 ## Key Features
 
@@ -16,7 +16,7 @@ This system consists of two main components: a Laravel 11 backend (PHP 8.2+) and
 -   **Automation Workflows**: Advanced automation allows users to create custom rules for their devices. Through a visual drag-and-drop workflow builder (built with React Flow), users can define triggers (time schedules, sensor thresholds, device state changes, etc.), conditions, and actions (e.g. adjust a setting, send a notification). These automations are validated in real-time on the frontend and stored via the API with all their components. An external script then fetches these automations via the REST API and manages their execution on connected devices.
 -   **Internationalization**: The application supports multiple languages in its user interface. The frontend uses i18next (with react-i18next) for managing translations, while the Laravel backend uses standard PHP-based localization files (e.g., mail.php returning associative arrays of translation strings). By default, English and Czech are available (with Czech as the primary locale), and additional languages can be added easily. All dates and numbers are formatted according to the active locale, leveraging libraries such as date-fns for date localization.
 -   **Responsive Modern UI**: Built as a single-page application with React 19 and Tailwind CSS, the frontend provides a responsive and snappy user interface. Users can access the system from desktops, tablets, or smartphones with a consistent experience. The UI includes dashboards for at-a-glance status, detailed device control panels and charts. It also supports dark mode and theme customization (via Tailwind and utility libraries).
--   **Reliability & Security**: The application is built on a modern stack (Laravel 11 and React), providing a robust and secure foundation. The backend leverages Laravel’s built-in security mechanisms, including protection against SQL injection, XSS, and CSRF. Authentication is managed through Laravel Sanctum, using strong password hashing algorithms and optional 2FA support. All API interactions require either an authenticated session or an access token, ensuring strict access control and maintaining the integrity of all client–server communication.
+-   **Reliability & Security**: The application is built on a modern stack (Laravel 13 and React 19), providing a robust and secure foundation. The backend leverages Laravel’s built-in security mechanisms, including protection against SQL injection, XSS, and CSRF. Authentication is managed through Laravel Sanctum, using strong password hashing algorithms and optional 2FA support. All API interactions require either an authenticated session or an access token, ensuring strict access control and maintaining the integrity of all client–server communication.
 
 ## Tech Stack
 
@@ -24,11 +24,11 @@ This project is split into two main components:
 
 ### Backend (Laravel)
 
-Laravel 11 (PHP 8.2+) application, using Laravel Sanctum for API authentication and Laravel Fortify for user auth flows. Role-based access control is implemented via Spatie Laravel Permission. The backend uses a MySQL database by default (Laravel’s database agnosticism allows swapping to others if needed). The backend organizes its API following REST principles (controllers for devices, users, etc.) and includes migration files for database schema and seeders for initial data (like default roles or an admin user).
+Laravel 13 (PHP 8.3+) application, using Laravel Sanctum for API authentication and Laravel Fortify for user auth flows. Role-based access control is implemented via Spatie Laravel Permission. The backend uses a MySQL database by default (Laravel’s database agnosticism allows swapping to others if needed). The backend organizes its API following REST principles (controllers for devices, users, etc.) and includes migration files for database schema and seeders for initial data (like default roles or an admin user).
 
 ### Frontend (React + TypeScript)
 
-React 19 with TypeScript, built using the Vite toolchain. The UI is styled with Tailwind CSS and uses React Router (v7) for client-side routing between views. For charts and graphs, it incorporates Chart.js (with a date-fns adapter for time axes) and Recharts for complex visualizations. Real-time device updates are handled via the mqtt.js library on the frontend, which subscribes to topics for live data. The automation editor uses React Flow (v12) under the hood, enabling a node-based diagramming interface for workflows. Internationalization is supported by react-i18next, loading translation JSON files for different locales. The frontend code is written in modern React style (functional components with hooks) and is organized into features (e.g., device management, history charts, automation builder).
+React 19 with TypeScript 5.7, built using the Vite 6 toolchain. The UI is styled with Tailwind CSS 3 and uses React Router (v7) for client-side routing between views. For charts and graphs, it incorporates Chart.js (with a date-fns adapter for time axes) and Recharts for complex visualizations. Real-time device updates are handled via the mqtt.js library on the frontend, which subscribes to topics for live data. The automation editor uses React Flow (v12) under the hood, enabling a node-based diagramming interface for workflows. Internationalization is supported by react-i18next, loading translation JSON files for different locales. The frontend code is written in modern React style (functional components with hooks) and is organized into features (e.g., device management, history charts, automation builder).
 
 ### Communication
 
@@ -40,11 +40,13 @@ Devices that support MQTT communicate in real time directly with the frontend vi
 
 ### Prerequisites
 
--   PHP 8.2+
+-   PHP 8.3+
 -   Composer 2.x
 -   Node.js 22+
 -   npm 10+
 -   MySQL 8.0+ (recommended) or MariaDB 10.4+
+
+Alternatively, the backend can run in Docker with PHP and MySQL preconfigured, which removes the PHP, Composer and MySQL prerequisites — see [docker/README.md](docker/README.md). The frontend still runs on the host.
 
 ### Installation
 
@@ -123,7 +125,7 @@ Deployment is fully automated via a GitHub Actions CI/CD pipeline. It supports:
 -   React frontend static build upload
 -   Secure SSH-based deployment using secrets
 
-> Your production server must have PHP 8.2+, MySQL, Composer, and allow SSH access on a specified port.
+> Your production server must have PHP 8.3+, MySQL, Composer, and allow SSH access on a specified port.
 
 ### How It Works
 

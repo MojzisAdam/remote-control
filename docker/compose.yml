@@ -1,0 +1,52 @@
+# Local development environment for the Laravel backend.
+# See docker/README.md.
+
+name: remote-control
+
+services:
+    app:
+        build: .
+        working_dir: /app
+        volumes:
+            - ../backend:/app
+        ports:
+            - "8000:8000"
+        depends_on:
+            db:
+                condition: service_healthy
+        command: php artisan serve --host=0.0.0.0 --port=8000
+
+    # Optional worker: add --profile queue
+    queue:
+        build: .
+        working_dir: /app
+        volumes:
+            - ../backend:/app
+        depends_on:
+            db:
+                condition: service_healthy
+        command: php artisan queue:work --tries=3
+        restart: unless-stopped
+        profiles: [queue]
+
+    db:
+        image: mysql:8.0
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: remote_control
+            MYSQL_USER: remote_control
+            MYSQL_PASSWORD: secret
+        ports:
+            # 3307 avoids clashing with a local MySQL on 3306.
+            - "3307:3306"
+        volumes:
+            - dbdata:/var/lib/mysql
+        healthcheck:
+            test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot"]
+            interval: 5s
+            timeout: 5s
+            retries: 20
+            start_period: 30s
+
+volumes:
+    dbdata:

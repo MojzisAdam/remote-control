@@ -2,11 +2,12 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
+
 /**
- * Alias of VerifyCsrfToken for consistency.
+ * Alias of PreventRequestForgery for consistency.
  */
-class ValidateCsrfToken extends VerifyCsrfToken
+class ValidateCsrfToken extends PreventRequestForgery
 {
     //
     protected $except = [
