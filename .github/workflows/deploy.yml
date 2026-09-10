@@ -113,7 +113,7 @@ jobs:
 
             - name: Create staging directory
               run: |
-                  ssh server "mkdir -p '${{ secrets.STAGING_BACKEND_PATH }}'"
+                  ssh server "rm -rf '${{ secrets.STAGING_BACKEND_PATH }}' && mkdir -p '${{ secrets.STAGING_BACKEND_PATH }}'"
 
             - name: Upload backend via rsync
               run: |
@@ -128,6 +128,47 @@ jobs:
               run: |
                   echo "${{ secrets.ENV_BACKEND }}" > .env
                   scp .env server:${{ secrets.STAGING_BACKEND_PATH }}/.env
+
+            # storage/ holds uploaded firmware artifacts (storage/app/updates,
+            # storage/app/private) that exist nowhere in the repository. Each
+            # release is a fresh directory, so the release must borrow a shared
+            # storage directory that outlives it rather than carry its own.
+            - name: Link shared storage into the release
+              run: |
+                  ssh server 'bash -se' <<'REMOTE'
+                  set -euo pipefail
+
+                  LIVE="${{ secrets.BACKEND_PATH }}"
+                  STAGING="${{ secrets.STAGING_BACKEND_PATH }}"
+
+                  if [ -z "$LIVE" ] || [ -z "$STAGING" ]; then
+                    echo "BACKEND_PATH or STAGING_BACKEND_PATH is empty; refusing to touch the filesystem." >&2
+                    exit 1
+                  fi
+
+                  SHARED="$(dirname "$LIVE")/shared"
+
+                  # First run only: seed the shared directory from whatever
+                  # storage currently exists, so no data is lost on migration
+                  # to this scheme.
+                  if [ ! -d "$SHARED/storage" ]; then
+                    echo "Seeding shared storage at $SHARED/storage"
+                    mkdir -p "$SHARED"
+                    if [ -d "$LIVE/storage" ] && [ ! -L "$LIVE/storage" ]; then
+                      cp -a "$LIVE/storage" "$SHARED/storage"
+                    else
+                      cp -a "$STAGING/storage" "$SHARED/storage"
+                    fi
+                  fi
+
+                  rm -rf "$STAGING/storage"
+                  ln -s "$SHARED/storage" "$STAGING/storage"
+
+                  chmod -R ug+rwX "$SHARED/storage" "$STAGING/bootstrap/cache"
+
+                  echo "Shared storage linked. Contents:"
+                  du -sh "$SHARED/storage/app"/* 2>/dev/null || true
+                  REMOTE
 
             - name: Install backend dependencies and migrate
               run: |
@@ -148,6 +189,25 @@ jobs:
                   mv '${{ secrets.STAGING_BACKEND_PATH }}' '${{ secrets.BACKEND_PATH }}' && \
                   echo '${{ needs.check-version.outputs.version }}' > '${{ secrets.BACKEND_PATH }}/.deploy-version'
                   "
+
+            # public/storage and public/updates are symlinks holding absolute
+            # paths, and they live inside the release directory rather than in
+            # the repository. They must be recreated after the promote, or the
+            # public download paths 404 until someone notices.
+            - name: Recreate public symlinks
+              run: |
+                  ssh server "cd '${{ secrets.BACKEND_PATH }}' && \
+                  php artisan storage:link --force && \
+                  php artisan storage:link-updates"
+
+            # Queue workers are long-running PHP processes that hold the old
+            # release's code in memory. Without this they keep executing the
+            # previous version against the new database until something
+            # restarts them. queue:restart asks each worker to exit cleanly
+            # after its current job; the process supervisor starts new ones.
+            - name: Restart queue workers
+              run: |
+                  ssh server "cd '${{ secrets.BACKEND_PATH }}' && php artisan queue:restart"
 
             - name: Cleanup SSH key
               run: rm -f private_key ~/.ssh/cm-*
