@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use App\Services\ErrorNotificationService;
+use App\Services\BridgeIngest\ErrorBatchIngestor;
 use App\Http\Resources\NotificationResource;
 use App\Models\Notification;
 use App\Models\DeviceNotification;
@@ -40,6 +41,21 @@ class NotificationController extends Controller
                 'message' => $e->getMessage()
             ], 500);
         }
+    }
+
+    /**
+     * Process batched error transitions from the MQTT bridges, in the order sent.
+     */
+    public function notifyDeviceErrorBatch(Request $request, ErrorBatchIngestor $ingestor)
+    {
+        // Mails are sent synchronously (no queue worker), so keep batches small.
+        $request->validate([
+            'items' => 'required|array|max:25',
+            'items.*' => 'array',
+            'items.*.ref' => 'required|integer|distinct',
+        ]);
+
+        return response()->json($ingestor->ingest($request->input('items'))->toArray());
     }
 
     public function notifyAutomation(Request $request)

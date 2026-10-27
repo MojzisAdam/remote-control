@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Device;
 use App\Models\DeviceDescription;
 use App\Services\ErrorNotificationService;
+use App\Services\BridgeIngest\DeviceStateBatchIngestor;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -432,6 +433,20 @@ class DeviceController extends Controller
                 'message' => 'Internal server error',
             ], 500);
         }
+    }
+
+    /**
+     * Apply batched device state from the MQTT bridges. Never changes error_code.
+     */
+    public function updateOrCreateDeviceBatch(Request $request, DeviceStateBatchIngestor $ingestor)
+    {
+        $request->validate([
+            'items' => 'required|array|max:200',
+            'items.*' => 'array',
+            'items.*.ref' => 'required|integer|distinct',
+        ]);
+
+        return response()->json($ingestor->ingest($request->input('items'))->toArray());
     }
 
     public function removeUserDevice(Request $request, $deviceId)

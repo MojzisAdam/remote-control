@@ -48,6 +48,11 @@ interface DeviceHistoryHandlerInterface
     public function insertHistory(array $validated): void;
 
     /**
+     * Insert validated history rows that each carry their own `cas` timestamp
+     */
+    public function insertHistoryBatch(array $rows): void;
+
+    /**
      * Get the error column name for this device display type
      */
     public function getErrorColumn(): string;

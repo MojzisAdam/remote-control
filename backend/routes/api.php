@@ -120,7 +120,12 @@ Route::middleware(['auth:sanctum', 'throttle:admin', 'permission:manage-users'])
 
 Route::post('/devices', [DeviceController::class, 'updateOrCreateDevice'])->middleware(['api_key:device', 'throttle:external-api']);
 Route::post('/device-history', [HistoryController::class, 'insertHistory'])->middleware(['api_key:history', 'throttle:external-api']);
-Route::post('/device/notify', [NotificationController::class, 'notifyDeviceError'])->middleware(['api_key:notify', 'throttle:external-api']);
+Route::post('/device/notify', [NotificationController::class, 'notifyDeviceError'])->middleware(['api_key:notify', 'throttle:bridge-errors']);
+
+// Batched ingest from the MQTT bridges. Both error routes use bridge-errors, so errors are never throttled by history/state traffic.
+Route::post('/devices/batch', [DeviceController::class, 'updateOrCreateDeviceBatch'])->middleware(['api_key:device', 'throttle:bridge-batch']);
+Route::post('/device-history/batch', [HistoryController::class, 'insertHistoryBatch'])->middleware(['api_key:history', 'throttle:bridge-batch']);
+Route::post('/device/notify/batch', [NotificationController::class, 'notifyDeviceErrorBatch'])->middleware(['api_key:notify', 'throttle:bridge-errors']);
 Route::post('/logs/prune', LogPruneController::class)->middleware(['api_key:log_prune', 'throttle:log-prune']);
 
 // Automation runner routes

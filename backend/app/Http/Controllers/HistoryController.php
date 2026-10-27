@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Resources\UserGraphPreferenceResource;
 use App\Services\DeviceHistory\DeviceHistoryHandlerFactory;
 use App\Services\DeviceHistory\DeviceHistoryResourceFactory;
+use App\Services\BridgeIngest\HistoryBatchIngestor;
 use Illuminate\Support\Facades\Cache;
 
 class HistoryController extends Controller
@@ -313,5 +314,20 @@ class HistoryController extends Controller
         $handler->insertHistory($validated);
 
         return response()->json(['status' => 'success']);
+    }
+
+    /**
+     * Insert batched history rows from the MQTT bridges. Each row carries its own `cas`.
+     */
+    public function insertHistoryBatch(Request $request, HistoryBatchIngestor $ingestor)
+    {
+        $request->validate([
+            'rows' => 'required|array|max:500',
+            'rows.*' => 'array',
+            'rows.*.ref' => 'required|integer|distinct',
+            'rows.*.device_id' => 'required|string',
+        ]);
+
+        return response()->json($ingestor->ingest($request->input('rows'))->toArray());
     }
 }

@@ -61,6 +61,16 @@ class AppServiceProvider extends ServiceProvider
             return Limit::perMinute(400)->by($identifier);
         });
 
+        // MQTT bridge batches (history + state); a few requests per minute per bridge in normal operation
+        RateLimiter::for('bridge-batch', function (Request $request) {
+            return Limit::perMinute(60)->by($request->header('X-API-Key', $request->ip()));
+        });
+
+        // MQTT bridge error lane, kept apart so errors are never throttled by batch traffic
+        RateLimiter::for('bridge-errors', function (Request $request) {
+            return Limit::perMinute(120)->by($request->header('X-API-Key', $request->ip()));
+        });
+
         // Automation runner 
         RateLimiter::for('automation-runner', function (Request $request) {
             $identifier = $request->header('X-API-Key', 'automation');

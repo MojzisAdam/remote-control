@@ -14,6 +14,8 @@ use Carbon\Carbon;
 
 class StandardDeviceHistoryHandler implements DeviceHistoryHandlerInterface
 {
+    use UpsertsHistoryBatch;
+
     public function getQuery(string $deviceId): Builder
     {
         return DeviceHistory::query()->where('device_id', $deviceId);
@@ -144,5 +146,10 @@ class StandardDeviceHistoryHandler implements DeviceHistoryHandlerInterface
             ['device_id', 'cas'], // unique columns (composite key)
             array_keys($validated) // columns to update if duplicate exists
         );
+    }
+
+    public function insertHistoryBatch(array $rows): void
+    {
+        $this->upsertHistoryBatch(DeviceHistory::class, $rows);
     }
 }

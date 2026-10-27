@@ -13,6 +13,8 @@ use Carbon\Carbon;
 
 class DaitsuDeviceHistoryHandler implements DeviceHistoryHandlerInterface
 {
+    use UpsertsHistoryBatch;
+
     public function getQuery(string $deviceId): Builder
     {
         return DeviceHistoryDaitsu::query()->where('device_id', $deviceId);
@@ -136,6 +138,11 @@ class DaitsuDeviceHistoryHandler implements DeviceHistoryHandlerInterface
             ['device_id', 'cas'], // unique columns (composite key)
             array_keys($validated) // columns to update if duplicate exists
         );
+    }
+
+    public function insertHistoryBatch(array $rows): void
+    {
+        $this->upsertHistoryBatch(DeviceHistoryDaitsu::class, $rows);
     }
 
     public function getTemperatureColumns(): array
