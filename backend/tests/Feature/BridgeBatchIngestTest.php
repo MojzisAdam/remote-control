@@ -5,9 +5,11 @@ namespace Tests\Feature;
 use App\Models\Device;
 use App\Models\DeviceHistory;
 use App\Models\DeviceNotification;
+use App\Models\DeviceType;
 use Database\Seeders\NotificationTypesSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class BridgeBatchIngestTest extends TestCase
@@ -210,5 +212,64 @@ class BridgeBatchIngestTest extends TestCase
 
         $this->assertSame(0, (int) Device::find('cim-1')->error_code);
         $this->assertSame(2, DeviceNotification::where('device_id', 'cim-1')->count());
+    }
+
+    // Devices send their ID in upper or lower case depending on display type; it is one device.
+
+    public static function storedAndSentIdCases(): array
+    {
+        return [
+            'stored lower, sent upper' => ['9f0c2e5a', '9F0C2E5A'],
+            'stored upper, sent lower' => ['9F0C2E5A', '9f0c2e5a'],
+        ];
+    }
+
+    #[DataProvider('storedAndSentIdCases')]
+    public function test_history_batch_matches_device_id_case_insensitively(string $storedId, string $sentId): void
+    {
+        $this->makeDevice($storedId);
+
+        $this->bridgePost('/api/device-history/batch', ['rows' => [
+            $this->historyRow(1, '2026-10-26T10:00:00Z', ['device_id' => $sentId]),
+            $this->historyRow(2, '2026-10-26T10:01:00Z', ['device_id' => $storedId]),
+        ]])->assertOk()
+            ->assertJson(['accepted' => [1, 2], 'rejected' => [], 'deferred' => []]);
+
+        $stored = DeviceHistory::orderBy('cas')->pluck('device_id')->all();
+        $this->assertSame([$storedId, $storedId], $stored);
+    }
+
+    #[DataProvider('storedAndSentIdCases')]
+    public function test_state_batch_updates_existing_device_regardless_of_id_case(string $storedId, string $sentId): void
+    {
+        DeviceType::create(['id' => 'cim', 'name' => 'CIM', 'capabilities' => []]);
+        $this->makeDevice($storedId, ['fw_version' => '1.0']);
+
+        $this->bridgePost('/api/devices/batch', ['items' => [[
+            'ref' => 1, 'id' => $sentId, 'password' => null, 'display_type' => '2',
+            'device_type_id' => 'CIM', 'fw_v' => '2.0', 'received_at' => now()->toIso8601String(),
+        ]]])->assertOk()
+            ->assertJson(['accepted' => [1], 'rejected' => [], 'deferred' => []]);
+
+        $this->assertSame(1, Device::count());
+        $device = Device::first();
+        $this->assertSame($storedId, $device->id);
+        $this->assertSame('2', $device->display_type);
+        $this->assertSame('2.0', $device->fw_version);
+        $this->assertSame('cim', $device->device_type_id);
+    }
+
+    #[DataProvider('storedAndSentIdCases')]
+    public function test_error_batch_matches_device_id_case_insensitively(string $storedId, string $sentId): void
+    {
+        $this->makeDevice($storedId);
+
+        $this->bridgePost('/api/device/notify/batch', ['items' => [
+            ['ref' => 1, 'device_id' => $sentId, 'error_code' => 5],
+        ]])->assertOk()
+            ->assertJson(['accepted' => [1], 'rejected' => [], 'deferred' => []]);
+
+        $this->assertSame(5, (int) Device::find($storedId)->error_code);
+        $this->assertSame([$storedId], DeviceNotification::pluck('device_id')->all());
     }
 }

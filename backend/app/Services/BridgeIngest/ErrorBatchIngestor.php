@@ -20,9 +20,10 @@ class ErrorBatchIngestor
     {
         $result = new BatchResult();
 
+        // lowercased ID => stored ID; whereIn() matches case-insensitively (column collation), so the lookup must too
         $knownIds = Device::whereIn('id', array_unique(array_column($items, 'device_id')))
             ->pluck('id')
-            ->flip();
+            ->keyBy(fn (string $id) => mb_strtolower($id));
 
         foreach ($items as $item) {
             $validator = Validator::make($item, [
@@ -35,13 +36,15 @@ class ErrorBatchIngestor
                 continue;
             }
 
+            $deviceId = $knownIds->get(mb_strtolower($item['device_id']));
+
             // The device may be registered by a state batch that has not arrived yet.
-            if (!$knownIds->has($item['device_id'])) {
+            if ($deviceId === null) {
                 $result->defer($item['ref'], 'Device not found.');
                 continue;
             }
 
-            $this->errorNotificationService->processErrorTransition($item['device_id'], $item['error_code']);
+            $this->errorNotificationService->processErrorTransition($deviceId, $item['error_code']);
             $result->accept($item['ref']);
         }
 

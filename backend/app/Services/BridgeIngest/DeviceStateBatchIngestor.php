@@ -31,11 +31,14 @@ class DeviceStateBatchIngestor
     {
         $result = new BatchResult();
 
+        // lowercased ID => stored ID, so a type is matched case-insensitively like the old `exists:device_types,id`
+        $deviceTypeIds = DeviceType::pluck('id')->keyBy(fn (string $id) => mb_strtolower($id));
+
         $rules = [
             'id' => 'required|string|max:255',
             'password' => 'nullable|string',
             'display_type' => 'required|string',
-            'device_type_id' => ['nullable', 'string', Rule::in(DeviceType::pluck('id')->all())],
+            'device_type_id' => ['nullable', 'string', Rule::in($deviceTypeIds->all())],
             'ip' => 'nullable|ip',
             'script_v' => 'nullable|string',
             'fw_v' => 'nullable|string',
@@ -43,6 +46,10 @@ class DeviceStateBatchIngestor
         ];
 
         foreach ($items as $item) {
+            if (is_string($item['device_type_id'] ?? null)) {
+                $item['device_type_id'] = $deviceTypeIds->get(mb_strtolower($item['device_type_id']), $item['device_type_id']);
+            }
+
             $validator = Validator::make($item, $rules);
 
             if ($validator->fails()) {
@@ -68,6 +75,7 @@ class DeviceStateBatchIngestor
             }
         }
 
+        // Matched case-insensitively by the devices.id collation; an existing device keeps its stored ID.
         $device = Device::lockForUpdate()->find($state['id']);
 
         if (!$device) {

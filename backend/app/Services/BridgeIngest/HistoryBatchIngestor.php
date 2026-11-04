@@ -13,15 +13,18 @@ class HistoryBatchIngestor
     {
         $result = new BatchResult();
 
+        // devices.id has a case-insensitive collation, so whereIn() also returns devices stored in a different
+        // case than sent (one device sends upper or lower case depending on display type). Match them the same way.
         $deviceIds = array_unique(array_column($rows, 'device_id'));
-        $devices = Device::whereIn('id', $deviceIds)->get(['id', 'display_type'])->keyBy('id');
+        $devices = Device::whereIn('id', $deviceIds)->get(['id', 'display_type'])
+            ->keyBy(fn (Device $device) => mb_strtolower($device->id));
 
         // display_type => ['handler' => ..., 'rules' => ..., 'rows' => [...], 'refs' => [...]]
         $groups = [];
 
         foreach ($rows as $row) {
             $ref = $row['ref'];
-            $device = $devices->get($row['device_id']);
+            $device = $devices->get(mb_strtolower($row['device_id']));
 
             if (!$device) {
                 $result->defer($ref, 'Device not found.');
@@ -57,7 +60,8 @@ class HistoryBatchIngestor
                 continue;
             }
 
-            $groups[$type]['rows'][] = $validator->validated();
+            // Store the ID as the device has it, not as this row spelled it.
+            $groups[$type]['rows'][] = ['device_id' => $device->id] + $validator->validated();
             $groups[$type]['refs'][] = $ref;
         }
 
