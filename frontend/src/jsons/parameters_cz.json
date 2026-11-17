@@ -970,7 +970,7 @@
         "type": "int",
 		"register": 100,
         "default_value": 3,
-        "min_value": 1,
+        "min_value": 0,
         "max_value": 6,
         "increment_value": 1,
         "user_access": false,

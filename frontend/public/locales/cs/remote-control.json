@@ -32,7 +32,7 @@
   "connection": {
     "connected": "Připojeno",
     "connecting": "Připojování",
-    "disconnected": "Opdpojeno",
+    "disconnected": "Odpojeno",
     "offline": "Offline",
     "lastMessage": "Poslední zpráva:",
     "waiting": "Čekání na odpověď zařízení...",
