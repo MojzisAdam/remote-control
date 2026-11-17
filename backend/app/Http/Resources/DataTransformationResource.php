@@ -26,7 +26,7 @@ class DataTransformationResource extends JsonResource
             'TS9' => ($this->TS9 != -128) ? $this->TS9 : null,
             'PTO' => $this->PTO,
             'PTUV' => $this->PTUV,
-            'PTO2' => $this->PTO2 ?? null,
+            'PTO2' => ($this->PTO2 !== null && $this->PTO2 != -128) ? $this->PTO2 : null,
             'komp' => ($this->komp == 0) ? 0 : 10,
             'kvyk' => $this->kvyk,
             'run' => ($this->run == 0) ? 0 : 6,

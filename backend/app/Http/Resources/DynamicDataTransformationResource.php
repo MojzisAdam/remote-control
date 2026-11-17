@@ -28,7 +28,7 @@ class DynamicDataTransformationResource extends JsonResource
             'TS9' => fn() => ($this->TS9 != -128) ? $this->TS9 : null,
             'PTO' => fn() => $this->PTO,
             'PTUV' => fn() => $this->PTUV,
-            'PTO2' => fn() => $this->PTO2 ?? null,
+            'PTO2' => fn() => ($this->PTO2 !== null && $this->PTO2 != -128) ? $this->PTO2 : null,
             'komp' => fn() => ($this->komp == 0) ? 0 : 10,
             'kvyk' => fn() => $this->kvyk,
             'run' => fn() => ($this->run == 0) ? 0 : 6,
